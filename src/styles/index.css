@@ -1,0 +1,378 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.main_header {
+  width: 100vw;
+  height: calc(100vh - 3rem);
+  display: grid;
+  place-items: center;
+  margin-top: 3rem;
+}
+
+.main__header-container {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6rem;
+}
+
+.main__header-left {
+  margin-top: -3rem;
+}
+
+/* #8fbecc #d9c550*/
+.main__header-left-container {
+  background-color: #8fbecc;
+  border-radius: 20px;
+  padding: 2rem;
+}
+
+.main__header-left h4 {
+  margin-bottom: 1rem;
+  color: var(--color-secondary);
+  font-weight: 400;
+
+}
+
+.main__header-left p {
+  margin: 1rem 0 3.5rem;
+  font-size: 1.1rem;
+}
+
+.main__header-right {
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
+.main__header-right-container {
+  background-color: #8fbecc;
+  border-radius: 20px;
+  padding: 2rem;
+  opacity: 1;
+}
+
+.main__header-circle {
+  width: 35rem;
+  height: 35rem;
+  background: linear-gradient(75deg, var(--color-secondary), transparent);
+  border-radius: 50%;
+  position: absolute;
+  transition: var(--transition);
+}
+
+.main__header-image {
+  position: gl;
+  left: 15%;
+  /* right: 20%; */
+  transform: scale(1.0);
+}
+
+
+.main__header-right:hover .main__header-circle {
+  filter: blur(15px);
+}
+
+.main__header-image img {
+  width: 100%;
+  max-width: 100%;
+  /* set a maximum width to avoid the image being too large */
+
+}
+
+.main__header-expanded-image {
+  position: fixed;
+  top: 0;
+  left: -15rem;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: scale(0.4);
+}
+
+.main__header-expanded-image-container {
+  position: relative;
+}
+
+.main__header-expanded-image-close-btn {
+  position: absolute;
+  top: 10rem;
+  left: 120rem;
+  font-size: 4rem;
+  background: none;
+  border: none;
+  color: var(--color-secondary);
+  cursor: pointer;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background-color: blue;
+}
+
+.header__container-bg {
+  position: flex;
+  top: 0;
+  left: -180;
+  bottom: 0;
+  right: 0;
+  /* overflow: hidden; */
+  transform: translateX(20%);
+}
+
+.btn.lg {
+  animation: heartbeat 1.5s ease-in-out 3;
+  animation-iteration-count: 3;
+  transition: all 0.2s ease-in-out;
+}
+
+
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+    color: white;
+    background-color: var(--color-primary);
+  }
+
+  50% {
+    transform: scale(1.2);
+    color: var(--color-secondary);
+    background-color: var(--color-primary);
+  }
+
+  100% {
+    transform: scale(1);
+    color: white;
+    background-color: var(--color-primary);
+  }
+}
+
+.btn.lg:hover,
+.btn.lg:focus {
+  transform: scale(1.1);
+  color: var(--color-secondary);
+  background-color: var(--color-primary);
+}
+
+
+/* ============================= CODIGO index.css================================= */
+
+
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap");
+
+html,
+body,
+#root,
+.app,
+.content {
+  height: 100%;
+  width: 100%;
+  font-family: "Source Sans Pro", sans-serif;
+}
+
+[data-theme="dark"] {
+  --background-color: #0a0a0a;
+  --foreground-color: #fff;
+  --primary-text-color: #f6f6f6;
+  --secondary-text-color: #0a0a0a;
+  --toggle-bg: #283452;
+  --toggle-fg: #fff;
+}
+
+.app {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #e0e0e0;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+:root {
+  --primary-hue: 210;
+  --gray-hue: 240;
+  --color-primary: #FF0000;
+  --color-secondary: #f0c92e;
+
+  /* Color base envejecido */
+  --color-cuadro: #f38989;
+  /* Color base */
+
+  /* Degradado como variable */
+  --color-cuadro-gradient: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 1) 0%, rgba(245, 237, 225, 1) 25%, rgba(245, 167, 54, 1) 100%);
+
+  --color-white: #fff;
+  --color-gray-100: hsl(var(--gray-hue), 47%, 94%);
+  --color-gray-200: hsl(var(--gray-hue), 44%, 25%);
+  --color-gray-300: hsl(var(--gray-hue), 44%, 25%);
+  --color-gray-400: hsl(var(--gray-hue), 44%, 25%);
+  --color-gray-500: hsl(var(--gray-hue), 44%, 25%);
+  --color-gray-600: hsl(var(--gray-hue), 48%, 15%);
+
+  --container-width-lg: 80%;
+  --container-width-mg: 90%;
+  --transition: all 500ms ease;
+}
+
+/* General Styles */
+body {
+  font-family: 'Montserrat', sans-serif;
+  color: var(--color-gray-200);
+  line-height: 1.7;
+  /* overflow-x: hidden; */
+  /* background-color: white;  */
+  /* background-image: url('../assets/bg_texture_3.jpg'); */
+  z-index: -99;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+body::before {
+  content: "";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+  /* 60% menos de opacidad */
+
+  z-index: -20;
+}
+
+.container {
+  width: var(--container-width-lg);
+  max-width: 1920px;
+  margin-inline: auto;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  line-height: 1.2;
+  color: black;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+a {
+  color: white;
+}
+
+/* img {
+    display: block;
+    object-fit: cover;
+    width: 110%;
+  } */
+
+
+
+
+
+section {
+  margin-top: 10rem;
+}
+
+.section__head {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.section__head span {
+  background: blue;
+  padding: 0.8rem;
+  border-radius: 1rem;
+  color: white;
+  font-size: 1.5rem;
+}
+
+
+/* =================================== VALUES ===================================== */
+
+.values__container {
+  display: flex;
+  grid-template-columns: 40% 60%;
+  gap: 5%;
+  height: 100vh;
+  /* establece la altura al 80% del viewport height */
+}
+
+.values__left {
+  height: 100%;
+  /* establece la altura al 100% de su contenedor */
+}
+
+.values__right {
+  height: 100%;
+  /* establece la altura al 100% de su contenedor */
+}
+
+.values__images {
+  filter: saturate(0.25);
+  transition: var(--transition);
+}
+
+.values__image:hover {
+  filter: saturate(0.50);
+}
+
+.values__right>p {
+  margin: 0.5rem 0 5rem;
+}
+
+.values__wrapper {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  /* 4 columnas por defecto */
+  gap: 1.0rem 1.0rem;
+}
+
+.custom-modal-zindex {
+  z-index: 1060 !important; /* Bootstrap usa 1050 por defecto para modals */
+  position: relative;
+}
+
+.modal-zindex {
+  z-index: 9999 !important;
+  position: relative;
+}

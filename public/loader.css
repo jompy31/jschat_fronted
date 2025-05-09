@@ -1,0 +1,66 @@
+body {
+  margin: 0;
+}
+
+html {
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+#loading-bg {
+  position: absolute;
+  display: block;
+  background: var(--initial-loader-bg, #000);
+  block-size: 100%;
+  inline-size: 100%;
+}
+
+.loading-logo {
+  position: flex;
+
+}
+.loading-logo img {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  transform: translateY(20%);
+  animation: logo-anim 2s ease-in-out 0s 1;
+  animation-fill-mode: forwards;
+}
+
+.loading {
+  position: absolute;
+  box-sizing: border-box;
+  border: 3px solid transparent;
+  block-size: 55px;
+  border-radius: 50%;
+  inline-size: 55px;
+  inset-block-start: 50%;
+  inset-inline-start: calc(50% - 35px);
+}
+
+
+
+.loading .effects {
+  transition: all 0.3s ease;
+}
+
+@keyframes logo-anim {
+  0% {
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+}

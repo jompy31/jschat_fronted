@@ -1,0 +1,96 @@
+{
+    "colegio": "Colegio de Contadores Privados de Costa Rica",
+    "pagina_web": "https://www.contador.co.cr/",
+    "servicios": [
+        {
+            "servicio": "Constancias",
+            "descripcion": "Documentos cuyo resultado neto sea inferior a ¢100.000,00.",
+            "precio": "¢25.145,00"
+        },
+        {
+            "servicio": "Aranceles (Hora profesional)",
+            "descripcion": "Cobro por hora profesional en trabajos contables.",
+            "precio": "¢28.681,00"
+        },
+        {
+            "servicio": "Constancias (Exceso de ¢100,000)",
+            "descripcion": "Sobre el exceso de ¢100,000, se suma un 5% sobre dicho exceso. Ejemplo: Para ¢150,000 → Honorarios ¢31.238,85",
+            "precio": "¢31.238,85"
+        },
+        {
+            "servicio": "Servicios Contables Profesional (Anual)",
+            "descripcion": "Emisión de Estados Financieros para Bancos y Clientes, para empresas con seguimiento anual.",
+            "precio": "¢171.246,00"
+        },
+        {
+            "servicio": "Servicios Contables Profesional (Mensual)",
+            "descripcion": "Emisión de Estados Financieros para Bancos y Clientes, para empresas con seguimiento mensual.",
+            "precio": "¢85.623,00"
+        },
+        {
+            "servicio": "Flujo de Caja Proyectado",
+            "descripcion": "Elaboración de flujo de caja proyectado, depende de la complejidad del negocio.",
+            "precio": "¢85.623,00"
+        },
+        {
+            "servicio": "Asesoría Contable",
+            "descripcion": "Guiar y evacuar dudas en materia contable, tributaria y financiera.",
+            "precio": "¢28.681,00"
+        },
+        {
+            "servicio": "Deberes Formales Tributarios",
+            "descripcion": "Elaboración y presentación de declaraciones tributarias y municipales.",
+            "precio": "¢85.623,00"
+        },
+        {
+            "servicio": "Proceso de Fiscalización",
+            "descripcion": "Acompañamiento al cliente en el proceso de Auditoría Fiscal.",
+            "precio": "¢142.035,00"
+        },
+        {
+            "servicio": "Costeo de Importaciones",
+            "descripcion": "Cálculo y registro de importación, determinación del costo de productos importados.",
+            "precio": "¢28.681,00"
+        },
+        {
+            "servicio": "Levantamientos e Inventarios",
+            "descripcion": "Verificación de cantidad de activos fijos, materia prima, producto en proceso o terminado.",
+            "precio": "¢28.681,00"
+        },
+        {
+            "servicio": "Cálculo e implementación de Planillas",
+            "descripcion": "Cálculo de pago de planillas y determinación de cargas sociales.",
+            "precio": "¢85.623,00"
+        },
+        {
+            "servicio": "Cálculo de Aguinaldo o Liquidaciones Laborales",
+            "descripcion": "Cálculo de aguinaldo y pago del mismo, o cálculo de liquidaciones laborales.",
+            "precio": "¢28.681,00"
+        },
+        {
+            "servicio": "Conciliación de Cuentas Bancarias",
+            "descripcion": "Conciliación de cuentas bancarias, cotejar saldos con el saldo contable.",
+            "precio": "¢85.623,00"
+        },
+        {
+            "servicio": "Catálogo de Cuentas",
+            "descripcion": "Creación de catálogo de cuentas según empresa y actividad.",
+            "precio": "¢57.340,00"
+        },
+        {
+            "servicio": "Actualización de Libros Legales",
+            "descripcion": "Actualización de libros legales para cumplir con los deberes formales.",
+            "precio": "¢57.340,00"
+        },
+        {
+            "servicio": "Inscripción de Contribuyentes",
+            "descripcion": "Trámite de inscripción en la Dirección General de Tributación (DGT).",
+            "precio": "¢28.681,00"
+        },
+        {
+            "servicio": "Servicios Contables del Régimen Simplificado",
+            "descripcion": "Contabilidad y presentación de declaración del régimen simplificado.",
+            "precio": "¢57.340,00"
+        }
+    ]
+}

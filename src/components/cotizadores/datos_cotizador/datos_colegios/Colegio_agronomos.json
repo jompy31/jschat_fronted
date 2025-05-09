@@ -1,0 +1,287 @@
+{
+    "colegio": "Colegio de Ingenieros Agrónomos de Costa Rica",
+    "pagina_web": "https://ing-agronomos.or.cr/",
+    "modalidades": [
+        {
+            "modalidad": "Reforestación Sistema Agroforestal",
+            "rangos": [
+                {
+                    "cantidad": "1 a 100",
+                    "visitas_minimas": "2/año 1, 1/año 2 y 3 (proy de tres años)",
+                    "tiempo_minimo_visita": 1,
+                    "honorarios": 29200
+                },
+                {
+                    "cantidad": "1001 a 2000",
+                    "visitas_minimas": "2",
+                    "tiempo_minimo_visita": 1,
+                    "honorarios": 58400
+                },
+                {
+                    "cantidad": "2001 o más",
+                    "visitas_minimas": "3",
+                    "tiempo_minimo_visita": 1,
+                    "honorarios": 87600
+                }
+            ]
+        },
+        {
+            "modalidad": "Reforestación Bloque",
+            "rangos": [
+                {
+                    "cantidad": "1-3 ha",
+                    "visitas_minimas": "3 visitas año 1, 2 visitas año 2, 1 visita años siguientes (mínimo 8 visitas para 5 años)",
+                    "tiempo_minimo_visita": 1,
+                    "honorarios": 29200
+                },
+                {
+                    "cantidad": "4-10 ha",
+                    "visitas_minimas": "2",
+                    "tiempo_minimo_visita": 1,
+                    "honorarios": 58400
+                },
+                {
+                    "cantidad": "11-25 ha",
+                    "visitas_minimas": "3",
+                    "tiempo_minimo_visita": 1,
+                    "honorarios": 87600
+                },
+                {
+                    "cantidad": "26-50 ha",
+                    "visitas_minimas": "4",
+                    "tiempo_minimo_visita": 1,
+                    "honorarios": 116800
+                },
+                {
+                    "cantidad": "51-75 ha",
+                    "visitas_minimas": "6",
+                    "tiempo_minimo_visita": 1,
+                    "honorarios": 175200
+                },
+                {
+                    "cantidad": "76-150 ha",
+                    "visitas_minimas": "8",
+                    "tiempo_minimo_visita": 1,
+                    "honorarios": 233600
+                },
+                {
+                    "cantidad": "151-300 ha",
+                    "visitas_minimas": "12",
+                    "tiempo_minimo_visita": 1,
+                    "honorarios": 350400
+                },
+                {
+                    "cantidad": "301-500 ha",
+                    "visitas_minimas": "16",
+                    "tiempo_minimo_visita": 1,
+                    "honorarios": 467200
+                },
+                {
+                    "cantidad": ">501 ha",
+                    "visitas_minimas": "24",
+                    "tiempo_minimo_visita": 1,
+                    "honorarios": 700800
+                }
+            ]
+        },
+        {
+            "modalidad": "Conservación",
+            "rangos": [
+                {
+                    "cantidad": "2-20 ha",
+                    "visitas_minimas": "1/año",
+                    "tiempo_minimo_visita": 1,
+                    "honorarios": 29200
+                },
+                {
+                    "cantidad": "21-35 ha",
+                    "visitas_minimas": "2",
+                    "tiempo_minimo_visita": 1,
+                    "honorarios": 58400
+                },
+                {
+                    "cantidad": "36-50 ha",
+                    "visitas_minimas": "4",
+                    "tiempo_minimo_visita": 1,
+                    "honorarios": 116800
+                },
+                {
+                    "cantidad": "51-75 ha",
+                    "visitas_minimas": "6",
+                    "tiempo_minimo_visita": 1,
+                    "honorarios": 175200
+                },
+                {
+                    "cantidad": "76-150 ha",
+                    "visitas_minimas": "8",
+                    "tiempo_minimo_visita": 1,
+                    "honorarios": 233600
+                },
+                {
+                    "cantidad": "151-300 ha",
+                    "visitas_minimas": "12",
+                    "tiempo_minimo_visita": 1,
+                    "honorarios": 350400
+                },
+                {
+                    "cantidad": "301-500 ha",
+                    "visitas_minimas": "16",
+                    "tiempo_minimo_visita": 1,
+                    "honorarios": 467200
+                },
+                {
+                    "cantidad": ">501 ha",
+                    "visitas_minimas": "24",
+                    "tiempo_minimo_visita": 1,
+                    "honorarios": 700800
+                }
+            ]
+        },
+        {
+            "modalidad": "Aprovechamiento en Terrenos de Uso Agropecuario y Sin Bosque",
+            "rangos": [
+                {
+                    "cantidad": "0-99 m³",
+                    "visitas_minimas": "3 visitas",
+                    "tiempo_minimo_visita": 3,
+                    "honorarios": 87600
+                },
+                {
+                    "cantidad": "100-299 m³",
+                    "visitas_minimas": "3 visitas",
+                    "tiempo_minimo_visita": 3,
+                    "honorarios": 87600
+                },
+                {
+                    "cantidad": "300-1000 m³",
+                    "visitas_minimas": "5 visitas",
+                    "tiempo_minimo_visita": 3,
+                    "honorarios": 146000
+                },
+                {
+                    "cantidad": ">1000 m³",
+                    "visitas_minimas": "5 visitas",
+                    "tiempo_minimo_visita": 3,
+                    "honorarios": 146000
+                }
+            ]
+        },
+        {
+            "modalidad": "Origen (Plantaciones, SAF, Árboles Plantados Individualmente, Cercas Vivas, Cortinas)",
+            "rangos": [
+                {
+                    "cantidad": "0-99 m³",
+                    "visitas_minimas": "1 visita",
+                    "tiempo_minimo_visita": 3,
+                    "honorarios": 87600
+                },
+                {
+                    "cantidad": "100-299 m³",
+                    "visitas_minimas": "2 visitas",
+                    "tiempo_minimo_visita": 3,
+                    "honorarios": 87600
+                },
+                {
+                    "cantidad": "300-1000 m³",
+                    "visitas_minimas": "3 visitas",
+                    "tiempo_minimo_visita": 5,
+                    "honorarios": 146000
+                },
+                {
+                    "cantidad": ">1000 m³",
+                    "visitas_minimas": "4 visitas",
+                    "tiempo_minimo_visita": 5,
+                    "honorarios": 146000
+                }
+            ]
+        },
+        {
+            "modalidad": "Aprovechamiento en Bosque",
+            "rangos": [
+                {
+                    "cantidad": "-",
+                    "visitas_minimas": "3",
+                    "tiempo_minimo_visita": 6,
+                    "honorarios": 175200
+                }
+            ]
+        },
+        {
+            "modalidad": "Manejo de Bosque",
+            "rangos": [
+                {
+                    "cantidad": "-",
+                    "visitas_minimas": "2/año",
+                    "tiempo_minimo_visita": 6,
+                    "honorarios": 175200
+                }
+            ]
+        },
+        {
+            "modalidad": "Viveros",
+            "rangos": [
+                {
+                    "cantidad": "Hasta 29,999",
+                    "visitas_minimas": "3 visitas (1/mes)",
+                    "tiempo_minimo_visita": 1,
+                    "honorarios": 29200
+                },
+                {
+                    "cantidad": "30,000-99,999",
+                    "visitas_minimas": "2 visitas",
+                    "tiempo_minimo_visita": 1,
+                    "honorarios": 58400
+                },
+                {
+                    "cantidad": "100,000-200,000",
+                    "visitas_minimas": "3 visitas",
+                    "tiempo_minimo_visita": 1,
+                    "honorarios": 87600
+                },
+                {
+                    "cantidad": ">200,000",
+                    "visitas_minimas": "4 visitas",
+                    "tiempo_minimo_visita": 1,
+                    "honorarios": 116800
+                }
+            ]
+        },
+        {
+            "modalidad": "Inscripción y Renovación en Registros",
+            "rangos": [
+                {
+                    "categoria": "Empresas",
+                    "descripcion": "Compañías o entidades consultoras o asesoras",
+                    "honorarios": 94000
+                },
+                {
+                    "categoria": "Peritos Tasadores",
+                    "descripcion": "Peritos y Tasadores Agropecuarios y Forestales",
+                    "honorarios": 67000
+                },
+                {
+                    "categoria": "Profesionales Autorizados",
+                    "descripcion": "Profesionales autorizados para emitir recetas de aplicación aérea",
+                    "honorarios": 67000
+                }
+            ]
+        },
+        {
+            "modalidad": "Papelería de Venta en el Colegio",
+            "rangos": [
+                {
+                    "producto": "Formularios de Regencia Forestal",
+                    "honorarios": 5890
+                },
+                {
+                    "producto": "Informes de Regencia Agropecuaria",
+                    "honorarios": 7500
+                },
+                {
+                    "producto": "Libros de Protocolo",
+                    "honorarios": 13500
+                }
+            ]
+        }
+    ]
+}

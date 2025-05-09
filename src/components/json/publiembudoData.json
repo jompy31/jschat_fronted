@@ -1,0 +1,38 @@
+[
+    {
+        "name": "Combo 1 (Básico para PYMES)",
+        "description": [
+            "Servicios de Publicidad en Redes Sociales",
+            "Creación de Contenidos Visuales",
+            "Publicidad en Clasificados y Banners",
+            "Servicios de Landing Page y Marketing de Contenidos",
+            "Neuromarketing y Psicología del Consumidor"
+        ],
+        "price": "₡68,701.67",
+        "savings": "20% de ahorro"
+    },
+    {
+        "name": "Combo 2 (Medio para Empresas Medianas)",
+        "description": [
+            "Publicidad avanzada en Facebook, Instagram, y Google Ads",
+            "Creación de Video Animado y Audio Profesional",
+            "Landing Page Personalizada",
+            "Redacción de Artículos de Blog",
+            "Neuromarketing y Comunicación Neurolingüística"
+        ],
+        "price": "₡88,946.67",
+        "savings": "20% de ahorro"
+    },
+    {
+        "name": "Combo 3 (Avanzado para Empresas Grandes)",
+        "description": [
+            "Publicidad en TikTok, LinkedIn, y más",
+            "Tienda Virtual Avanzada",
+            "Perfilado Neuromarketing y Psicología del Color",
+            "Redacción SEO avanzada",
+            "Video Animado y Experiencia del Usuario"
+        ],
+        "price": "₡105,887.69",
+        "savings": "20% de ahorro"
+    }
+]

@@ -1,0 +1,125 @@
+{
+    "Costa_Rica": {
+      "location": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4043291.809606004!2d-87.58715119279981!3d8.250207766744383!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f92e56221acc925%3A0x6254f72535819a2b!2sCosta%20Rica!5e0!3m2!1ses-419!2scr!4v1729951969562!5m2!1ses-419!2scr",
+      "Provinces": [
+        {
+          "name": "San José",
+          "cantons": [
+            "San José",
+            "Escazú",
+            "Desamparados",
+            "Puriscal",
+            "Tarrazú",
+            "Aserrí",
+            "Mora",
+            "Goicoechea",
+            "Santa Ana",
+            "Alajuelita",
+            "Vásquez de Coronado",
+            "Acosta",
+            "Tibás",
+            "Moravia",
+            "Montes de Oca",
+            "Turrubares",
+            "Dota",
+            "Curridabat",
+            "Pérez Zeledón",
+            "León Cortés Castro"
+          ]
+        },
+        {
+          "name": "Alajuela",
+          "cantons": [
+            "Alajuela",
+            "San Ramón",
+            "Grecia",
+            "San Mateo",
+            "Atenas",
+            "Naranjo",
+            "Palmares",
+            "Poás",
+            "Orotina",
+            "San Carlos",
+            "Zarcero",
+            "Valverde Vega",
+            "Upala",
+            "Los Chiles",
+            "Guatuso",
+            "Río Cuarto"
+          ]
+        },
+        {
+          "name": "Cartago",
+          "cantons": [
+            "Cartago",
+            "Paraíso",
+            "La Unión",
+            "Jiménez",
+            "Turrialba",
+            "Alvarado",
+            "Oreamuno",
+            "El Guarco"
+          ]
+        },
+        {
+          "name": "Heredia",
+          "cantons": [
+            "Heredia",
+            "Barva",
+            "Santo Domingo",
+            "Santa Bárbara",
+            "San Rafael",
+            "San Isidro",
+            "Belén",
+            "Flores",
+            "San Pablo",
+            "Sarapiquí"
+          ]
+        },
+        {
+          "name": "Guanacaste",
+          "cantons": [
+            "Liberia",
+            "Nicoya",
+            "Santa Cruz",
+            "Bagaces",
+            "Carrillo",
+            "Cañas",
+            "Abangares",
+            "Tilarán",
+            "Nandayure",
+            "La Cruz",
+            "Hojancha"
+          ]
+        },
+        {
+          "name": "Puntarenas",
+          "cantons": [
+            "Puntarenas",
+            "Esparza",
+            "Buenos Aires",
+            "Montes de Oro",
+            "Osa",
+            "Quepos",
+            "Golfito",
+            "Coto Brus",
+            "Parrita",
+            "Corredores",
+            "Garabito"
+          ]
+        },
+        {
+          "name": "Limón",
+          "cantons": [
+            "Limón",
+            "Pococí",
+            "Siquirres",
+            "Talamanca",
+            "Matina",
+            "Guácimo"
+          ]
+        }
+      ]
+    }
+  }
+  

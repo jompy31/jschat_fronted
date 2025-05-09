@@ -1,5 +1,3 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # dependencies
 /node_modules
 /.pnp
@@ -10,7 +8,9 @@
 
 # production
 /build
-
+# Ignore services folder
+frontend/src/containers/services/
+# frontend/src/services/
 # misc
 .DS_Store
 .env.local

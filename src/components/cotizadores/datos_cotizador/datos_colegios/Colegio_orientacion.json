@@ -1,0 +1,108 @@
+{
+    "colegio": "Colegio de Profesionales en Orientación de Costa Rica",
+    "pagina_web": "https://www.cpocr.org/",
+    "modalidades": [
+        {
+            "modalidad": "Virtual o Presencial",
+            "grado": "Bachillerato",
+            "servicios": [
+                {
+                    "servicio": "Proceso de Orientación grupal",
+                    "descripcion": "Máximo 15 personas: ₡13,069.00 por persona por sesión. De 16 personas en adelante: ₡10,455.00 por persona por sesión."
+                },
+                {
+                    "servicio": "Consultoría",
+                    "descripcion": "No se recomienda esta modalidad para personas con Bachillerato."
+                },
+                {
+                    "servicio": "Charlas - Conferencias",
+                    "descripcion": "₡39,205.50 por sesión"
+                },
+                {
+                    "servicio": "Bachilleres universitarios (Tarifa adicional)",
+                    "descripcion": "₡26,137.00 por sesión"
+                },
+                {
+                    "servicio": "Licenciados universitarios (Tarifa adicional)",
+                    "descripcion": "₡35,286.30 por sesión"
+                },
+                {
+                    "servicio": "Posgrado (Tarifa adicional)",
+                    "descripcion": "₡39,207.00 por sesión"
+                },
+                {
+                    "servicio": "Salario base",
+                    "descripcion": "₡653,427.21 para Bachilleres universitarios"
+                }
+            ]
+        },
+        {
+            "modalidad": "Virtual o Presencial",
+            "grado": "Licenciatura",
+            "servicios": [
+                {
+                    "servicio": "Proceso de Orientación grupal",
+                    "descripcion": "Máximo 15 personas: ₡17,643.15 por persona por sesión. De 16 personas en adelante: ₡14,114.50 por persona por sesión."
+                },
+                {
+                    "servicio": "Consultoría",
+                    "descripcion": "₡52,929.45 por día"
+                },
+                {
+                    "servicio": "Charlas - Conferencias",
+                    "descripcion": "₡52,929.45 por sesión"
+                },
+                {
+                    "servicio": "Bachilleres universitarios (Tarifa adicional)",
+                    "descripcion": "4% de salario base de un bachiller universitario según DECRETO N°44756-MTSS"
+                },
+                {
+                    "servicio": "Licenciados universitarios (Tarifa adicional)",
+                    "descripcion": "4.5% de salario base de un licenciado universitario según DECRETO N°44756-MTSS"
+                },
+                {
+                    "servicio": "Posgrado (Tarifa adicional)",
+                    "descripcion": "5% de salario de un licenciado universitario según DECRETO N°44756-MTSS"
+                },
+                {
+                    "servicio": "Salario base",
+                    "descripcion": "₡784,139.53 para Licenciados universitarios"
+                }
+            ]
+        },
+        {
+            "modalidad": "Virtual o Presencial",
+            "grado": "Posgrado",
+            "servicios": [
+                {
+                    "servicio": "Proceso de Orientación grupal",
+                    "descripcion": "Máximo 15 personas: ₡19,603.50 por persona por sesión. De 16 personas en adelante: ₡15,682.80 por persona por sesión."
+                },
+                {
+                    "servicio": "Consultoría",
+                    "descripcion": "₡58,810.50 por día"
+                },
+                {
+                    "servicio": "Charlas - Conferencias",
+                    "descripcion": "₡58,810.50 por sesión"
+                },
+                {
+                    "servicio": "Bachilleres universitarios (Tarifa adicional)",
+                    "descripcion": "4% de salario base de un bachiller universitario según DECRETO N°44756-MTSS"
+                },
+                {
+                    "servicio": "Licenciados universitarios (Tarifa adicional)",
+                    "descripcion": "4.5% de salario base de un licenciado universitario según DECRETO N°44756-MTSS"
+                },
+                {
+                    "servicio": "Posgrado (Tarifa adicional)",
+                    "descripcion": "5% de salario de un licenciado universitario según DECRETO N°44756-MTSS"
+                },
+                {
+                    "servicio": "Salario base",
+                    "descripcion": "-"
+                }
+            ]
+        }
+    ]
+}

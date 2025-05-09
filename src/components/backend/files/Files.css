@@ -1,0 +1,30 @@
+/* Custom styles to complement Tailwind CSS */
+.files-container {
+  font-family: 'Inter', sans-serif;
+}
+
+.preview-image, .preview-video {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.context-container ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+
+.context-container li {
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .preview-image, .preview-video {
+    width: 100%;
+  }
+}

@@ -1,0 +1,35 @@
+.full-width-modal .modal-dialog {
+  width: 80% !important;
+  max-width: none !important;
+  margin: auto !important;
+  background-color: white !important;
+}
+
+@media (max-width: 768px) {
+  .full-width-modal .modal-dialog {
+    width: 95% !important;
+    margin: 0 auto !important;
+  }
+}
+
+.modal-80w {
+  width: 80% !important;
+  max-width: none !important;
+  margin: 0 auto !important;
+}
+
+.modal-90w {
+  width: 90% !important;
+  max-width: none !important;
+  margin: 0 auto !important;
+}
+
+/* Ensure modal dialog is centered and above other content */
+.modal-dialog {
+  z-index: 1200 !important;
+}
+
+/* Ensure modal backdrop is just below the modal */
+.modal-backdrop {
+  z-index: 1199 !important;
+}

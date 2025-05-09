@@ -1,0 +1,106 @@
+{
+    "colegio": "Colegio de Contadores Públicos de Costa Rica",
+    "pagina_web": "https://www.contadorespublicos.or.cr/",
+    "servicios": [
+        {
+            "servicio": "Honorarios de Auditoría Financiera, Informática u Operacional",
+            "descripcion": "La tarifa mínima por hora profesional para cualquier tipo de auditoría es de ¢12.133,10. La auditoría mínima es de 80 horas, y cualquier exceso de horas se cobra a esta tarifa.",
+            "precio": "¢12.133,10 por hora"
+        },
+        {
+            "servicio": "Honorarios de Asesoría y Consultoría Administrativa, Financiera, Fiscal y Contable",
+            "descripcion": "Tarifas mínimas para asesoría y consultoría en temas administrativos, financieros, fiscales y contables.",
+            "precio": "¢25.076,01 por hora"
+        },
+        {
+            "servicio": "Honorarios de Peritajes Extrajudiciales y Arbitrajes",
+            "descripcion": "Tarifas para peritajes extrajudiciales y arbitrajes según el monto del peritaje:",
+            "precio": [
+                {
+                    "rango": "Hasta ¢1.011.789,45",
+                    "precio": "¢101.178,94"
+                },
+                {
+                    "rango": "De ¢1.011.789,45 hasta ¢2.022.205,30",
+                    "precio": "5% adicional"
+                },
+                {
+                    "rango": "Sobre el exceso de ¢2.022.205,30",
+                    "precio": "3% adicional"
+                }
+            ]
+        },
+        {
+            "servicio": "Honorarios de Certificación de Ingresos (Relaciones Laborales)",
+            "descripcion": "Tarifas mínimas para certificación de ingresos brutos generados en relaciones laborales, según rango de ingreso mensual:",
+            "precio": [
+                {
+                    "rango": "Hasta ¢545.994,88",
+                    "precio": "¢20.222,42"
+                },
+                {
+                    "rango": "De ¢545.994,88 a ¢821.014,18",
+                    "precio": "5% adicional sobre el ingreso"
+                },
+                {
+                    "rango": "De ¢821.014,18 a ¢1.213.356,98",
+                    "precio": "4% adicional sobre el ingreso"
+                },
+                {
+                    "rango": "De ¢1.213.356,98 a ¢2.022.205,30",
+                    "precio": "3% adicional sobre el ingreso"
+                },
+                {
+                    "rango": "Sobre el exceso de ¢2.022.205,30",
+                    "precio": "2% adicional sobre el ingreso"
+                }
+            ]
+        },
+        {
+            "servicio": "Honorarios de Certificación o Estudio de Ingresos (Operaciones Comerciales)",
+            "descripcion": "Certificación de ingresos derivados de operaciones comerciales, industriales, profesionales, o lucro cesante, con base en un porcentaje:",
+            "precio": [
+                {
+                    "rango": "Hasta ¢707.772,48",
+                    "precio": "10%"
+                },
+                {
+                    "rango": "Más de ¢707.772,48",
+                    "precio": "5% adicional"
+                }
+            ]
+        },
+        {
+            "servicio": "Honorarios de Certificación de Ingresos (Rentas no Laborales)",
+            "descripcion": "Certificación de ingresos brutos derivados de alquileres, intereses, pensiones, dividendos, comisiones que no provienen de relación laboral.",
+            "precio": [
+                {
+                    "rango": "Hasta ¢404.441,41",
+                    "precio": "10%"
+                },
+                {
+                    "rango": "Superior a ¢404.441,41",
+                    "precio": "5% adicional"
+                }
+            ]
+        },
+        {
+            "servicio": "Honorarios de Estudios de Pre-factibilidad, Factibilidad y Flujos de Efectivo",
+            "descripcion": "Estudio y análisis de pre-factibilidad, factibilidad y flujos de efectivo, basado en la inversión total del proyecto.",
+            "precio": [
+                {
+                    "rango": "Hasta ¢80.888.184,68",
+                    "precio": "1.5% de la inversión total"
+                },
+                {
+                    "rango": "Exceso de ¢80.888.184,68 hasta ¢118.008.092,52",
+                    "precio": "1.0% de la inversión total"
+                },
+                {
+                    "rango": "Más de ¢118.008.092,52",
+                    "precio": "0.5% de la inversión total"
+                }
+            ]
+        }
+    ]
+}

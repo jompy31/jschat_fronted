@@ -1,0 +1,584 @@
+{
+    "categorias": [
+      {
+        "nombre": "Google ADS",
+        "numero": "1",
+        "subcategorias": [
+          {
+            "nombre": "Anuncios Pagados",
+            "numero": "1.1",
+            "grupos": [
+              {
+                "nombre": "ABCupon.com",
+                "numero": "1.1.1",
+                "argumento": "Anuncios promocionados por ABCupon.",
+                "link": "https://ads.google.com"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "nombre": "LinkedIn",
+        "numero": "2",
+        "subcategorias": [
+          {
+            "nombre": "Páginas Corporativas",
+            "numero": "2.1",
+            "grupos": [
+              {
+                "nombre": "ABCupon",
+                "numero": "2.1.1",
+                "argumento": "Página de Linkedin para bolsa de empleo.",
+                "link": "https://www.linkedin.com/company/abcupon"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "nombre": "TikTok",
+        "numero": "3",
+        "subcategorias": [
+          {
+            "nombre": "Canales de TikTok",
+            "numero": "3.1",
+            "grupos": [
+              {
+                "nombre": "ABCupon",
+                "numero": "3.1.1",
+                "argumento": "Videos promocionales de ABCupon.",
+                "link": "https://www.tiktok.com/@abcupon_cr?_t=ZM-8t64CQbxVUE&_r=1"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "nombre": "WhatsApp",
+        "numero": "4",
+        "subcategorias": [
+          {
+            "nombre": "WhatsApp comercios Afiliados",
+            "numero": "4.1",
+            "grupos": [
+              {
+                "nombre": "ABCupon.com",
+                "numero": "4.1.1",
+                "argumento": "Grupo para discusión y solicitudes de créditos.",
+                "link": "https://wa.me/50687886767"
+              },
+              {
+                "nombre": "Inversiones Credi Red",
+                "numero": "4.1.2",
+                "argumento": "Grupo para atender consultas y solicitudes.",
+                "link": "https://wa.me/50662594405"
+              },
+              {
+                "nombre": "Red de Hipotecas",
+                "numero": "4.1.3",
+                "argumento": "Grupo para discusión y solicitudes de créditos.",
+                "link": "https://wa.me/50689741577"
+              },
+              {
+                "nombre": "Coopered",
+                "numero": "4.1.4",
+                "argumento": "Grupo para discusión y solicitudes de créditos.",
+                "link": "https://wa.me/50689741577"
+              },
+              {
+                "nombre": "Casas 50/50",
+                "numero": "4.1.5",
+                "argumento": "Grupo para discusión y solicitudes de créditos.",
+                "link": "https://wa.me/50683840545"
+              },
+              {
+                "nombre": "Laboratorio Legal y Notariado",
+                "numero": "4.1.6",
+                "argumento": "Grupo para discusión y solicitudes de créditos.",
+                "link": "https://wa.me/50662604996"
+              },
+              {
+                "nombre": "Taller enderezado y pintura Jopar",
+                "numero": "4.1.7",
+                "argumento": "Grupo para discusión y solicitudes de créditos.",
+                "link": "https://wa.me/50661551414"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "nombre": "X Twitter",
+        "numero": "5",
+        "subcategorias": [
+          {
+            "nombre": "Perfiles de Empresa",
+            "numero": "5.1",
+            "grupos": [
+              {
+                "nombre": "ABCupon",
+                "numero": "5.1.1",
+                "argumento": "Cuenta oficial para información y promociones ABCupon.",
+                "link": "https://x.com/abcupon_cr"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "nombre": "Instagram",
+        "numero": "6",
+        "subcategorias": [
+          {
+            "nombre": "Fan Page propias",
+            "numero": "6.1",
+            "grupos": [
+              {
+                "nombre": "ABCupon",
+                "numero": "6.1.1",
+                "argumento": "Logo (Solicite crédito aquí) y Argumento: ¿M?",
+                "link": "https://www.instagram.com/abcupon_ventas/"
+              },
+              {
+                "nombre": "Inversiones CrediRed",
+                "numero": "6.1.2",
+                "argumento": "BANCOS, CREDITO, INTERESES, FINANCIAMIENTO, PRESTAMOS, FINANCIERAS, COOPERATIVAS.",
+                "link": "https://www.instagram.com/inversionescredired/"
+              },
+              {
+                "nombre": "Laboratorio Legal y Notariado",
+                "numero": "6.1.3",
+                "argumento": "BANCOS, CREDITO, INTERESES, FINANCIAMIENTO, PRESTAMOS, FINANCIERAS, COOPERATIVAS.",
+                "link": "https://www.instagram.com/laboratoriolegalynotariado/"
+              },
+              {
+                "nombre": "Taller de Enderezado y Pintura Jopar",
+                "numero": "6.1.3",
+                "argumento": "BANCOS, CREDITO, INTERESES, FINANCIAMIENTO, PRESTAMOS, FINANCIERAS, COOPERATIVAS.",
+                "link": "https://www.instagram.com/enderezadoypinturajopar/"
+              },
+              {
+                "nombre": "Coopered R. L.",
+                "numero": "6.1.3",
+                "argumento": "BANCOS, CREDITO, INTERESES, FINANCIAMIENTO, PRESTAMOS, FINANCIERAS, COOPERATIVAS.",
+                "link": "https://www.instagram.com/cooperedrl/"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "nombre": "Facebook",
+        "numero": "7",
+        "subcategorias": [
+          {
+            "nombre": "Fan Page propias",
+            "numero": "7.1",
+            "subsubcategorias": [
+              {
+                "nombre": "Bolsa de empleo",
+                "numero": "7.1.1",
+                "grupos": [
+                  {
+                    "nombre": "BOLSA DE EMPLEO SAN JOSÉ Y DIRECTORIO",
+                    "numero": "7.1.1.1",
+                    "argumento": "Publica y encuentra empleos en San José, Costa Rica.",
+                    "link": "https://www.facebook.com/empleoscostarica"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO TARRAZÚ Y DIRECTORIO",
+                    "numero": "7.1.1.2",
+                    "argumento": "Publica y encuentra empleos en Tarrazú, Costa Rica.",
+                    "link": "https://www.facebook.com/empleostarrazú"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO SANTA ANA Y DIRECTORIO",
+                    "numero": "7.1.1.3",
+                    "argumento": "Publica y encuentra empleos en Santa Ana, Costa Rica.",
+                    "link": "https://www.facebook.com/empleossantaana"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO TIBAS Y DIRECTORIO",
+                    "numero": "7.1.1.4",
+                    "argumento": "Publica y encuentra empleos en Tibas, Costa Rica.",
+                    "link": "https://www.facebook.com/empleostibas"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO MONTES DE OCA Y DIRECTORIO",
+                    "numero": "7.1.1.5",
+                    "argumento": "Publica y encuentra empleos en Montes de Oca, Costa Rica.",
+                    "link": "https://www.facebook.com/empleosmontesdeoca"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO TURRUBARES Y DIRECTORIO",
+                    "numero": "7.1.1.6",
+                    "argumento": "Publica y encuentra empleos en Turrubares, Costa Rica.",
+                    "link": "https://www.facebook.com/empleosturrubares"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO ALAJUELA Y DIRECTORIO",
+                    "numero": "7.1.1.7",
+                    "argumento": "Publica y encuentra empleos en Alajuela, Costa Rica.",
+                    "link": "https://www.facebook.com/empleosalajuela"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO SAN MATEO Y DIRECTORIO",
+                    "numero": "7.1.1.8",
+                    "argumento": "Publica y encuentra empleos en San Mateo, Costa Rica.",
+                    "link": "https://www.facebook.com/empleossanmateo"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO NARANJO Y DIRECTORIO",
+                    "numero": "7.1.1.9",
+                    "argumento": "Publica y encuentra empleos en Naranjo, Costa Rica.",
+                    "link": "https://www.facebook.com/empleosnaranjo"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO GUATUSO Y DIRECTORIO",
+                    "numero": "7.1.1.10",
+                    "argumento": "Publica y encuentra empleos en Guatuso, Costa Rica.",
+                    "link": "https://www.facebook.com/empleosguatuso"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO LA UNIÓN Y DIRECTORIO",
+                    "numero": "7.1.1.11",
+                    "argumento": "Publica y encuentra empleos en La Unión, Costa Rica.",
+                    "link": "https://www.facebook.com/empleoslaunion"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO HEREDIA Y DIRECTORIO",
+                    "numero": "7.1.1.12",
+                    "argumento": "Publica y encuentra empleos en Heredia, Costa Rica.",
+                    "link": "https://www.facebook.com/empleosheredia"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO SANTA BÁRBARA Y DIRECTORIO",
+                    "numero": "7.1.1.13",
+                    "argumento": "Publica y encuentra empleos en Santa Bárbara, Costa Rica.",
+                    "link": "https://www.facebook.com/empleossantabarbara"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO FLORES Y DIRECTORIO",
+                    "numero": "7.1.1.14",
+                    "argumento": "Publica y encuentra empleos en Flores, Costa Rica.",
+                    "link": "https://www.facebook.com/empleosflores"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO SAN PABLO Y DIRECTORIO",
+                    "numero": "7.1.1.15",
+                    "argumento": "Publica y encuentra empleos en San Pablo, Costa Rica.",
+                    "link": "https://www.facebook.com/empleossanpablo"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO ALVARADO Y DIRECTORIO",
+                    "numero": "7.1.1.16",
+                    "argumento": "Publica y encuentra empleos en Alvarado, Costa Rica.",
+                    "link": "https://www.facebook.com/empleosalvarado"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO MONTES DE ORO Y DIRECTORIO",
+                    "numero": "7.1.1.17",
+                    "argumento": "Publica y encuentra empleos en Montes de Oro, Costa Rica.",
+                    "link": "https://www.facebook.com/empleosmontesdeoro"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO CORREDORES Y DIRECTORIO",
+                    "numero": "7.1.1.18",
+                    "argumento": "Publica y encuentra empleos en Corredores, Costa Rica.",
+                    "link": "https://www.facebook.com/empleoscorredores"
+                  }
+                ]
+              },
+              {
+                "nombre": "Directorio comercial",
+                "numero": "7.1.2",
+                "grupos": [
+                  {
+                    "nombre": "DIRECTORIO TELEFONICO ABcupon PURISCAL Y DIRECTORIO",
+                    "numero": "7.1.2.1",
+                    "argumento": "Directorio telefónico de negocios en Puriscal, Costa Rica.",
+                    "link": "https://www.facebook.com/directoriopuriscal"
+                  },
+                  {
+                    "nombre": "DIRECTORIO TELEFONICO ABcupon MORA Y DIRECTORIO",
+                    "numero": "7.1.2.2",
+                    "argumento": "Directorio telefónico de negocios en Mora, Costa Rica.",
+                    "link": "https://www.facebook.com/directoriomora"
+                  },
+                  {
+                    "nombre": "DIRECTORIO TELEFONICO ABcupon CORONADO Y DIRECTORIO",
+                    "numero": "7.1.2.3",
+                    "argumento": "Directorio telefónico de negocios en Coronado, Costa Rica.",
+                    "link": "https://www.facebook.com/directoriocoronado"
+                  },
+                  {
+                    "nombre": "DIRECTORIO TELEFONICO ABcupon MORAVIA Y DIRECTORIO",
+                    "numero": "7.1.2.4",
+                    "argumento": "Directorio telefónico de negocios en Moravia, Costa Rica.",
+                    "link": "https://www.facebook.com/directoriodemoravia"
+                  },
+                  {
+                    "nombre": "DIRECTORIO TELEFONICO ABcupon DOTA Y DIRECTORIO",
+                    "numero": "7.1.2.5",
+                    "argumento": "Directorio telefónico de negocios en Dota, Costa Rica.",
+                    "link": "https://www.facebook.com/directoriodedota"
+                  },
+                  {
+                    "nombre": "DIRECTORIO TELEFONICO SAN RAMON Y DIRECTORIO",
+                    "numero": "7.1.2.6",
+                    "argumento": "Directorio telefónico de negocios en San Ramón, Costa Rica.",
+                    "link": "https://www.facebook.com/directoriosanramon"
+                  },
+                  {
+                    "nombre": "DIRECTORIO TELEFONICO ABcupon TURRIALBA Y DIRECTORIO",
+                    "numero": "7.1.2.7",
+                    "argumento": "Directorio telefónico de negocios en Turrialba, Costa Rica.",
+                    "link": "https://www.facebook.com/directoriodeturrialba"
+                  },
+                  {
+                    "nombre": "DIRECTORIO TELEFONICO BARVA Y DIRECTORIO",
+                    "numero": "7.1.2.8",
+                    "argumento": "Directorio telefónico de negocios en Barva, Costa Rica.",
+                    "link": "https://www.facebook.com/directoriobarva"
+                  },
+                  {
+                    "nombre": "DIRECTORIO TELEFONICO ABcupon SARAPIQUÍ Y DIRECTORIO",
+                    "numero": "7.1.2.9",
+                    "argumento": "Directorio telefónico de negocios en Sarapiquí, Costa Rica.",
+                    "link": "https://www.facebook.com/directoriosarapiqui"
+                  },
+                  {
+                    "nombre": "DIRECTORIO TELEFONICO ABcupon GUANACASTE Y DIRECTORIO",
+                    "numero": "7.1.2.10",
+                    "argumento": "Directorio telefónico de negocios en Guanacaste, Costa Rica.",
+                    "link": "https://www.facebook.com/directorioguanacaste"
+                  }
+                ]
+              },
+              {
+                "nombre": "Escencial Costa Rica",
+                "numero": "7.1.3",
+                "grupos": [
+                  {
+                    "nombre": "ESCENCIAL COSTA RICA HOSPEDAJE ESCAZÚ Y DIRECTORIO",
+                    "numero": "7.1.3.1",
+                    "argumento": "Directorio de hospedajes en Escazú, Costa Rica.",
+                    "link": "https://www.facebook.com/hospedajeescazu"
+                  },
+                  {
+                    "nombre": "ESCENCIAL COSTA RICA HOSPEDAJE SAN JOSÉ Y DIRECTORIO",
+                    "numero": "7.1.3.2",
+                    "argumento": "Directorio de hospedajes en San José, Costa Rica.",
+                    "link": "https://www.facebook.com/hospedajesanjose"
+                  },
+                  {
+                    "nombre": "ESCENCIAL COSTA RICA HOSPEDAJE MANAGUA Y DIRECTORIO",
+                    "numero": "7.1.3.3",
+                    "argumento": "Directorio de hospedajes en Managua, Costa Rica.",
+                    "link": "https://www.facebook.com/hospedajemanagua"
+                  },
+                  {
+                    "nombre": "ESCENCIAL COSTA RICA HOSPEDAJE PUNTARENAS Y DIRECTORIO",
+                    "numero": "7.1.3.4",
+                    "argumento": "Directorio de hospedajes en Puntarenas, Costa Rica.",
+                    "link": "https://www.facebook.com/hospedajepuntarenas"
+                  },
+                  {
+                    "nombre": "ESCENCIAL COSTA RICA HOSPEDAJE LIBERIA Y DIRECTORIO",
+                    "numero": "7.1.3.5",
+                    "argumento": "Directorio de hospedajes en Liberia, Costa Rica.",
+                    "link": "https://www.facebook.com/hospedajeliberia"
+                  },
+                  {
+                    "nombre": "ESCENCIAL COSTA RICA HOSPEDAJE CARTAGO Y DIRECTORIO",
+                    "numero": "7.1.3.6",
+                    "argumento": "Directorio de hospedajes en Cartago, Costa Rica.",
+                    "link": "https://www.facebook.com/hospedajecartago"
+                  },
+                  {
+                    "nombre": "ESCENCIAL COSTA RICA HOSPEDAJE ALAJUELA Y DIRECTORIO",
+                    "numero": "7.1.3.7",
+                    "argumento": "Directorio de hospedajes en Alajuela, Costa Rica.",
+                    "link": "https://www.facebook.com/hospedajealajuela"
+                  },
+                  {
+                    "nombre": "ESCENCIAL COSTA RICA HOSPEDAJE QUEPOS Y DIRECTORIO",
+                    "numero": "7.1.3.8",
+                    "argumento": "Directorio de hospedajes en Quepos, Costa Rica.",
+                    "link": "https://www.facebook.com/hospedajequepos"
+                  },
+                  {
+                    "nombre": "ESCENCIAL COSTA RICA HOSPEDAJE ZARCERO Y DIRECTORIO",
+                    "numero": "7.1.3.9",
+                    "argumento": "Directorio de hospedajes en Zarcero, Costa Rica.",
+                    "link": "https://www.facebook.com/hospedajezarcero"
+                  },
+                  {
+                    "nombre": "ESCENCIAL COSTA RICA HOSPEDAJE RIVERA Y DIRECTORIO",
+                    "numero": "7.1.3.10",
+                    "argumento": "Directorio de hospedajes en Rivera, Costa Rica.",
+                    "link": "https://www.facebook.com/hospedajerivera"
+                  }
+                
+                ]
+              }
+            ]
+          },
+          {
+            "nombre": "Grupos comerciales directos",
+            "numero": "7.2",
+            "subsubcategorias": [
+              {
+                "nombre": "Bolsa de empleo",
+                "numero": "7.2.1",
+                "grupos": [
+                  {
+                    "nombre": "BOLSA DE EMPLEO SAN JOSÉ Y DIRECTORIO",
+                    "numero": "7.2.1.1",
+                    "argumento": "Publica y encuentra empleos en San José, Costa Rica.",
+                    "link": "https://www.facebook.com/empleoscostarica"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO TARRAZÚ Y DIRECTORIO",
+                    "numero": "7.2.1.2",
+                    "argumento": "Publica y encuentra empleos en Tarrazú, Costa Rica.",
+                    "link": "https://www.facebook.com/empleostarrazu"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO SANTA ANA Y DIRECTORIO",
+                    "numero": "7.2.1.3",
+                    "argumento": "Publica y encuentra empleos en Santa Ana, Costa Rica.",
+                    "link": "https://www.facebook.com/empleossantaana"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO TIBAS Y DIRECTORIO",
+                    "numero": "7.2.1.4",
+                    "argumento": "Publica y encuentra empleos en Tibás, Costa Rica.",
+                    "link": "https://www.facebook.com/empleostibas"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO MONTES DE OCA Y DIRECTORIO",
+                    "numero": "7.2.1.5",
+                    "argumento": "Publica y encuentra empleos en Montes de Oca, Costa Rica.",
+                    "link": "https://www.facebook.com/empleosmontesdeoca"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO TURRUBARES Y DIRECTORIO",
+                    "numero": "7.2.1.6",
+                    "argumento": "Publica y encuentra empleos en Turrubares, Costa Rica.",
+                    "link": "https://www.facebook.com/empleosturrubares"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO ALAJUELA Y DIRECTORIO",
+                    "numero": "7.2.1.7",
+                    "argumento": "Publica y encuentra empleos en Alajuela, Costa Rica.",
+                    "link": "https://www.facebook.com/empleosalajuela"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO SAN MATEO Y DIRECTORIO",
+                    "numero": "7.2.1.8",
+                    "argumento": "Publica y encuentra empleos en San Mateo, Costa Rica.",
+                    "link": "https://www.facebook.com/empleossanmateo"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO NARANJO Y DIRECTORIO",
+                    "numero": "7.2.1.9",
+                    "argumento": "Publica y encuentra empleos en Naranjo, Costa Rica.",
+                    "link": "https://www.facebook.com/empleosnaranjo"
+                  },
+                  {
+                    "nombre": "BOLSA DE EMPLEO GUATUSO Y DIRECTORIO",
+                    "numero": "7.2.1.10",
+                    "argumento": "Publica y encuentra empleos en Guatuso, Costa Rica.",
+                    "link": "https://www.facebook.com/empleosguatuso"
+                  }
+                ]
+              },
+              {
+                "nombre": "Directorio comercial",
+                "numero": "7.2.2",
+                "grupos": [
+                  {
+                    "nombre": "DIRECTORIO TELEFONICO ABcupon PURISCAL Y DIRECTORIO",
+                    "numero": "7.2.2.1",
+                    "argumento": "Directorio telefónico de negocios en Puriscal, Costa Rica.",
+                    "link": "https://www.facebook.com/directoriopuriscal"
+                  },
+                  {
+                    "nombre": "DIRECTORIO TELEFONICO ABcupon MORA Y DIRECTORIO",
+                    "numero": "7.2.2.2",
+                    "argumento": "Directorio telefónico de negocios en Mora, Costa Rica.",
+                    "link": "https://www.facebook.com/directoriomora"
+                  },
+                  {
+                    "nombre": "DIRECTORIO TELEFONICO ABcupon CORONADO Y DIRECTORIO",
+                    "numero": "7.2.2.3",
+                    "argumento": "Directorio telefónico de negocios en Coronado, Costa Rica.",
+                    "link": "https://www.facebook.com/directoriocoronado"
+                  },
+                  {
+                    "nombre": "DIRECTORIO TELEFONICO ABcupon LOS CHILES Y DIRECTORIO",
+                    "numero": "7.2.2.4",
+                    "argumento": "Directorio telefónico de negocios en Los Chiles, Costa Rica.",
+                    "link": "https://www.facebook.com/directorioloschiles"
+                  },
+                  {
+                    "nombre": "DIRECTORIO TELEFONICO ABcupon DOTA Y DIRECTORIO",
+                    "numero": "7.2.2.5",
+                    "argumento": "Directorio telefónico de negocios en Dota, Costa Rica.",
+                    "link": "https://www.facebook.com/directoriodota"
+                  }
+                ]
+              },
+              {
+                "nombre": "Escencial Costa Rica",
+                "numero": "7.3.3",
+                "grupos": [
+                  {
+                    "nombre": "ESCENCIAL COSTA RICA HOSPEDAJE ESCAZÚ Y DIRECTORIO",
+                    "numero": "7.3.3.1",
+                    "argumento": "Directorio de hospedajes en Escazú, Costa Rica.",
+                    "link": "https://www.facebook.com/hospedajeescazu"
+                  },
+                  {
+                    "nombre": "ESCENCIAL COSTA RICA HOSPEDAJE PEREZ ZELEDON Y DIRECTORIO",
+                    "numero": "7.3.3.2",
+                    "argumento": "Directorio de hospedajes en Pérez Zeledón, Costa Rica.",
+                    "link": "https://www.facebook.com/hospedajeperezzeledon"
+                  },
+                  {
+                    "nombre": "ESCENCIAL COSTA RICA HOSPEDAJE POAS Y DIRECTORIO",
+                    "numero": "7.3.3.3",
+                    "argumento": "Directorio de hospedajes en Poás, Costa Rica.",
+                    "link": "https://www.facebook.com/hospedajepoas"
+                  },
+                  {
+                    "nombre": "ESCENCIAL COSTA RICA HOSPEDAJE SAN CARLOS Y DIRECTORIO",
+                    "numero": "7.3.3.4",
+                    "argumento": "Directorio de hospedajes en San Carlos, Costa Rica.",
+                    "link": "https://www.facebook.com/hospedajesancarlos"
+                  },
+                  {
+                    "nombre": "ESCENCIAL COSTA RICA HOSPEDAJE LIBERIA Y DIRECTORIO",
+                    "numero": "7.3.3.5",
+                    "argumento": "Directorio de hospedajes en Liberia, Costa Rica.",
+                    "link": "https://www.facebook.com/hospedajeliberia"
+                  },
+                  {
+                    "nombre": "ESCENCIAL COSTA RICA HOSPEDAJE TALAMANCA Y DIRECTORIO",
+                    "numero": "7.3.3.6",
+                    "argumento": "Directorio de hospedajes en Talamanca, Costa Rica.",
+                    "link": "https://www.facebook.com/hospedajetalamanca"
+                  }
+                
+                ]
+              }
+            
+            ]
+          }
+        ]
+      }
+    ]
+  }
+  

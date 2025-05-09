@@ -1,0 +1,81 @@
+{
+    "colegio": "Colegio de Profesionales en Nutrición de Costa Rica",
+    "pagina_web": "https://cpn.cr/",
+    "servicios": [
+        {
+            "servicio": "Hora profesional",
+            "descripcion": "Costo por hora de un servicio profesional de nutrición.",
+            "tarifa": 27785.00
+        },
+        {
+            "servicio": "Hora docente",
+            "descripcion": "Costo por hora de un servicio de nutrición como docente o en actividades de enseñanza.",
+            "tarifa": 10000.00
+        },
+        {
+            "servicio": "Elaboración de menús",
+            "descripcion": "Costo por la elaboración de menús de nutrición.",
+            "tarifa": 3890.00
+        },
+        {
+            "servicio": "Consultoría nacional",
+            "descripcion": "Costo por hora de consultoría profesional en nutrición a nivel nacional.",
+            "tarifa": 27785.00
+        },
+        {
+            "servicio": "Consultoría internacional",
+            "descripcion": "Costo por hora de consultoría profesional en nutrición a nivel internacional.",
+            "tarifa": 45.00
+        },
+        {
+            "servicio": "Consulta individual domiciliar",
+            "descripcion": "Costo por consulta individual a domicilio.",
+            "tarifa": 27785.00
+        },
+        {
+            "servicio": "Consulta individual",
+            "descripcion": "Costo por consulta individual en consultorio.",
+            "tarifa": 24450.00
+        },
+        {
+            "servicio": "Consulta grupal domiciliar (6 a 12 personas)",
+            "descripcion": "Costo por consulta grupal a domicilio para 6 a 12 personas.",
+            "tarifa": 16670.00
+        },
+        {
+            "servicio": "Consulta grupal domiciliar (3 a 5 personas)",
+            "descripcion": "Costo por consulta grupal a domicilio para 3 a 5 personas.",
+            "tarifa": 20000.00
+        },
+        {
+            "servicio": "Consulta grupal (6 a 12 personas)",
+            "descripcion": "Costo por consulta grupal en consultorio para 6 a 12 personas.",
+            "tarifa": 13335.00
+        },
+        {
+            "servicio": "Consulta grupal (3 a 5 personas)",
+            "descripcion": "Costo por consulta grupal en consultorio para 3 a 5 personas.",
+            "tarifa": 16670.00
+        },
+        {
+            "servicio": "Consulta en pareja",
+            "descripcion": "Costo por consulta en pareja en consultorio.",
+            "tarifa": 20000.00
+        },
+        {
+            "servicio": "Consulta en pareja domiciliar",
+            "descripcion": "Costo por consulta en pareja a domicilio.",
+            "tarifa": 23340.00
+        },
+        {
+            "servicio": "Charla magistral (>10 personas)",
+            "descripcion": "Costo por charla magistral de nutrición para más de 10 personas.",
+            "tarifa": 11115.00
+        },
+        {
+            "servicio": "Salario mínimo",
+            "descripcion": "Salario mínimo para los profesionales de nutrición.",
+            "tarifa": 765985.00
+        }
+    ]
+}

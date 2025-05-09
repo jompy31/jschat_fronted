@@ -1,0 +1,41 @@
+{
+    "colegio": "Colegio de Licenciados y Profesores en Letras, Filosofía, Ciencias y Artes de Costa Rica",
+    "pagina_web": "https://www.colypro.com/",
+    "servicios": [
+        {
+            "servicio": "Hora profesional - Profesor/a",
+            "descripcion": "Pago por hora profesional para docentes con grado de Profesor/a.",
+            "precio": "¢13,835.00"
+        },
+        {
+            "servicio": "Hora profesional - Bachiller",
+            "descripcion": "Pago por hora profesional para docentes con grado de Bachiller universitario.",
+            "precio": "¢16,241.00"
+        },
+        {
+            "servicio": "Hora profesional - Licenciado/a",
+            "descripcion": "Pago por hora profesional para docentes con grado de Licenciado/a universitario.",
+            "precio": "¢21,655.00"
+        },
+        {
+            "servicio": "Hora profesional - Máster",
+            "descripcion": "Pago por hora profesional para docentes con grado de Maestría universitaria.",
+            "precio": "¢22,858.00"
+        },
+        {
+            "servicio": "Hora profesional - Doctor/a",
+            "descripcion": "Pago por hora profesional para docentes con grado de Doctorado universitario.",
+            "precio": "¢25,865.00"
+        },
+        {
+            "servicio": "Dedicación Exclusiva",
+            "descripcion": "Retribución económica para docentes con contrato exclusivo con el Ministerio de Educación Pública, que exige título universitario mínimo de Bachiller y cumplimiento de otros requisitos específicos.",
+            "precio": "Varía según puesto"
+        },
+        {
+            "servicio": "Carrera Profesional Docente",
+            "descripcion": "Incentivo económico adicional para docentes con grados académicos adicionales a los requisitos del puesto, que participan en formación académica y capacitación profesional continua.",
+            "precio": "Depende del caso específico"
+        }
+    ]
+}

@@ -1,0 +1,68 @@
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 220px; /* Ancho del sidebar */
+    background: white;
+    margin-right: -50px;
+    margin-top: 15px;
+    color: blue;
+    z-index: 9999;
+    transition: width 0.3s ease;
+  }
+  
+  .sidebar-collapsed {
+    width: 100px; /* Ancho del sidebar colapsado */
+  }
+  
+  .sidebar-toggle {
+    background: transparent;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+  }
+  
+  .sidebar-toggle:hover {
+    background: #f5f5f5;
+  }
+  
+  .sidebar-toggle:focus {
+    outline: none;
+  }
+  
+  .sidebar .sidebar-content {
+    height: 100%;
+  }
+  
+  .sidebar .sidebar-content .sidenav {
+    height: 100%;
+    width: 100%;
+  }
+  
+  
+  .sidebar .sidebar-content .sidenav .sidenav-menu {
+    background: white;
+  }
+  
+  .sidebar .sidebar-content .sidenav .sidenav-menu .sidenav-menu-item {
+    border-bottom: 1px solid white;
+  }
+  
+  .sidebar .sidebar-content .sidenav .sidenav-menu .sidenav-menu-item a {
+    color: black;
+    text-decoration: none;
+  }
+  
+  .sidebar .sidebar-content .sidenav .sidenav-menu .sidenav-menu-item a:hover {
+    color: blue;
+  }
+  
+  .sidebar .sidebar-content .sidenav .sidenav-menu .sidenav-menu-item .sidenav-menu-icon {
+    color: blue;
+  }
+  
+  .sidebar .sidebar-content .sidenav .sidenav-menu .sidenav-menu-item .sidenav-menu-text {
+    color: black;
+  }
+  

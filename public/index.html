@@ -1,43 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Cache-Control" content="no-store" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description"
+    content="ABcupon - Tu plataforma para servicios y productos en Costa Rica. Conectamos a usuarios con proveedores confiables.">
+  <meta name="keywords"
+    content="ABCupon, avisos clasificados, bolsa de empleo, directorio de servicios en Costa Rica,catalogo digital, catalogo fisico, descuentos exclusivos, proveedores confiables" />
+  <meta name="author" content="Ing. Jean Pierre Barnett Caruzo" />
+  <meta name="robots" content="index, follow" />
+  <meta name="googlebot" content="index, follow" />
+  <meta name="generator" content="Tu Plataforma de Blog" />
+  <meta property="og:title" content="ABCupon - Directorio confiable de servicios y productos en Costa Rica">
+  <meta property="og:description"
+    content="Encuentra servicios y productos de calidad en Costa Rica. Conectamos a usuarios con proveedores confiables y ofrecemos descuentos exclusivos. ¡Visita ABCupon ahora!">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/cambio_pagina.jpeg" />
+  <meta property="og:url" content="https://abcupon.com/" />
+  <meta property="og:site_name" content="ABcupon" />
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+<!-- Google tag jpbc(gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JX15TNQ4LE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-  </body>
+  gtag('config', 'G-JX15TNQ4LE');
+</script>
+
+<!-- Google tag gerencia (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-0W7DW00DM7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-0W7DW00DM7');
+</script>
+<!-- Meta Pixel Code -->
+<script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '586277364172554');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=586277364172554&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
+
+  <link rel="canonical" href="https://abcupon.com/" />
+  <link rel="stylesheet" type="text/css" href="/loader.css" />
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="apple-touch-icon" href="/logo192.png" />
+  <link rel="manifest" href="/manifest.json" />
+
+  <style>
+    /* Mejora del rendimiento de las fuentes */
+    @font-face {
+      font-family: 'YourFontFamily';
+      src: url('/path/to/font.woff2') format('woff2');
+      font-display: swap;
+      /* Evita el CLS debido a la carga de fuentes */
+    }
+  </style>
+
+  <!-- Notice the use of %PUBLIC_URL% in the tags above. It will be replaced with the URL of the `public` folder during the build. Only files inside the `public` folder can be referenced from the HTML. Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will work correctly both with client-side routing and a non-root public URL. Learn how to configure a non-root public URL by running `npm run build`. -->
+  <title>ABcupon - Tu Plataforma de Servicios y Productos</title>
+
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root">
+    <div id="loading-bg">
+      <div class="loading-logo">
+        <img src="/cambio_pagina.jpeg" height="50" width="50" alt="Logo" loading="lazy" />
+        <!-- Tamaño definido para evitar CLS -->
+      </div>
+      <h1>Bienvenido a ABcupon - Tu Directorio Digital de Productos</h1>
+      <h2>Somos la primera plataforma costarricense en ofrecer un directorio comercial para todo publico. Contáctenos en
+        Uruca, San José al (+506) 8384-0545 o vía correo electrónico a soporte@abcupon.com.</h2>
+      <h3>En ABcupon.com, nos esforzamos por ofrecer una experiencia de compra cómoda, segura y satisfactoria. Nuestra
+        misión es facilitar su vida con una variedad de servicios que van desde bienestar y belleza hasta ocio,
+        garantizando que cada proveedor cumpla con los más altos estándares de calidad. Nuestra visión es convertirnos
+        en el referente principal de servicios confiables y de calidad, donde tanto proveedores como clientes disfruten
+        de un entorno virtual seguro y conveniente.
+        Valoramos su confianza y trabajamos para ofrecer transparencia en todas nuestras transacciones, con un enfoque
+        en el servicio al cliente excepcional. Lo invitamos a explorar nuestras ofertas y promociones exclusivas, y
+        agradecemos que sea parte de la comunidad de ABcupon.com. Estamos aquí para hacer su vida más fácil y
+        satisfactoria.</h3>
+      <h3>CONTÁCTENOS</h3>
+      <p>Costa Rica, San José, Uruca 300 metros Oeste del Hotel Irazu</p>
+      <p>(+506) 8384-0545</p>
+      <p><a href="mailto:soporte@abcupon.com">soporte@abcupon.com</a></p>
+
+      <h3>Quiénes somos</h3>
+      <p>En ABcupon.com, nos esforzamos por hacer que su experiencia de compra sea cómoda, segura y satisfactoria.
+        Nuestra plataforma está diseñada pensando en usted, para que pueda navegar fácilmente y encontrar los servicios
+        que mejor se adapten a sus necesidades.</p>
+
+      <h3>MISIÓN</h3>
+      <p>Nuestra misión es facilitar su vida al ofrecerle una amplia variedad de servicios, desde bienestar y belleza
+        hasta actividades de ocio, todo en un solo lugar. Trabajamos diligentemente para garantizar que cada proveedor
+        cumpla con los más altos estándares de calidad y confiabilidad, para que pueda disfrutar de una experiencia
+        excepcional en cada transacción.</p>
+
+      <h3>VISIÓN</h3>
+      <p>Nuestra visión es convertirnos en el referente principal para aquellos que buscan servicios confiables y de
+        calidad en un entorno virtual. Nos esforzamos por ser reconocidos como el destino preferido, donde tanto
+        proveedores como clientes puedan encontrar una plataforma segura, transparente y conveniente para satisfacer sus
+        necesidades.</p>
+
+      <p>Valoramos la confianza que deposita en nosotros al elegir ABcupón.com. Trabajamos arduamente para garantizar la
+        transparencia en todas nuestras transacciones y nos esforzamos por brindarle un servicio al cliente excepcional.
+        Siempre estamos dispuestos a escuchar sus comentarios, responder sus preguntas y solucionar cualquier inquietud
+        que pueda tener.</p>
+
+      <p>Le invitamos a explorar nuestra amplia selección de servicios y a disfrutar de las ofertas y promociones
+        exclusivas que encontrará en ABcupón.com. Confía en nosotros para hacer su vida más fácil y satisfactoria.</p>
+
+      <p>Gracias por ser parte de la comunidad de ABcupón.com. Esperamos poder brindarle una experiencia inigualable
+        mientras le acompañamos en la búsqueda de servicios confiables y de calidad.</p>
+
+      <p>Equipo de ABcupón.com</p>
+    </div>
+  </div>
+  <p style="color:rgba(255,255,255,.1);background-color:rgba(255,255,255,.1)">Para obtener más información sobre
+    servicios y productos, visita el sitio web de <a href="https://www.directoriodecooperativas.com/" target="_blank"
+      rel="noopener noreferrer" title="Directorio de Cooperativas">Visita nuestro directorio de cooperativas</a>
+    .</p>
+  <footer style="color:rgba(255,255,255,.1);background-color:rgba(255,255,255,.1)">
+    <p> <a href="https://abcupon.com/" title="ABcupon">Visita nuestro sitio web</a>.</p>
+
+  </footer>
+</body>
+
+<!-- Archivo sitemap.xml -->
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url style="color: rgba(255, 255, 255, 0.1); background-color: rgba(255, 255, 255, 0.1);">
+    <loc>https://abcupon.com/</loc>
+    <changefreq style="color: rgba(255, 255, 255, 0.1); background-color: rgba(255, 255, 255, 0.1);"></changefreq>
+    <priority style="color: rgba(255, 255, 255, 0.1); background-color: rgba(255, 255, 255, 0.1);"></priority>
+  </url>
+  <!-- Agregar URLS adicionales aquí -->
+</urlset>
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "ABcupon - Tu Directorio comercial",
+  "description": "ABcupon conecta a usuarios con proveedores confiables en Costa Rica.",
+    "url": "https://abcupon.com/",
+    "logo": "https://abcupon.com/logo192.png",
+    "mainEntity": {
+      "@type": "Service",
+      "serviceType": "Directorio de servicios",
+      "provider": {
+        "@type": "Organization",
+        "name": "ABcupon"
+      }
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+506 8384-0545",
+      "contactType": "Customer Service",
+      "areaServed": "CR",
+      "availableLanguage": "Spanish"
+    }
+  }
+  </script>
+
+</html>
+
 </html>

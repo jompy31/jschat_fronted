@@ -1,0 +1,22 @@
+{
+    "servicios": [
+      {"tipo_servicio": "Matrimonio civil", "timbres_registro": "₡0", "honorarios_escritura": "₡121 000", "monto_iva": "₡15 730", "valor_del_servicio": "₡136 730", "tipo_cambio": 550, "valor_del_servicio_dolares": "$248.60"},
+      {"tipo_servicio": "Divorcio por mutuo acuerdo sin gananciales", "timbres_registro": "₡0", "honorarios_escritura": "₡121 000", "monto_iva": "₡15 730", "valor_del_servicio": "₡136 730", "tipo_cambio": 550, "valor_del_servicio_dolares": "$248.60"},
+      {"tipo_servicio": "Separación judicial o divorcio con contención sin gananciales", "timbres_registro": "₡0", "honorarios_escritura": "₡181 500", "monto_iva": "₡23 595", "valor_del_servicio": "₡205 095", "tipo_cambio": 550, "valor_del_servicio_dolares": "$372.90"},
+      {"tipo_servicio": "Separación judicial o divorcio sin contención", "timbres_registro": "₡0", "honorarios_escritura": "₡181 500", "monto_iva": "₡23 595", "valor_del_servicio": "₡205 095", "tipo_cambio": 550, "valor_del_servicio_dolares": "$372.90"},
+      {"tipo_servicio": "Reconocimiento de hijos", "timbres_registro": "₡0", "honorarios_escritura": "₡60 500", "monto_iva": "₡7 865", "valor_del_servicio": "₡68 365", "tipo_cambio": 550, "valor_del_servicio_dolares": "$124.30"},
+      {"tipo_servicio": "CAMBIO DE APELLIDOS", "timbres_registro": "₡82 531", "honorarios_escritura": "₡181 500", "monto_iva": "₡23 595", "valor_del_servicio": "₡287 626", "tipo_cambio": 550, "valor_del_servicio_dolares": "$522.96"},
+      {"tipo_servicio": "Autenticación notarial", "timbres_registro": "₡275", "honorarios_escritura": "₡20 510", "monto_iva": "₡2 666", "valor_del_servicio": "₡23 451", "tipo_cambio": 550, "valor_del_servicio_dolares": "$42.64"},
+      {"tipo_servicio": "Autenticación de firma", "timbres_registro": "₡275", "honorarios_escritura": "₡18 150", "monto_iva": "₡2 360", "valor_del_servicio": "₡20 785", "tipo_cambio": 550, "valor_del_servicio_dolares": "$37.79"},
+      {"tipo_servicio": "Autenticación de firma de notario en poder ante la DNN", "timbres_registro": "₡650", "honorarios_escritura": "₡11 175", "monto_iva": "₡1 453", "valor_del_servicio": "₡13 278", "tipo_cambio": 550, "valor_del_servicio_dolares": "$24.14"},
+      {"tipo_servicio": "Autenticación de firma de notario por la DNN", "timbres_registro": "₡525", "honorarios_escritura": "₡10 000", "monto_iva": "₡1 300", "valor_del_servicio": "₡11 825", "tipo_cambio": 550, "valor_del_servicio_dolares": "$21.50"},
+      {"tipo_servicio": "Autenticación firma de notario por la DNN en certificaciones de copias", "timbres_registro": "₡551", "honorarios_escritura": "₡11 175", "monto_iva": "₡1 453", "valor_del_servicio": "₡13 179", "tipo_cambio": 550, "valor_del_servicio_dolares": "$23.96"},
+      {"tipo_servicio": "Sociedad mercantil. Protocolización de actas sin efectos registrales*", "timbres_registro": "₡0", "honorarios_escritura": "₡60 500", "monto_iva": "₡7 865", "valor_del_servicio": "₡68 365", "tipo_cambio": 550, "valor_del_servicio_dolares": "$124.30"},
+      {"tipo_servicio": "Sociedad mercantil. Redacción de actas con efectos registrales*", "timbres_registro": "₡0", "honorarios_escritura": "₡90 750", "monto_iva": "₡11 798", "valor_del_servicio": "₡102 548", "tipo_cambio": 550, "valor_del_servicio_dolares": "$186.45"},
+      {"tipo_servicio": "Cancelación de condiciones, limitaciones, anotaciones", "timbres_registro": "₡420", "honorarios_escritura": "₡121 000", "monto_iva": "₡15 730", "valor_del_servicio": "₡137 150", "tipo_cambio": 550, "valor_del_servicio_dolares": "$249.36"},
+      {"tipo_servicio": "S.A.y sociedad de responsabilidad limitada (Capital social de ₡10,000)", "timbres_registro": "₡82 531", "honorarios_escritura": "₡181 500", "monto_iva": "₡23 595", "valor_del_servicio": "₡287 626", "tipo_cambio": 550, "valor_del_servicio_dolares": "$522.96"},
+      {"tipo_servicio": "Cancelación de condiciones, limitaciones, anotaciones", "timbres_registro": "₡420", "honorarios_escritura": "₡121 000", "monto_iva": "₡15 730", "valor_del_servicio": "₡137 150", "tipo_cambio": 550, "valor_del_servicio_dolares": "$249.36"},
+      {"tipo_servicio": "S. A. y sociedad de responsabilidad limitada (Capital social de ₡10mil*", "timbres_registro": "₡82 531", "honorarios_escritura": "₡181 500", "monto_iva": "₡23 595", "valor_del_servicio": "₡287 626", "tipo_cambio": 550, "valor_del_servicio_dolares": "$522.96"}
+    ]
+  }
+  

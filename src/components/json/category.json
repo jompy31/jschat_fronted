@@ -1,0 +1,1436 @@
+{
+    "categorias": [
+      {
+        "nombre": "1. Autos y Accesorios AB",
+        "subcategorias": [
+          {
+            "nombre": "1.1 Venta de Automoviles",
+            "subsubcategorias": [
+              "1.1.1 Sedanes",
+              "1.1.2 SUV",
+              "1.1.3 Hatchbacks",
+              "1.1.4 Deportivos",
+              "1.1.5 Camionetas"
+            ]
+          },
+          {
+            "nombre": "1.2 Venta de motocicletas",
+            "subsubcategorias": [
+              "1.2.1 Clásicas / Custom",
+              "1.2.2 Doble Propósito",
+              "1.2.3 Enduro",
+              "1.2.4 Kids / Juvenil",
+              "1.2.5 Montañera",
+              "1.2.6 Moto de Trabajo",
+              "1.2.7 Motocross",
+              "1.2.8 Pandillera",
+              "1.2.9 Pistera / Deportiva",
+              "1.2.10 Scooter",
+              "1.2.11 Sport / Naked",
+              "1.2.12 Standard",
+              "1.2.13 Touring / Adventure"
+            ]
+          },
+          {
+            "nombre": "1.3 Venta de camiones",
+            "subsubcategorias": [
+              "1.3.1 Camiones de carga",
+              "1.3.2 Camiones de mudanza",
+              "1.3.3 Camiones frigoríficos"
+            ]
+          },
+          {
+            "nombre": "1.4 Venta de cuadraciclos",
+            "subsubcategorias": [
+              "1.4.1 Cuadraciclos deportivos",
+              "1.4.2 Cuadraciclos utilitarios"
+            ]
+          },
+          {
+            "nombre": "1.5 Venta de lanchas botes jetsky",
+            "subsubcategorias": [
+              "1.5.1 Lanchas deportivas",
+              "1.5.2 Botes de pesca",
+              "1.5.3 Jetsky"
+            ]
+          },
+          {
+            "nombre": "1.6 Venta de campers y carretas",
+            "subsubcategorias": [
+              "1.6.1 Campers de viaje",
+              "1.6.2 Carretas de carga"
+            ]
+          },
+          {
+            "nombre": "1.7 Venta de aeronautica",
+            "subsubcategorias": [
+              "1.7.1 Aviones ligeros",
+              "1.7.2 Helicópteros"
+            ]
+          },
+          {
+            "nombre": "1.8 Taller",
+            "subsubcategorias": [
+              "1.8.1 Taller de vehículos",
+              "1.8.2 Taller de motocicletas",
+              "1.8.3 Taller de lanchas y botes",
+              "1.8.4 Taller de aeronautica"
+            ]
+          },
+          {
+            "nombre": "1.9 Repuestos",
+            "subsubcategorias": [
+              "1.9.1 Repuestos de vehículos",
+              "1.9.2 Repuestos de motocicletas",
+              "1.9.3 Repuestos de camiones",
+              "1.9.4 Repuestos de cuadraciclos",
+              "1.9.5 Repuestos de lanchas y botes",
+              "1.9.6 Repuestos de campers y carretas"
+            ]
+          },
+          {
+            "nombre": "1.10 Servicio de grúa Urgencias",
+            "subsubcategorias": [
+              "1.10.1 Servicio de grúa",
+              "1.10.2 Emergencia en Sitio",
+              "1.10.3 Reparación de motores"
+            ]
+          }
+        ]
+      },
+      {
+        "nombre": "2. Bolsa de Empleo AB",
+        "subcategorias": [
+          {
+            "nombre": "2.1 Ferias de empleo",
+            "subsubcategorias": [
+              "2.1.1 Sector Administrativo",
+              "2.1.2 Sector Servicios",
+              "2.1.3 Sector Industrial",
+              "2.1.4 Sector Tecnológico",
+              "2.1.5 Sector Salud",
+              "2.1.6 Sector Educación",
+              "2.1.7 Sector Turismo",
+              "2.1.8 Sector Construcción",
+              "2.1.9 Sector Marketing y Ventas"
+            ]
+          },
+          {
+            "nombre": "2.2 TCU, Voluntariado",
+            "subsubcategorias": [
+              "2.2.1 Contabilidad",
+              "2.2.2 Diseño Gráfico",
+              "2.2.3 Investigación de Mercado",
+              "2.2.4 Desarrollo de Software",
+              "2.2.5 Psicología",
+              "2.2.6 Educación",
+              "2.2.7 Enfermería",
+              "2.2.8 Trabajo Social"
+            ]
+          },
+          {
+            "nombre": "2.3 Directorio Bolsa de empleo",
+            "subsubcategorias": [
+              "2.3.1 Contabilidad",
+              "2.3.2 Diseño Gráfico",
+              "2.3.3 Desarrollo de Software",
+              "2.3.4 Ingeniería",
+              "2.3.5 Marketing",
+              "2.3.6 Ventas",
+              "2.3.7 Recursos Humanos",
+              "2.3.8 Administración de Empresas",
+              "2.3.9 Salud y Medicina",
+              "2.3.10 Turismo"
+            ]
+          },
+          {
+            "nombre": "2.4 Servicios profesionales, Freelance",
+            "subsubcategorias": [
+              "2.4.1 Contabilidad",
+              "2.4.2 Diseño Gráfico",
+              "2.4.3 Marketing Digital",
+              "2.4.4 Desarrollo Web",
+              "2.4.5 Redacción y Copywriting",
+              "2.4.6 Traducción e Interpretación",
+              "2.4.7 Consultoría de Negocios",
+              "2.4.8 Asesoría Legal",
+              "2.4.9 Fotografía",
+              "2.4.10 Video y Producción Audiovisual"
+            ]
+          },
+          {
+            "nombre": "2.5 Empresa requiere trabajador, avisos de plazas vacantes",
+            "subsubcategorias": [
+              "2.5.1 Contabilidad",
+              "2.5.2 Diseño Gráfico",
+              "2.5.3 Marketing",
+              "2.5.4 Desarrollo de Software",
+              "2.5.5 Recursos Humanos",
+              "2.5.6 Atención al Cliente",
+              "2.5.7 Ventas",
+              "2.5.8 Logística",
+              "2.5.9 Salud y Seguridad",
+              "2.5.10 Ingeniería"
+            ]
+          },
+          {
+            "nombre": "2.6 Trabajador se postula interesado en plazas vacantes en su área",
+            "subsubcategorias": [
+              "2.6.1 Contabilidad",
+              "2.6.2 Diseño Gráfico",
+              "2.6.3 Marketing",
+              "2.6.4 Desarrollo de Software",
+              "2.6.5 Ventas",
+              "2.6.6 Atención al Cliente",
+              "2.6.7 Recursos Humanos",
+              "2.6.8 Educación",
+              "2.6.9 Salud",
+              "2.6.10 Turismo"
+            ]
+          },
+          {
+            "nombre": "2.7 Registro de experiencia y evaluación de colaborador y posición",
+            "subsubcategorias": [
+              "2.7.1 Evaluación de Desempeño",
+              "2.7.2 Retroalimentación 360",
+              "2.7.3 Capacitación y Formación",
+              "2.7.4 Promociones y Ascensos",
+              "2.7.5 Clima Organizacional",
+              "2.7.6 Compensación y Beneficios",
+              "2.7.7 Competencias Técnicas",
+              "2.7.8 Competencias Blandas",
+              "2.7.9 Evaluación de Objetivos y Metas",
+              "2.7.10 Registro de Logros y Proyectos"
+            ]
+          }
+        ]
+      },      
+      {
+        "nombre": "3. Casas, Lotes y Boncre",
+        "subcategorias": [
+
+          {
+            "nombre": "3.1 Venta de casas",
+            "subsubcategorias": [
+              "3.1.1 Propiedades en San Jose",
+              "3.1.2 Propiedades en  Alajuela",
+              "3.1.3 Propiedades en Heredia",
+              "3.1.4 Propiedades en Cartago",
+              "3.1.5 Propiedades en Guanacaste",
+              "3.1.6 Propiedades en Puntarenas",
+              "3.1.7 Propiedades en Limón"
+            ]
+          },
+          {
+            "nombre": "3.2 Alquiler de casa",
+            "subsubcategorias": [
+              "3.2.1 Propiedades en San Jose",
+              "3.2.2 Propiedades en Alajuela",
+              "3.2.3 Propiedades en Heredia",
+              "3.2.4 Propiedades en Cartago",
+              "3.2.5 Propiedades en Guanacaste",
+              "3.2.6 Propiedades en Puntarenas",
+              "3.2.7 Propiedades en Limón"
+            ]
+          },
+          {
+            "nombre": "3.3 Venta de Lotes",
+            "subsubcategorias": [
+              "3.3.1 Propiedades en San Jose",
+              "3.3.2 Propiedades en Alajuela",
+              "3.3.3 Propiedades en Heredia",
+              "3.3.4 Propiedades en Cartago",
+              "3.3.5 Propiedades en Guanacaste",
+              "3.3.6 Propiedades en Puntarenas",
+              "3.3.7 Propiedades en Limón"
+            ]
+          },
+          {
+            "nombre": "3.4 Alquiler de Terreno",
+            "subsubcategorias": [
+              "3.4.1 Propiedades en San Jose",
+              "3.4.2 Propiedades en Alajuela",
+              "3.4.3 Propiedades en Heredia",
+              "3.4.4 Propiedades en Cartago",
+              "3.4.5 Propiedades en Guanacaste",
+              "3.4.6 Propiedades en Puntarenas",
+              "3.4.7 Propiedades en Limón"
+            ]
+          },
+          {
+            "nombre": "3.5 Bono Credito",
+            "subsubcategorias": [
+              "3.5.1 Propiedades en San Jose",
+              "3.5.2 Propiedades en Alajuela",
+              "3.5.3 Propiedades en Heredia",
+              "3.5.4 Propiedades en Cartago",
+              "3.5.5 Propiedades en Guanacaste",
+              "3.5.6 Propiedades en Puntarenas",
+              "3.5.7 Propiedades en Limón"
+            ]
+          }
+        ]
+      },
+      {
+        "nombre": "4. Clinica Salud y Estetica",
+        "subcategorias": [
+          {
+            "nombre": "4.1 Medicina general",
+            "subsubcategorias": [
+              "4.1.1 Consulta médica",
+              "4.1.2 Vacunaciones",
+              "4.1.3 Manejo de Enfermedades Crónicas",
+              "4.1.4 Exámenes de laboratorio",
+              "4.1.5 Cirugía menor",
+              "4.1.6 Consultas de seguimiento"
+            ]
+          },
+          {
+            "nombre": "4.2 Odontologia",
+            "subsubcategorias": [
+              "4.2.1 Limpieza dental",
+              "4.2.2 Exámenes de rayos X dentales",
+              "4.2.3 Tratamientos de conducto",
+              "4.2.4 Extracciones dentales",
+              "4.2.5 Blanqueamiento dental",
+              "4.2.6 Implantes dentales",
+              "4.2.7 Selladores dentales",
+              "4.2.8 Prótesis dentales"
+            ]
+          },
+          {
+            "nombre": "4.3 Ortodoncia",
+            "subsubcategorias": [
+              "4.3.1 Evaluación ortodóntica",
+              "4.3.2 Brackets tradicionales",
+              "4.3.3 Brackets estéticos",
+              "4.3.4 Retenedores",
+              "4.3.5 Aparatos ortopédicos maxilofaciales",
+              "4.3.6 Consultas de seguimiento"
+            ]
+          },
+          {
+            "nombre": "4.4 Oftalmologia",
+            "subsubcategorias": [
+              "4.4.1 Exámenes de la vista",
+              "4.4.2 Prescripción de anteojos o lentes de contacto",
+              "4.4.3 Cirugía de cataratas",
+              "4.4.4 Cirugía de corrección de la visión láser (LASIK)",
+              "4.4.5 Tratamiento de enfermedades oculares",
+              "4.4.6 Evaluación de ojos secos",
+              "4.4.7 Consultas de seguimiento"
+            ]
+          },
+          {
+            "nombre": "4.5 Pediatria",
+            "subsubcategorias": [
+              "4.5.1 Exámenes físicos y de desarrollo",
+              "4.5.2 Vacunaciones",
+              "4.5.3 Tratamiento de enfermedades pediátricas ",
+              "4.5.4 Atención de enfermedades crónicas en niños",
+              "4.5.5 Asesoramiento sobre nutrición infantil",
+              "4.5.6 Evaluación y tratamiento de alergias en niños",
+              "4.5.7 Consultas de seguimiento"
+            ]
+          },
+          {
+            "nombre": "4.6 Geriatria",
+            "subsubcategorias": [
+              "4.6.1 Evaluación de la salud geriátrica",
+              "4.6.2 Manejo de enfermedades crónicas en personas mayores",
+              "4.6.3 Asesoramiento sobre medicamentos y polifarmacia",
+              "4.6.4 Cuidado de la memoria y evaluación de demencia",
+              "4.6.5 Rehabilitación geriátrica",
+              "4.6.6 Atención de problemas de movilidad",
+              "4.6.7 Planificación de cuidados a largo plazo",
+              "4.6.8 Consultas de seguimiento"
+            ]
+          },
+          {
+            "nombre": "4.7 Ginecologia",
+            "subsubcategorias": [
+              "4.7.1 Exámenes ginecológicos",
+              "4.7.2 Control de la salud reproductiva",
+              "4.7.3 Anticoncepción y planificación familiar",
+              "4.7.4 Tratamiento de enfermedades ginecológicas",
+              "4.7.5 Atención prenatal y postnatal",
+              "4.7.6 Cirugía ginecológica",
+              "4.7.7 Evaluación y tratamiento de problemas hormonales",
+              "4.7.8 Consultas de seguimiento"
+            ]
+          },
+          {
+            "nombre": "4.8 Farmacias",
+            "subsubcategorias": [
+              "4.8.1 Medicamentos de venta libre",
+              "4.8.2 Medicamentos recetados",
+              "4.8.3 Productos naturales y suplementos",
+              "4.8.4 Artículos de cuidado personal",
+              "4.8.5 Equipos médicos básicos",
+              "4.8.6 Servicios de consulta farmacéutica",
+              "4.8.7 Medicamentos especializados"
+            ]
+          },
+          {
+            "nombre": "4.9 Laboratorios Clínicos",
+            "subsubcategorias": [
+              "4.9.1 Pruebas de rutina (hemograma, glucosa, colesterol)",
+              "4.9.2 Pruebas hormonales",
+              "4.9.3 Pruebas de enfermedades infecciosas",
+              "4.9.4 Pruebas genéticas",
+              "4.9.5 Análisis de fertilidad",
+              "4.9.6 Servicios de toma de muestras a domicilio",
+              "4.9.7 Consultas de interpretación de resultados"
+            ]
+          },
+          {
+            "nombre": "4.10 Clínica de Estética",
+            "subsubcategorias": [
+              "4.10.1 Tratamientos faciales (limpieza profunda, peelings químicos)",
+              "4.10.2 Tratamientos corporales (exfoliaciones, envolturas)",
+              "4.10.3 Depilación láser",
+              "4.10.4 Micropigmentación (cejas, labios, ojos)",
+              "4.10.5 Rellenos dérmicos y ácido hialurónico",
+              "4.10.6 Botox y rejuvenecimiento facial",
+              "4.10.7 Tratamientos contra la celulitis y reafirmantes",
+              "4.10.8 Tratamientos reductivos (crioterapia, ultrasonido, cavitación)",
+              "4.10.9 Reducción de medidas con radiofrecuencia",
+              "4.10.10 Tratamientos capilares (mesoterapia, fortalecimiento capilar)",
+              "4.10.11 Cirugías estéticas: implantes de senos y glúteos",
+              "4.10.12 Evaluación estética personalizada"
+            ]
+          }
+        ]
+      },
+      {
+        "nombre": "5. Comunicación, Tecnología y Energía",
+        "subcategorias": [
+            {
+              "nombre": "5.1 Telecomunicaciones",
+              "subsubcategorias": [
+                "5.1.1 Telefonía Móvil",
+                "5.1.2 Internet de Alta Velocidad",
+                "5.1.3 Televisión por Cable",
+                "5.1.4 Proveedores de Internet",
+                "5.1.5 Redes y comunicaciones",
+                "5.1.6 Seguridad informática"
+              ]
+            },
+            {
+              "nombre": "5.2 Radio y Televisión",
+              "subsubcategorias": [
+                "5.2.1 Estaciones de Radio",
+                "5.2.2 Estaciones de Televisión",
+                "5.2.3 Producción de Contenido Multimedia"
+              ]
+            },
+            {
+              "nombre": "5.3 Desarrollo de Software",
+              "subsubcategorias": [
+                "5.3.1 Aplicaciones Móviles",
+                "5.3.2 Software Empresarial",
+                "5.3.3 Desarrollo de Videojuegos"
+              ]
+            },
+            {
+              "nombre": "5.4 Hardware y Componentes",
+              "subsubcategorias": [
+                "5.4.1 Venta de Equipos de Computación",
+                "5.4.2 Componentes de Hardware",
+                "5.4.3 Accesorios de Computadora"
+              ]
+            },
+            {
+              "nombre": "5.5 Servicios de TI",
+              "subsubcategorias": [
+                "5.5.1 Soporte Técnico",
+                "5.5.2 Servicios de Redes",
+                "5.5.3 Seguridad Informática"
+              ]
+            },
+            {
+              "nombre": "5.6 Empresas de Tecnología",
+              "subsubcategorias": [
+                "5.6.1 Consultoría Tecnológica",
+                "5.6.2 Integración de Sistemas",
+                "5.6.3 Desarrollo de Hardware"
+              ]
+            },
+            {
+              "nombre": "5.7 Energía Solar",
+              "subsubcategorias": [
+                "5.7.1 Paneles Solares",
+                "5.7.2 Instalación de Energía Solar",
+                "5.7.3 Mantenimiento de Sistemas Solares"
+              ]
+            },
+            {
+              "nombre": "5.8 Energía Eólica",
+              "subsubcategorias": [
+                "5.8.1 Generadores Eólicos",
+                "5.8.2 Instalación de Energía Eólica",
+                "5.8.3 Mantenimiento de Sistemas Eólicos"
+              ]
+            },
+            {
+              "nombre": "5.9 Servicios de Electricidad",
+              "subsubcategorias": [
+                "5.9.1 Instalaciones Eléctricas",
+                "5.9.2 Reparación de Equipos Eléctricos",
+                "5.9.3 Generación de Energía Eléctrica"
+              ]
+            },
+            {
+              "nombre": "5.10 Eficiencia Energética",
+              "subsubcategorias": [
+                "5.10.1 Auditoría Energética",
+                "5.10.2 Sistemas de Iluminación Eficiente",
+                "5.10.3 Optimización de Consumo de Energía"
+              ]
+            }
+          ]
+        },
+      {
+        "nombre": "6. Construcción, Diseño y Supervisión",
+        "subcategorias": [
+            {
+              "nombre": "6.1 Constructoras",
+              "subsubcategorias": [
+                "6.1.1 Construcción de Edificios",
+                "6.1.2 Construcción de Carreteras",
+                "6.1.3 Construcción de Puentes"
+              ]
+            },
+            {
+              "nombre": "6.2 Remodelación de Interiores",
+              "subsubcategorias": [
+                "6.2.1 Renovación de Cocinas",
+                "6.2.2 Renovación de Baños",
+                "6.2.3 Decoración de Interiores"
+              ]
+            },
+            {
+              "nombre": "6.3 Construcción de Viviendas",
+              "subsubcategorias": [
+                "6.3.1 Casas Residenciales",
+                "6.3.2 Apartamentos",
+                "6.3.3 Construcción de Casas Prefabricadas"
+              ]
+            },
+            {
+              "nombre": "6.4 Construcción de Obras Públicas",
+              "subsubcategorias": [
+                "6.4.1 Carreteras y Autopistas",
+                "6.4.2 Puentes y Viaductos",
+                "6.4.3 Construcción de Hospitales"
+              ]
+            },
+            {
+              "nombre": "6.5 Diseño de Interiores",
+              "subsubcategorias": [
+                "6.5.1 Diseño de Espacios Comerciales",
+                "6.5.2 Diseño de Oficinas",
+                "6.5.3 Diseño de Restaurantes"
+              ]
+            },
+            {
+              "nombre": "6.6 Supervisión de Obras",
+              "subsubcategorias": [
+                "6.6.1 Supervisión de Construcción Residencial",
+                "6.6.2 Supervisión de Obras de Infraestructura",
+                "6.6.3 Supervisión de Proyectos de Ingeniería"
+              ]
+            },
+            {
+              "nombre": "6.7 Supervisión de Proyectos de Construcción",
+              "subsubcategorias": [
+                "6.7.1 Supervisión de Proyectos de Arquitectura",
+                "6.7.2 Supervisión de Proyectos de Diseño Industrial",
+                "6.7.3 Supervisión de Proyectos de Ingeniería Civil"
+              ]
+            },
+            {
+              "nombre": "6.8 Supervisión de Diseño de Interiores",
+              "subsubcategorias": [
+                "6.8.1 Supervisión de Diseño de Espacios Comerciales",
+                "6.8.2 Supervisión de Diseño de Oficinas",
+                "6.8.3 Supervisión de Diseño de Restaurantes"
+              ]
+            }
+          ]
+        },
+      {
+        "nombre": "7. Cupones de Descuento de Inversión e Intercambio",
+        "subcategorias": [
+            {
+              "nombre": "7.1 Inversiones en Bienes Raíces",
+              "subsubcategorias": [
+                "7.1.1 Inmuebles Comerciales",
+                "7.1.2 Propiedades Residenciales",
+                "7.1.3 Desarrollo de Terrenos"
+              ]
+            },
+            {
+              "nombre": "7.2 Inversiones en Startups",
+              "subsubcategorias": [
+                "7.2.1 Inversiones en Tecnología",
+                "7.2.2 Inversiones en Empresas Emergentes",
+                "7.2.3 Inversiones en Innovación"
+              ]
+            },
+            {
+              "nombre": "7.3 Inversiones en Mercados Financieros",
+              "subsubcategorias": [
+                "7.3.1 Acciones y Valores",
+                "7.3.2 Fondos Mutuos",
+                "7.3.3 Trading de Forex"
+              ]
+            },
+            {
+              "nombre": "7.4 Inversiones en Criptomonedas",
+              "subsubcategorias": [
+                "7.4.1 Bitcoin",
+                "7.4.2 Ethereum",
+                "7.4.3 Ripple"
+              ]
+            },
+            {
+              "nombre": "7.5 Intercambio de Productos",
+              "subsubcategorias": [
+                "7.5.1 Intercambio de Electrónicos",
+                "7.5.2 Intercambio de Ropa",
+                "7.5.3 Intercambio de Juguetes",
+                "7.5.4 Intercambio de Libros"
+              ]
+            },
+            {
+              "nombre": "7.6 Intercambio de Servicios Profesionales",
+              "subsubcategorias": [
+                "7.6.1 Servicios Legales",
+                "7.6.2 Servicios de Consultoría",
+                "7.6.3 Servicios de Diseño Gráfico",
+                "7.6.4 Servicios de Programacion web"
+              ]
+            },
+            {
+              "nombre": "7.7 Intercambio de Experiencias",
+              "subsubcategorias": [
+                "7.7.1 Intercambio de Viajes",
+                "7.7.2 Intercambio de Eventos Culturales",
+                "7.7.3 Intercambio de Experiencias Gastronómicas"
+              ]
+            },
+            {
+              "nombre": "7.8 Descuentos en Restaurantes",
+              "subsubcategorias": [
+                "7.8.1 Comida Rápida",
+                "7.8.2 Restaurantes de Lujo",
+                "7.8.3 Comida Internacional"
+              ]
+            },
+            {
+              "nombre": "7.9 Ofertas en Viajes y Alojamiento",
+              "subsubcategorias": [
+                "7.9.1 Paquetes de Viajes",
+                "7.9.2 Hoteles y Alojamiento",
+                "7.9.3 Ofertas de Vuelos"
+              ]
+            },{
+              "nombre": "7.10 Descuentos en Entretenimiento",
+              "subsubcategorias": [
+                "7.10.1 Cine y Teatro",
+                "7.10.2 Parques de Diversiones",
+                "7.10.3 Fondos de inversión",
+                "7.10.4 Eventos Deportivos"
+              ]
+            },
+            {
+              "nombre": "7.11Promociones en Tiendas Locales",
+              "subsubcategorias": [
+                "7.11.1 Ropa y Moda",
+                "7.11.2 Electrónicos",
+                "7.11.3 Productos para el Hogar"
+              ]
+            }
+          ]
+        },
+        {
+          "nombre": "8. Centros de Educación y Universidades",
+          "subcategorias": [
+            {
+              "nombre": "8.1 Educación superior",
+              "subsubcategorias": [
+                "8.1.1 Universidades",
+                "8.1.2 Institutos técnicos",
+                "8.1.3 Escuelas de negocios",
+                "8.1.4 Centros de idiomas",
+                "8.1.5 Escuelas de arte y diseño",
+                "8.1.6 Facultades de ciencias sociales",
+                "8.1.7 Facultades de ingeniería y tecnología",
+                "8.1.8 Escuelas de salud"
+              ]
+            },
+            {
+              "nombre": "8.2 Educación continua",
+              "subsubcategorias": [
+                "8.2.1 Cursos especializados",
+                "8.2.2 Programas de certificación",
+                "8.2.3 Seminarios y talleres",
+                "8.2.4 Desarrollo profesional",
+                "8.2.5 Cursos en línea",
+                "8.2.6 Formación ejecutiva"
+              ]
+            },
+            {
+              "nombre": "8.3 Educación básica y secundaria",
+              "subsubcategorias": [
+                "8.3.1 Escuelas primarias",
+                "8.3.2 Escuelas secundarias",
+                "8.3.3 Escuelas de formación técnica",
+                "8.3.4 Escuelas para necesidades especiales"
+              ]
+            },
+            {
+              "nombre": "8.4 Educación a distancia",
+              "subsubcategorias": [
+                "8.4.1 Plataformas de e-learning",
+                "8.4.2 Programas de grado a distancia",
+                "8.4.3 Tutorías virtuales"
+              ]
+            },
+            {
+              "nombre": "8.5 Programas de intercambio",
+              "subsubcategorias": [
+                "8.5.1 Intercambio académico internacional",
+                "8.5.2 Programas de movilidad estudiantil",
+                "8.5.3 Estancias de investigación",
+                "8.5.4 Becas internacionales"
+              ]
+            }
+          ]
+        }
+        ,
+        {
+          "nombre": "9. Entretenimiento, Diversión y Restaurantes",
+          "subcategorias": [
+            {
+              "nombre": "9.1 Entretenimiento",
+              "subsubcategorias": [
+                "9.1.1 Cines y teatros",
+                "9.1.2 Parques de diversiones",
+                "9.1.3 Eventos culturales",
+                "9.1.4 Conciertos y espectáculos",
+                "9.1.5 Eventos Deportivos"
+              ]
+            },
+            {
+              "nombre": "9.2 Diversión",
+              "subsubcategorias": [
+                "9.2.1 Baile",
+                "9.2.2 Karaokes",
+                "9.2.3 Parques Acuaticos",
+                "9.2.4 Parques Recreativos"
+              ]
+            },
+            {
+              "nombre": "9.3 Restaurantes",
+              "subsubcategorias": [
+                "9.3.1 Restaurante Tico",
+                "9.3.2 Restaurante Mexicano",
+                "9.3.3 Restaurante Chino",
+                "9.3.4 Restaurante Japones",
+                "9.3.5 Restaurante Koreano",
+                "9.3.6 Restaurante Brasileño",
+                "9.3.7 Restaurante Español",
+                "9.3.8 Restaurante Italiano",
+                "9.3.9 Restaurante Peruano",
+                "9.3.10 Restaurante Colombiano"
+              ]
+            }
+          ]
+        },
+        {
+          "nombre": "10. Ferretería y Depósito",
+          "subcategorias": [
+            {
+              "nombre": "10.1 Ferretería",
+              "subsubcategorias": [
+                "10.1.1 Herramientas Manuales",
+                "10.1.2 Herramientas Eléctricas",
+                "10.1.3 Fijaciones y Tornillos",
+                "10.1.4 Materiales de Construcción",
+                "10.1.5 Pinturas y Acabados",
+                "10.1.6 Cables y Conectores",
+                "10.1.7 Equipos de Soldadura",
+                "10.1.8 Accesorios para Fontanería"
+              ]
+            },
+            {
+              "nombre": "10.2 Depósito",
+              "subsubcategorias": [
+                "10.2.1 Almacenamiento y Organización",
+                "10.2.2 Equipo de Carga y Elevación",
+                "10.2.3 Seguridad Industrial",
+                "10.2.4 Estanterías y Racks",
+                "10.2.5 Palets y Contenedores",
+                "10.2.6 Equipos de Protección Personal (EPP)",
+                "10.2.7 Carretillas y Transpaletas"
+              ]
+            },
+            {
+              "nombre": "10.3 Suministros de Limpieza",
+              "subsubcategorias": [
+                "10.3.1 Productos de Limpieza Doméstica",
+                "10.3.2 Productos de Limpieza Industrial",
+                "10.3.3 Equipos de Limpieza",
+                "10.3.4 Desinfectantes y Sanitizantes",
+                "10.3.5 Equipos de Aspiración",
+                "10.3.6 Accesorios de Limpieza",
+                "10.3.7 Soluciones para Control de Residuos"
+              ]
+            }
+          ]
+        }
+        ,
+        {
+          "nombre": "11. Hogar, Tienda, Electrónica y Supermercados",
+          "subcategorias": [
+            {
+              "nombre": "11.1 Productos para el Hogar",
+              "subsubcategorias": [
+                "11.1.1 Electrodomésticos",
+                "11.1.2 Muebles",
+                "11.1.3 Decoración",
+                "11.1.4 Cocina",
+                "11.1.5 Alfombras",
+                "11.1.6 Cortinas",
+                "11.1.7 Bazar",
+                "11.1.8 Juguetes",
+                "11.1.9 Ropa Damas",
+                "11.1.10 Ropa Hombres",
+                "11.1.11 Ropa Niños",
+                "11.1.12 Zapatería Damas",
+                "11.1.13 Zapatería Hombres",
+                "11.1.14 Zapatería Niños",
+                "11.1.15 Outlet",
+                "11.1.16 Iluminación",
+                "11.1.17 Artículos para el Jardín",
+                "11.1.18 Herramientas para el Hogar"
+              ]
+            },
+            {
+              "nombre": "11.2 Tiendas de Electrónica",
+              "subsubcategorias": [
+                "11.2.1 Teléfonos y Accesorios",
+                "11.2.2 Computadoras y Portátiles",
+                "11.2.3 Electrónica de Consumo",
+                "11.2.4 Audio y Video",
+                "11.2.5 Accesorios Electrónicos",
+                "11.2.6 Cámaras y Fotografía",
+                "11.2.7 Electrodomésticos Inteligentes",
+                "11.2.8 Dispositivos Wearables"
+              ]
+            },
+            {
+              "nombre": "11.3 Supermercado",
+              "subsubcategorias": [
+                "11.3.1 Alimentos",
+                "11.3.2 Bebidas",
+                "11.3.3 Congelados",
+                "11.3.4 Productos Frescos",
+                "11.3.5 Artículos de Limpieza",
+                "11.3.6 Cuidado Personal",
+                "11.3.7 Productos para Mascotas",
+                "11.3.8 Salud y Bienestar",
+                "11.3.9 Comida Rápida y Snacks",
+                "11.3.10 Productos Orgánicos",
+                "11.3.11 Conservas y Salsas",
+                "11.3.12 Artículos de Oficina y Papelería"
+              ]
+            }
+          ]
+        }
+        ,
+        {
+          "nombre": "12. Planes de Inversión, Portafolio Inmobiliario",
+          "subcategorias": [
+            {
+              "nombre": "12.1 Inversiones en Propiedades",
+              "subsubcategorias": [
+                "12.1.1 Apartamentos",
+                "12.1.2 Casas",
+                "12.1.3 Terrenos",
+                "12.1.4 Edificios Comerciales",
+                "12.1.5 Propiedades Residenciales",
+                "12.1.6 Propiedades de Lujo",
+                "12.1.7 Viviendas Vacacionales",
+                "12.1.8 Propiedades de Remate"
+              ]
+            },
+            {
+              "nombre": "12.2 Inversiones en Desarrollo Inmobiliario",
+              "subsubcategorias": [
+                "12.2.1 Proyectos Residenciales",
+                "12.2.2 Proyectos Comerciales",
+                "12.2.3 Proyectos Mixtos",
+                "12.2.4 Proyectos de Urbanización",
+                "12.2.5 Desarrollo de Infraestructura",
+                "12.2.6 Proyectos de Viviendas Sostenibles",
+                "12.2.7 Proyectos de Renovación Urbana"
+              ]
+            },
+            {
+              "nombre": "12.3 Inversiones en Bienes Raíces Comerciales",
+              "subsubcategorias": [
+                "12.3.1 Oficinas",
+                "12.3.2 Locales Comerciales",
+                "12.3.3 Centros Comerciales",
+                "12.3.4 Propiedades para Alquiler Comercial",
+                "12.3.5 Parques Industriales",
+                "12.3.6 Alquileres de Espacios para Co-Working",
+                "12.3.7 Propiedades para Restaurantes y Retail"
+              ]
+            },
+            {
+              "nombre": "12.4 Inversiones en Propiedades Especiales",
+              "subsubcategorias": [
+                "12.4.1 Hoteles y Resorts",
+                "12.4.2 Complejos Turísticos",
+                "12.4.3 Propiedades Industriales",
+                "12.4.4 Propiedades Agrícolas",
+                "12.4.5 Centros de Distribución",
+                "12.4.6 Estaciones de Servicio",
+                "12.4.7 Infraestructuras Logísticas"
+              ]
+            },
+            {
+              "nombre": "12.5 Inversiones en Bienes Raíces Internacionales",
+              "subsubcategorias": [
+                "12.5.1 Inversiones en Propiedades en el Extranjero",
+                "12.5.2 Proyectos Internacionales de Desarrollo",
+                "12.5.3 Oportunidades de Inversión en Mercados Emergentes",
+                "12.5.4 Bienes Raíces en Zonas Turísticas Internacionales"
+              ]
+            },
+            {
+              "nombre": "12.6 Fondos de Inversión Inmobiliaria",
+              "subsubcategorias": [
+                "12.6.1 Fondos de Inversión Residencial",
+                "12.6.2 Fondos de Inversión Comercial",
+                "12.6.3 Fondos de Inversión en Infraestructura",
+                "12.6.4 Fondos de Inversión Mixtos",
+                "12.6.5 Fondos de Inversión Sostenibles"
+              ]
+            }
+          ]
+        }
+        ,
+        {
+          "nombre": "13. Legal y Notariado",
+          "subcategorias": [
+            {
+              "nombre": "13.1 Traspaso",
+              "subsubcategorias": [
+                "13.1.1 Vehículos",
+                "13.1.2 Inmuebles"
+              ]
+            },
+            {
+              "nombre": "13.2 Inscripcion de Hipoteca",
+              "subsubcategorias": [
+                "13.2.1 Escritura para Prestamos por Hipoteca"
+              ]
+            },
+            {
+              "nombre": "13.3 Levantamiento de Hipoteca",
+              "subsubcategorias": [
+                "13.3.1 Escritura de Cancelación"
+              ]
+            },
+            {
+              "nombre": "13.4 Servicios Notariales",
+              "subsubcategorias": [
+                "13.4.1 Matrimonio Civil",
+                "13.4.2 Divorcio por mutuo acuerdo sin gananciales",
+                "13.4.3 Separación judicial o divorcio con contención sin gananciales",
+                "13.4.4 Separación judicial o divorcio sin contención",
+                "13.4.5 Autenticación notarial",
+                "13.4.6 Autenticación de firma",
+                "13.4.7 Autenticación de firma de notario en poder ante la DNN",
+                "13.4.8 Autenticación de firma de notario por la DNN",
+                "13.4.9 Sociedad mercantil. Protocolización de actas sin efectos registrales",
+                "13.4.10 Sociedad mercantil. Redacción de actas con efectos registrales",
+                "13.4.11 Cancelación de condiciones, limitaciones, anotaciones",
+                "13.4.12 Sociedad A y sociedad de responsabilidad limitada"
+              ]
+            },
+            {
+              "nombre": "13.5 Financiamiento de notariado",
+              "subsubcategorias": [
+                "13.5.1 Financiamiento el monto por concepto de los servicios Profesionales"
+              ]
+            },
+            {
+              "nombre": "13.6 Estudio para traspaso",
+              "subsubcategorias": [
+                "13.6.1 Estudio antes de la compra de propiedades",
+                "13.6.2 Estudio antes de la compra de Vehiculos"
+              ]
+            },
+            {
+              "nombre": "13.7 Estudio para Mortuales",
+              "subsubcategorias": [
+                "13.7.1 Estudio para Mortuales sin Contencion",
+                "13.7.2 Estudio para Mortuales con Contencion"
+              ]
+            },
+            {
+              "nombre": "13.8 Estudio para Redaccion",
+              "subsubcategorias": [
+                "13.8.1 Estudio para Redaccion de testamento con Bienes Muebles e Inmuebles",
+                "13.8.2 Estudio para Redaccion de divorcio con Bienes",
+                "13.8.3 Estudio para Redaccion de divorcio sin Bienes"
+              ]
+            },
+            {
+              "nombre": "13.9 Gestión y Litigios Judiciales",
+              "subsubcategorias": [
+                "13.9.1 Cambio de apellidos",
+                "13.9.2 Aviso de cobro a deudor sin resultado económico",
+                "13.9.3 Aviso de cobro a deudor con resultado económico",
+                "13.9.4 Aviso de cobro a deudor con resultado económico mediante arreglo",
+                "13.9.5 Consignación de alquileres",
+                "13.9.6 Convenios preventivos de acreedores",
+                "13.9.7 Fijación de alquileres",
+                "13.9.8 Procesos interdictales",
+                "13.9.9 Procesos de desahucio por falta de pago",
+                "13.9.10 Procesos de ejecución hipotecaria o prendaria",
+                "13.9.11 Procesos sucesorios",
+                "13.9.12 Recursos de amparo y acciones de inconstitucionalidad",
+                "13.9.13 Procesos de divorcio consensuado con o sin liquidación de gananciales",
+                "13.9.14 Procesos de pensión alimenticia y modificación de medidas"
+              ]
+            },
+            {
+              "nombre": "13.10 Servicios Migratorios y Extranjería",
+              "subsubcategorias": [
+                "13.10.1 Cédula de residencia por vínculo con costarricense",
+                "13.10.2 Trámite de naturalización (nacionalidad costarricense)",
+                "13.10.3 Permiso temporal laboral (con o sin oposición)",
+                "13.10.4 Trámites de exequátur en otras materias"
+              ]
+            },
+            {
+              "nombre": "13.11 Servicios Especializados",
+              "subsubcategorias": [
+                "13.11.1 Confección de pagarés o letras de cambio",
+                "13.11.2 Obtención de constancias de entrada y salida del país",
+                "13.11.3 Redacción de actas sin efectos registrales",
+                "13.11.4 Servicios Legales"
+              ]
+            }
+          ]
+        },
+        {
+          "nombre": "14. Librería AB",
+          "subcategorias": [
+            {
+              "nombre": "14.1 Libros",
+              "subsubcategorias": [
+                "14.1.1 Ficción",
+                "14.1.2 No Ficción",
+                "14.1.3 Ciencia Ficción y Fantasía",
+                "14.1.4 Novelas Románticas",
+                "14.1.5 Historia"
+              ]
+            },
+            {
+              "nombre": "14.2 Articulos de oficina",
+              "subsubcategorias": [
+                "14.2.1 Cuadernos y Papelería",
+                "14.2.2 Útiles Escolares",
+                "14.2.3 Mochilas y Bolsos",
+                "14.2.4 Pintura y Dibujo",
+                "14.2.5 Manualidades para Niños",
+                "14.2.6 Material de Arte",
+                "14.2.7 Revistas de Entretenimiento",
+                "14.2.8 Revistas Científicas",
+                "14.2.9 Periódicos Locales",
+                "14.2.10 Lápices",
+                "14.2.11 Bolígrafos",
+                "14.2.12 Marcadores",
+                "14.2.13 Gomas de Borrar"
+              ]
+            }
+          ]
+        },
+      {
+        "nombre": "15. Catálogo, Ofertas y Subastas",
+        "subcategorias": [
+          {
+            "nombre": "15.1 Catalogo de productos",
+            "subsubcategorias": [
+              "15.1.1 Productos Destacados",
+              "15.1.2 Catálogo Completo",
+              "15.1.3 Nuevos Lanzamientos",
+              "15.1.4 Productos en Descuento"
+            ]
+          },
+          {
+            "nombre": "15.2 Ofertas especiales",
+            "subsubcategorias": [
+              "15.2.1 Ofertas Diarias",
+              "15.2.2 Ofertas Semanales",
+              "15.2.3 Ofertas de Temporada",
+              "15.2.4 Ofertas Flash"
+            ]
+          },
+          {
+            "nombre": "15.3 Subastas en linea",
+            "subsubcategorias": [
+              "15.3.1 Subastas en Vivo",
+              "15.3.2 Subastas en Línea",
+              "15.3.3 Subastas de Arte",
+              "15.3.4 Subastas de Coleccionables"
+            ]
+          }
+          ]
+        },
+        {
+          "nombre": "16. Noticias AB",
+          "subcategorias": [
+            {
+              "nombre": "16.1 Noticias locales",
+              "subsubcategorias": [
+                "16.1.1 Política",
+                "16.1.2 Economía",
+                "16.1.3 Cultura",
+                "16.1.4 Deportes"
+              ]
+            },
+            {
+              "nombre": "16.2 Noticias internacionales",
+              "subsubcategorias": [
+                "16.2.1 Actualidad mundial",
+                "16.2.2 Conflictos y diplomacia",
+                "16.2.3 Cambio climático",
+                "16.2.4 Salud global"
+              ]
+            }
+          ]
+        },
+        {
+          "nombre": "17. Póliza y Seguros AB",
+          "subcategorias": [
+            {
+              "nombre": "17.1 Pólizas de Seguros",
+              "subsubcategorias": [
+                "17.1.1 Seguro de Vida",
+                "17.1.2 Seguro de Salud",
+                "17.1.3 Seguro de Automóvil",
+                "17.1.4 Seguro de Hogar",
+                "17.1.5 Seguro de Viaje"
+              ]
+            },
+            {
+              "nombre": "17.2 Seguros Comerciales",
+              "subsubcategorias": [
+                "17.2.1 Seguro de Responsabilidad Civil",
+                "17.2.2 Seguro de Propiedad Comercial",
+                "17.2.3 Seguro de Empleados",
+                "17.2.4 Seguro de Negocio",
+                "17.2.5 Seguro de Flota de Vehículos"
+              ]
+            },
+            {
+              "nombre": "17.3 Seguros Especiales",
+              "subsubcategorias": [
+                "17.3.1 Seguro de Mascotas",
+                "17.3.2 Seguro de Embarcaciones",
+                "17.3.3 Seguro de Arte y Colecciones",
+                "17.3.4 Seguro de Joyería"
+              ]
+            },
+            {
+              "nombre": "17.4 Servicios de Asesoría",
+              "subsubcategorias": [
+                "17.4.1 Asesoría de Seguros",
+                "17.4.2 Reclamaciones y Siniestros",
+                "17.4.3 Evaluación de Riesgos"
+              ]
+            }
+          ]
+        },
+        {
+          "nombre": "18. Préstamos Privados Sobre Propiedades",
+          "subcategorias": [
+            {
+              "nombre": "18.1 Hipotecas",
+              "subsubcategorias": [
+                "18.1.1 Préstamos para vivienda",
+                "18.1.2 Refinanciamiento",
+                "18.1.3 Préstamos inversos",
+                "18.1.4 Préstamos para construcción"
+              ]
+            },
+            {
+              "nombre": "18.2 Préstamos con garantía",
+              "subsubcategorias": [
+                "18.2.1 Préstamos personales",
+                "18.2.2 Préstamos empresariales",
+                "18.2.3 Líneas de crédito",
+                "18.2.4 Préstamos para automóviles"
+              ]
+            }
+          ]
+        },
+        {
+          "nombre": "19. Productos y Servicios Cooperativos",
+          "subcategorias": [
+            {
+              "nombre": "19.1 Productos Cooperativos",
+              "subsubcategorias": [
+                "19.1.1 Alimentos y Agricultura",
+                "19.1.2 Servicios Financieros",
+                "19.1.3 Energía y Medio Ambiente",
+                "19.1.4 Salud y Bienestar",
+                "19.1.5 Educación y Capacitación"
+              ]
+            },
+            {
+              "nombre": "19.2 Servicios Cooperativos",
+              "subsubcategorias": [
+                "19.2.1 Banca Cooperativa",
+                "19.2.2 Cooperativas de Vivienda",
+                "19.2.3 Cooperativas de Crédito",
+                "19.2.4 Cooperativas de Consumidores",
+                "19.2.5 Cooperativas de Agricultores"
+              ]
+            },
+            {
+              "nombre": "19.3 Cooperativas de Trabajo",
+              "subsubcategorias": [
+                "19.3.1 Cooperativas de Agricultura",
+                "19.3.2 Cooperativas de Servicios",
+                "19.3.4 Cooperativas de Producción"
+              ]
+            },
+            {
+              "nombre": "19.4 Apoyo y Asesoramiento",
+              "subsubcategorias": [
+                "19.4.1 Asesoramiento Cooperativo",
+                "19.4.2 Promoción de Cooperativas",
+                "19.4.3 Educación Cooperativa"
+              ]
+            }
+          ]
+        },
+        {
+          "nombre": "20. Combos de Publicidad y Páginas Web",
+          "subcategorias": [
+            {
+              "nombre": "20.1 Diseño Gráfico",
+              "subsubcategorias": [
+                "20.1.1 Logotipos y Branding",
+                "20.1.2 Diseño de Folletos",
+                "20.1.3 Diseño de Tarjetas de Visita",
+                "20.1.4 Diseño de Flyers y Posters",
+                "20.1.5 Diseño de Publicidad Impresa"
+              ]
+            },
+            {
+              "nombre": "20.2 Desarrollo Web",
+              "subsubcategorias": [
+                "20.2.1 Diseño y Desarrollo de Páginas Web",
+                "20.2.2 E-commerce y Tiendas en Línea",
+                "20.2.3 Desarrollo de Aplicaciones Web",
+                "20.2.4 Mantenimiento de Sitios Web",
+                "20.2.5 Optimización de SEO"
+              ]
+            },
+            {
+              "nombre": "20.3 Publicidad en Línea",
+              "subsubcategorias": [
+                "20.3.1 Publicidad en Redes Sociales",
+                "20.3.2 Publicidad en Google Ads",
+                "20.3.3 Marketing por Correo Electrónico",
+                "20.3.4 Publicidad en Display",
+                "20.3.5 Publicidad en Video"
+              ]
+            },
+            {
+              "nombre": "20.4 Marketing y Estrategia",
+              "subsubcategorias": [
+                "20.4.1 Estrategias de Marketing Digital",
+                "20.4.2 Análisis de Datos y Métricas",
+                "20.4.3 Consultoría de Marketing"
+              ]
+            }
+          ]
+        },
+        {
+          "nombre": "21. Fundación Eslabonescr.com",
+          "subcategorias": [
+            {
+              "nombre": "21.1 Eventos y Donaciones",
+              "subsubcategorias": [
+                "21.1.1 Eventos de Recaudación de Fondos",
+                "21.1.2 Donaciones en Línea",
+                "21.1.3 Subastas Benéficas",
+                "21.1.4 Venta de Entradas para Eventos"
+              ]
+            },
+            {
+              "nombre": "21.2 Productos y Servicios",
+              "subsubcategorias": [
+                "21.2.1 Venta de Artículos Benéficos",
+                "21.2.2 Servicios de Consultoría",
+                "21.2.3 Programas de Capacitación"
+              ]
+            },
+            {
+              "nombre": "21.3 Educación y Programas",
+              "subsubcategorias": [
+                "21.3.1 Cursos en Línea",
+                "21.3.2 Programas de Mentoría",
+                "21.3.3 Talleres y Seminarios"
+              ]
+            },
+            {
+              "nombre": "21.4 Arte y Cultura",
+              "subsubcategorias": [
+                "21.4.1 Venta de Obras de Arte",
+                "21.4.2 Eventos Culturales",
+                "21.4.3 Clases de Arte y Música"
+              ]
+            },
+            {
+              "nombre": "21.5 Servicios de Consultoría",
+              "subsubcategorias": [
+                "21.5.1 Consultoría Social y Comunitaria",
+                "21.5.2 Consultoría de Desarrollo Sostenible"
+              ]
+            }
+          ]
+        },
+        {
+          "nombre": "22. Esencial Costa Rica: Hoteles y Turismo",
+          "subcategorias": [
+            {
+              "nombre": "22.1 Hoteles",
+              "subsubcategorias": [
+                "22.1.1 Hoteles de Lujo",
+                "22.1.2 Hoteles Boutique",
+                "22.1.3 Hoteles de Playa",
+                "22.1.4 Hoteles en la Selva",
+                "22.1.5 Hoteles Económicos"
+              ]
+            },
+            {
+              "nombre": "22.2 Turismo de Aventura",
+              "subsubcategorias": [
+                "22.2.1 Tours de Canopy",
+                "22.2.2 Rafting y Kayak",
+                "22.2.3 Senderismo y Trekking",
+                "22.2.4 Observación de Aves"
+              ]
+            },
+            {
+              "nombre": "22.3 Turismo Ecológico",
+              "subsubcategorias": [
+                "22.3.1 Reservas Naturales",
+                "22.3.2 Recorridos en Selva",
+                "22.3.3 Observación de Vida Silvestre"
+              ]
+            },
+            {
+              "nombre": "22.4 Turismo Cultural",
+              "subsubcategorias": [
+                "22.4.1 Visitas a Sitios Históricos",
+                "22.4.2 Museos y Galerías de Arte",
+                "22.4.3 Tours Gastronómicos"
+              ]
+            },
+            {
+              "nombre": "22.5 Paquetes de Viaje",
+              "subsubcategorias": [
+                "22.5.1 Paquetes Todo Incluido",
+                "22.5.2 Paquetes de Aventura",
+                "22.5.3 Paquetes Románticos"
+              ]
+            }
+          ]
+        },
+        {
+          "nombre": "23. Transporte y Mensajería",
+          "subcategorias": [
+            {
+              "nombre": "23.1 Transporte de Carga",
+              "subsubcategorias": [
+                "23.1.1 Transporte de Mercancías",
+                "23.1.2 Logística y Almacenamiento",
+                "23.1.3 Transporte de Materiales Peligrosos",
+                "23.1.4 Transporte Internacional"
+              ]
+            },
+            {
+              "nombre": "23.2 Transporte de Pasajeros",
+              "subsubcategorias": [
+                "23.2.1 Transporte Público",
+                "23.2.2 Servicios de Taxi",
+                "23.2.3 Alquiler de Vehículos",
+                "23.2.4 Transporte Privado"
+              ]
+            },
+            {
+              "nombre": "23.3 Servicios de Mensajería",
+              "subsubcategorias": [
+                "23.3.1 Entrega de Documentos",
+                "23.3.2 Mensajería Express",
+                "23.3.3 Servicios de Correo Postal"
+              ]
+            },
+            {
+              "nombre": "23.4 Logística y Distribución",
+              "subsubcategorias": [
+                "23.4.1 Gestión de Inventarios",
+                "23.4.2 Distribución de Productos",
+                "23.4.3 Servicios de Almacén"
+              ]
+            },
+            {
+              "nombre": "23.5 Transporte de Carga Especializada",
+              "subsubcategorias": [
+                "23.5.1 Transporte de Carga Refrigerada",
+                "23.5.2 Transporte de Carga Pesada",
+                "23.5.3 Transporte de Vehículos"
+              ]
+            }
+          ]
+        },
+        {
+          "nombre": "24. Directorio Comercial C.R",
+          "subcategorias": [
+            {
+              "nombre": "24.1 Directorio de negocios",
+              "subsubcategorias": [
+                "24.1.1 Empresas locales",
+                "24.1.2 Profesionales independientes",
+                "24.1.3 Negocios familiares",
+                "24.1.4 Startups y emprendimientos"
+              ]
+            },
+            {
+              "nombre": "24.2 Directorio de servicios",
+              "subsubcategorias": [
+                "24.2.1 Salud y bienestar",
+                "24.2.2 Servicios legales",
+                "24.2.3 Consultoría empresarial",
+                "24.2.4 Servicios creativos"
+              ]
+            }
+          ]
+        }
+    ]
+  }
+  

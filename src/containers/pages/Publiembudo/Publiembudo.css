@@ -1,0 +1,108 @@
+/* Pantalla completa y estilo general */
+.publiembudo-container {
+    font-family: "Poppins", sans-serif;
+    padding: 2rem;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: white;
+    text-align: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin-top: 6%;
+}
+
+.publiembudo-title {
+    font-size: 2.5rem;
+    margin-bottom: 5%;
+    text-shadow: 0 0 10px #00ffe0;
+}
+
+/* Diseño de la cuadrícula */
+.combo-grid {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* Estilo de las tarjetas */
+.combo-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 1.5rem;
+    width: 300px;
+    box-shadow: 0 0 20px rgba(0, 255, 224, 0.4);
+    transition: transform 0.3s, box-shadow 0.3s;
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.combo-card.center-focus {
+    width: 400px;
+    transform: scale(1.1);
+    box-shadow: 0 0 30px rgba(0, 255, 224, 0.8);
+}
+
+.combo-card.hovered {
+    transform: translateY(-10px);
+    box-shadow: 0 0 30px rgba(0, 255, 224, 0.8);
+}
+
+/* Estilo del contenido */
+.combo-name {
+    font-size: 1.5rem;
+    color: #00ffe0;
+    margin-bottom: 1rem;
+}
+
+.combo-description {
+    text-align: left;
+    margin-bottom: 1rem;
+    list-style: none;
+    padding: 0;
+}
+
+.combo-bullet {
+    margin: 0.5rem 0;
+    color: #cceeff;
+    font-size: 0.95rem;
+}
+
+.combo-price {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.combo-savings {
+    color: #ffcc00;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+/* Botón Cotizar */
+.quote-button {
+    background: #00ffe0;
+    color: #000;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+    align-self: center;
+}
+
+.quote-button:hover {
+    background: #ffcc00;
+    color: #000;
+}

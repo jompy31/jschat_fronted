@@ -1,0 +1,61 @@
+{
+    "colegio": "Colegio de Profesionales en Psicología de Costa Rica",
+    "pagina_web": "https://psicologiacr.com/",
+    "servicios": [
+        {
+            "servicio": "Hora Profesional",
+            "descripcion": "Tarifa por cada hora profesional de trabajo.",
+            "precio": "₡28,620"
+        },
+        {
+            "servicio": "Psicoterapia Individual y otros (60 minutos)",
+            "descripcion": "Sesión de psicoterapia individual o de otros procesos terapéuticos de 60 minutos.",
+            "precio": "₡28,620"
+        },
+        {
+            "servicio": "Psicoterapia de Pareja (90 minutos)",
+            "descripcion": "Sesión de psicoterapia para parejas de 90 minutos.",
+            "precio": "₡39,220"
+        },
+        {
+            "servicio": "Psicoterapia Familiar (90 minutos)",
+            "descripcion": "Sesión de psicoterapia familiar de 90 minutos.",
+            "precio": "₡39,220"
+        },
+        {
+            "servicio": "Psicoterapia o procesos grupales (120 minutos)",
+            "descripcion": "Cobro por cantidad de horas profesionales en procesos grupales. Mínimo 6 personas, máximo 12 personas (adicionando co-terapeuta si se supera el número).",
+            "precio": "₡63,600"
+        },
+        {
+            "servicio": "Talleres Profesionales (60 minutos mínimo)",
+            "descripcion": "Talleres profesionales con una cantidad máxima de 25 personas. Si se supera el número, se agrega un co-facilitador.",
+            "precio": "₡31,177 por hora"
+        },
+        {
+            "servicio": "Informe Psicodiagnóstico (No incluye tiempo de aplicación de pruebas)",
+            "descripcion": "Informe psicodiagnóstico realizado, sin contar el tiempo de aplicación de pruebas.",
+            "precio": "₡63,600"
+        },
+        {
+            "servicio": "Idoneidad mental para portar y poseer armas de fuego o laborar en seguridad privada",
+            "descripcion": "Evaluación de idoneidad mental para portar armas o trabajar en seguridad privada.",
+            "precio": "₡63,600"
+        },
+        {
+            "servicio": "Idoneidad mental para solicitantes de Adopción",
+            "descripcion": "Evaluación de idoneidad mental para solicitantes de adopción.",
+            "precio": "Nota 1"
+        },
+        {
+            "servicio": "Idoneidad mental para laborar en Centros de Atención Integral, Infantil, Públicos, Privados y Mixtos",
+            "descripcion": "Evaluación de idoneidad mental para laborar en centros de atención integral y otros.",
+            "precio": "₡63,600"
+        },
+        {
+            "servicio": "Idoneidad mental para Acompañamiento con Animales de Apoyo Emocional",
+            "descripcion": "Evaluación de idoneidad mental para acompañamiento con animales de apoyo emocional (Acuerdo CPPCR-850-2020).",
+            "precio": "₡63,600"
+        }
+    ]
+}

@@ -1,0 +1,25 @@
+/* Formulario_directorio.css */
+body {
+    font-family: 'Inter', sans-serif;
+  }
+  zapatos de hombrehit
+  input, textarea {
+    transition: all 0.3s ease;
+  }
+  
+  input:focus, textarea:focus {
+    transform: scale(1.02);
+  }
+  
+  .modal {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  button:hover {
+    transform: translateY(-2px);
+  }

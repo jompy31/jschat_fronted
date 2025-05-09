@@ -1,0 +1,297 @@
+{
+    "provincias": {
+      "San José": {
+        "cantones": [
+          {
+            "nombre": "San José",
+            "facebook": "https://www.facebook.com/munidesanjose"
+          },
+          {
+            "nombre": "Escazú",
+            "facebook": "https://www.facebook.com/Municipalidaddeescazu"
+          },
+          {
+            "nombre": "Desamparados",
+            "facebook": "https://www.facebook.com/MuniDesamparados"
+          },
+          {
+            "nombre": "Puriscal",
+            "facebook": "https://www.facebook.com/MunicipalidadDePuriscal"
+          },
+          {
+            "nombre": "Tarrazú",
+            "facebook": "https://www.facebook.com/MunicipalidadTarrazu"
+          },
+          {
+            "nombre": "Aserrí",
+            "facebook": "https://www.facebook.com/Municipalidaddeaseri"
+          },
+          {
+            "nombre": "Alajuelita",
+            "facebook": "https://www.facebook.com/municipalidadalajuelita"
+          },
+          {
+            "nombre": "Goicoechea",
+            "facebook": "https://www.facebook.com/munigoicooficial"
+          },
+          {
+            "nombre": "Santa Ana",
+            "facebook": "https://www.facebook.com/munidesanjose"
+          },
+          {
+            "nombre": "Vásquez de Coronado",
+            "facebook": "https://www.facebook.com/municipalidadvazquezdecoronado"
+          },
+          {
+            "nombre": "Acosta",
+            "facebook": "https://www.facebook.com/GobiernoLocalAcosta"
+          },
+          {
+            "nombre": "Turrubares",
+            "facebook": "https://www.facebook.com/profile.php?id=61560699396429"
+          },
+          {
+            "nombre": "Dota",
+            "facebook": "https://www.facebook.com/profile.php?id=100069342454220"
+          },
+          {
+            "nombre": "Los Santos",
+            "facebook": "https://www.facebook.com/profile.php?id=100063840983708"
+          }
+        ]
+      },
+      "Alajuela": {
+        "cantones": [
+          {
+            "nombre": "Alajuela",
+            "facebook": "https://www.facebook.com/munialajuela"
+          },
+          {
+            "nombre": "Grecia",
+            "facebook": "https://www.facebook.com/grecia.go.cr"
+          },
+          {
+            "nombre": "San Ramón",
+            "facebook": "https://www.facebook.com/profile.php?id=100067996890352"
+          },
+          {
+            "nombre": "Naranjo",
+            "facebook": "https://www.facebook.com/MunicipalidadNaranjo"
+          },
+          {
+            "nombre": "Zarcero",
+            "facebook": "https://www.facebook.com/MuniZarcero"
+          },
+          {
+            "nombre": "Sarchí",
+            "facebook": "https://www.facebook.com/MunicipalidadSarchi"
+          },
+          {
+            "nombre": "Poás",
+            "facebook": "https://www.facebook.com/municipalidaddepoas"
+          },
+          {
+            "nombre": "Atenas",
+            "facebook": "https://www.facebook.com/Atenas2020"
+          },
+          {
+            "nombre": "Carrillo",
+            "facebook": "https://www.facebook.com/MunicipalidadCarrillo"
+          },
+          {
+            "nombre": "Upala",
+            "facebook": "https://facebook.com/municipalidad.deupala"
+          },
+          {
+            "nombre": "Los Chiles",
+            "facebook": "https://www.facebook.com/muniloschiles"
+          },
+          {
+            "nombre": "Guatuso",
+            "facebook": "https://www.facebook.com/@MuniGuatuso"
+          }
+        ]
+      },
+      "Cartago": {
+        "cantones": [
+          {
+            "nombre": "Cartago",
+            "facebook": "https://www.facebook.com/munidecartago"
+          },
+          {
+            "nombre": "Paraíso",
+            "facebook": "https://www.facebook.com/MuniParaiso"
+          },
+          {
+            "nombre": "La Unión",
+            "facebook": "https://www.facebook.com/@MuniGuatuso"
+          },
+          {
+            "nombre": "Turrialba",
+            "facebook": "https://www.facebook.com/profile.php?id=100064617762560"
+          },
+          {
+            "nombre": "Alvarado",
+            "facebook": "https://www.facebook.com/municipalidad.alvarado"
+          },
+          {
+            "nombre": "Oreamuno",
+            "facebook": "https://www.facebook.com/oreamuno.go.cr"
+          },
+          {
+            "nombre": "El Guarco",
+            "facebook": "https://www.facebook.com/MuniGuarco"
+          }
+        ]
+      },
+      "Guanacaste": {
+        "cantones": [
+          {
+            "nombre": "Liberia",
+            "facebook": "https://www.facebook.com/MuniLiberiaGL"
+          },
+          {
+            "nombre": "Nicoya",
+            "facebook": "https://www.facebook.com/GestionSocialNicoya"
+          },
+          {
+            "nombre": "Santa Cruz",
+            "facebook": "https://www.facebook.com/profile.php?id=100064536769339"
+          },
+          {
+            "nombre": "Tilarán",
+            "facebook": "https://www.facebook.com/municipalidadtilaran"
+          },
+          {
+            "nombre": "Carrillo",
+            "facebook": "https://www.facebook.com/MunicipalidadCarrillo"
+          },
+          {
+            "nombre": "La Cruz",
+            "facebook": "https://www.facebook.com/municipalidadlacruz"
+          },
+          {
+            "nombre": "Cañas",
+            "facebook": "https://www.facebook.com/muni.canas"
+          },
+          {
+            "nombre": "Abangares",
+            "facebook": "https://www.facebook.com/abangares.go.cr"
+          },
+          {
+            "nombre": "Hojancha",
+            "facebook": "https://www.facebook.com/profile.php?id=100064878990112"
+          }
+        ]
+      },
+      "Puntarenas": {
+        "cantones": [
+          {
+            "nombre": "Puntarenas",
+            "facebook": "https://www.facebook.com/profile.php?id=100066650379401"
+          },
+          {
+            "nombre": "Esparza",
+            "facebook": "https://www.facebook.com/MunicipalidaddeEsparza"
+          },
+          {
+            "nombre": "Buenos Aires",
+            "facebook": "https://www.facebook.com/MunicipalidadBuenosAires"
+          },
+          {
+            "nombre": "Montes de Oro",
+            "facebook": "https://www.facebook.com/muni.montesdeoro"
+          },
+          {
+            "nombre": "Osa",
+            "facebook": "https://www.facebook.com/MuniOsa"
+          },
+          {
+            "nombre": "Corredores",
+            "facebook": "https://www.facebook.com/profile.php?id=100064501937929"
+          },
+          {
+            "nombre": "Golfito",
+            "facebook": "https://www.facebook.com/munidegolfito"
+          },
+          {
+            "nombre": "Coto Brus",
+            "facebook": "https://www.facebook.com/profile.php?id=100069229053248"
+          },
+          {
+            "nombre": "Quepos",
+            "facebook": "https://www.facebook.com/MunicipalidaddeQuepos"
+          },
+          {
+            "nombre": "Turrubares",
+            "facebook": "https://www.facebook.com/profile.php?id=61560699396429"
+          }
+        ]
+      },
+      "Heredia": {
+        "cantones": [
+          {
+            "nombre": "Heredia",
+            "facebook": "https://www.facebook.com/MunicipalidadDeHeredia"
+          },
+          {
+            "nombre": "San Rafael",
+            "facebook": "https://www.facebook.com/MunicipalidadDeSanRafael"
+          },
+          {
+            "nombre": "Santo Domingo",
+            "facebook": "https://www.facebook.com/municipiodesantodomingo"
+          },
+          {
+            "nombre": "Barva",
+            "facebook": "https://www.facebook.com/MunicipalidadBarva"
+          },
+          {
+            "nombre": "Santa Bárbara",
+            "facebook": "https://www.facebook.com/munisantabarbara"
+          },
+          {
+            "nombre": "San Isidro",
+            "facebook": "https://www.facebook.com/MuniciSanIsidrodeHeredia"
+          },
+          {
+            "nombre": "San Pablo",
+            "facebook": "https://www.facebook.com/CCSanPablo"
+          }
+        ]
+      },
+      "Limón": {
+        "cantones": [
+          {
+            "nombre": "Limón",
+            "facebook": "https://www.facebook.com/Municipalidadlimon"
+          },
+          {
+            "nombre": "Pococí",
+            "facebook": "https://www.facebook.com/municipalidaddepococi"
+          },
+          {
+            "nombre": "Siquirres",
+            "facebook": "https://www.facebook.com/municipalidaddesiquirres"
+          },
+          {
+            "nombre": "Talamanca",
+            "facebook": "https://www.facebook.com/MuniDeTala"
+          },
+          {
+            "nombre": "Matina",
+            "facebook": "https://www.facebook.com/MatinaGobiernoLocal"
+          },
+          {
+            "nombre": "Guácimo",
+            "facebook": "https://www.facebook.com/@municipalidadguacimo/"
+          },
+          {
+            "nombre": "Cahuita",
+            "facebook": "https://www.facebook.com/cahuitacaribe"
+          }
+        ]
+      }
+    }
+  }
+  

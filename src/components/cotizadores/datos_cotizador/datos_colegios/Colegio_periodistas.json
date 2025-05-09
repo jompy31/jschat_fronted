@@ -1,0 +1,108 @@
+{
+    "colegio": "Colegio de Periodistas de Costa Rica",
+    "pagina_web": "https://colper.or.cr/",
+    "servicios": [
+        {
+            "servicio": "Texto periodístico (600 a 750 palabras)",
+            "descripcion": "Recopilación de información de máximo 3 fuentes de manera virtual, con datos de contexto y antecedentes de fuentes diversas.",
+            "tarifa_minima": 120000
+        },
+        {
+            "servicio": "Texto periodístico (750 a 1000 palabras)",
+            "descripcion": "Reportaje detallado escrito a partir de 3 fuentes de información.",
+            "tarifa_minima": 220000
+        },
+        {
+            "servicio": "Texto periodístico (1000 a 1500 palabras)",
+            "descripcion": "Reportaje extenso escrito con información de al menos 3 fuentes.",
+            "tarifa_minima": 250000
+        },
+        {
+            "observaciones": "El precio sube si las entrevistas son presenciales. Si el texto es para un cliente corporativo, el precio depende del enfoque acordado previamente. Solo se aceptan hasta 3 revisiones de la nota."
+        },
+        {
+            "servicio": "Producción de vídeo (máximo 2 minutos)",
+            "descripcion": "Guion, grabación de personas en un mismo lugar y postproducción con animaciones sencillas o diseños explicativos.",
+            "tarifa_minima": 350000
+        },
+        {
+            "servicio": "Capacitación de voceros (4 horas)",
+            "descripcion": "Incluye charla y práctica en cámara con equipo.",
+            "tarifa_minima": 1500000
+        },
+        {
+            "servicio": "Community Manager (8-10 posteos mensuales)",
+            "descripcion": "Manejo de redes sociales, atención a comentarios, recomendaciones de pauta publicitaria, y diseño de contenido básico.",
+            "tarifa_minima": 200000
+        },
+        {
+            "servicio": "Conducción de evento (2 horas)",
+            "descripcion": "Presentación y conducción de evento por 2 horas.",
+            "tarifa_minima": 150000
+        },
+        {
+            "servicio": "Locución para cuñas publicitarias (30 segundos)",
+            "descripcion": "Grabación de cuñas publicitarias.",
+            "tarifa_minima": 80000
+        },
+        {
+            "observaciones": "El precio varía según el lugar y el tipo de evento. No incluye alquiler de espacio físico ni pauta publicitaria."
+        },
+        {
+            "servicio": "Sesión fotográfica de 1 hora",
+            "descripcion": "Incluye iluminación.",
+            "tarifa_minima": 75000
+        },
+        {
+            "servicio": "Diseños gráficos para redes sociales (10 diseños)",
+            "descripcion": "Incluye ilustraciones personalizadas para redes sociales.",
+            "tarifa_minima": 100000
+        },
+        {
+            "servicio": "Gestión para publicaciones en medios de comunicación (lobby)",
+            "descripcion": "Gestión para lograr publicaciones en medios de comunicación.",
+            "tarifa_minima": 300000
+        },
+        {
+            "servicio": "Gestión de relaciones públicas",
+            "descripcion": "Evaluación de la imagen de la organización, estrategias de comunicación interna y externa, marketing. Costo mensual.",
+            "tarifa_minima": 700000
+        },
+        {
+            "servicio": "Asesoría temporal de desarrollo de estrategia",
+            "descripcion": "Incluye plan de prevención de riesgos, capacitación de voceros (2 horas), y recomendaciones de estrategia de comunicación.",
+            "tarifa_minima": 2000000
+        },
+        {
+            "servicio": "Análisis y recomendaciones de estrategia de comunicación",
+            "descripcion": "Análisis de redes sociales, medios, y recomendaciones de mensajes clave.",
+            "tarifa_minima": 2500000
+        },
+        {
+            "observaciones": "El precio varía si se realiza fuera del Gran Área Metropolitana o si se requieren animaciones digitales. No incluye la elaboración de comunicados de prensa."
+        },
+        {
+            "servicio": "Organización de conferencia de prensa",
+            "descripcion": "Organización de conferencia de prensa, incluida convocatoria.",
+            "tarifa_minima": 300000
+        },
+        {
+            "servicio": "Plan de medios",
+            "descripcion": "Estrategia de distribución, inversión en publicidad y negociación con medios.",
+            "tarifa_minima": 3000000
+        },
+        {
+            "servicio": "Análisis de estrategia de comunicación interna",
+            "descripcion": "Incluye diagnóstico y recomendaciones de mensajes clave.",
+            "tarifa_minima": 2500000
+        },
+        {
+            "servicio": "Animación digital sencilla (menos de un minuto)",
+            "descripcion": "Con guion y estilos gráficos preaprobados.",
+            "tarifa_minima": 350000
+        },
+        {
+            "observaciones": "El precio varía dependiendo del tipo de marca y la frecuencia de medios. No incluye costos de lugar ni elaboración de comunicados."
+        }
+    ]
+}

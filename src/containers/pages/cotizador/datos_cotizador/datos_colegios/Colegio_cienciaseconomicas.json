@@ -1,0 +1,46 @@
+{
+    "colegio": "Colegio de Profesionales en Ciencias Económicas de Costa Rica",
+    "pagina_web": "https://www.colegiocienciaseconomicas.cr/",
+    "servicios": [
+        {
+            "servicio": "Bachillerato en Estadística",
+            "descripcion": "Costo por hora para servicios profesionales de un bachiller en Estadística.",
+            "tarifa": 35525.87
+        },
+        {
+            "servicio": "Licenciatura en Estadística",
+            "descripcion": "Costo por hora para servicios profesionales de un licenciado en Estadística.",
+            "tarifa": 43592.97
+        },
+        {
+            "servicio": "Bachillerato en Economía",
+            "descripcion": "Costo por hora para servicios profesionales de un bachiller en Economía.",
+            "tarifa": 39641.73
+        },
+        {
+            "servicio": "Licenciatura en Economía",
+            "descripcion": "Costo por hora para servicios profesionales de un licenciado en Economía.",
+            "tarifa": 49149.39
+        },
+        {
+            "servicio": "Bachillerato en Administración",
+            "descripcion": "Costo por hora para servicios profesionales de un bachiller en Administración.",
+            "tarifa": 39201.18
+        },
+        {
+            "servicio": "Licenciatura en Administración",
+            "descripcion": "Costo por hora para servicios profesionales de un licenciado en Administración.",
+            "tarifa": 47204.64
+        },
+        {
+            "servicio": "Bachillerato en Ciencias Actuariales",
+            "descripcion": "Costo por hora para servicios profesionales de un bachiller en Ciencias Actuariales.",
+            "tarifa": 39230.15
+        },
+        {
+            "servicio": "Licenciatura en Ciencias Actuariales",
+            "descripcion": "Costo por hora para servicios profesionales de un licenciado en Ciencias Actuariales.",
+            "tarifa": 48593.75
+        }
+    ]
+}

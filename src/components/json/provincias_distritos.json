@@ -1,0 +1,392 @@
+{
+    "provincias": {
+      "San José": {
+        "cantones": {
+          "San José": [
+            "Carmen",
+            "Merced",
+            "Hospital",
+            "Catedral",
+            "Zapote",
+            "San Francisco de Dos Ríos",
+            "La Uruca",
+            "Mata Redonda"
+          ],
+          "Escazú": [
+            "Escazú",
+            "San Antonio",
+            "San Rafael"
+          ],
+          "Desamparados": [
+            "Desamparados",
+            "San Miguel",
+            "San Juan de Dios",
+            "San Rafael Arriba",
+            "San Vicente"
+          ],
+          "Puriscal": [
+            "Puriscal",
+            "Barbacoas",
+            "Granja",
+            "Candelaria",
+            "Santiago",
+            "Cruz",
+            "La Posa"
+          ],
+          "Tarrazú": [
+            "San Marcos",
+            "San Lorenzo",
+            "San Carlos"
+          ],
+          "Aserrí": [
+            "Aserrí",
+            "Tarbaca",
+            "La Montaña"
+          ],
+          "Alajuelita": [
+            "Alajuelita",
+            "San José",
+            "Concepción",
+            "San Felipe"
+          ],
+          "Goicoechea": [
+            "Guadalupe",
+            "San Francisco",
+            "San Isidro",
+            "Calle Blancos",
+            "Tirrases"
+          ],
+          "Santa Ana": [
+            "Santa Ana",
+            "Salitral",
+            "Pozos",
+            "Uruca"
+          ],
+          "Vásquez de Coronado": [
+            "Vásquez de Coronado",
+            "San Isidro",
+            "Cascajal",
+            "Dulce Nombre"
+          ],
+          "Acosta": [
+            "Acosta",
+            "San Ignacio",
+            "Guaitil",
+            "Santiago"
+          ],
+          "Turrubares": [
+            "Turrubares",
+            "San Pablo",
+            "San Juan"
+          ],
+          "Dota": [
+            "Dota",
+            "Santa María",
+            "Los Santos"
+          ],
+          "Los Santos": [
+            "San Isidro",
+            "Santa María",
+            "San Pedro",
+            "Santa Cruz"
+          ]
+        }
+      },
+      "Alajuela": {
+        "cantones": {
+          "Alajuela": [
+            "Alajuela",
+            "San José",
+            "San Ramón",
+            "San Pedro",
+            "El Coyol",
+            "La Garita",
+            "Río Segundo"
+          ],
+          "Grecia": [
+            "Grecia",
+            "San Isidro",
+            "San José",
+            "San Francisco",
+            "San Roque"
+          ],
+          "San Ramón": [
+            "San Ramón",
+            "San Isidro",
+            "San Rafael",
+            "San Pedro",
+            "San Francisco"
+          ],
+          "Naranjo": [
+            "Naranjo",
+            "San Juan",
+            "La Isla",
+            "San Miguel",
+            "El Rosario"
+          ],
+          "Zarcero": [
+            "Zarcero",
+            "Tigra",
+            "San Carlos"
+          ],
+          "Valverde Vega": [
+            "Valverde Vega",
+            "Santa María",
+            "San José"
+          ],
+          "Sarchí": [
+            "Sarchí",
+            "San Pedro",
+            "San Ramón",
+            "Río Cuarto"
+          ],
+          "Poás": [
+            "Poás",
+            "San Pedro",
+            "San Rafael"
+          ],
+          "Atenas": [
+            "Atenas",
+            "Santa Eulalia",
+            "San José"
+          ],
+          "Carrillo": [
+            "Carrillo",
+            "San Jorge",
+            "San Luis"
+          ],
+          "Upala": [
+            "Upala",
+            "Aguas Claras",
+            "El Cacao"
+          ],
+          "Los Chiles": [
+            "Los Chiles",
+            "Caño Negro"
+          ],
+          "Guatuso": [
+            "Guatuso",
+            "San Rafael",
+            "Cote"
+          ]
+        }
+      },
+      "Cartago": {
+        "cantones": {
+          "Cartago": [
+            "Cartago",
+            "Oriental",
+            "San Francisco"
+          ],
+          "Paraíso": [
+            "Paraíso",
+            "Santiago",
+            "Llanos de Santa Lucía"
+          ],
+          "La Unión": [
+            "La Unión",
+            "San Diego",
+            "San Juan"
+          ],
+          "Jiménez": [
+            "Jiménez",
+            "San Rafael",
+            "San Pedro"
+          ],
+          "Turrialba": [
+            "Turrialba",
+            "La Suiza",
+            "Santa Teresita"
+          ],
+          "Alvarado": [
+            "Alvarado",
+            "Santiago",
+            "San Antonio"
+          ],
+          "Oreamuno": [
+            "Oreamuno",
+            "San Rafael",
+            "San Isidro"
+          ],
+          "El Guarco": [
+            "El Guarco",
+            "San Francisco"
+          ]
+        }
+      },
+      "Guanacaste": {
+        "cantones": {
+          "Liberia": [
+            "Liberia",
+            "Nimboyores",
+            "Filadelfia",
+            "Bolsón"
+          ],
+          "Nicoya": [
+            "Nicoya",
+            "Cañas",
+            "Sámara"
+          ],
+          "Santa Cruz": [
+            "Santa Cruz",
+            "Bolsón",
+            "Tamarindo",
+            "Cangrejal"
+          ],
+          "Tilarán": [
+            "Tilarán",
+            "Santa Rosa",
+            "Quebrada Grande"
+          ],
+          "Carrillo": [
+            "Carrillo",
+            "Cabo Velas",
+            "San Jorge"
+          ],
+          "Guanacaste": [
+            "Guanacaste",
+            "San Juan",
+            "La Garita"
+          ],
+          "La Cruz": [
+            "La Cruz",
+            "Santa Rosa",
+            "San Juan"
+          ],
+          "Cañas": [
+            "Cañas",
+            "San Carlos"
+          ],
+          "Abangares": [
+            "Abangares",
+            "San Juan",
+            "La Libertad"
+          ],
+          "Hojancha": [
+            "Hojancha",
+            "Bajo del Tigre"
+          ]
+        }
+      },
+      "Puntarenas": {
+        "cantones": {
+          "Puntarenas": [
+            "Puntarenas",
+            "Pochote",
+            "La Unión"
+          ],
+          "Esparza": [
+            "Esparza",
+            "San Juan",
+            "San Antonio"
+          ],
+          "Buenos Aires": [
+            "Buenos Aires",
+            "Pérez Zeledón"
+          ],
+          "Montes de Oro": [
+            "Montes de Oro",
+            "Miramar"
+          ],
+          "Osa": [
+            "Osa",
+            "Puerto Jiménez",
+            "Palmar"
+          ],
+          "Corredores": [
+            "Corredores",
+            "San Vito"
+          ],
+          "Golfito": [
+            "Golfito",
+            "Guaycará",
+            "Puerto Jiménez"
+          ],
+          "Coto Brus": [
+            "Coto Brus",
+            "San Vito",
+            "Las Flores"
+          ],
+          "Quepos": [
+            "Quepos",
+            "Matapalo"
+          ],
+          "Turrubares": [
+            "Turrubares",
+            "San Pablo",
+            "San Juan"
+          ]
+        }
+      },
+      "Heredia": {
+        "cantones": {
+          "Heredia": [
+            "Heredia",
+            "San Francisco",
+            "Barva",
+            "Santo Domingo"
+          ],
+          "San Rafael": [
+            "San Rafael",
+            "Santo Domingo"
+          ],
+          "Santo Domingo": [
+            "Santo Domingo",
+            "San Vicente"
+          ],
+          "Barva": [
+            "Barva",
+            "San Juan"
+          ],
+          "Santa Bárbara": [
+            "Santa Bárbara",
+            "Santo Domingo"
+          ],
+          "San Isidro": [
+            "San Isidro",
+            "San Pablo"
+          ],
+          "San Fernando": [
+            "San Fernando",
+            "San Rafael"
+          ]
+        }
+      },
+      "Limón": {
+        "cantones": {
+          "Limón": [
+            "Limón",
+            "Matina",
+            "Siquirres",
+            "Guápiles"
+          ],
+          "Pococí": [
+            "Pococí",
+            "Guápiles",
+            "La Rita"
+          ],
+          "Siquirres": [
+            "Siquirres",
+            "La Unión"
+          ],
+          "Talamanca": [
+            "Talamanca",
+            "Bribri"
+          ],
+          "Matina": [
+            "Matina",
+            "Carmen"
+          ],
+          "Guácimo": [
+            "Guácimo",
+            "Cahuita"
+          ],
+          "Cahuita": [
+            "Cahuita",
+            "Carmen"
+          ]
+        }
+      }
+    }
+  }
+  
