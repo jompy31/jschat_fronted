@@ -2,203 +2,221 @@ import axios from "axios";
 import config from "../config/enviroments.ts";
 
 class ProductDataService {
-  // Obtener todos los productos
-  getAll() {
-    return axios.get(`${config.API_URL}/products/`); // URL para obtener productos
+  // Configura el encabezado de autorización para todas las solicitudes
+  setAuthHeader(token) {
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `Token ${token}`;
+    } else {
+      delete axios.defaults.headers.common["Authorization"];
+    }
   }
 
-  // Obtener todos los subproductos
-  getAllSubProduct() {
-    return axios.get(`${config.API_URL}/products/subproducts/`); // URL para obtener subproductos
-  }
-  getSubProductByEmail(email) {
-    return axios.get(`${config.API_URL}/products/subproducts/by-email/${email}/`);
-  }
-  createSubProduct(data, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.post(`${config.API_URL}/products/subproducts/`, data);
-  }
-
-  updateSubProduct(subProductId, data, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.put(
-      `${config.API_URL}/products/subproducts/${subProductId}/`,
-      data
-    );
-  }
-
-  deleteSubProduct(subProductId, token) {
-    // axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.delete(
-      `${config.API_URL}/products/subproducts/${subProductId}/delete/`
-    );
+  // Productos
+  getAll(token) {
+    this.setAuthHeader(token);
+    return axios.get(`${config.API_URL}/products/`);
   }
 
   createProduct(data, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.post("${config.API_URL}/products/", data); // Cambiar la URL
+    this.setAuthHeader(token);
+    return axios.post(`${config.API_URL}/products/`, data);
   }
+
   updateProduct(id, data, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.put(`${config.API_URL}/products/${id}/update/`, data); // Use the correct URL for updating a product
+    this.setAuthHeader(token);
+    return axios.put(`${config.API_URL}/products/${id}/update/`, data);
   }
 
   deleteProduct(id, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.delete(`${config.API_URL}/products/product/${id}/delete/`); // Cambiar la URL
+    this.setAuthHeader(token);
+    return axios.delete(`${config.API_URL}/products/product/${id}/delete/`);
   }
-  // Equipo (teamMember)
+
+  // Subproductos
+  getAllSubProduct(token) {
+    this.setAuthHeader(token);
+    return axios.get(`${config.API_URL}/products/subproducts/`);
+  }
+
+  getSubProductByEmail(email, token) {
+    this.setAuthHeader(token);
+    return axios.get(`${config.API_URL}/products/subproducts/by-email/${email}/`);
+  }
+
+  createSubProduct(data, token) {
+    this.setAuthHeader(token);
+    return axios.post(`${config.API_URL}/products/subproducts/`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  }
+
+  updateSubProduct(subProductId, data, token) {
+    this.setAuthHeader(token);
+    return axios.put(`${config.API_URL}/products/subproducts/${subProductId}/`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  }
+
+  deleteSubProduct(subProductId, token) {
+    this.setAuthHeader(token);
+    return axios.delete(`${config.API_URL}/products/subproducts/${subProductId}/delete/`);
+  }
+
+  // Miembros del equipo
   getAllTeamMembers(subProductId, token) {
-    // axios.defaults.headers.common[`Authorization`] = `Token ` + token;
-    return axios.get(
-      `${config.API_URL}/products/subproducts/${subProductId}/teammembers/`
-    );
+    this.setAuthHeader(token);
+    return axios.get(`${config.API_URL}/products/subproducts/${subProductId}/teammembers/`);
   }
 
-  createTeamMember(data, token) {
-    axios.defaults.headers.common[`Authorization`] = `Token ` + token;
-    return axios.post(`${config.API_URL}/products/teammembers/`, data);
+  createTeamMember(subProductId, data, token) {
+    this.setAuthHeader(token);
+    return axios.post(`${config.API_URL}/products/subproducts/${subProductId}/teammembers/`, data);
   }
 
-  updateTeamMember(teamMemberId, data, token) {
-    axios.defaults.headers.common[`Authorization`] = `Token ` + token;
-    return axios.put(
-      `${config.API_URL}/products/teammembers/${teamMemberId}/`,
-      data
-    );
+  updateTeamMember(subProductId, teamMemberId, data, token) {
+    this.setAuthHeader(token);
+    return axios.put(`${config.API_URL}/products/subproducts/${subProductId}/teammembers/${teamMemberId}/`, data);
   }
 
-  deleteTeamMember(teamMemberId, token) {
-    return axios.delete(
-      `${config.API_URL}/products/teammembers/${teamMemberId}/`
-    );
+  deleteTeamMember(subProductId, teamMemberId, token) {
+    this.setAuthHeader(token);
+    return axios.delete(`${config.API_URL}/products/subproducts/${subProductId}/teammembers/${teamMemberId}/`);
   }
 
-  // Horarios comerciales (businessHours)
+  // Horarios comerciales
   getAllBusinessHours(subProductId, token) {
-    // axios.defaults.headers.common[`Authorization`] = `Token ` + token;
-    return axios.get(
-      `${config.API_URL}/products/subproducts/${subProductId}/businesshours/`
-    );
+    this.setAuthHeader(token);
+    return axios.get(`${config.API_URL}/products/subproducts/${subProductId}/businesshours/`);
   }
 
-  createBusinessHour(data, token) {
-    axios.defaults.headers.common[`Authorization`] = `Token ` + token;
-    return axios.post(`${config.API_URL}/products/businesshours/`, data);
+  createBusinessHour(subProductId, data, token) {
+    this.setAuthHeader(token);
+    return axios.post(`${config.API_URL}/products/subproducts/${subProductId}/businesshours/`, data);
   }
 
-  updateBusinessHour(businessHourId, data, token) {
-    axios.defaults.headers.common[`Authorization`] = `Token ` + token;
-    return axios.put(
-      `${config.API_URL}/products/subproducts/${businessHourId}/businesshours/`,
-      data
-    );
+  updateBusinessHour(subProductId, businessHourId, data, token) {
+    this.setAuthHeader(token);
+    return axios.put(`${config.API_URL}/products/subproducts/${subProductId}/businesshours/${businessHourId}/`, data);
   }
 
-  deleteBusinessHour(businessHourId, token) {
-    return axios.delete(
-      `${config.API_URL}/products/subproducts/${businessHourId}/businesshours/`
-    );
+  deleteBusinessHour(subProductId, businessHourId, token) {
+    this.setAuthHeader(token);
+    return axios.delete(`${config.API_URL}/products/subproducts/${subProductId}/businesshours/${businessHourId}/`);
   }
 
-  // Cupones (coupons)
+  // Cupones
   getAllCoupons(subProductId, token) {
-    // axios.defaults.headers.common[`Authorization`] = `Token ` + token;
-    return axios.get(
-      `${config.API_URL}/products/subproducts/${subProductId}/coupons/`
-    );
+    this.setAuthHeader(token);
+    return axios.get(`${config.API_URL}/products/subproducts/${subProductId}/coupons/`);
   }
 
-  createCoupon(data, token) {
-    axios.defaults.headers.common[`Authorization`] = `Token ` + token;
-    return axios.post(`${config.API_URL}/products/subproducts/coupons/`, data);
+  createCoupon(subProductId, data, token) {
+    this.setAuthHeader(token);
+    return axios.post(`${config.API_URL}/products/subproducts/${subProductId}/coupons/`, data);
   }
 
-  updateCoupon(couponId, data, token) {
-    axios.defaults.headers.common[`Authorization`] = `Token ` + token;
-    return axios.put(
-      `${config.API_URL}/products/subproducts/coupons/${couponId}/`,
-      data
-    );
+  updateCoupon(subProductId, couponId, data, token) {
+    this.setAuthHeader(token);
+    return axios.put(`${config.API_URL}/products/subproducts/${subProductId}/coupons/${couponId}/`, data);
   }
 
-  deleteCoupon(couponId, token) {
-    return axios.delete(
-      `${config.API_URL}/products/subproducts/coupons/${couponId}/`
-    );
+  deleteCoupon(subProductId, couponId, token) {
+    this.setAuthHeader(token);
+    return axios.delete(`${config.API_URL}/products/subproducts/${subProductId}/coupons/${couponId}/`);
   }
 
-  getAllCharacteristics(token) {
-    // axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.get(`${config.API_URL}/products/characteristics/`); // URL para obtener características
-  }
-
-  createCharacteristic(data, token) {
-    // axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.post("${config.API_URL}/products/characteristics/", data); // URL para crear característica
-  }
-
-  updateCharacteristic(id, data, token) {
-    // axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.put(`${config.API_URL}/products/characteristics/${id}/`, data); // URL para actualizar característica
-  }
-
-  deleteCharacteristic(id, token) {
-    // axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.delete(`${config.API_URL}/products/characteristics/${id}/`); // URL para eliminar característica
-  }
-
+  // Servicios
   getAllServices(token) {
+    this.setAuthHeader(token);
     return axios.get(`${config.API_URL}/products/services/`);
   }
 
   getAllServicesForSubProduct(subProductId, token) {
-    // axios.defaults.headers.common[`Authorization`] = `Token ` + token;
-    return axios.get(
-      `${config.API_URL}/products/subproducts/${subProductId}/services/`
-    );
+    this.setAuthHeader(token);
+    return axios.get(`${config.API_URL}/products/subproducts/${subProductId}/services/`);
   }
 
   createServiceForSubProduct(subProductId, data, token) {
-    // axios.defaults.headers.common[`Authorization`] = `Token ` + token;
-    return axios.post(
-      `${config.API_URL}/products/subproducts/${subProductId}/services/`,
-      data
-    );
+    this.setAuthHeader(token);
+    return axios.post(`${config.API_URL}/products/subproducts/${subProductId}/services/`, {
+      ...data,
+      subproduct: subProductId, // Incluir subproduct explícitamente
+    });
   }
-
   updateServiceForSubProduct(subProductId, serviceId, data, token) {
-    axios.defaults.headers.common[`Authorization`] = `Token ` + token;
-    return axios.put(
-      `${config.API_URL}/products/subproducts/${subProductId}/services/${serviceId}/`,
-      data
-    );
+    this.setAuthHeader(token);
+    return axios.put(`${config.API_URL}/products/subproducts/${subProductId}/services/`, {
+      ...data,
+      service_id: serviceId,
+      subproduct: subProductId, // Mantener subproduct en la actualización
+    });
+  }
+  deleteServiceForSubProduct(subProductId, serviceId, token) {
+    this.setAuthHeader(token);
+    return axios.delete(`${config.API_URL}/products/subproducts/${subProductId}/services/${serviceId}/`);
   }
 
-  deleteServiceForSubProduct(subProductId, serviceId, token) {
-    // axios.defaults.headers.common[`Authorization`] = `Token ` + token;
-    return axios.delete(
-      `${config.API_URL}/products/subproducts/${subProductId}/services/${serviceId}/`
-    );
-  }
+  // Combos
   getAllCombos(token) {
-    // axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.get(`${config.API_URL}/products/combos/`); // URL for getting combos
+    this.setAuthHeader(token);
+    return axios.get(`${config.API_URL}/products/combos/`);
+  }
+
+  getAllCombosForSubProduct(subProductId, token) {
+    this.setAuthHeader(token);
+    // Obtener servicios del subproducto primero
+    return axios
+      .get(`${config.API_URL}/products/subproducts/${subProductId}/services/`)
+      .then((response) => {
+        const serviceIds = response.data.map((service) => service.id);
+        // Filtrar combos que contengan al menos uno de los serviceIds
+        return axios.get(`${config.API_URL}/products/combos/`).then((comboResponse) => {
+          const filteredCombos = comboResponse.data.filter((combo) =>
+            combo.services.some((service) => serviceIds.includes(service.id))
+          );
+          return { data: filteredCombos };
+        });
+      });
   }
 
   createCombo(data, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.post("${config.API_URL}/products/combos/", data); // URL for creating combo
+    this.setAuthHeader(token);
+    return axios.post(`${config.API_URL}/products/combos/`, data);
   }
 
   updateCombo(comboId, data, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.put(`${config.API_URL}/products/combos/${comboId}/`, data); // URL for updating combo
+    this.setAuthHeader(token);
+    return axios.put(`${config.API_URL}/products/combos/${comboId}/`, data);
   }
 
   deleteCombo(comboId, token) {
-    // axios.defaults.headers.common["Authorization"] = "Token " + token;
+    this.setAuthHeader(token);
     return axios.delete(`${config.API_URL}/products/combos/${comboId}/`);
+  }
+
+  // Características
+  getAllCharacteristics(token) {
+    this.setAuthHeader(token);
+    return axios.get(`${config.API_URL}/products/characteristics/`);
+  }
+
+  createCharacteristic(data, token) {
+    this.setAuthHeader(token);
+    return axios.post(`${config.API_URL}/products/characteristics/`, data);
+  }
+
+  updateCharacteristic(id, data, token) {
+    this.setAuthHeader(token);
+    return axios.put(`${config.API_URL}/products/characteristics/${id}/`, data);
+  }
+
+  deleteCharacteristic(id, token) {
+    this.setAuthHeader(token);
+    return axios.delete(`${config.API_URL}/products/characteristics/${id}/delete/`);
   }
 }
 

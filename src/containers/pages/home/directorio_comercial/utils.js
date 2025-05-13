@@ -39,6 +39,9 @@ const fetchProducts = async (start = 0, limit = CHUNK_SIZE) => {
         limit,
       });
 
+      console.log("Respuesta de subproductos:", subProductsResponse.data);
+      console.log("Respuesta de servicios:", servicesResponse.data);
+
       allSubProducts = subProductsResponse.data;
       allServices = servicesResponse.data;
 
@@ -59,7 +62,14 @@ const fetchProducts = async (start = 0, limit = CHUNK_SIZE) => {
 
     return { allSubProducts, allServices };
   } catch (e) {
-    console.error("Error al obtener subproductos o servicios:", e);
+    console.error("Error detallado al obtener subproductos o servicios:", {
+      message: e.message,
+      stack: e.stack,
+      response: e.response ? {
+        status: e.response.status,
+        data: e.response.data,
+      } : null,
+    });
     toast.error("Error al cargar datos. Intenta de nuevo.");
     return { allSubProducts: [], allServices: [] };
   }

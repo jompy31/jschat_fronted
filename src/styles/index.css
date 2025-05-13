@@ -327,38 +327,8 @@ section {
 }
 
 
-/* =================================== VALUES ===================================== */
 
-.values__container {
-  display: flex;
-  grid-template-columns: 40% 60%;
-  gap: 5%;
-  height: 100vh;
-  /* establece la altura al 80% del viewport height */
-}
 
-.values__left {
-  height: 100%;
-  /* establece la altura al 100% de su contenedor */
-}
-
-.values__right {
-  height: 100%;
-  /* establece la altura al 100% de su contenedor */
-}
-
-.values__images {
-  filter: saturate(0.25);
-  transition: var(--transition);
-}
-
-.values__image:hover {
-  filter: saturate(0.50);
-}
-
-.values__right>p {
-  margin: 0.5rem 0 5rem;
-}
 
 .values__wrapper {
   display: grid;

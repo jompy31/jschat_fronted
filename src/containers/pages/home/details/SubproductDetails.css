@@ -1,99 +1,255 @@
 /* SubproductDetails.css */
 
+/* Global container styles */
 .landing-page {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 100vh;
-  text-align: center;
+  min-height: 100vh;
+  background-color: #f5f7fa;
+  padding: 20px;
+  font-family: 'Roboto', sans-serif;
 }
 
+/* Logo section */
 .logo-section {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  height: 30vh;
+  align-items: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #ffffff, #e8ecef);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .logo-section img {
-  max-height: 50%;
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: 8px;
+  object-fit: contain;
 }
 
+/* Data section */
 .data-section {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
   width: 100%;
-  margin-top: 20px;
+  max-width: 1200px;
   padding: 20px;
-  background-color: #FFFFFF;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-  border-radius: 10px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
 }
 
+/* File section links */
 .file-section a {
-  color: #007BFF;
+  color: #007bff;
   text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
 }
 
+.file-section a:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+/* Custom table styles */
 .custom-table {
   width: 100%;
-  background-color: #FF0000;
-  /* Color de fondo rojo */
-  color: #FFFFFF;
-  /* Color del texto blanco */
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-  border-radius: 10px;
+  background-color: #ffffff;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.whatsapp-button {
-  align-self: flex-end;
-  margin-top: 20px;
-  text-decoration: none;
+.custom-table th,
+.custom-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.custom-table th {
   background-color: #4CAF50;
-  /* Color de fondo verde */
-  padding: 10px;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* WhatsApp button */
+.whatsapp-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #25D366;
   border-radius: 50%;
-  display: inline-block;
-  width: 100px;
-  height: 100px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  cursor: pointer;
+  z-index: 1000;
 }
 
 .whatsapp-button img {
-  width: 100%;
-  height: 100%;
+  width: 36px;
+  height: 36px;
 }
 
-@media print {
-  #componente {
-    width: 1920px;
-    font-size: 12px;
-    /* Otros ajustes de estilos */
-  }
+.whatsapp-button:hover {
+  background-color: #20b358;
+  transform: scale(1.1);
 }
 
-/* styles.css */
+/* Animation for WhatsApp button */
 @keyframes vibrate {
-  0% {
-    transform: translateX(0);
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  50% { transform: translateX(2px); }
+  75% { transform: translateX(-2px); }
+  100% { transform: translateX(0); }
+}
+
+.whatsapp-button:active {
+  animation: vibrate 0.3s ease;
+}
+
+/* Card styles for sections */
+.card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 200vh;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* Section headers */
+.section-header {
+  font-size: 2em;
+  color: #333;
+  font-weight: 700;
+  margin-bottom: 15px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Buttons */
+.button {
+  background-color: #4CAF50;
+  color: #ffffff;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  display: inline-block;
+  text-align: center;
+}
+
+.button:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+}
+
+.button:active {
+  transform: translateY(0);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .landing-page {
+    padding: 10px;
   }
 
-  25% {
-    transform: translateX(-5px);
+  .logo-section {
+    padding: 15px;
   }
 
-  50% {
-    transform: translateX(5px);
+  .logo-section img {
+    max-width: 150px;
+    max-height: 150px;
   }
 
-  75% {
-    transform: translateX(-5px);
+  .data-section {
+    padding: 15px;
   }
 
-  100% {
-    transform: translateX(5px);
+  .card {
+    padding: 15px;
+  }
+
+  .section-header {
+    font-size: 1.5em;
+  }
+
+  .button {
+    padding: 10px 20px;
+    font-size: 0.9em;
+  }
+
+  .whatsapp-button {
+    width: 50px;
+    height: 50px;
+  }
+
+  .whatsapp-button img {
+    width: 30px;
+    height: 30px;
   }
 }
+
+@media (max-width: 340px) {
+  .landing-page {
+    zoom: 60%;
+  }
+
+  .card {
+    padding: 10px;
+  }
+
+  .section-header {
+    font-size: 1.2em;
+  }
+
+  .button {
+    padding: 8px 16px;
+    font-size: 0.8em;
+  }
+}
+
+/* Print styles */
+@media print {
+  .landing-page {
+    padding: 0;
+  }
+
+  .whatsapp-button {
+    display: none;
+  }
+
+  .card {
+    box-shadow: none;
+    border: 1px solid #e0e0e0;
+  }
+
+  .button {
+    display: none;
+  }
+}
+

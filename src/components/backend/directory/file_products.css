@@ -1,0 +1,8 @@
+.full-width-modal .modal-dialog {
+  width: 80% !important;
+  height: 80% !important;
+  max-width: 80% !important;
+  margin: auto !important;
+  margin-left: -60vh !important;
+  background-color: white !important;
+}

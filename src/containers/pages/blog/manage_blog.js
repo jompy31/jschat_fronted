@@ -38,6 +38,7 @@ const ManageBlog = () => {
     toggleComments,
     handleCommentChange,
     handleCreateComment,
+    handleDeleteComment, // Added to destructure from hook
     toggleLike,
     toggleFullScreen,
     renderLikesTooltip,
@@ -70,7 +71,7 @@ const ManageBlog = () => {
         </div>
       )}
       <div style={{ display: "flex" }}>
-        <div style={{ width: "100%", marginTop: '5%' }}>
+        <div style={{ width: "100%", marginTop: "5%" }}>
           <br />
           <h2
             style={{
@@ -98,6 +99,7 @@ const ManageBlog = () => {
                 openEditModal={openEditModal}
                 openImageModal={openImageModal}
                 renderLikesTooltip={renderLikesTooltip}
+                handleDeleteComment={handleDeleteComment} // Pass the new prop
               />
             ))}
           </Row>

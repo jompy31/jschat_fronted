@@ -8,9 +8,7 @@
 
 # production
 /build
-# Ignore services folder
-frontend/src/containers/services/
-# frontend/src/services/
+
 # misc
 .DS_Store
 .env.local

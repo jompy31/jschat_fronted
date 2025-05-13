@@ -32,7 +32,12 @@ const Files= lazy(() => import("../components/backend/files"));
 const UserList = lazy(() => import("../components/backend/users"));
 const Register = lazy(() => import("../components/backend/users/register.js"));
 const Calendar = lazy(() => import("../components/backend/calendar"));
-
+const Contacts = lazy(() => import("../components/backend/contacts_info"));
+const Managejob = lazy(() => import("../components/backend/manage_job"));
+const Files_frontend = lazy(() => import("../components/backend/files_frontend"));
+const Files_products = lazy(() => import("../components/backend/files_products"));
+const Directory = lazy(() => import("../components/backend/directory"));
+const Files_news = lazy(() => import("../components/backend/clasificados"));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -160,7 +165,7 @@ function App() {
             <Route path="/current_user" element={<UserList1 token={token} user={user} />} />
             <Route path="/profile" element={<Profile />} />
             <Route element={<PrivateRoute />}>
-              {/* <Route path="/customer" element={<> {" "} <Contacts token={token} user={user} /> </>} /> */}
+              <Route path="/customer" element={<> {" "} <Contacts token={token} user={user} /> </>} />
               <Route path="/files" element={<Files />} />
               {/* <Route path="/rh" element={<RH />} />
               <Route path="/turismo" element={<Tourism />} /> */}
@@ -168,6 +173,11 @@ function App() {
             </Route>
             <Route element={<AdminRoute />}>
               <Route path="/user" element={<UserList />} />
+              <Route path="/empleos" element={<Managejob />} />
+              <Route path="/files_frontend" element={<Files_frontend />} />
+              <Route path="/files_products" element={<Files_products />} />
+              <Route path="/directory" element={<Directory />} />
+              <Route path="/files_news" element={<Files_news />} />
               {/* <Route path="/manage_blog" element={<ManageBlog token={token} user={user} />} />
               <Route path="/files_frontend" element={<Files_frontend />} />
               <Route path="/files_products" element={<Files_products />} />

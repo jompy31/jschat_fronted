@@ -1,0 +1,122 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.container {
+  @apply min-h-screen p-6 transition-colors duration-300;
+}
+
+.container.light {
+  @apply bg-gray-100 text-gray-900;
+}
+
+.container.dark {
+  @apply bg-gray-900 text-white;
+}
+
+.btn {
+  @apply px-4 py-2 rounded-lg transition-all duration-200;
+}
+
+.btn-primary {
+  @apply bg-blue-600 text-white hover:bg-blue-700;
+}
+
+.btn-secondary {
+  @apply bg-gray-300 text-gray-800 hover:bg-gray-400;
+}
+
+.btn-danger {
+  @apply bg-red-600 text-white hover:bg-red-700;
+}
+
+.modal {
+  @apply rounded-lg shadow-lg p-6 bg-white dark:bg-gray-800;
+  background-color: #ffffff !important;
+  color: #1a202c !important;
+}
+
+.modal * {
+  color: inherit;
+}
+
+.lead-modal {
+  @apply flex flex-col;
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  max-height: 85vh !important;
+  overflow-y: auto !important;
+  width: 80% !important;
+  max-width: 800px !important;
+  padding: 24px !important;
+  border-radius: 12px !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+.lead-modal::-webkit-scrollbar,
+.modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.lead-modal::-webkit-scrollbar-track,
+.modal::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.lead-modal::-webkit-scrollbar-thumb,
+.modal::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.lead-modal::-webkit-scrollbar-thumb:hover,
+.modal::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.card {
+  @apply rounded-lg shadow-md p-4 bg-white dark:bg-gray-700;
+}
+
+.table-header {
+  @apply bg-blue-600 text-white font-semibold;
+}
+
+.table-row:hover {
+  @apply bg-blue-50 dark:bg-gray-600;
+}
+
+input, select, textarea {
+  @apply border-gray-300 dark:border-gray-600 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white;
+}
+
+#modal-content {
+  @apply p-4 bg-white;
+  color: #1a202c !important;
+}
+
+#modal-content p, #modal-content h6 {
+  @apply mb-2;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.modal, .card {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@media (max-width: 768px) {
+  .container {
+    @apply p-4;
+  }
+
+  .modal, .lead-modal {
+    @apply w-11/12;
+  }
+}

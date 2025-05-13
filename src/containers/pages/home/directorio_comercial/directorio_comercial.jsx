@@ -39,9 +39,10 @@ function Distributors({ products = [], subproducts = [], services = [], selected
     const processData = async () => {
       console.log("Productos recibidos:", products);
       console.log("Subproductos recibidos:", subproducts);
+      console.log("Servicios recibidos:", services);
 
-      if (!products.length) {
-        console.log("Productos vacíos, esperando datos de home.jsx...");
+      if (!products.length && !subproducts.length) {
+        console.log("Productos y subproductos vacíos, esperando datos de home.jsx...");
         return;
       }
 
@@ -55,8 +56,8 @@ function Distributors({ products = [], subproducts = [], services = [], selected
         let finalSubProducts = subproducts;
         let finalServices = services;
 
-        if (!Array.isArray(subproducts) || subproducts.length === 0 || !Array.isArray(services) || services.length === 0) {
-          console.log("Subproductos o servicios vacíos, fetching data...");
+        if (!Array.isArray(subproducts) || subproducts.length === 0) {
+          console.log("Subproductos vacíos, obteniendo datos...");
           const { allSubProducts, allServices } = await fetchProducts(0, CHUNK_SIZE);
           finalSubProducts = allSubProducts;
           finalServices = allServices;
@@ -159,7 +160,6 @@ function Distributors({ products = [], subproducts = [], services = [], selected
           )
         : true;
 
-      const products = Array.isArray(distributor?.products) ? distributor.products : [];
       const productNames = Array.isArray(distributor?.productNames) ? distributor.productNames : [];
 
       const matchesCategory = selectedCategory
@@ -175,48 +175,24 @@ function Distributors({ products = [], subproducts = [], services = [], selected
         : true;
 
       const matches = (
-        (!selectedCountry || normalizeString(distributor?.country) === normalizeString(selectedCountry)) &&
-        (!selectedProvince || normalizeString(distributor?.province) === normalizeString(selectedProvince)) &&
-        (!selectedCanton || normalizeString(distributor?.canton) === normalizeString(selectedCanton)) &&
-        (!selectedDistrict || normalizeString(distributor?.distrito) === normalizeString(selectedDistrict)) &&
+        (!selectedCountry || normalizeString(distributor?.country || "") === normalizeString(selectedCountry)) &&
+        (!selectedProvince || normalizeString(distributor?.province || "") === normalizeString(selectedProvince)) &&
+        (!selectedCanton || normalizeString(distributor?.canton || "") === normalizeString(selectedCanton)) &&
+        (!selectedDistrict || normalizeString(distributor?.distrito || "") === normalizeString(selectedDistrict)) &&
         (selectedDirectory === "comercios"
-          ? !products.includes(19)
+          ? !(distributor.products || []).includes(19)
           : selectedDirectory === "cooperativas"
-          ? products.includes(19)
+          ? (distributor.products || []).includes(19)
           : selectedDirectory === "asociaciones"
-          ? products.includes(25)
+          ? (distributor.products || []).includes(25)
           : true) &&
         (!selectedComercialActivity ||
-          normalizeString(distributor?.comercial_activity) === normalizeString(selectedComercialActivity)) &&
+          normalizeString(distributor?.comercial_activity || "") === normalizeString(selectedComercialActivity)) &&
         matchesService &&
         matchesCategory &&
         matchesSubcategory &&
         matchesSubsubcategory
       );
-
-      if (!matchesSubcategory) {
-        console.log(`Subproducto ID: ${distributor.id} no coincide con subcategory`, {
-          distributorSubcategory: distributor?.subcategory,
-          normalizedDistributorSubcategory: normalizeString(distributor?.subcategory || ""),
-          selectedSubcategory,
-          normalizedSelectedSubcategory: normalizeString(selectedSubcategory),
-        });
-      }
-      if (!matchesSubsubcategory) {
-        console.log(`Subproducto ID: ${distributor.id} no coincide con subsubcategory`, {
-          distributorSubsubcategory: distributor?.subsubcategory,
-          normalizedDistributorSubsubcategory: normalizeString(distributor?.subsubcategory || ""),
-          selectedSubsubcategory,
-          normalizedSelectedSubsubcategory: normalizeString(selectedSubsubcategory),
-        });
-      }
-      if (matches) {
-        console.log(`Subproducto ID: ${distributor.id} coincide`, {
-          productNames,
-          subcategory: distributor?.subcategory,
-          subsubcategory: distributor?.subsubcategory,
-        });
-      }
 
       return matches;
     });
@@ -229,36 +205,11 @@ function Distributors({ products = [], subproducts = [], services = [], selected
       subsubcategory: d.subsubcategory,
     })));
 
-    let sorted;
-    if (selectedCategory) {
-      // Group by category and collect unique distributors
-      const groupedByCategory = filtered.reduce((acc, distributor) => {
-        (distributor.productNames || []).forEach((category) => {
-          if (normalizeString(category) === normalizeString(selectedCategory)) {
-            if (!acc[category]) acc[category] = new Map();
-            acc[category].set(distributor.id, distributor);
-          }
-        });
-        return acc;
-      }, {});
-
-      // Sort categories and flatten unique distributors
-      sorted = Object.keys(groupedByCategory)
-        .sort((a, b) => a.localeCompare(b))
-        .flatMap((category) =>
-          Array.from(groupedByCategory[category].values()).sort((a, b) =>
-            normalizeString(a?.name || "").localeCompare(normalizeString(b?.name || ""))
-          )
-        );
-    } else {
-      // Remove duplicates by id and sort by name
-      const uniqueDistributors = Array.from(
-        new Map(filtered.map((distributor) => [distributor.id, distributor])).values()
-      );
-      sorted = uniqueDistributors.sort((a, b) =>
-        normalizeString(a?.name || "").localeCompare(normalizeString(b?.name || ""))
-      );
-    }
+    let sorted = Array.from(
+      new Map(filtered.map((distributor) => [distributor.id, distributor])).values()
+    ).sort((a, b) =>
+      normalizeString(a?.name || "").localeCompare(normalizeString(b?.name || ""))
+    );
 
     setAllDistributors(sorted);
     setDistributors(sorted);
@@ -301,13 +252,12 @@ function Distributors({ products = [], subproducts = [], services = [], selected
     if (!searchTerm) {
       const results = allDistributors.filter((distributor) => {
         const matchesService = selectedService
-          ? distributor.services &&
-            distributor.services.some(
+          ? distributor.Services?.some(
               (service) =>
                 service?.id === selectedService?.id ||
                 normalizeString(service?.name) === normalizeString(selectedService?.name)
-            )
-          : true;
+          )
+        : true;
         const matchesCategory = selectedCategory
           ? (distributor.productNames || []).some(
               (name) => normalizeString(name) === normalizeString(selectedCategory)
@@ -355,8 +305,7 @@ function Distributors({ products = [], subproducts = [], services = [], selected
 
       const filteredResults = results.filter((distributor) => {
         const matchesService = selectedService
-          ? distributor.services &&
-            distributor.services.some(
+          ? distributor.services?.some(
               (service) =>
                 service?.id === selectedService?.id ||
                 normalizeString(service?.name) === normalizeString(selectedService?.name)

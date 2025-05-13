@@ -1,5 +1,5 @@
 const CHUNK_SIZE = 100;
-const ROW_HEIGHT = 60;
+const ROW_HEIGHT = 68;
 const ITEMS_PER_COLUMN = 20;
 const COLUMN_BLOCK_HEIGHT = ROW_HEIGHT * (ITEMS_PER_COLUMN / 1.3);
 const CACHE_KEY = "distributors_cache";

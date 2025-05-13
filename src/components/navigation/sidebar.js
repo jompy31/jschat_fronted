@@ -78,27 +78,27 @@ function Sidebar() {
     {
       name: 'Calendario',
       description: 'Editar Calendario',
-      href: '/calendar',
+      href: '/calendario',
       icon: FiCalendar,
     },
     {
       name: 'Blog',
       description: 'Puedes leer las ultimas publicaciones',
-      href: '/manage_blog',
+      href: '/blog',
       icon: FiBookOpen,
     },
     {
       name: 'Empleos',
       description: 'Administrar empleos',
-      href: '/manage_job',
+      href: '/empleos',
       icon: FiBriefcase,
     },
-    {
-      name: 'Hoteles',
-      description: 'Administrar hoteles',
-      href: '/manage_tourism',
-      icon: FiBriefcase,
-    },
+    // {
+    //   name: 'Hoteles',
+    //   description: 'Administrar hoteles',
+    //   href: '/manage_tourism',
+    //   icon: FiBriefcase,
+    // },
     {
       name: 'Modificar archivos',
       description: 'Modificar archivos multimedia',

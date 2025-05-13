@@ -1,0 +1,134 @@
+.files-container {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .search-container{
+    max-width: 800px;
+    align-items: center;
+    /* margin-bottom: 20px; */
+  }
+  
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .upload-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .upload-container input[type="file"] {
+    margin-right: 10px;
+  }
+  
+  .upload-container select {
+    margin-right: 10px;
+    padding: 5px;
+  }
+  
+  .upload-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+  }
+  
+  .files-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .files-table th,
+  .files-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  .files-table th {
+    background-color: #f2f2f2;
+  }
+  
+  .delete-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+  }
+  
+  input[type="checkbox"] {
+    margin: 0;
+  }
+  
+  /* Responsive Styling */
+
+@media (max-width: 768px) {
+  /* Adjust table layout and font size for smaller screens */
+  .files-table th,
+  .files-table td {
+    padding: 5px;
+    font-size: 12px;
+  }
+
+  /* Adjust preview component size for smaller screens */
+  .preview-image {
+    width: 100%;
+    float: none;
+  }
+
+  .preview-video {
+    width: 100%;
+  }
+
+  /* Stack header buttons vertically */
+  .header-buttons {
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .header-buttons button {
+    margin-bottom: 5px;
+  }
+  .table-container {
+    overflow-x: auto;
+    width: 100%;
+  }
+  .upload-container {
+    flex-direction: column;
+  }
+
+  .upload-container input[type="file"],
+  .upload-container select,
+  .upload-container button {
+    margin: 5px 0;
+  }
+  
+}
+
+.context-container {
+  margin-top: 10px;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+.context-container ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.context-container li {
+  margin-bottom: 5px;
+  font-size: 14px;
+}

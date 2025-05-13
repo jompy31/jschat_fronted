@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Tooltip } from "react-bootstrap";
+import { ToastContainer, toast } from "react-toastify";
 import {
   fetchBlogPosts,
   createBlogPost,
@@ -40,11 +41,21 @@ export const useBlogManagement = () => {
         const posts = await fetchBlogPosts();
         setBlogPosts(posts);
       } catch (error) {
-        console.error("Failed to load blog posts:", error);
+        console.error("Failed to fetch posts:", error);
       }
     };
     loadBlogPosts();
   }, []);
+
+  // Update selectedImage when blogPosts change
+  useEffect(() => {
+    if (selectedImage && blogPosts.length > 0) {
+      const updatedPost = blogPosts.find((post) => post.id === selectedImage.id);
+      if (updatedPost) {
+        setSelectedImage(updatedPost);
+      }
+    }
+  }, [blogPosts, selectedImage]);
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
@@ -114,7 +125,7 @@ export const useBlogManagement = () => {
       setTitle(selectedBlog.title);
       setContent(selectedBlog.content);
       setImage(null);
-  setIsModalOpen(true);
+      setIsModalOpen(true);
     }
   };
 
@@ -159,21 +170,55 @@ export const useBlogManagement = () => {
       return;
     }
 
+    if (!comment || comment.trim() === "") {
+      alert("El comentario no puede estar vacío.");
+      return;
+    }
+
     const data = {
       blog_post: blogPostId,
       user: localStorage.getItem("userId"),
       content: comment,
     };
 
-    await createComment(data, token);
-    const posts = await fetchBlogPosts();
-    setBlogPosts(posts.map((post) => ({ ...post, comment: post.id === blogPostId ? "" : post.comment })));
+    try {
+      await createComment(data, token);
+      const posts = await fetchBlogPosts();
+      setBlogPosts(
+        posts.map((post) => ({
+          ...post,
+          comment: post.id === blogPostId ? "" : post.comment,
+        }))
+      );
+    } catch (error) {
+      console.error("Error creating comment:", error);
+      alert("Error al crear el comentario. Por favor, intenta de nuevo.");
+    }
   };
 
   const handleDeleteComment = async (blogPostId, commentId) => {
-    await deleteComment(blogPostId, commentId, token);
-    const posts = await fetchBlogPosts();
-    setBlogPosts(posts);
+    try {
+      if (!token) {
+        throw new Error("User not authenticated");
+      }
+      await deleteComment(blogPostId, commentId, token);
+      // console.log("blogPostId", blogPostId, "commentId", commentId, "user.token", user.token)
+      // Update blogPosts state to remove the deleted comment
+      setBlogPosts((prevPosts) =>
+        prevPosts.map((post) =>
+          post.id === blogPostId
+            ? {
+                ...post,
+                comments: post.comments.filter((comment) => comment.id !== commentId),
+              }
+            : post
+        )
+      );
+      toast.success("Comentario eliminado correctamente");
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+      toast.error("Error al eliminar el comentario");
+    }
   };
 
   const toggleLike = async (blogPostId) => {
@@ -208,9 +253,13 @@ export const useBlogManagement = () => {
         borderRadius: "8px",
       }}
     >
-      {likes.map((like) => (
-        <div key={like.user}>{like.user}</div>
-      ))}
+      {likes && likes.length > 0 ? (
+        likes.map((like) => (
+          <div key={like.user}>{like.author || like.user || "Usuario"}</div>
+        ))
+      ) : (
+        <div>Sin me gusta</div>
+      )}
     </Tooltip>
   );
 
