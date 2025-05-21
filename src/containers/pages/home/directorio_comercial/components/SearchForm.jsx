@@ -152,14 +152,62 @@ const SearchForm = ({
     }
   };
 
-  // Extract unique subcategories and subsubcategories with natural sorting
-  const subcategories = [...new Set(updatedSubProducts.map((distributor) => distributor?.subcategory))]
-    .filter((subcategory) => subcategory !== undefined && subcategory !== null && subcategory !== "")
-    .sort(naturalSort);
+  // Parse and extract unique categories
+  const parseCategories = (categoryString) => {
+    if (!categoryString || typeof categoryString !== "string") return [];
+    return categoryString
+      .split(",")
+      .map((cat) => cat.trim())
+      .filter((cat) => cat !== "");
+  };
 
-  const subsubcategories = [...new Set(updatedSubProducts.map((distributor) => distributor?.subsubcategory))]
-    .filter((subsubcategory) => subsubcategory !== undefined && subsubcategory !== null && subsubcategory !== "")
-    .sort(naturalSort);
+  // Filter subcategories based on selected category
+  const filteredSubcategories = selectedCategory
+    ? [
+        ...new Set(
+          updatedSubProducts
+            .filter((distributor) =>
+              (distributor.productNames || []).some(
+                (name) => normalizeString(name) === normalizeString(selectedCategory)
+              )
+            )
+            .flatMap((distributor) => parseCategories(distributor?.subcategory))
+        ),
+      ]
+        .filter((subcategory) => subcategory !== undefined && subcategory !== null && subcategory !== "")
+        .sort(naturalSort)
+    : [];
+
+  // Filter subsubcategories based on selected subcategory
+  const filteredSubsubcategories = selectedCategory && selectedSubcategory
+    ? [
+        ...new Set(
+          updatedSubProducts
+            .filter((distributor) =>
+              (distributor.productNames || []).some(
+                (name) => normalizeString(name) === normalizeString(selectedCategory)
+              ) &&
+              parseCategories(distributor?.subcategory).some(
+                (subcat) => normalizeString(subcat) === normalizeString(selectedSubcategory)
+              )
+            )
+            .flatMap((distributor) => parseCategories(distributor?.subsubcategory))
+        ),
+      ]
+        .filter((subsubcategory) => subsubcategory !== undefined && subsubcategory !== null && subsubcategory !== "")
+        .sort(naturalSort)
+    : [];
+
+  // Reset subcategory and subsubcategory when category changes
+  useEffect(() => {
+    setSelectedSubcategory(null);
+    setSelectedSubsubcategory(null);
+  }, [selectedCategory, setSelectedSubcategory, setSelectedSubsubcategory]);
+
+  // Reset subsubcategory when subcategory changes
+  useEffect(() => {
+    setSelectedSubsubcategory(null);
+  }, [selectedSubcategory, setSelectedSubsubcategory]);
 
   return (
     <div
@@ -172,7 +220,7 @@ const SearchForm = ({
         margin: "0 auto",
         padding: "20px",
         borderRadius: "10px",
-        zoom:  "80%",
+        zoom: "80%",
       }}
     >
       <Formulario_directorio />
@@ -507,7 +555,7 @@ const SearchForm = ({
                   style={{ width: "100%", padding: "8px" }}
                 >
                   <option value="">No importa</option>
-                  {subcategories.map((subcategory, index) => (
+                  {filteredSubcategories.map((subcategory, index) => (
                     <option key={index} value={subcategory}>
                       {subcategory}
                     </option>
@@ -528,7 +576,7 @@ const SearchForm = ({
                   style={{ width: "100%", padding: "8px" }}
                 >
                   <option value="">No importa</option>
-                  {subsubcategories.map((subsubcategory, index) => (
+                  {filteredSubsubcategories.map((subsubcategory, index) => (
                     <option key={index} value={subsubcategory}>
                       {subsubcategory}
                     </option>

@@ -17,6 +17,9 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
   const resultsPerPage = 2;
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const isMini = useMediaQuery({ query: "(max-width: 340px)" });
+  // useEffect(() => {
+  //   console.log("Subproducts received:", subproducts);
+  // }, [subproducts]);
 
   // Normalize string function
   const normalizeString = (str) => {
@@ -81,15 +84,16 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
 
   const subproductFuse = new Fuse(subproducts, {
     keys: [
-      "name",
-      "address",
-      "comercial_activity",
-      "contact_name",
-      "email",
-      "province",
-      "canton",
-      "distrito",
-      "url",
+      { name: "name", weight: 0.4 }, // Mayor peso para el nombre
+      { name: "comercial_activity", weight: 0.3 }, // Peso para actividad comercial
+      { name: "description", weight: 0.2 }, // Incluir descripción
+      { name: "address", weight: 0.1 },
+      { name: "contact_name", weight: 0.1 },
+      { name: "email", weight: 0.1 },
+      { name: "province", weight: 0.1 },
+      { name: "canton", weight: 0.1 },
+      { name: "distrito", weight: 0.1 },
+      { name: "url", weight: 0.1 },
     ],
     threshold: 0.4,
     includeScore: true,

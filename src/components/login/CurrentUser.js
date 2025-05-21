@@ -12,10 +12,13 @@ const UserList1 = (props) => {
     if (props.token) {
       TodoDataService.getUserList(props.token)
         .then((response) => {
-          setUserList(response.data);
+          // Manejar la estructura paginada
+          const users = response.data.results || response.data; // Usa results si existe, sino usa data directamente
+          setUserList(Array.isArray(users) ? users : []);
         })
         .catch((e) => {
-          console.log(e);
+          console.error("Error al obtener la lista de usuarios:", e);
+          setUserList([]); // Asegúrate de establecer un array vacío en caso de error
         });
     }
   };

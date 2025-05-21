@@ -110,7 +110,7 @@ const BlogPostModal = ({
       centered
       dialogClassName={isMobile ? "modal-90w" : "modal-80w"}
       backdrop="static"
-      style={{ zIndex: 1200, marginTop:"5%" }}
+      style={{ zIndex: 1200, marginTop:"8%" }}
       animation
       onClick={handleBackdropClick}
     >

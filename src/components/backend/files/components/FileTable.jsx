@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 
 const FileTable = ({
   files,
+  fileMeta,
   selectedFiles,
   setSelectedFiles,
   previewFileUrls,
@@ -20,7 +21,7 @@ const FileTable = ({
   token,
   fetchFiles,
   currentUser,
-  NotallowedFileNames,
+  NotallowedFileNames = [],
 }) => {
   const handleCheckboxChange = (event, fileId) => {
     const checked = event.target.checked;
@@ -35,7 +36,7 @@ const FileTable = ({
     FileDataService.deleteFile(id, token)
       .then(response => {
         console.log('Archivo eliminado exitosamente:', response.data);
-        fetchFiles();
+        fetchFiles(currentPage);
       })
       .catch(error => {
         console.error('Error al eliminar el archivo:', error);
@@ -63,10 +64,7 @@ const FileTable = ({
     !NotallowedFileNames.includes(file.name)
   );
 
-  const indexOfLastFile = currentPage * filesPerPage;
-  const indexOfFirstFile = indexOfLastFile - filesPerPage;
-  const currentFiles = filteredFiles.slice(indexOfFirstFile, indexOfLastFile);
-  const totalPages = Math.ceil(filteredFiles.length / filesPerPage);
+  const totalPages = Math.ceil(fileMeta.count / filesPerPage);
 
   const getPreviewComponent = (fileUrl) => {
     const fileExtension = getFileExtension(fileUrl);
@@ -173,7 +171,7 @@ const FileTable = ({
                 </tr>
               </thead>
               <tbody>
-                {currentFiles.map(file => (
+                {filteredFiles.map(file => (
                   <motion.tr
                     key={file.id}
                     initial={{ opacity: 0 }}

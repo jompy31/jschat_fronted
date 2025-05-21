@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import CostaRica from "../../../components/json/costarica.json";
+import ProductDataService from "../../../services/products";
+import logo from "../../../assets/categorias/25.webp"
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -30,9 +32,11 @@ const ComerciosAfiliados = ({ subproducts }) => {
   const [propertyTypeSelected, setPropertyTypeSelected] = useState("");
   const [currentImageIndices, setCurrentImageIndices] = useState({});
   const [selectedProperty, setSelectedProperty] = useState(null);
+  const [totalItems, setTotalItems] = useState(0); 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
+  const pageSize = 8; 
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const isMini = useMediaQuery({ query: "(max-width: 340px)" });
 
@@ -44,36 +48,56 @@ const ComerciosAfiliados = ({ subproducts }) => {
     filterProperties();
   }, [country, province, canton, propertyTypeSelected, properties]);
 
-  const transformProperties = () => {
+   // Obtener subproductos del servidor
+   useEffect(() => {
+    fetchSubProducts();
+  }, [token, currentPage]);
+
+  const fetchSubProducts = async () => {
     try {
-      const filteredSubproducts = subproducts.filter((subproduct) => subproduct.addressmap);
+      const response = await ProductDataService.getPointOfSaleSubProducts(token, currentPage, pageSize);
+      console.log("Server Response:", response);
+      const subproducts = response.data.results || response.data;
+      setTotalItems(response.data.count || 0);
+      transformProperties(subproducts);
+    } catch (error) {
+      console.error("Error al obtener subproductos de point-of-sale:", error);
+    }
+  };
+
+  const transformProperties = (subproducts) => {
+    try {
+      const filteredSubproducts = subproducts.filter((subproduct) => subproduct); // Filtrar subproductos válidos
+      console.log("Input Subproducts:", subproducts);
       const transformedProperties = filteredSubproducts.map((subproduct) => {
         return {
           id: subproduct.id,
-          title: subproduct.name,
-          description: subproduct.description,
+          title: subproduct.name || "Sin nombre",
+          description: subproduct.description || "Sin descripción",
           rating: null,
-          province: subproduct.province,
-          canton: subproduct.canton || "",
-          location: subproduct.addressmap,
-          pictures: subproduct.logo ? [{ image: subproduct.logo }] : [],
-          property_type: subproduct.comercial_activity,
+          province: subproduct.province || "Sin provincia",
+          canton: subproduct.canton || "Sin cantón",
+          location: subproduct.addressmap || "",
+          pictures: [
+            ...(subproduct.image ? [{ image: subproduct.image }] : []),
+            ...(subproduct.logo ? [{ image: subproduct.logo }] : []),
+          ], // Incluir image y logo
+          property_type: subproduct.comercial_activity || "Sin actividad",
           bedrooms: null,
           bathrooms: null,
           price_per_night: null,
-          contact_name: subproduct.contact_name,
-          phone: subproduct.phone,
-          country: subproduct.country,
-          url: subproduct.url,
+          contact_name: subproduct.contact_name || "Sin contacto",
+          phone: subproduct.phone || "Sin teléfono",
+          country: subproduct.country || "Costa Rica",
+          url: subproduct.url || "#",
         };
       });
       setProperties(transformedProperties);
-      console.log("Transformed Properties", transformedProperties);
+      console.log("Transformed Properties:", transformedProperties);
     } catch (error) {
       console.error("Error al transformar los subproductos:", error);
     }
   };
-
   const getCoordinatesFromLocation = (location) => {
     const regex =
       /!1m12!1m3!1d[^!]*!2d([-+]?[0-9]*\.?[0-9]+)!3d([-+]?[0-9]*\.?[0-9]+)/;
@@ -328,13 +352,13 @@ const ComerciosAfiliados = ({ subproducts }) => {
                       alt={`Imagen de ${property.title}`}
                       onError={(e) => {
                         console.error(`Failed to load image for ${property.title}: ${images[currentIndex].image}`);
-                        e.target.src = "https://via.placeholder.com/300x200?text=Imagen+No+Disponible";
+                        e.target.src = logo;
                       }}
                       className="property-image"
                     />
                   ) : (
                     <img
-                      src="https://via.placeholder.com/300x200?text=Sin+Imagen"
+                    src={logo}
                       alt="Sin imagen disponible"
                       className="property-image"
                     />

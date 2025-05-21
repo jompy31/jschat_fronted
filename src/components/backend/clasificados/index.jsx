@@ -12,6 +12,7 @@ const FilesNews = () => {
   const token = useSelector((state) => state.authentication.token);
   const {
     newsPosts,
+    totalNewsPosts,
     selectedNews,
     searchTerm,
     showModal,
@@ -39,10 +40,10 @@ const FilesNews = () => {
 
   useEffect(() => {
     fetchNewsPosts();
-  }, [fetchNewsPosts]);
+  }, [fetchNewsPosts, currentPage, searchTerm, categoryFilter, subcategoryFilter, subsubcategoryFilter]);
 
   return (
-    <Container className="mt-20 py-6 max-w-7xl mx-auto" style={{marginTop:"8%"}}>
+    <Container className="mt-20 py-6 max-w-7xl mx-auto" style={{ marginTop: "8%" }}>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-800">Gestión de Clasificados</h1>
         <Button
@@ -75,14 +76,11 @@ const FilesNews = () => {
       />
       <NewsTable
         newsPosts={newsPosts}
+        totalNewsPosts={totalNewsPosts}
         selectedNews={selectedNews}
         toggleSelectNews={toggleSelectNews}
         toggleModal={toggleModal}
         handleDeleteSelected={handleDeleteSelected}
-        searchTerm={searchTerm}
-        categoryFilter={categoryFilter}
-        subcategoryFilter={subcategoryFilter}
-        subsubcategoryFilter={subsubcategoryFilter}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         itemsPerPage={itemsPerPage}

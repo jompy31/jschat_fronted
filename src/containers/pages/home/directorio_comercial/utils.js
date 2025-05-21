@@ -17,35 +17,35 @@ const clearOldCache = () => {
     .forEach((key) => localStorage.removeItem(key));
 };
 
-const fetchProducts = async (start = 0, limit = CHUNK_SIZE) => {
+const fetchProducts = async (page = 1, page_size = CHUNK_SIZE) => {
   try {
+    let allProducts = [];
     let allSubProducts = [];
     let allServices = [];
 
-    const cacheKey = `${CACHE_KEY}_${start}_${limit}`;
+    const cacheKey = `${CACHE_KEY}_${page}_${page_size}`;
     const cachedData = localStorage.getItem(cacheKey);
 
     if (cachedData) {
-      const { subProducts, services } = JSON.parse(cachedData);
+      const { products, subProducts, services } = JSON.parse(cachedData);
+      allProducts = products;
       allSubProducts = subProducts;
       allServices = services;
     } else {
-      const subProductsResponse = await ProductDataService.getAllSubProduct({
-        start,
-        limit,
-      });
-      const servicesResponse = await ProductDataService.getAllServices({
-        start,
-        limit,
-      });
+      // Cargar productos (categorías) de una sola vez
+      const productsResponse = await ProductDataService.getAll(null);
+      const subProductsResponse = await ProductDataService.getAllSubProduct(null, page, page_size);
+      const servicesResponse = await ProductDataService.getAllServices(null);
 
+      console.log("Respuesta de productos:", productsResponse.data);
       console.log("Respuesta de subproductos:", subProductsResponse.data);
       console.log("Respuesta de servicios:", servicesResponse.data);
 
-      allSubProducts = subProductsResponse.data;
+      allProducts = productsResponse.data.results || productsResponse.data;
+      allSubProducts = subProductsResponse.data.results || [];
       allServices = servicesResponse.data;
 
-      const dataToCache = { subProducts: allSubProducts, services: allServices };
+      const dataToCache = { products: allProducts, subProducts: allSubProducts, services: allServices };
       const totalSize = new TextEncoder().encode(JSON.stringify(dataToCache)).length;
       const maxSize = 1 * 1024 * 1024;
 
@@ -60,9 +60,9 @@ const fetchProducts = async (start = 0, limit = CHUNK_SIZE) => {
       }
     }
 
-    return { allSubProducts, allServices };
+    return { allProducts, allSubProducts, allServices };
   } catch (e) {
-    console.error("Error detallado al obtener subproductos o servicios:", {
+    console.error("Error detallado al obtener datos:", {
       message: e.message,
       stack: e.stack,
       response: e.response ? {
@@ -71,7 +71,7 @@ const fetchProducts = async (start = 0, limit = CHUNK_SIZE) => {
       } : null,
     });
     toast.error("Error al cargar datos. Intenta de nuevo.");
-    return { allSubProducts: [], allServices: [] };
+    return { allProducts: [], allSubProducts: [], allServices: [] };
   }
 };
 

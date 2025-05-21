@@ -118,7 +118,7 @@ const Publicidad = () => {
       )}
 
       {mostrarModal && (
-        <div className="modal" onClick={toggleModal}>
+        <div className="modal" onClick={toggleModal} style={{marginTop:"3%"}}>
           <div className="modal-content rounded-shadow"
             style={{ maxHeight: "80vh", overflowY: "auto" }} onClick={(e) => e.stopPropagation()}>
             <span className="close1" onClick={toggleModal}>×</span>

@@ -21,13 +21,18 @@ export const fetchAllData = async (token) => {
     ]);
 
     return {
-      jobPostings: jobResponse.data,
-      companies: companyResponse.data,
-      jobCategories: categoryResponse.data,
-      experienceLevels: experienceResponse.data,
-      skills: skillsResponse.data,
-      benefits: benefitsResponse.data,
-      jobTags: tagsResponse.data,
+      jobPostings: jobResponse.data.results || jobResponse.data, // Extract results or fallback to data
+      jobPagination: {
+        count: jobResponse.data.count || jobResponse.data.length,
+        next: jobResponse.data.next || null,
+        previous: jobResponse.data.previous || null,
+      },
+      companies: companyResponse.data.results || companyResponse.data,
+      jobCategories: categoryResponse.data.results || categoryResponse.data,
+      experienceLevels: experienceResponse.data.results || experienceResponse.data,
+      skills: skillsResponse.data.results || skillsResponse.data,
+      benefits: benefitsResponse.data.results || benefitsResponse.data,
+      jobTags: tagsResponse.data.results || tagsResponse.data,
     };
   } catch (error) {
     console.error("Error fetching data:", error);

@@ -5,33 +5,18 @@ import PropTypes from 'prop-types';
 
 const NewsTable = ({
   newsPosts,
+  totalNewsPosts,
   selectedNews,
   toggleSelectNews,
   toggleModal,
   handleDeleteSelected,
-  searchTerm,
-  categoryFilter,
-  subcategoryFilter,
-  subsubcategoryFilter,
   currentPage,
   setCurrentPage,
   itemsPerPage,
 }) => {
   const [pageInput, setPageInput] = useState('');
 
-  const filteredNewsPosts = newsPosts.filter((post) => {
-    const matchesSearch =
-      post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.category.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = !categoryFilter || post.category === categoryFilter;
-    const matchesSubcategory = !subcategoryFilter || post.subcategory === subcategoryFilter;
-    const matchesSubsubcategory = !subsubcategoryFilter || post.subsubcategory === subsubcategoryFilter;
-    return matchesSearch && matchesCategory && matchesSubcategory && matchesSubsubcategory;
-  });
-
-  const totalPages = Math.ceil(filteredNewsPosts.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedPosts = filteredNewsPosts.slice(startIndex, startIndex + itemsPerPage);
+  const totalPages = Math.ceil(totalNewsPosts / itemsPerPage);
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
@@ -57,7 +42,7 @@ const NewsTable = ({
     if (contentType === 'clasificado_logo' || contentType === 'clasificado_imagen') {
       return (
         <img
-          src={content}
+          src={content || ''}
           alt="Vista previa"
           className="max-w-[100px] max-h-[100px] object-cover rounded"
         />
@@ -68,12 +53,12 @@ const NewsTable = ({
 
   const handleDownload = async (fileUrl, title) => {
     try {
-      const response = await fetch(fileUrl);
+      const response = await fetch(fileUrl || '');
       const blob = await response.blob();
       const url = window.URL.createObjectURL(new Blob([blob]));
       const link = document.createElement('a');
       link.href = url;
-      link.download = `${title}.png`;
+      link.download = `${title || 'clasificado'}.png`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -85,7 +70,7 @@ const NewsTable = ({
 
   return (
     <div className="mt-6">
-        {selectedNews.length > 0 && (
+      {selectedNews.length > 0 && (
         <div className="mt-4">
           <Button
             variant="danger"
@@ -101,7 +86,7 @@ const NewsTable = ({
           </Button>
         </div>
       )}
-      {filteredNewsPosts.length > 0 ? (
+      {newsPosts.length > 0 ? (
         <>
           <div className="overflow-x-auto shadow-lg rounded-lg">
             <Table striped hover className="min-w-full">
@@ -116,14 +101,14 @@ const NewsTable = ({
                 </tr>
               </thead>
               <tbody>
-                {paginatedPosts.map((post) => (
+                {newsPosts.map((post) => (
                   <tr key={post.id} className="border-b">
                     <td className="p-3">
                       <Form.Check
                         type="checkbox"
                         checked={selectedNews.includes(post.id)}
                         onChange={() => toggleSelectNews(post.id)}
-                        aria-label={`Seleccionar ${post.title}`}
+                        aria-label={`Seleccionar ${post.title || 'clasificado'}`}
                       />
                     </td>
                     <td className="p-3">
@@ -131,15 +116,16 @@ const NewsTable = ({
                         className="text-blue-600 hover:underline cursor-pointer"
                         onClick={() => toggleModal(true, post.id)}
                       >
-                        {post.title}
+                        {post.title || '-'}
                       </span>
                     </td>
-                    <td className="p-3">{post.category}</td>
-                    <td className="p-3">{post.description}</td>
+                    <td className="p-3">{post.category || '-'}</td>
+                    <td className="p-3">{post.description || '-'}</td>
                     <td className="p-3">
                       <button
                         onClick={() => handleDownload(post.content, post.title)}
                         className="text-blue-600 hover:text-blue-800 font-medium"
+                        disabled={!post.content}
                       >
                         Descargar
                       </button>
@@ -153,9 +139,8 @@ const NewsTable = ({
           <div className="flex flex-col sm:flex-row justify-between items-center mt-4">
             <div className="mb-2 sm:mb-0">
               <span className="text-gray-600">
-                Mostrando {startIndex + 1}-
-                {Math.min(startIndex + itemsPerPage, filteredNewsPosts.length)} de{' '}
-                {filteredNewsPosts.length} resultados
+                Mostrando {(currentPage - 1) * itemsPerPage + 1}-
+                {Math.min(currentPage * itemsPerPage, totalNewsPosts)} de {totalNewsPosts} resultados
               </span>
             </div>
             <div className="flex items-center gap-2">
@@ -168,10 +153,7 @@ const NewsTable = ({
               </Button>
               <div className="flex gap-1">
                 {Array.from({ length: totalPages }, (_, i) => i + 1)
-                  .slice(
-                    Math.max(0, currentPage - 3),
-                    Math.min(totalPages, currentPage + 2)
-                  )
+                  .slice(Math.max(0, currentPage - 3), Math.min(totalPages, currentPage + 2))
                   .map((page) => (
                     <Button
                       key={page}
@@ -197,7 +179,7 @@ const NewsTable = ({
                   onChange={handlePageInput}
                   onKeyPress={handlePageInputSubmit}
                   className="w-16 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  placeholder={currentPage}
+                  placeholder={currentPage.toString()}
                 />
               </div>
             </div>
@@ -206,21 +188,17 @@ const NewsTable = ({
       ) : (
         <p className="text-gray-600 text-center mt-4">No hay publicaciones de noticias disponibles.</p>
       )}
-      
     </div>
   );
 };
 
 NewsTable.propTypes = {
   newsPosts: PropTypes.array.isRequired,
+  totalNewsPosts: PropTypes.number.isRequired,
   selectedNews: PropTypes.array.isRequired,
   toggleSelectNews: PropTypes.func.isRequired,
   toggleModal: PropTypes.func.isRequired,
   handleDeleteSelected: PropTypes.func.isRequired,
-  searchTerm: PropTypes.string.isRequired,
-  categoryFilter: PropTypes.string.isRequired,
-  subcategoryFilter: PropTypes.string.isRequired,
-  subsubcategoryFilter: PropTypes.string.isRequired,
   currentPage: PropTypes.number.isRequired,
   setCurrentPage: PropTypes.func.isRequired,
   itemsPerPage: PropTypes.number.isRequired,

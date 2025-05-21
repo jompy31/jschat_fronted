@@ -1,18 +1,21 @@
 import TodoDataService from "../../../../services/todos";
 
-export const loadLeads = async (token) => {
+export const loadLeads = async (token, page = 1, search = "") => {
   try {
-    const response = await TodoDataService.getAllLeads(token);
-    return response.data.map((lead) => ({
-      ...lead,
-      lastComment: lead.comments?.length > 0 ? lead.comments[lead.comments.length - 1] : null,
-    }));
+    const response = await TodoDataService.getAllLeads(token, page, { page, search });
+    const { results, count } = response.data;
+    return {
+      leads: results.map((lead) => ({
+        ...lead,
+        lastComment: lead.comments?.length > 0 ? lead.comments[lead.comments.length - 1] : null,
+      })),
+      totalCount: count,
+    };
   } catch (error) {
     console.error("Error loading leads:", error);
     throw error;
   }
 };
-
 export const createLead = async (leadData, token) => {
   const formData = new FormData();
   for (const key in leadData) {
@@ -51,10 +54,28 @@ export const createComment = async (leadId, comment, token) => {
   return TodoDataService.createCommentlead(commentData, token);
 };
 
-export const getLeadComments = async (leadId, token) => {
-  return TodoDataService.getLeadComments(leadId, token);
-};
+// apiUtils.js
+export const getLeadComments = async (leadId, token, page = 1) => {
+  try {
+    const response = await TodoDataService.getLeadComments(leadId, token, { page });
+    const { results, count, next } = response.data;
+    let allComments = results;
 
+    // Fetch all pages if paginated
+    let currentPage = page;
+    while (response.data.next) {
+      currentPage += 1;
+      const nextResponse = await TodoDataService.getLeadComments(leadId, token, { page: currentPage });
+      allComments = [...allComments, ...nextResponse.data.results];
+      response.data = nextResponse.data;
+    }
+
+    return { data: allComments };
+  } catch (error) {
+    console.error("Error fetching comments:", error);
+    throw error;
+  }
+};
 export const deleteComment = async (leadId, commentId, token) => {
   return TodoDataService.deleteCommentContact(leadId, commentId, token);
 };

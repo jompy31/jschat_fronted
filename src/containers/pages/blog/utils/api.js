@@ -2,8 +2,22 @@ import TodoDataService from "../../../../services/todos";
 
 export const fetchBlogPosts = async () => {
   try {
+    let allPosts = [];
+    let nextUrl = null;
+
+    // Initial request to get the first page
     const response = await TodoDataService.getAllBlogPosts();
-    return response.data;
+    allPosts = allPosts.concat(response.data.results);
+    nextUrl = response.data.next;
+
+    // Fetch subsequent pages if `next` URL exists
+    while (nextUrl) {
+      const nextResponse = await TodoDataService.getNextPage(nextUrl); // Assume a method to fetch next page
+      allPosts = allPosts.concat(nextResponse.data.results);
+      nextUrl = nextResponse.data.next;
+    }
+
+    return allPosts;
   } catch (error) {
     console.error("Error fetching blog posts:", error);
     throw error;

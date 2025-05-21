@@ -2,25 +2,32 @@ import axios from "axios";
 import config from "../config/enviroments.ts";
 
 class TodoDataService {
+  setAuthHeader(token) {
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `Token ${token}`;
+    } else {
+      delete axios.defaults.headers.common["Authorization"];
+    }
+  }
   getAll(token) {
     axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.get(`${config.API_URL}/api/todos/`);
+    return axios.get(`${config.API_URL}/todos/`);
   }
   createTodo(data, token) {
     axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.post(`${config.API_URL}/api/todos/`, data);
+    return axios.post(`${config.API_URL}/todos/`, data);
   }
   updateTodo(id, data, token) {
     axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.put(`${config.API_URL}/api/todos/${id}`, data);
+    return axios.put(`${config.API_URL}/todos/${id}`, data);
   }
   deleteTodo(id, token) {
     axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.delete(`${config.API_URL}/api/todos/${id}`);
+    return axios.delete(`${config.API_URL}/todos/${id}`);
   }
   completeTodo(id, token) {
     axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.put(`${config.API_URL}/api/todos/${id}/complete`);
+    return axios.put(`${config.API_URL}/todos/${id}/complete`);
   }
   getUserList(token) {
     // axios.defaults.headers.common[`Authorization`] = `Token ` + token;
@@ -100,9 +107,11 @@ class TodoDataService {
   sendEmailPreview(data) {
     return axios.post(`${config.API_URL}/send-email-preview/`, data);
   }
-  getAllLeads(token) {
-    axios.defaults.headers.common[`Authorization`] = `Token ` + token;
-    return axios.get(`${config.API_URL}/leads/`);
+  getAllLeads(token, page = 1, page_size = 100) {
+    this.setAuthHeader(token);
+    return axios.get(`${config.API_URL}/leads/`, {
+      params: { page, page_size },
+    });
   }
 
   createLead(data, token) {

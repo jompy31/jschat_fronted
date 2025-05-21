@@ -9,6 +9,7 @@ import CategorySidebar from "./components/CategorySidebar";
 import PaginationControls from "./components/PaginationControls";
 import JobApplicationModal from "./components/JobApplicationModal";
 import { fetchAllData, createJobApplication } from "./utils/api";
+import EmployeeDataService from "../../../services/employee";
 import { JOBS_PER_PAGE } from "./utils/constants";
 import image2 from "../../../assets/categorias/2.webp";
 import image1 from "../../../assets/categorias/25.webp";
@@ -18,6 +19,7 @@ const BolsaEmpleo = () => {
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [paginationData, setPaginationData] = useState({ count: 0, next: null, previous: null });
   const [companies, setCompanies] = useState([]);
   const [jobCategories, setJobCategories] = useState([]);
   const [experienceLevels, setExperienceLevels] = useState([]);
@@ -60,6 +62,24 @@ const BolsaEmpleo = () => {
     setCurrentJobApplication(null);
   };
 
+  const fetchJobsByPage = async (page) => {
+    setLoading(true);
+    try {
+      const response = await EmployeeDataService.getAllJobPostings(token, { params: { page } });
+      setJobPostings(response.data.results || response.data);
+      setFilteredJobs(response.data.results || response.data);
+      setPaginationData({
+        count: response.data.count || response.data.length,
+        next: response.data.next || null,
+        previous: response.data.previous || null,
+      });
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -67,6 +87,7 @@ const BolsaEmpleo = () => {
         const data = await fetchAllData(token);
         setJobPostings(data.jobPostings);
         setFilteredJobs(data.jobPostings);
+        setPaginationData(data.jobPagination);
         setCompanies(data.companies);
         setJobCategories(data.jobCategories);
         setExperienceLevels(data.experienceLevels);
@@ -83,6 +104,10 @@ const BolsaEmpleo = () => {
   }, []);
 
   useEffect(() => {
+    fetchJobsByPage(currentPage);
+  }, [currentPage]);
+
+  useEffect(() => {
     let filtered = jobPostings;
     if (searchTerm) {
       filtered = filtered.filter((job) =>
@@ -93,7 +118,6 @@ const BolsaEmpleo = () => {
       filtered = filtered.filter((job) => job.category === selectedCategory);
     }
     setFilteredJobs(filtered);
-    setCurrentPage(1);
   }, [searchTerm, jobPostings, selectedCategory]);
 
   const handleShowModal = (job) => {
@@ -105,12 +129,8 @@ const BolsaEmpleo = () => {
 
   const handleCategorySelect = (categoryId) => {
     setSelectedCategory(categoryId === selectedCategory ? null : categoryId);
+    setCurrentPage(1);
   };
-
-  const currentJobs = filteredJobs.slice(
-    (currentPage - 1) * JOBS_PER_PAGE,
-    currentPage * JOBS_PER_PAGE
-  );
 
   return (
     <div
@@ -165,8 +185,19 @@ const BolsaEmpleo = () => {
             alignItems: "start",
           }}
         >
-          {currentJobs.length > 0 ? (
-            currentJobs.map((job) => (
+          {loading ? (
+            <div
+              style={{
+                gridColumn: "span 2",
+                textAlign: "center",
+                fontSize: "1.0em",
+                color: "#777",
+              }}
+            >
+              Cargando empleos...
+            </div>
+          ) : filteredJobs.length > 0 ? (
+            filteredJobs.map((job) => (
               <JobCard
                 key={job.id}
                 job={job}
@@ -185,14 +216,14 @@ const BolsaEmpleo = () => {
                 color: "#777",
               }}
             >
-              Necesitas autenticarte para poder visualizar los empleos disponibles.
+              Actualmente no hay empleos disponibles
             </div>
           )}
         </div>
       </div>
 
       <PaginationControls
-        totalJobs={filteredJobs.length}
+        totalJobs={paginationData.count}
         jobsPerPage={JOBS_PER_PAGE}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}

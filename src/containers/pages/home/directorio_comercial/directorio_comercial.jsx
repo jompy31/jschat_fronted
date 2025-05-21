@@ -11,8 +11,31 @@ import LoadingSpinner from "./components/LoadingSpinner";
 import LetterLoadingMessage from "./components/LetterLoadingMessage";
 import DistributorTable from "./components/DistributorTable";
 import SearchForm from "./components/SearchForm";
+import ProductDataService from "../../../../services/products";
 
-function Distributors({ products = [], subproducts = [], services = [], selectedCategory, setSelectedCategory, selectedSubcategory, setSelectedSubcategory, selectedSubsubcategory, setSelectedSubsubcategory, clearFilters }) {
+// Natural sort function for sorting categories
+const naturalSort = (a, b) => {
+  const re = /(\d+)/g;
+  const aParts = a.split(re);
+  const bParts = b.split(re);
+
+  for (let i = 0; i < Math.min(aParts.length, bParts.length); i++) {
+    if (i % 2 === 0) {
+      if (aParts[i] !== bParts[i]) {
+        return aParts[i].localeCompare(bParts[i]);
+      }
+    } else {
+      const aNum = parseInt(aParts[i], 10);
+      const bNum = parseInt(bParts[i], 10);
+      if (aNum !== bNum) {
+        return aNum - bNum;
+      }
+    }
+  }
+  return aParts.length - bParts.length;
+};
+
+function Distributors({ products: initialProducts = [], subproducts = [], services = [], selectedCategory, setSelectedCategory, selectedSubcategory, setSelectedSubcategory, selectedSubsubcategory, setSelectedSubsubcategory, clearFilters }) {
   const [distributors, setDistributors] = useState([]);
   const [selectedDirectory, setSelectedDirectory] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -23,105 +46,157 @@ function Distributors({ products = [], subproducts = [], services = [], selected
   const [selectedComercialActivity, setSelectedComercialActivity] = useState("");
   const [selectedService, setSelectedService] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isFullyLoaded, setIsFullyLoaded] = useState(false);
   const [allDistributors, setAllDistributors] = useState([]);
   const [filteredDistributors, setFilteredDistributors] = useState([]);
   const [isLetterLoading, setIsLetterLoading] = useState(false);
   const [updatedSubProducts, setUpdatedSubProducts] = useState([]);
   const [allServices, setAllServices] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState(initialProducts);
   const [vibrate, setVibrate] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const isMini = useMediaQuery({ query: "(max-width: 340px)" });
   const listRef = useRef(null);
   const hasProcessedProps = useRef(false);
+  const hasShownToast = useRef(false);
 
+  // Cargar productos iniciales
   useEffect(() => {
-    const processData = async () => {
-      console.log("Productos recibidos:", products);
-      console.log("Subproductos recibidos:", subproducts);
-      console.log("Servicios recibidos:", services);
-
-      if (!products.length && !subproducts.length) {
-        console.log("Productos y subproductos vacíos, esperando datos de home.jsx...");
-        return;
-      }
-
-      if (hasProcessedProps.current) {
-        console.log("Props ya procesados, omitiendo...");
-        return;
-      }
-
-      setIsLoading(true);
+    const loadInitialData = async () => {
       try {
-        let finalSubProducts = subproducts;
-        let finalServices = services;
-
-        if (!Array.isArray(subproducts) || subproducts.length === 0) {
-          console.log("Subproductos vacíos, obteniendo datos...");
-          const { allSubProducts, allServices } = await fetchProducts(0, CHUNK_SIZE);
-          finalSubProducts = allSubProducts;
-          finalServices = allServices;
-        }
-
-        if (!Array.isArray(finalSubProducts) || !Array.isArray(finalServices)) {
-          console.error("Datos inválidos:", { finalSubProducts, finalServices });
-          toast.error("Error: Datos inválidos recibidos.");
-          setUpdatedSubProducts([]);
-          setAllServices([]);
-          setCategories([]);
-          return;
-        }
-
-        const productMap = products.reduce((acc, product) => {
-          acc[product.id] = product.name || `Producto ${product.id}`;
-          return acc;
-        }, {});
-
-        const allCategories = products
-          .map((product) => product.name)
-          .filter((name) => name && typeof name === "string")
-          .sort((a, b) => a.localeCompare(b));
-
-        setCategories([...new Set(allCategories)]);
-
-        const servicesBySubproduct = finalServices.reduce((acc, service) => {
-          const subproductId = service?.subproduct;
-          if (subproductId) {
-            if (!acc[subproductId]) acc[subproductId] = [];
-            acc[subproductId].push(service);
-          }
-          return acc;
-        }, {});
-
-        const updated = finalSubProducts.map((subProduct) => {
-          const productNames = (subProduct.products || []).map((productId) => productMap[productId] || productId);
-          return {
-            ...subProduct,
-            services: servicesBySubproduct[subProduct?.id] || [],
-            productNames,
-          };
-        });
-
-        console.log("Subproductos procesados:", updated.map(d => ({
-          id: d.id,
-          name: d.name,
-          productNames: d.productNames,
-          subcategory: d.subcategory,
-          subsubcategory: d.subsubcategory,
-        })));
-        setUpdatedSubProducts(updated);
-        setAllServices(finalServices);
-        hasProcessedProps.current = true;
+        const { allProducts, allSubProducts, allServices } = await fetchProducts(1, CHUNK_SIZE);
+        setProducts(allProducts);
+        setUpdatedSubProducts(allSubProducts);
+        setAllServices(allServices);
+        setCategories(
+          Array.isArray(allProducts)
+            ? [...new Set(
+                allProducts
+                  .filter((product) => product.name && typeof product.name === "string")
+                  .map((product) => product.name)
+                  .sort((a, b) => a.localeCompare(b))
+              )]
+            : []
+        );
       } catch (e) {
-        console.error("Error al procesar datos:", e);
-        toast.error("Error al procesar datos. Intenta de nuevo.");
-      } finally {
-        setIsLoading(false);
+        console.error("Error al cargar datos iniciales:", e);
+        toast.error("Error al cargar datos iniciales.");
       }
     };
 
-    processData();
-  }, [products, subproducts, services]);
+    if (!initialProducts.length) {
+      loadInitialData();
+    } else {
+      setCategories(
+        Array.isArray(initialProducts)
+          ? [...new Set(
+              initialProducts
+                .filter((product) => product.name && typeof product.name === "string")
+                .map((product) => product.name)
+                .sort((a, b) => a.localeCompare(b))
+              )]
+          : []
+      );
+    }
+  }, [initialProducts]);
+
+  const loadMoreSubProducts = useCallback(async () => {
+    if (!hasMore || isLoading) return;
+    setIsLoading(true);
+    try {
+      const response = await ProductDataService.getAllSubProduct(null, page, CHUNK_SIZE);
+      const { results, next } = response.data;
+      const newSubProducts = results || [];
+
+      if (newSubProducts.length === 0 || !next) {
+        setHasMore(false);
+        setIsFullyLoaded(true);
+      }
+
+      const productMap = Array.isArray(products)
+        ? products.reduce((acc, product) => {
+            if (product.id && product.name && typeof product.name === "string") {
+              acc[product.id] = product.name;
+            } else {
+              console.warn(`Invalid product data: ${JSON.stringify(product)}`);
+            }
+            return acc;
+          }, {})
+        : {};
+
+      const servicesBySubproduct = Array.isArray(services)
+        ? services.reduce((acc, service) => {
+            const subproductId = service?.subproduct;
+            if (subproductId) {
+              if (!acc[subproductId]) acc[subproductId] = [];
+              acc[subproductId].push(service);
+            }
+            return acc;
+          }, {})
+        : {};
+
+      const updated = newSubProducts.map((subProduct) => {
+        const productNames = (subProduct.products || []).map((productId) => {
+          const name = productMap[productId];
+          if (!name) {
+            console.warn(`No product name found for productId: ${productId}, subProduct: ${subProduct.id}`);
+            return `Unknown Product ${productId}`;
+          }
+          return name;
+        }).filter(name => name && typeof name === "string");
+
+        return {
+          ...subProduct,
+          services: servicesBySubproduct[subProduct?.id] || [],
+          productNames,
+        };
+      });
+
+      setUpdatedSubProducts((prev) => [...prev, ...updated]);
+      setPage((prev) => prev + 1);
+
+      console.log("Updated Subproducts:", updated.map(d => ({
+        id: d.id,
+        name: d.name,
+        productNames: d.productNames,
+      })));
+    } catch (e) {
+      console.error("Error al cargar subproductos:", e);
+      toast.error("Error al cargar más comercios.");
+      setHasMore(false);
+      setIsFullyLoaded(true);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [page, hasMore, isLoading, products, services]);
+
+  useEffect(() => {
+    if (!hasMore || isLoading) return;
+    const intervalId = setInterval(() => {
+      if (hasMore && !isLoading) {
+        loadMoreSubProducts();
+      }
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [loadMoreSubProducts, hasMore, isLoading]);
+
+  useEffect(() => {
+    if (isFullyLoaded && !isLoading && !hasShownToast.current) {
+      toast.success("Directorio cargado correctamente", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      hasShownToast.current = true;
+    }
+  }, [isFullyLoaded, isLoading]);
 
   useInterval(() => {
     setVibrate(true);
@@ -129,6 +204,14 @@ function Distributors({ products = [], subproducts = [], services = [], selected
       setVibrate(false);
     }, 200);
   }, 4000);
+
+  const parseCategories = (categoryString) => {
+    if (!categoryString || typeof categoryString !== "string") return [];
+    return categoryString
+      .split(",")
+      .map((cat) => cat.trim())
+      .filter((cat) => cat !== "");
+  };
 
   const fetchDistributors = useCallback(() => {
     if (!updatedSubProducts.length) {
@@ -161,24 +244,36 @@ function Distributors({ products = [], subproducts = [], services = [], selected
         : true;
 
       const productNames = Array.isArray(distributor?.productNames) ? distributor.productNames : [];
+      let matchesCategory = true;
+      let matchesSubcategory = true;
+      let matchesSubsubcategory = true;
 
-      const matchesCategory = selectedCategory
-        ? productNames.some((name) => normalizeString(name) === normalizeString(selectedCategory))
-        : true;
-
-      const matchesSubcategory = selectedSubcategory
-        ? normalizeString(distributor?.subcategory || "") === normalizeString(selectedSubcategory)
-        : true;
-
-      const matchesSubsubcategory = selectedSubsubcategory
-        ? normalizeString(distributor?.subsubcategory || "") === normalizeString(selectedSubsubcategory)
-        : true;
+      if (selectedSubsubcategory) {
+        const distributorSubsubcategories = parseCategories(distributor?.subsubcategory);
+        matchesSubsubcategory = distributorSubsubcategories.some(
+          (subsubcat) => normalizeString(subsubcat).includes(normalizeString(selectedSubsubcategory))
+        );
+      } else if (selectedSubcategory) {
+        const distributorSubcategories = parseCategories(distributor?.subcategory);
+        matchesSubcategory = distributorSubcategories.some(
+          (subcat) => normalizeString(subcat).includes(normalizeString(selectedSubcategory))
+        );
+      } else if (selectedCategory) {
+        matchesCategory = productNames.some((name) => {
+          const normalizedName = normalizeString(name);
+          const normalizedSelectedCategory = normalizeString(selectedCategory);
+          const match = normalizedName.includes(normalizedSelectedCategory) ||
+                        normalizedSelectedCategory.includes(normalizedName);
+          console.log(`Comparing category: ${normalizedName} vs ${normalizedSelectedCategory} -> ${match}`);
+          return match;
+        });
+      }
 
       const matches = (
-        (!selectedCountry || normalizeString(distributor?.country || "") === normalizeString(selectedCountry)) &&
-        (!selectedProvince || normalizeString(distributor?.province || "") === normalizeString(selectedProvince)) &&
-        (!selectedCanton || normalizeString(distributor?.canton || "") === normalizeString(selectedCanton)) &&
-        (!selectedDistrict || normalizeString(distributor?.distrito || "") === normalizeString(selectedDistrict)) &&
+        (!selectedCountry || normalizeString(distributor?.country || "").includes(normalizeString(selectedCountry))) &&
+        (!selectedProvince || normalizeString(distributor?.province || "").includes(normalizeString(selectedProvince))) &&
+        (!selectedCanton || normalizeString(distributor?.canton || "").includes(normalizeString(selectedCanton))) &&
+        (!selectedDistrict || normalizeString(distributor?.distrito || "").includes(normalizeString(selectedDistrict))) &&
         (selectedDirectory === "comercios"
           ? !(distributor.products || []).includes(19)
           : selectedDirectory === "cooperativas"
@@ -187,7 +282,7 @@ function Distributors({ products = [], subproducts = [], services = [], selected
           ? (distributor.products || []).includes(25)
           : true) &&
         (!selectedComercialActivity ||
-          normalizeString(distributor?.comercial_activity || "") === normalizeString(selectedComercialActivity)) &&
+          normalizeString(distributor?.comercial_activity || "").includes(normalizeString(selectedComercialActivity))) &&
         matchesService &&
         matchesCategory &&
         matchesSubcategory &&
@@ -207,9 +302,29 @@ function Distributors({ products = [], subproducts = [], services = [], selected
 
     let sorted = Array.from(
       new Map(filtered.map((distributor) => [distributor.id, distributor])).values()
-    ).sort((a, b) =>
-      normalizeString(a?.name || "").localeCompare(normalizeString(b?.name || ""))
     );
+
+    if (selectedSubsubcategory) {
+      sorted = sorted.sort((a, b) => {
+        const aSubsubcategories = parseCategories(a?.subsubcategory).sort(naturalSort);
+        const bSubsubcategories = parseCategories(b?.subsubcategory).sort(naturalSort);
+        const aFirstSubsubcat = aSubsubcategories[0] || "";
+        const bFirstSubsubcat = bSubsubcategories[0] || "";
+        return naturalSort(aFirstSubsubcat, bFirstSubsubcat);
+      });
+    } else if (selectedSubcategory) {
+      sorted = sorted.sort((a, b) => {
+        const aSubcategories = parseCategories(a?.subcategory).sort(naturalSort);
+        const bSubcategories = parseCategories(b?.subcategory).sort(naturalSort);
+        const aFirstSubcat = aSubcategories[0] || "";
+        const bFirstSubcat = bSubcategories[0] || "";
+        return naturalSort(aFirstSubcat, bFirstSubcat);
+      });
+    } else {
+      sorted = sorted.sort((a, b) =>
+        normalizeString(a?.name || "").localeCompare(normalizeString(b?.name || ""))
+      );
+    }
 
     setAllDistributors(sorted);
     setDistributors(sorted);
@@ -248,27 +363,43 @@ function Distributors({ products = [], subproducts = [], services = [], selected
     setFilteredDistributors(allDistributors);
   }, [allDistributors]);
 
+  const sanctifySearchTerm = (term) => {
+    const element = document.createElement("div");
+    element.innerHTML = term;
+    return element.textContent || element.innerText || "";
+  };
+
   const handleSearch = () => {
-    if (!searchTerm) {
+    const sanitizedSearchTerm = sanctifySearchTerm(searchTerm);
+    if (!sanitizedSearchTerm) {
       const results = allDistributors.filter((distributor) => {
         const matchesService = selectedService
-          ? distributor.Services?.some(
+          ? distributor.services?.some(
               (service) =>
                 service?.id === selectedService?.id ||
                 normalizeString(service?.name) === normalizeString(selectedService?.name)
           )
         : true;
-        const matchesCategory = selectedCategory
-          ? (distributor.productNames || []).some(
-              (name) => normalizeString(name) === normalizeString(selectedCategory)
-            )
-          : true;
-        const matchesSubcategory = selectedSubcategory
-          ? normalizeString(distributor?.subcategory || "") === normalizeString(selectedSubcategory)
-          : true;
-        const matchesSubsubcategory = selectedSubsubcategory
-          ? normalizeString(distributor?.subsubcategory || "") === normalizeString(selectedSubsubcategory)
-          : true;
+        let matchesCategory = true;
+        let matchesSubcategory = true;
+        let matchesSubsubcategory = true;
+
+        if (selectedSubsubcategory) {
+          const distributorSubsubcategories = parseCategories(distributor?.subsubcategory);
+          matchesSubsubcategory = distributorSubsubcategories.some(
+            (subsubcat) => normalizeString(subsubcat) === normalizeString(selectedSubsubcategory)
+          );
+        } else if (selectedSubcategory) {
+          const distributorSubcategories = parseCategories(distributor?.subcategory);
+          matchesSubcategory = distributorSubcategories.some(
+            (subcat) => normalizeString(subcat) === normalizeString(selectedSubcategory)
+          );
+        } else if (selectedCategory) {
+          matchesCategory = (distributor.productNames || []).some(
+            (name) => normalizeString(name) === normalizeString(selectedCategory)
+          );
+        }
+
         return matchesService && matchesCategory && matchesSubcategory && matchesSubsubcategory;
       });
       console.log("Resultados sin búsqueda de texto:", results.map(d => ({
@@ -301,7 +432,7 @@ function Distributors({ products = [], subproducts = [], services = [], selected
           return normalizeString(value);
         },
       });
-      const results = fuse.search(normalizeString(searchTerm)).map((result) => result.item);
+      const results = fuse.search(normalizeString(sanitizedSearchTerm)).map((result) => result.item);
 
       const filteredResults = results.filter((distributor) => {
         const matchesService = selectedService
@@ -311,17 +442,26 @@ function Distributors({ products = [], subproducts = [], services = [], selected
                 normalizeString(service?.name) === normalizeString(selectedService?.name)
             )
           : true;
-        const matchesCategory = selectedCategory
-          ? (distributor.productNames || []).some(
-              (name) => normalizeString(name) === normalizeString(selectedCategory)
-            )
-          : true;
-        const matchesSubcategory = selectedSubcategory
-          ? normalizeString(distributor?.subcategory || "") === normalizeString(selectedSubcategory)
-          : true;
-        const matchesSubsubcategory = selectedSubsubcategory
-          ? normalizeString(distributor?.subsubcategory || "") === normalizeString(selectedSubsubcategory)
-          : true;
+        let matchesCategory = true;
+        let matchesSubcategory = true;
+        let matchesSubsubcategory = true;
+
+        if (selectedSubsubcategory) {
+          const distributorSubsubcategories = parseCategories(distributor?.subsubcategory);
+          matchesSubsubcategory = distributorSubsubcategories.some(
+            (subsubcat) => normalizeString(subsubcat) === normalizeString(selectedSubsubcategory)
+          );
+        } else if (selectedSubcategory) {
+          const distributorSubcategories = parseCategories(distributor?.subcategory);
+          matchesSubcategory = distributorSubcategories.some(
+            (subcat) => normalizeString(subcat) === normalizeString(selectedSubcategory)
+          );
+        } else if (selectedCategory) {
+          matchesCategory = (distributor.productNames || []).some(
+            (name) => normalizeString(name) === normalizeString(selectedCategory)
+          );
+        }
+
         return matchesService && matchesCategory && matchesSubcategory && matchesSubsubcategory;
       });
 
@@ -428,9 +568,13 @@ function Distributors({ products = [], subproducts = [], services = [], selected
         setSelectedSubsubcategory={setSelectedSubsubcategory}
       />
 
-      {isLoading ? (
-        <LoadingSpinner />
-      ) : updatedSubProducts.length === 0 ? (
+      {!isFullyLoaded && (
+        <div style={{ textAlign: "center", margin: "20px 0" }}>
+          <LoadingSpinner />
+        </div>
+      )}
+
+      {updatedSubProducts.length === 0 && isFullyLoaded ? (
         <div style={{ textAlign: "center", marginTop: "20px" }}>
           <p>No se encontraron comercios en el directorio.</p>
           <button

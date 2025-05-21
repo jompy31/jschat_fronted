@@ -3,12 +3,20 @@ import { Calendar as BigCalendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
-const EventCalendar = ({ eventos, setSelectedEvent, setShowEditDeleteModal }) => {
+const EventCalendar = ({ eventos, setSelectedEvent, setShowAddModal, setIsEditMode, setNewEvent }) => {
   const localizer = momentLocalizer(moment);
 
   const handleEventClick = (event) => {
     setSelectedEvent(event);
-    setShowEditDeleteModal(true);
+    setIsEditMode(true);
+    setShowAddModal(true);
+    setNewEvent({
+      id: event.id, // Añadir el id
+      title: event.title,
+      memo: event.memo || '',
+      created: moment(event.start).toDate(),
+      complete: event.complete || false,
+    });
   };
 
   return (
@@ -21,6 +29,7 @@ const EventCalendar = ({ eventos, setSelectedEvent, setShowEditDeleteModal }) =>
           start: moment(evento.created).toDate(),
           end: moment(evento.created).add(1, 'hours').toDate(),
           memo: evento.memo,
+          complete: evento.complete,
         }))}
         startAccessor="start"
         endAccessor="end"
@@ -28,7 +37,14 @@ const EventCalendar = ({ eventos, setSelectedEvent, setShowEditDeleteModal }) =>
         onSelectEvent={handleEventClick}
         onSelectSlot={() => {
           setSelectedEvent(null);
-          setShowEditDeleteModal(false);
+          setShowAddModal(true); // Open modal for adding new event
+          setIsEditMode(false); // Ensure it's not in edit mode
+          setNewEvent({
+            title: '',
+            memo: '',
+            created: new Date(),
+            complete: false,
+          });
         }}
         popup={true}
         tooltipAccessor="memo"

@@ -2,7 +2,6 @@ import axios from "axios";
 import config from "../config/enviroments.ts";
 
 class ProductDataService {
-  // Configura el encabezado de autorización para todas las solicitudes
   setAuthHeader(token) {
     if (token) {
       axios.defaults.headers.common["Authorization"] = `Token ${token}`;
@@ -11,10 +10,11 @@ class ProductDataService {
     }
   }
 
-  // Productos
-  getAll(token) {
+  getAll(token, page = 1, page_size = 1000) {
     this.setAuthHeader(token);
-    return axios.get(`${config.API_URL}/products/`);
+    return axios.get(`${config.API_URL}/products/`,{
+      params: { page, page_size },
+    });
   }
 
   createProduct(data, token) {
@@ -32,10 +32,18 @@ class ProductDataService {
     return axios.delete(`${config.API_URL}/products/product/${id}/delete/`);
   }
 
-  // Subproductos
-  getAllSubProduct(token) {
+  getAllSubProduct(token, page = 1, page_size = 1000) {
     this.setAuthHeader(token);
-    return axios.get(`${config.API_URL}/products/subproducts/`);
+    return axios.get(`${config.API_URL}/products/subproducts/`, {
+      params: { page, page_size },
+    });
+  }
+  
+  getPointOfSaleSubProducts(token, page = 1, page_size = 100) {
+    this.setAuthHeader(token);
+    return axios.get(`${config.API_URL}/products/subproducts/point-of-sale/`, {
+      params: { page, page_size },
+    });
   }
 
   getSubProductByEmail(email, token) {
@@ -66,7 +74,6 @@ class ProductDataService {
     return axios.delete(`${config.API_URL}/products/subproducts/${subProductId}/delete/`);
   }
 
-  // Miembros del equipo
   getAllTeamMembers(subProductId, token) {
     this.setAuthHeader(token);
     return axios.get(`${config.API_URL}/products/subproducts/${subProductId}/teammembers/`);
@@ -87,7 +94,6 @@ class ProductDataService {
     return axios.delete(`${config.API_URL}/products/subproducts/${subProductId}/teammembers/${teamMemberId}/`);
   }
 
-  // Horarios comerciales
   getAllBusinessHours(subProductId, token) {
     this.setAuthHeader(token);
     return axios.get(`${config.API_URL}/products/subproducts/${subProductId}/businesshours/`);
@@ -108,7 +114,6 @@ class ProductDataService {
     return axios.delete(`${config.API_URL}/products/subproducts/${subProductId}/businesshours/${businessHourId}/`);
   }
 
-  // Cupones
   getAllCoupons(subProductId, token) {
     this.setAuthHeader(token);
     return axios.get(`${config.API_URL}/products/subproducts/${subProductId}/coupons/`);
@@ -129,10 +134,11 @@ class ProductDataService {
     return axios.delete(`${config.API_URL}/products/subproducts/${subProductId}/coupons/${couponId}/`);
   }
 
-  // Servicios
   getAllServices(token) {
     this.setAuthHeader(token);
-    return axios.get(`${config.API_URL}/products/services/`);
+    return axios.get(`${config.API_URL}/products/services/`).then((response) => {
+      return { data: response.data.results || response.data };
+    });
   }
 
   getAllServicesForSubProduct(subProductId, token) {
@@ -144,23 +150,24 @@ class ProductDataService {
     this.setAuthHeader(token);
     return axios.post(`${config.API_URL}/products/subproducts/${subProductId}/services/`, {
       ...data,
-      subproduct: subProductId, // Incluir subproduct explícitamente
+      subproduct: subProductId,
     });
   }
+
   updateServiceForSubProduct(subProductId, serviceId, data, token) {
     this.setAuthHeader(token);
     return axios.put(`${config.API_URL}/products/subproducts/${subProductId}/services/`, {
       ...data,
       service_id: serviceId,
-      subproduct: subProductId, // Mantener subproduct en la actualización
+      subproduct: subProductId,
     });
   }
+
   deleteServiceForSubProduct(subProductId, serviceId, token) {
     this.setAuthHeader(token);
     return axios.delete(`${config.API_URL}/products/subproducts/${subProductId}/services/${serviceId}/`);
   }
 
-  // Combos
   getAllCombos(token) {
     this.setAuthHeader(token);
     return axios.get(`${config.API_URL}/products/combos/`);
@@ -168,12 +175,10 @@ class ProductDataService {
 
   getAllCombosForSubProduct(subProductId, token) {
     this.setAuthHeader(token);
-    // Obtener servicios del subproducto primero
     return axios
       .get(`${config.API_URL}/products/subproducts/${subProductId}/services/`)
       .then((response) => {
         const serviceIds = response.data.map((service) => service.id);
-        // Filtrar combos que contengan al menos uno de los serviceIds
         return axios.get(`${config.API_URL}/products/combos/`).then((comboResponse) => {
           const filteredCombos = comboResponse.data.filter((combo) =>
             combo.services.some((service) => serviceIds.includes(service.id))
@@ -198,7 +203,6 @@ class ProductDataService {
     return axios.delete(`${config.API_URL}/products/combos/${comboId}/`);
   }
 
-  // Características
   getAllCharacteristics(token) {
     this.setAuthHeader(token);
     return axios.get(`${config.API_URL}/products/characteristics/`);

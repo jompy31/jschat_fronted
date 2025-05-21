@@ -8,7 +8,7 @@ import { getAllProducts, getAllCharacteristics, getUserList, getAllServices } fr
 import { formatDate } from './utils/format';
 import './file_products.css';
 
-const CharacteristicsTable = ({ token: propToken, user }) => {
+const FilesProducts = ({ token: propToken, user }) => {
   const [products, setProducts] = useState([]);
   const [characteristics, setCharacteristics] = useState([]);
   const [services, setServices] = useState([]);
@@ -29,11 +29,14 @@ const CharacteristicsTable = ({ token: propToken, user }) => {
           getAllCharacteristics(),
           getAllServices(),
         ]);
-        setProducts(productsData);
-        setCharacteristics(characteristicsData);
-        setServices(servicesData);
+        setProducts(Array.isArray(productsData) ? productsData : []);
+        setCharacteristics(Array.isArray(characteristicsData) ? characteristicsData : []);
+        setServices(Array.isArray(servicesData) ? servicesData : []);
       } catch (error) {
         console.error('Error fetching data:', error);
+        setProducts([]);
+        setCharacteristics([]);
+        setServices([]);
       }
     };
     fetchData();
@@ -42,8 +45,11 @@ const CharacteristicsTable = ({ token: propToken, user }) => {
   useEffect(() => {
     if (token) {
       getUserList(token)
-        .then((users) => setUserList(users))
-        .catch((error) => console.error('Error fetching users:', error));
+        .then((users) => setUserList(Array.isArray(users) ? users : []))
+        .catch((error) => {
+          console.error('Error fetching users:', error);
+          setUserList([]);
+        });
     }
   }, [token]);
 
@@ -72,15 +78,22 @@ const CharacteristicsTable = ({ token: propToken, user }) => {
     },
     {
       header: 'Características',
-      render: (product) => product.characteristics.map((char) => (
+      render: (product) => product.characteristics?.map((char) => (
         <div key={char.id} className="text-sm">
           <strong>{char.name}</strong>: {char.description}
         </div>
-      )),
+      )) || 'N/A',
     },
     { header: 'Descripción', accessor: 'description' },
-    { header: 'Creado por', accessor: 'user' },
-    { header: 'Creado en', render: (product) => formatDate(product.created_at) },
+    { 
+      header: 'Creado por', 
+      accessor: 'user',
+      render: (product) => product.user?.username || 'N/A'
+    },
+    { 
+      header: 'Creado en', 
+      render: (product) => formatDate(product.created_at) || 'N/A'
+    },
     {
       header: 'Acciones',
       render: (product) => (
@@ -182,4 +195,4 @@ const CharacteristicsTable = ({ token: propToken, user }) => {
   );
 };
 
-export default CharacteristicsTable;
+export default FilesProducts;

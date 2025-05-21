@@ -27,9 +27,11 @@ const Skills = ({ token }) => {
   const loadSkills = async () => {
     try {
       const response = await getAllSkills(token);
-      setSkills(response.data);
+      const skillsData = Array.isArray(response.data) ? response.data : [];
+      setSkills(skillsData);
     } catch (error) {
       console.error('Error loading skills:', error);
+      setSkills([]);
     }
   };
 

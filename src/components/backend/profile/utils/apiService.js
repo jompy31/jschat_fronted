@@ -13,7 +13,8 @@ export const fetchUser = async (userId, token) => {
 export const fetchWorkExperience = async (userId, token) => {
   try {
     const response = await TodoDataService.getAllWorkExperiences(token);
-    return response.data;
+    // Filtrar experiencias por userId
+    return response.data.results.filter(experience => experience.user === userId) || [];
   } catch (error) {
     console.error("Error fetching work experience:", error);
     return [];
@@ -23,13 +24,13 @@ export const fetchWorkExperience = async (userId, token) => {
 export const fetchSkills = async (userId, token) => {
   try {
     const response = await TodoDataService.getAllSkills(token);
-    return response.data;
+    // Filtrar habilidades por userId
+    return response.data.results.filter(skill => skill.user === userId) || [];
   } catch (error) {
     console.error("Error fetching skills:", error);
     return [];
   }
 };
-
 export const updateUser = async (userId, formData, token) => {
   try {
     await TodoDataService.updateUser(userId, formData, token);

@@ -18,6 +18,7 @@ import "./ContactsInfo.css";
 
 const ContactsInfo = () => {
   const [leads, setLeads] = useState([]);
+  const [totalCount, setTotalCount] = useState(0); // Add state for totalCount
   const [selectedLead, setSelectedLead] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -54,9 +55,18 @@ const ContactsInfo = () => {
 
   useEffect(() => {
     if (localStorage.getItem("user")) {
-      loadLeads(token).then(setLeads).catch(() => setErrorToast("Error al cargar leads"));
+      const fetchLeads = async () => {
+        try {
+          const { leads, totalCount } = await loadLeads(token, currentPage);
+          setLeads(leads);
+          setTotalCount(totalCount);
+        } catch (error) {
+          setErrorToast("Error al cargar leads");
+        }
+        };
+        fetchLeads();
     }
-  }, [token]);
+  }, [token, currentPage]); // Add currentPage as a dependency
 
   const handleLeadClick = (lead) => {
     setModalLead(lead);
@@ -88,7 +98,9 @@ const ContactsInfo = () => {
       await createLead(newLead, token);
       setShowCreateModal(false);
       setNewLead(initialLeadState);
-      setLeads(await loadLeads(token));
+      const { leads, totalCount } = await loadLeads(token, currentPage);
+      setLeads(leads);
+      setTotalCount(totalCount);
     } catch (error) {
       setErrorToast(error.response?.data?.error || "Error al crear lead");
     }
@@ -102,7 +114,9 @@ const ContactsInfo = () => {
         await createComment(selectedLead.id, editedLead.comment, token);
       }
       setShowEditModal(false);
-      setLeads(await loadLeads(token));
+      const { leads, totalCount } = await loadLeads(token, currentPage);
+      setLeads(leads);
+      setTotalCount(totalCount);
     } catch (error) {
       setErrorToast(error.response?.data?.error || "Error al actualizar lead");
     }
@@ -113,7 +127,9 @@ const ContactsInfo = () => {
     if (comment && comment.trim()) {
       try {
         await createComment(lead.id, comment, token);
-        setLeads(await loadLeads(token));
+        const { leads, totalCount } = await loadLeads(token, currentPage);
+        setLeads(leads);
+        setTotalCount(totalCount);
       } catch (error) {
         setErrorToast("Error al crear comentario");
       }
@@ -153,10 +169,16 @@ const ContactsInfo = () => {
       await deleteLead(selectedLead.id, token);
       setShowDeleteToast(false);
       setSelectedLead(null);
-      setLeads(await loadLeads(token));
+      const { leads, totalCount } = await loadLeads(token, currentPage);
+      setLeads(leads);
+      setTotalCount(totalCount);
     } catch (error) {
       setErrorToast("Error al eliminar lead");
     }
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   const handleDownloadCSV = async () => {
@@ -228,10 +250,11 @@ const ContactsInfo = () => {
       {viewMode === "table" ? (
         <LeadTable
           leads={leads}
+          totalCount={totalCount} // Pass totalCount
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           currentPage={currentPage}
-          handlePageChange={setCurrentPage}
+          handlePageChange={handlePageChange}
           handleLeadClick={handleLeadClick}
           handleDeleteConfirmation={handleDeleteConfirmation}
           handleEdit={handleEdit}
@@ -246,6 +269,7 @@ const ContactsInfo = () => {
         </DragDropContext>
       )}
 
+      {/* Rest of the modal and component code remains unchanged */}
       {showModal1 && modalLead && (
         <Modal open={showModal1} onClose={() => setShowModal1(false)}>
           <Box
@@ -257,7 +281,7 @@ const ContactsInfo = () => {
               transform: "translate(-50%, -50%)",
               width: "80%",
               maxWidth: 800,
-              bgcolor: "#ffffff", // Solid white background
+              bgcolor: "#ffffff",
               boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
               p: 4,
               borderRadius: 12,

@@ -21,10 +21,17 @@ const CreateEditModal = ({
       centered
       dialogClassName="modal-80w"
       backdrop="static"
-      style={{ zIndex: 1300 }} // Higher z-index to overlay all content
+      style={{ zIndex: 1500 }}
       animation
     >
-      <Modal.Header closeButton>
+      <Modal.Header
+        closeButton
+        style={{
+          backgroundColor: "#fff", // Ensure white background
+          borderBottom: "1px solid #e0e0e0", // Match footer border
+          padding: "15px 20px",
+        }}
+      >
         <Modal.Title style={{ fontSize: "1.5rem", color: "#1c2526" }}>
           {selectedBlogId ? "Editar Publicación" : "Crear Nueva Publicación"}
         </Modal.Title>
@@ -32,10 +39,10 @@ const CreateEditModal = ({
       <Modal.Body
         style={{
           maxHeight: "70vh",
-          overflowY: "auto", // Enable scrolling within modal
+          overflowY: "auto",
           padding: "20px",
           backgroundColor: "#fff",
-          borderRadius: "8px",
+          borderRadius: "8px 8px 0 0", // Rounded top corners
         }}
       >
         <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
@@ -43,7 +50,9 @@ const CreateEditModal = ({
           <div style={{ flex: 1 }}>
             <Form>
               <Form.Group controlId="formTitle" style={{ marginBottom: "15px" }}>
-                <Form.Label style={{ fontWeight: "500", color: "#1c2526" }}>Título</Form.Label>
+                <Form.Label style={{ fontWeight: "500", color: "#1c2526" }}>
+                  Título
+                </Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Ingresa el título"
@@ -57,8 +66,13 @@ const CreateEditModal = ({
                   }}
                 />
               </Form.Group>
-              <Form.Group controlId="formContent" style={{ marginBottom: "15px" }}>
-                <Form.Label style={{ fontWeight: "500", color: "#1c2526" }}>Contenido</Form.Label>
+              <Form.Group
+                controlId="formContent"
+                style={{ marginBottom: "15px" }}
+              >
+                <Form.Label style={{ fontWeight: "500", color: "#1c2526" }}>
+                  Contenido
+                </Form.Label>
                 <Form.Control
                   as="textarea"
                   rows={5}
@@ -73,8 +87,13 @@ const CreateEditModal = ({
                   }}
                 />
               </Form.Group>
-              <Form.Group controlId="formImage" style={{ marginBottom: "15px" }}>
-                <Form.Label style={{ fontWeight: "500", color: "#1c2526" }}>Imagen</Form.Label>
+              <Form.Group
+                controlId="formImage"
+                style={{ marginBottom: "15px" }}
+              >
+                <Form.Label style={{ fontWeight: "500", color: "#1c2526" }}>
+                  Imagen
+                </Form.Label>
                 <Form.Control
                   type="file"
                   accept="image/*"
@@ -91,7 +110,14 @@ const CreateEditModal = ({
           </div>
           {/* Live Preview Section */}
           <div style={{ flex: 1, maxWidth: "400px" }}>
-            <h4 style={{ fontSize: "16px", color: "#1c2526", marginBottom: "15px", fontWeight: "500" }}>
+            <h4
+              style={{
+                fontSize: "16px",
+                color: "#1c2526",
+                marginBottom: "15px",
+                fontWeight: "500",
+              }}
+            >
               Vista Previa
             </h4>
             <Card
@@ -103,7 +129,14 @@ const CreateEditModal = ({
               }}
             >
               {image && (
-                <div style={{ position: "relative", width: "100%", height: "150px", overflow: "hidden" }}>
+                <div
+                  style={{
+                    position: "relative",
+                    width: "100%",
+                    height: "150px",
+                    overflow: "hidden",
+                  }}
+                >
                   <Image
                     src={URL.createObjectURL(image)}
                     alt="Preview"
@@ -142,18 +175,41 @@ const CreateEditModal = ({
           </div>
         </div>
       </Modal.Body>
-      <Modal.Footer style={{ borderTop: "1px solid #e0e0e0", padding: "15px" }}>
+      <Modal.Footer
+        style={{
+          backgroundColor: "#fff", // Ensure white background
+          borderTop: "1px solid #e0e0e0",
+          padding: "15px 20px",
+          borderRadius: "0 0 8px 8px", // Rounded bottom corners
+          boxShadow: "0 -2px 8px rgba(0, 0, 0, 0.1)", // Subtle shadow for depth
+        }}
+      >
         <Button
           variant="secondary"
           onClick={closeEditModal}
-          style={{ borderRadius: "8px", padding: "8px 20px", fontSize: "14px" }}
+          style={{
+            borderRadius: "8px",
+            padding: "8px 20px",
+            fontSize: "14px",
+            backgroundColor: "#6c757d", // Consistent secondary color
+            border: "none",
+            marginRight: "10px",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)", // Button shadow
+          }}
         >
           Cancelar
         </Button>
         <Button
           variant="primary"
           onClick={selectedBlogId ? updateBlogPost : createBlogPost}
-          style={{ borderRadius: "8px", padding: "8px 20px", fontSize: "14px" }}
+          style={{
+            borderRadius: "8px",
+            padding: "8px 20px",
+            fontSize: "14px",
+            backgroundColor: "#007bff", // Consistent primary color
+            border: "none",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)", // Button shadow
+          }}
         >
           {selectedBlogId ? "Actualizar" : "Crear"}
         </Button>

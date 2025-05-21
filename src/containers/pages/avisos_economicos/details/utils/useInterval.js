@@ -1,0 +1,20 @@
+// frontend_abcupon/src/containers/pages/avisos_economicos/utils/useInterval.js
+import { useEffect, useRef } from "react";
+
+export const useInterval = (callback, delay) => {
+  const savedCallback = useRef();
+
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+    if (delay !== null) {
+      const id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+};

@@ -1,7 +1,7 @@
 {
     "categorias": [
       {
-        "nombre": "1. Autos y Accesorios AB",
+        "nombre": "1. Autos y accesorios AB",
         "subcategorias": [
           {
             "nombre": "1.1 Venta de Automoviles",
@@ -99,7 +99,7 @@
         ]
       },
       {
-        "nombre": "2. Bolsa de Empleo AB",
+        "nombre": "2. Bolsa de empleo AB",
         "subcategorias": [
           {
             "nombre": "2.1 Ferias de empleo",
@@ -206,7 +206,7 @@
         ]
       },      
       {
-        "nombre": "3. Casas, Lotes y Boncre",
+        "nombre": "3. Casas, lotes y boncre",
         "subcategorias": [
 
           {
@@ -272,7 +272,7 @@
         ]
       },
       {
-        "nombre": "4. Clinica Salud y Estetica",
+        "nombre": "4. Clinicas, salud y estética",
         "subcategorias": [
           {
             "nombre": "4.1 Medicina general",
@@ -403,7 +403,7 @@
         ]
       },
       {
-        "nombre": "5. Comunicación, Tecnología y Energía",
+        "nombre": "5. Comunicación, tecnología y energía",
         "subcategorias": [
             {
               "nombre": "5.1 Telecomunicaciones",
@@ -491,14 +491,15 @@
           ]
         },
       {
-        "nombre": "6. Construcción, Diseño y Supervisión",
+        "nombre": "6. Construcción, diseño y supervisión",
         "subcategorias": [
             {
               "nombre": "6.1 Constructoras",
               "subsubcategorias": [
-                "6.1.1 Construcción de Edificios",
-                "6.1.2 Construcción de Carreteras",
-                "6.1.3 Construcción de Puentes"
+                "6.1.1 Construcción de Casas",
+                "6.1.2 Construcción de Edificios",
+                "6.1.3 Construcción de Carreteras",
+                "6.1.4 Construcción de Puentes"
               ]
             },
             {
@@ -560,7 +561,7 @@
           ]
         },
       {
-        "nombre": "7. Cupones de Descuento de Inversión e Intercambio",
+        "nombre": "7. Cupones de descuento de inversión e intercambio",
         "subcategorias": [
             {
               "nombre": "7.1 Inversiones en Bienes Raíces",
@@ -655,7 +656,7 @@
           ]
         },
         {
-          "nombre": "8. Centros de Educación y Universidades",
+          "nombre": "8. Centros de educacion y universidades",
           "subcategorias": [
             {
               "nombre": "8.1 Educación superior",
@@ -711,7 +712,7 @@
         }
         ,
         {
-          "nombre": "9. Entretenimiento, Diversión y Restaurantes",
+          "nombre": "9. Entretenimiento, diversión y restaurante",
           "subcategorias": [
             {
               "nombre": "9.1 Entretenimiento",
@@ -750,7 +751,7 @@
           ]
         },
         {
-          "nombre": "10. Ferretería y Depósito",
+          "nombre": "10. Ferretería y depósito",
           "subcategorias": [
             {
               "nombre": "10.1 Ferretería",
@@ -793,7 +794,7 @@
         }
         ,
         {
-          "nombre": "11. Hogar, Tienda, Electrónica y Supermercados",
+          "nombre": "11. Hogar, tienda, electronica y supermercado",
           "subcategorias": [
             {
               "nombre": "11.1 Productos para el Hogar",
@@ -852,7 +853,7 @@
         }
         ,
         {
-          "nombre": "12. Planes de Inversión, Portafolio Inmobiliario",
+          "nombre": "12. Planes de inversión, portafolio inmobiliario",
           "subcategorias": [
             {
               "nombre": "12.1 Inversiones en Propiedades",
@@ -926,7 +927,7 @@
         }
         ,
         {
-          "nombre": "13. Legal y Notariado",
+          "nombre": "13. Legal y notariado",
           "subcategorias": [
             {
               "nombre": "13.1 Traspaso",
@@ -1065,7 +1066,7 @@
           ]
         },
       {
-        "nombre": "15. Catálogo, Ofertas y Subastas",
+        "nombre": "15. Catalogo, ofertas y subastas",
         "subcategorias": [
           {
             "nombre": "15.1 Catalogo de productos",
@@ -1120,7 +1121,7 @@
           ]
         },
         {
-          "nombre": "17. Póliza y Seguros AB",
+          "nombre": "17. Póliza y seguros AB",
           "subcategorias": [
             {
               "nombre": "17.1 Pólizas de Seguros",
@@ -1162,7 +1163,7 @@
           ]
         },
         {
-          "nombre": "18. Préstamos Privados Sobre Propiedades",
+          "nombre": "18. Préstamos privados sobre propiedades",
           "subcategorias": [
             {
               "nombre": "18.1 Hipotecas",
@@ -1185,7 +1186,7 @@
           ]
         },
         {
-          "nombre": "19. Productos y Servicios Cooperativos",
+          "nombre": "19. Productos y servicios cooperativos",
           "subcategorias": [
             {
               "nombre": "19.1 Productos Cooperativos",
@@ -1226,7 +1227,7 @@
           ]
         },
         {
-          "nombre": "20. Combos de Publicidad y Páginas Web",
+          "nombre": "20. Combos de publicidad y paginas web",
           "subcategorias": [
             {
               "nombre": "20.1 Diseño Gráfico",
@@ -1269,7 +1270,7 @@
           ]
         },
         {
-          "nombre": "21. Fundación Eslabonescr.com",
+          "nombre": "21. Fundacion eslabonescr.com",
           "subcategorias": [
             {
               "nombre": "21.1 Eventos y Donaciones",
@@ -1314,7 +1315,7 @@
           ]
         },
         {
-          "nombre": "22. Esencial Costa Rica: Hoteles y Turismo",
+          "nombre": "22. Escencial Costa Rica hoteles y turismo",
           "subcategorias": [
             {
               "nombre": "22.1 Hoteles",
@@ -1362,7 +1363,7 @@
           ]
         },
         {
-          "nombre": "23. Transporte y Mensajería",
+          "nombre": "23. Transporte y mensajería",
           "subcategorias": [
             {
               "nombre": "23.1 Transporte de Carga",
@@ -1409,7 +1410,7 @@
           ]
         },
         {
-          "nombre": "24. Directorio Comercial C.R",
+          "nombre": "24. Directorio comercial abcupon.com",
           "subcategorias": [
             {
               "nombre": "24.1 Directorio de negocios",

@@ -51,16 +51,22 @@ const UserSearch = () => {
       const userResponse = await getUserList(token);
       const skillsResponse = await getAllSkills(token);
       const experiencesResponse = await getAllWorkExperiences(token);
-      const updatedUserList = mergeUserSkills(userResponse.data, skillsResponse.data);
+      const users = Array.isArray(userResponse.data) ? userResponse.data : [];
+      const skillsData = Array.isArray(skillsResponse.data) ? skillsResponse.data : [];
+      const experiencesData = Array.isArray(experiencesResponse.data) ? experiencesResponse.data : [];
+      const updatedUserList = mergeUserSkills(users, skillsData);
       const finalUserList = updatedUserList.map((user) => {
-        const userExperiences = experiencesResponse.data.filter((exp) => exp.user === user.id);
+        const userExperiences = experiencesData.filter((exp) => exp.user === user.id);
         return { ...user, experiences: userExperiences };
       });
       const filteredUserList = finalUserList.filter((user) => user.openwork === true);
       setUserList(filteredUserList);
-      setSkills(skillsResponse.data);
+      console.log("probando", skillsResponse.data )
+      setSkills(skillsData);
     } catch (error) {
       console.error('Error fetching users, skills, or experiences:', error);
+      setUserList([]);
+      setSkills([]);
     }
   };
 

@@ -1,32 +1,38 @@
 import React, { useState, useEffect } from "react";
-import ProductDataService from "../../../../services/products";
 import { useSelector } from "react-redux";
+import ProductDataService from "../../../../services/products";
+import { fetchServices, fetchCombos } from "../utils/apiUtils";
+import PaginationControls from "../components/PaginationControls";
 
 const CreateServicesModal = ({ show, onHide, selectedSubproduct }) => {
   const token = useSelector((state) => state.authentication.token);
   const [services, setServices] = useState([]);
+  const [totalServices, setTotalServices] = useState(0);
   const [combos, setCombos] = useState([]);
+  const [totalCombos, setTotalCombos] = useState(0);
+  const [currentServicesPage, setCurrentServicesPage] = useState(1);
+  const [currentCombosPage, setCurrentCombosPage] = useState(1);
+  const [serviceSearchTerm, setServiceSearchTerm] = useState("");
   const [newService, setNewService] = useState({ id: null, name: "", description: "", price: "", duration: "" });
   const [newCombo, setNewCombo] = useState({ id: null, name: "", description: "", price: "", selectedServiceIds: [], subproduct: null });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     if (selectedSubproduct) {
-      fetchServicesAndCombos(selectedSubproduct.id);
       setNewCombo((prev) => ({ ...prev, subproduct: selectedSubproduct.id }));
+      fetchServicesAndCombos(selectedSubproduct.id);
     }
-  }, [selectedSubproduct]);
+  }, [selectedSubproduct, currentServicesPage, currentCombosPage, serviceSearchTerm]);
 
   const fetchServicesAndCombos = async (subproductId) => {
     setLoading(true);
     try {
-      const [servicesResponse, combosResponse] = await Promise.all([
-        ProductDataService.getAllServicesForSubProduct(subproductId, token),
-        ProductDataService.getAllCombosForSubProduct(subproductId, token),
+      await Promise.all([
+        fetchServices(setServices, setTotalServices, subproductId, token, currentServicesPage, itemsPerPage, serviceSearchTerm),
+        fetchCombos(setCombos, setTotalCombos, subproductId, token, currentCombosPage, itemsPerPage),
       ]);
-      setServices(servicesResponse.data);
-      setCombos(combosResponse.data);
     } catch (error) {
       setError("Error al cargar servicios o combos: " + (error.response?.data?.error || error.message));
     } finally {
@@ -95,8 +101,8 @@ const CreateServicesModal = ({ show, onHide, selectedSubproduct }) => {
   };
 
   const handleAddCombo = async () => {
-    if (!newCombo.name || !newCombo.price || !newCombo.selectedServiceIds.length || !newCombo.subproduct) {
-      setError("Nombre, precio, al menos un servicio y subproducto son obligatorios para el combo.");
+    if (!newCombo.name || !newCombo.selectedServiceIds.length || !newCombo.subproduct) {
+      setError("Nombre, al menos un servicio y subproducto son obligatorios para el combo.");
       return;
     }
     setLoading(true);
@@ -105,7 +111,7 @@ const CreateServicesModal = ({ show, onHide, selectedSubproduct }) => {
         name: newCombo.name,
         description: newCombo.description,
         price: newCombo.price,
-        selectedServiceIds: newCombo.selectedServiceIds,
+        services: newCombo.selectedServiceIds, // Changed to match backend expectation
         subproduct: newCombo.subproduct,
       };
       if (newCombo.id) {
@@ -169,11 +175,25 @@ const CreateServicesModal = ({ show, onHide, selectedSubproduct }) => {
           {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
           {loading && <p className="text-blue-600 text-sm mb-4">Cargando...</p>}
 
+          {/* Service Search */}
+          <div className="mb-4">
+            <input
+              type="text"
+              className="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Buscar servicios..."
+              value={serviceSearchTerm}
+              onChange={(e) => {
+                setServiceSearchTerm(e.target.value);
+                setCurrentServicesPage(1);
+              }}
+            />
+          </div>
+
           {/* Services Table */}
           <h4 className="text-md font-semibold text-gray-900">Servicios</h4>
           <div className="overflow-x-auto mt-2">
             <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+              <thead className=" sattelite bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Código</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
@@ -212,6 +232,12 @@ const CreateServicesModal = ({ show, onHide, selectedSubproduct }) => {
               </tbody>
             </table>
           </div>
+          <PaginationControls
+            currentPage={currentServicesPage}
+            totalItems={totalServices}
+            itemsPerPage={itemsPerPage}
+            setCurrentPage={setCurrentServicesPage}
+          />
 
           {/* Add/Update Service Form */}
           <h4 className="mt-6 text-md font-semibold text-gray-900">{newService.id ? "Editar Servicio" : "Agregar Nuevo Servicio"}</h4>
@@ -296,6 +322,12 @@ const CreateServicesModal = ({ show, onHide, selectedSubproduct }) => {
               </tbody>
             </table>
           </div>
+          <PaginationControls
+            currentPage={currentCombosPage}
+            totalItems={totalCombos}
+            itemsPerPage={itemsPerPage}
+            setCurrentPage={setCurrentCombosPage}
+          />
 
           {/* Add/Update Combo Form */}
           <h4 className="mt-6 text-md font-semibold text-gray-900">{newCombo.id ? "Editar Combo" : "Agregar Nuevo Combo"}</h4>

@@ -57,12 +57,12 @@ const WorkExperience = ({
             workExperience.map((experience) => (
               <tr key={experience.id}>
                 <td>
-                  <input
+                  {/* <input
                     type="checkbox"
                     value={experience.id}
                     onChange={handleExperienceChange}
                     checked={selectedExperience.includes(experience.id)}
-                  />
+                  /> */}
                 </td>
                 <td>{experience.job_title}</td>
                 <td>{experience.company_name}</td>

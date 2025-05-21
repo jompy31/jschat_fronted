@@ -38,12 +38,12 @@ const Skills = ({ skills, selectedSkills, handleSkillChange, handleDeleteSkill, 
             skills.map((skill) => (
               <tr key={skill.id}>
                 <td>
-                  <input
+                  {/* <input
                     type="checkbox"
                     value={skill.id}
                     onChange={handleSkillChange}
                     checked={selectedSkills.includes(skill.id)}
-                  />
+                  /> */}
                 </td>
                 <td>{skill.name}</td>
                 <td>

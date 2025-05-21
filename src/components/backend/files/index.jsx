@@ -12,6 +12,7 @@ import './Files.css';
 
 const Files = () => {
   const [files, setFiles] = useState([]);
+  const [fileMeta, setFileMeta] = useState({ count: 0, next: null, previous: null });
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileName, setFileName] = useState('');
   const [selectedFileName, setSelectedFileName] = useState('');
@@ -22,6 +23,7 @@ const Files = () => {
   const [filesPerPage, setFilesPerPage] = useState(3);
   const [currentPage, setCurrentPage] = useState(1);
   const [designs, setDesigns] = useState([]);
+  const [designMeta, setDesignMeta] = useState({ count: 0, next: null, previous: null });
   const [selectedDesigns, setSelectedDesigns] = useState([]);
   const [previewDesignUrls, setPreviewDesignUrls] = useState({});
   const [designName, setDesignName] = useState('');
@@ -39,55 +41,67 @@ const Files = () => {
   const [customerSearch, setCustomerSearch] = useState('');
   const [contextSearch, setContextSearch] = useState('');
   const [currentUser, setCurrentUser] = useState(null);
+  const [isLoadingDesigns, setIsLoadingDesigns] = useState(false);
+  const [designError, setDesignError] = useState(null);
 
   const token = useSelector(state => state.authentication.token);
-  const NotallowedFileNames = ['First', 'SERVICES_3', 'SERVICES_1', 'SERVICES_2', 'Third', 'Second', 'Background Header', 'Video Summary', 'CPT3', 'CPT3XL', 'Compact', 'Tabletop', 'PLD_3D', '3Dpads', 'PCB', 'MultiScale', 'Sensor', 'Fringes', 'Chips'];
 
   const fetchCurrentUserData = () => {
     const currentUser = localStorage.getItem('currentUser');
     setCurrentUser(JSON.parse(currentUser));
   };
 
-  const fetchFiles = () => {
-    FileDataService.getAll(token)
+  const fetchFiles = (page = 1) => {
+    FileDataService.getAll(token, page, filesPerPage)
       .then(response => {
-        setFiles(response.data);
+        const { results, count, next, previous } = response.data;
+        setFiles(results);
+        setFileMeta({ count, next, previous });
         const urls = {};
-        response.data.forEach(file => {
+        results.forEach(file => {
           urls[file.id] = file.file;
         });
         setPreviewFileUrls(urls);
       })
       .catch(error => {
-        console.error(error);
+        console.error('Error fetching files:', error);
       });
   };
 
-  const fetchDesigns = () => {
-    FileDataService.getAllDesigns(token)
+  const fetchDesigns = (page = 1) => {
+    setIsLoadingDesigns(true);
+    setDesignError(null);
+    FileDataService.getAllDesigns(token, page, designsPerPage)
       .then(response => {
-        setDesigns(response.data);
+        console.log('Designs API Response:', response.data); // Log the response
+        const { results, count, next, previous } = response.data;
+        setDesigns(results || []);
+        setDesignMeta({ count: count || 0, next, previous });
         const urls = {};
-        response.data.forEach(design => {
-          urls[design.id] = design.file;
+        results.forEach(design => {
+          urls[design.id] = design.image || '';
         });
         setPreviewDesignUrls(urls);
       })
       .catch(error => {
-        console.error(error);
+        console.error('Error fetching designs:', error.response || error); // Log detailed error
+        setDesignError('No se pudieron cargar los diseños. Verifique la conexión con el servidor.');
+      })
+      .finally(() => {
+        setIsLoadingDesigns(false);
       });
   };
 
   useEffect(() => {
     fetchCurrentUserData();
-    fetchFiles();
-    fetchDesigns();
-  }, []);
+    fetchFiles(currentPage);
+    fetchDesigns(currentDesignsPage);
+  }, [currentPage, filesPerPage, currentDesignsPage, designsPerPage]);
 
   return (
     <>
       <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-      <Container className="py-8 px-4 sm:px-6 lg:px-8" style={{marginTop:"5%"}}>
+      <Container className="py-8 px-4 sm:px-6 lg:px-8" style={{ marginTop: "5%" }}>
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -148,6 +162,7 @@ const Files = () => {
         >
           <FileTable
             files={files}
+            fileMeta={fileMeta}
             selectedFiles={selectedFiles}
             setSelectedFiles={setSelectedFiles}
             previewFileUrls={previewFileUrls}
@@ -160,7 +175,6 @@ const Files = () => {
             token={token}
             fetchFiles={fetchFiles}
             currentUser={currentUser}
-            NotallowedFileNames={NotallowedFileNames}
           />
         </motion.div>
 
@@ -229,27 +243,33 @@ const Files = () => {
               transition={{ delay: 0.8, duration: 0.5 }}
               className="bg-white shadow-lg rounded-lg p-6"
             >
-              <DesignTable
-                designs={designs}
-                selectedDesigns={selectedDesigns}
-                setSelectedDesigns={setSelectedDesigns}
-                previewDesignUrls={previewDesignUrls}
-                designNameSearch={designNameSearch}
-                creatorSearch={creatorSearch}
-                customerSearch={customerSearch}
-                contextSearch={contextSearch}
-                startDate={startDate}
-                endDate={endDate}
-                designsPerPage={designsPerPage}
-                currentDesignsPage={currentDesignsPage}
-                setCurrentDesignsPage={setCurrentDesignsPage}
-                token={token}
-                fetchDesigns={fetchDesigns}
-                currentUser={currentUser}
-                showFullContext={showFullContext}
-                setShowFullContext={setShowFullContext}
-                NotallowedFileNames={NotallowedFileNames}
-              />
+              {isLoadingDesigns ? (
+                <p className="text-gray-600">Cargando diseños...</p>
+              ) : designError ? (
+                <p className="text-red-600">{designError}</p>
+              ) : (
+                <DesignTable
+                  designs={designs}
+                  designMeta={designMeta}
+                  selectedDesigns={selectedDesigns}
+                  setSelectedDesigns={setSelectedDesigns}
+                  previewDesignUrls={previewDesignUrls}
+                  designNameSearch={designNameSearch}
+                  creatorSearch={creatorSearch}
+                  customerSearch={customerSearch}
+                  contextSearch={contextSearch}
+                  startDate={startDate}
+                  endDate={endDate}
+                  designsPerPage={designsPerPage}
+                  currentDesignsPage={currentDesignsPage}
+                  setCurrentDesignsPage={setCurrentDesignsPage}
+                  token={token}
+                  fetchDesigns={fetchDesigns}
+                  currentUser={currentUser}
+                  showFullContext={showFullContext}
+                  setShowFullContext={setShowFullContext}
+                />
+              )}
             </motion.div>
           </>
         )}

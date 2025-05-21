@@ -12,6 +12,7 @@ const debounce = (func, wait) => {
 
 const useNewsManagement = (token) => {
   const [newsPosts, setNewsPosts] = useState([]);
+  const [totalNewsPosts, setTotalNewsPosts] = useState(0);
   const [selectedNews, setSelectedNews] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -30,7 +31,7 @@ const useNewsManagement = (token) => {
     description: '',
     contentType: 'clasificado',
     contentFile: null,
-    maxWords: 20, // Added maxWords with default value
+    maxWords: 20,
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
@@ -38,12 +39,21 @@ const useNewsManagement = (token) => {
   const [subcategoryFilter, setSubcategoryFilter] = useState('');
   const [subsubcategoryFilter, setSubsubcategoryFilter] = useState('');
 
-  // Fetch all news posts with retry and debounce
+  // Fetch news posts with pagination and filters
   const fetchNewsPosts = useCallback(
     debounce(async (retryCount = 0) => {
       try {
-        const response = await FileDataService.getAllPost();
-        setNewsPosts(response.data);
+        const response = await FileDataService.getAllPost(
+          token,
+          currentPage,
+          itemsPerPage,
+          searchTerm,
+          categoryFilter,
+          subcategoryFilter,
+          subsubcategoryFilter
+        );
+        setNewsPosts(response.data.results || response.data);
+        setTotalNewsPosts(response.data.count || 0);
       } catch (error) {
         console.error('Error fetching news posts:', error);
         if (retryCount < 3) {
@@ -51,7 +61,7 @@ const useNewsManagement = (token) => {
         }
       }
     }, 500),
-    []
+    [currentPage, searchTerm, categoryFilter, subcategoryFilter, subsubcategoryFilter, token, itemsPerPage]
   );
 
   // Toggle modal and set form data for create/edit
@@ -72,7 +82,7 @@ const useNewsManagement = (token) => {
           description: selectedPost.description,
           contentType: selectedPost.content_type,
           contentFile: null,
-          maxWords: 20, // Default to 20 when editing
+          maxWords: 20,
         });
         setEditMode(true);
         setEditNewsId(postId);
@@ -91,7 +101,7 @@ const useNewsManagement = (token) => {
         description: '',
         contentType: 'clasificado',
         contentFile: null,
-        maxWords: 20, // Default to 20 when creating
+        maxWords: 20,
       });
       setEditMode(false);
       setEditNewsId(null);
@@ -117,8 +127,8 @@ const useNewsManagement = (token) => {
     }
 
     try {
-      const response = await FileDataService.createNewsPost(formDataToSend, token);
-      setNewsPosts((prev) => [...prev, response.data]);
+      await FileDataService.createNewsPost(formDataToSend, token);
+      fetchNewsPosts();
       toggleModal();
     } catch (error) {
       console.error('Error creating news post:', error);
@@ -144,12 +154,8 @@ const useNewsManagement = (token) => {
     }
 
     try {
-      const response = await FileDataService.updateNewsPost(editNewsId, formDataToSend, token);
-      setNewsPosts((prev) =>
-        prev.map((post) =>
-          post.id === editNewsId ? { ...post, ...response.data } : post
-        )
-      );
+      await FileDataService.updateNewsPost(editNewsId, formDataToSend, token);
+      fetchNewsPosts();
       toggleModal();
     } catch (error) {
       console.error('Error updating news post:', error);
@@ -161,9 +167,9 @@ const useNewsManagement = (token) => {
   const handleDeleteSelected = async () => {
     try {
       await FileDataService.deleteNewsPost(selectedNews, token);
-      setNewsPosts((prev) => prev.filter((post) => !selectedNews.includes(post.id)));
       setSelectedNews([]);
-      setCurrentPage(1); // Reset to first page after deletion
+      setCurrentPage(1);
+      fetchNewsPosts();
     } catch (error) {
       console.error('Error deleting news posts:', error);
       fetchNewsPosts();
@@ -179,6 +185,7 @@ const useNewsManagement = (token) => {
 
   return {
     newsPosts,
+    totalNewsPosts,
     selectedNews,
     searchTerm,
     showModal,

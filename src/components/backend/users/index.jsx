@@ -146,7 +146,7 @@ const UserList = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100" style={{marginTop:"5%"}}>
+    <div className="min-h-screen bg-gray-100" style={{marginTop:"8%"}}>
       <div className="container mx-auto px-4 py-8">
         {location.pathname !== '/register' && (
           <CurrentUserContext.Provider value={currentUser}>

@@ -2,127 +2,137 @@ import axios from "axios";
 import config from "../config/enviroments.ts";
 
 class JobDataService {
+  // Helper method to set headers with token
+  setAuthHeaders(token) {
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `Token ${token}`;
+    } else {
+      delete axios.defaults.headers.common["Authorization"];
+    }
+  }
+
   // Métodos para el modelo Empresa (Company)
-  getAllCompanies(token) {
-    return axios.get(`${config.API_URL}/employee/companies/`);
+  getAllCompanies(token, page = 1, page_size = 100) {
+    this.setAuthHeaders(token);
+    return axios.get(`${config.API_URL}/employee/companies/`, {
+      params: { page, page_size },
+    });
   }
 
   createCompany(data, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
+    this.setAuthHeaders(token);
     return axios.post(`${config.API_URL}/employee/companies/`, data);
   }
 
   updateCompany(id, data, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
+    this.setAuthHeaders(token);
     return axios.put(`${config.API_URL}/employee/companies/${id}/`, data);
   }
 
   deleteCompany(id, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
+    this.setAuthHeaders(token);
     return axios.delete(`${config.API_URL}/employee/companies/${id}/`);
   }
 
   // Métodos para el modelo Categoría de trabajo (JobCategory)
-  getAllJobCategories(token) {
-    // axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.get(`${config.API_URL}/employee/job-categories/`);
+  getAllJobCategories(token, page = 1, page_size = 100) {
+    this.setAuthHeaders(token);
+    return axios.get(`${config.API_URL}/employee/job-categories/`, {
+      params: { page, page_size },
+    });
   }
 
   createJobCategory(data, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
+    this.setAuthHeaders(token);
     return axios.post(`${config.API_URL}/employee/job-categories/`, data);
   }
 
   updateJobCategory(id, data, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
+    this.setAuthHeaders(token);
     return axios.put(`${config.API_URL}/employee/job-categories/${id}/`, data);
   }
 
   deleteJobCategory(id, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
+    this.setAuthHeaders(token);
     return axios.delete(`${config.API_URL}/employee/job-categories/${id}/`);
   }
 
   // Métodos para el modelo Publicación de trabajo (JobPosting)
-  getAllJobPostings(token) {
-    // axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.get(`${config.API_URL}/employee/jobs/`);
+  getAllJobPostings(token, page = 1, page_size = 100) {
+    this.setAuthHeaders(token);
+    return axios.get(`${config.API_URL}/employee/jobs/`, {
+      params: { page, page_size },
+    });
   }
 
   createJobPosting(data, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
+    this.setAuthHeaders(token);
     return axios.post(`${config.API_URL}/employee/jobs/`, data);
   }
 
   updateJobPosting(id, data, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
+    this.setAuthHeaders(token);
     return axios.put(`${config.API_URL}/employee/jobs/${id}/`, data);
   }
 
   deleteJobPosting(id, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
+    this.setAuthHeaders(token);
     return axios.delete(`${config.API_URL}/employee/jobs/${id}/`);
   }
 
   // Métodos para el modelo Aplicación de trabajo (JobApplication)
   createJobApplication(data, token, jobId) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
+    this.setAuthHeaders(token);
     return axios.post(`${config.API_URL}/employee/jobs/${jobId}/apply/`, data);
   }
 
-  getAllJobApplications(token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.get(`${config.API_URL}/employee/applications/`);
+  getAllJobApplications(token, page = 1, page_size = 100) {
+    this.setAuthHeaders(token);
+    return axios.get(`${config.API_URL}/employee/applications/`, {
+      params: { page, page_size },
+    });
   }
+
   deleteJobApplication(jobId, token, applicationId) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
+    this.setAuthHeaders(token);
     return axios.delete(
       `${config.API_URL}/employee/jobs/${jobId}/apply/${applicationId}/`
     );
   }
 
-  // Métodos para el modelo Pregunta de trabajo (JobQuestion)
-  createJobQuestion(data, token, jobId) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.post(
-      `${config.API_URL}/employee/jobs/${jobId}/questions/`,
-      data
-    );
-  }
-
-  getAllJobQuestions(token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.get(`${config.API_URL}/employee/questions/`);
-  }
-
   // Métodos para el modelo Alerta de trabajo (JobAlert)
-  getAllJobAlerts(token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.get(`${config.API_URL}/employee/job-alerts/`);
+  getAllJobAlerts(token, page = 1, page_size = 100) {
+    this.setAuthHeaders(token);
+    return axios.get(`${config.API_URL}/employee/job-alerts/`, {
+      params: { page, page_size },
+    });
   }
 
   createJobAlert(data, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
+    this.setAuthHeaders(token);
     return axios.post(`${config.API_URL}/employee/job-alerts/create/`, data);
   }
+
   deleteJobAlert(jobId, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
+    this.setAuthHeaders(token);
     return axios.delete(`${config.API_URL}/employee/job-alerts/${jobId}/`);
   }
 
   // Métodos para el modelo Nivel de experiencia (ExperienceLevel)
-  getAllExperienceLevels(token) {
-    // axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.get(`${config.API_URL}/employee/experience-levels/`);
+  getAllExperienceLevels(token, page = 1, page_size = 100) {
+    this.setAuthHeaders(token);
+    return axios.get(`${config.API_URL}/employee/experience-levels/`, {
+      params: { page, page_size },
+    });
   }
 
   createExperienceLevel(data, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
+    this.setAuthHeaders(token);
     return axios.post(`${config.API_URL}/employee/experience-levels/`, data);
   }
 
   updateExperienceLevel(id, data, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
+    this.setAuthHeaders(token);
     return axios.put(
       `${config.API_URL}/employee/experience-levels/${id}/`,
       data
@@ -130,70 +140,76 @@ class JobDataService {
   }
 
   deleteExperienceLevel(id, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
+    this.setAuthHeaders(token);
     return axios.delete(`${config.API_URL}/employee/experience-levels/${id}/`);
   }
 
   // Métodos para Habilidades (Skill)
-  getAllSkills(token) {
-    // axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.get(`${config.API_URL}/employee/skills/`);
+  getAllSkills(token, page = 1, page_size = 100) {
+    this.setAuthHeaders(token);
+    return axios.get(`${config.API_URL}/employee/skills/`, {
+      params: { page, page_size },
+    });
   }
 
   createSkill(data, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
+    this.setAuthHeaders(token);
     return axios.post(`${config.API_URL}/employee/skills/`, data);
   }
 
   updateSkill(id, data, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.put(`${config.API_URL}/employee/skills/${id}/`, data);
+    this.setAuthHeaders(token);
+    return axios.put(`${config.API_URL}/skills/${id}/`, data);
   }
 
   deleteSkill(id, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
+    this.setAuthHeaders(token);
     return axios.delete(`${config.API_URL}/employee/skills/${id}/`);
   }
 
   // Métodos para Beneficios (Benefit)
-  getAllBenefits(token) {
-    // axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.get(`${config.API_URL}/employee/benefits/`);
+  getAllBenefits(token, page = 1, page_size = 100) {
+    this.setAuthHeaders(token);
+    return axios.get(`${config.API_URL}/employee/benefits/`, {
+      params: { page, page_size },
+    });
   }
 
   createBenefit(data, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
+    this.setAuthHeaders(token);
     return axios.post(`${config.API_URL}/employee/benefits/`, data);
   }
 
   updateBenefit(id, data, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
+    this.setAuthHeaders(token);
     return axios.put(`${config.API_URL}/employee/benefits/${id}/`, data);
   }
 
   deleteBenefit(id, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
+    this.setAuthHeaders(token);
     return axios.delete(`${config.API_URL}/employee/benefits/${id}/`);
   }
 
   // Métodos para Etiquetas de trabajo (JobTag)
-  getAllJobTags(token) {
-    // axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.get(`${config.API_URL}/employee/job-tags/`);
+  getAllJobTags(token, page = 1, page_size = 100) {
+    this.setAuthHeaders(token);
+    return axios.get(`${config.API_URL}/employee/job-tags/`, {
+      params: { page, page_size },
+    });
   }
 
   createJobTag(data, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
+    this.setAuthHeaders(token);
     return axios.post(`${config.API_URL}/employee/job-tags/`, data);
   }
 
   updateJobTag(id, data, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
+    this.setAuthHeaders(token);
     return axios.put(`${config.API_URL}/employee/job-tags/${id}/`, data);
   }
 
   deleteJobTag(id, token) {
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
+    this.setAuthHeaders(token);
     return axios.delete(`${config.API_URL}/employee/job-tags/${id}/`);
   }
 }

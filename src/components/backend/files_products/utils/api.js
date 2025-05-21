@@ -3,7 +3,7 @@ import TodoDataService from '../../../../services/todos';
 
 export const getAllProducts = async () => {
   const response = await ProductDataService.getAll();
-  return response.data;
+  return Array.isArray(response.data.results) ? response.data.results : response.data;
 };
 
 export const createProduct = async (formData, token) => {
@@ -22,7 +22,7 @@ export const deleteProduct = async (id, token) => {
 
 export const getAllCharacteristics = async () => {
   const response = await ProductDataService.getAllCharacteristics();
-  return response.data;
+  return Array.isArray(response.data.results) ? response.data.results : response.data;
 };
 
 export const createCharacteristic = async (data, token) => {
@@ -39,12 +39,12 @@ export const deleteCharacteristic = async (id) => {
 
 export const getAllServices = async () => {
   const response = await ProductDataService.getAllServices();
-  return response.data;
+  return Array.isArray(response.data.results) ? response.data.results : response.data;
 };
 
 export const getUserList = async (token) => {
   const response = await TodoDataService.getUserList(token);
-  return response.data;
+  return Array.isArray(response.data.results) ? response.data.results : response.data;
 };
 
 export const createServiceForSubProduct = async (subProductId, service) => {

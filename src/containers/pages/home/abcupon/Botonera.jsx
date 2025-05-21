@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import FileDataService from '../../../../services/files';
 import { useMediaQuery } from "react-responsive";
 import { useSelector } from 'react-redux';
+import Fuse from 'fuse.js';
+import { normalizeString } from '../directorio_comercial/utils';
 import img1 from '../../../../assets/categorias/1-.webp';
 import img2 from '../../../../assets/categorias/2.webp';
 import img3 from '../../../../assets/categorias/3.webp';
@@ -33,78 +35,78 @@ const values = [
   {
     id: 1,
     icon: <img src={img1} alt="Categoría 1. Autos y Accesorios AB" />,
-    title: "1. Autos y Accesorios AB",
+    title: "1. Autos y accesorios AB",
     route: "/vehiculosrepuestosytalleres",
   },
   {
     id: 2,
     icon: <img src={img2} alt="Categoría 2. Bolsa de Empleo AB" />,
-    title: "2. Bolsa de Empleo AB",
+    title: "2. Bolsa de empleo AB",
   },
   {
     id: 3,
     icon: <img src={img3} alt="Categoría 3. Casas, Lotes y Boncre" />,
-    title: "3. Casas, Lotes y Boncre",
+    title: "3. Casas, lotes y boncre",
     route: "/casasylotes",
   },
   {
     id: 4,
     icon: <img src={img4} alt="Categoría 4. Clinica Salud y Estetica" />,
-    title: "4. Clinica Salud y Estetica",
+    title: "4. Clinicas, salud y estética",
     route: "/clinicassaludyestetica",
   },
   {
     id: 5,
     icon: <img src={img5} alt="Categoría 5. Comunicación, Tecnología y Energía" />,
-    title: "5. Comunicación, Tecnología y Energía",
+    title: "5. Comunicación, tecnología y energía",
     route: "/comunicaciontecnologiayenergia",
   },
   {
     id: 6,
     icon: <img src={img6} alt="Categoría 6. Construcción, Diseño y Supervisión" />,
-    title: "6. Construcción, Diseño y Supervisión",
+    title: "6. Construcción, diseño y supervisión",
     route: "/construcciondisenoysupervicion",
   },
   {
     id: 7,
     icon: <img src={img7} alt="Categoría 7. Cupones de Descuento de Inversión e Intercambio" />,
-    title: "7. Cupones de Descuento de Inversión e Intercambio",
+    title: "7. Cupones de descuento de inversión e intercambio",
     route: "/cuponesdedescuento",
   },
   {
     id: 8,
     icon: <img src={img8} alt="Categoría 8. Centros de Educación y Universidades" />,
-    title: "8. Centros de Educación y Universidades",
+    title: "8. Centros de educacion y universidades",
     route: "/centroseducativos",
   },
   {
     id: 9,
     icon: <img src={img9} alt="Categoría 9. Entretenimiento, Diversión y Restaurantes" />,
-    title: "9. Entretenimiento, Diversión y Restaurantes",
+    title: "9. Entretenimiento, diversión y restaurante",
     route: "/entretenimientorestaurantesyturismo",
   },
   {
     id: 10,
     icon: <img src={img10} alt="Categoría 10. Ferretería y Depósito" />,
-    title: "10. Ferretería y Depósito",
+    title: "10. Ferretería y depósito",
     route: "/ferreteriaydeposito",
   },
   {
     id: 11,
     icon: <img src={img11} alt="Categoría 11. Hogar, Tienda, Electrónica y Supermercados" />,
-    title: "11. Hogar, Tienda, Electrónica y Supermercados",
+    title: "11. Hogar, tienda, electronica y supermercado",
     route: "/hogartiendayelectronica",
   },
   {
     id: 12,
     icon: <img src={img12} alt="Categoría 12. Planes de Inversión, Portafolio Inmobiliario" />,
-    title: "12. Planes de Inversión, Portafolio Inmobiliario",
+    title: "12. Planes de inversión, portafolio inmobiliario",
     route: "/plataformadeinversiones",
   },
   {
     id: 13,
     icon: <img src={img13} alt="Categoría 13. Legal y Notariado" />,
-    title: "13. Legal y Notariado",
+    title: "13. Legal y notariado",
     route: "/legalynotariado",
   },
   {
@@ -116,7 +118,7 @@ const values = [
   {
     id: 15,
     icon: <img src={img15} alt="Categoría 15. Catálogo, Ofertas y Subastas" />,
-    title: "15. Catálogo, Ofertas y Subastas",
+    title: "15. Catalogo, ofertas y subastas",
     route: "/ofertasysubastas",
   },
   {
@@ -128,55 +130,55 @@ const values = [
   {
     id: 17,
     icon: <img src={img17} alt="Categoría 17. Póliza y Seguros AB" />,
-    title: "17. Póliza y Seguros AB",
+    title: "17. Póliza y seguros AB",
     route: "/polizayseguros",
   },
   {
     id: 18,
     icon: <img src={img18} alt="Categoría 18. Préstamos Privados Sobre Propiedades" />,
-    title: "18. Préstamos Privados Sobre Propiedades",
+    title: "18. Préstamos privados sobre propiedades",
     route: "/prestamosyrescatesobrepropiedades",
   },
   {
     id: 19,
     icon: <img src={img19} alt="Categoría 19. Productos y Servicios Cooperativos" />,
-    title: "19. Productos y Servicios Cooperativos",
+    title: "19. Productos y servicios cooperativos",
     route: "/productosyservicioscooperativos",
   },
   {
     id: 20,
     icon: <img src={img20} alt="Categoría 20. Combos de Publicidad y Páginas Web" />,
-    title: "20. Combos de Publicidad y Páginas Web",
+    title: "20. Combos de publicidad y paginas web",
     route: "/publicidadypaginasweb",
   },
   {
     id: 21,
     icon: <img src={img21} alt="Categoría 21. Fundación Eslabonescr.com" />,
-    title: "21. Fundación Eslabonescr.com",
+    title: "21. Fundacion eslabonescr.com",
     route: "/fundacioneslabones",
   },
   {
     id: 22,
     icon: <img src={img22} alt="Categoría 22. Esencial Costa Rica: Hoteles y Turismo" />,
-    title: "22. Esencial Costa Rica: Hoteles y Turismo",
+    title: "22. Escencial Costa Rica hoteles y turismo",
     route: "/hotelesturismo",
   },
   {
     id: 23,
     icon: <img src={img23} alt="Categoría 23. Transporte y Mensajería" />,
-    title: "23. Transporte y Mensajería",
+    title: "23. Transporte y mensajería",
     route: "/transporteymensajeria",
   },
   {
     id: 24,
     icon: <img src={img24} alt="Categoría 24. Directorio Comercial C.R" />,
-    title: "24. Directorio Comercial C.R",
+    title: "24. Directorio comercial abcupon.com",
     route: "/directoriocomercial",
   },
 ];
 
-const Botonera = ({ 
-  selectedCategory, 
+const Botonera = ({
+  selectedCategory,
   setSelectedCategory,
   selectedSubcategory,
   setSelectedSubcategory,
@@ -184,6 +186,7 @@ const Botonera = ({
   setSelectedSubsubcategory
 }) => {
   const [imageUrl, setImageUrl] = useState('');
+  const [fuse, setFuse] = useState(null);
   const token = useSelector(state => state.authentication.token);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentCategory, setCurrentCategory] = useState(null);
@@ -193,6 +196,14 @@ const Botonera = ({
 
   useEffect(() => {
     fetchImage();
+    // Initialize Fuse.js for categories
+    const fuseOptions = {
+      keys: ['nombre'],
+      threshold: 0.3, // Adjust for sensitivity (0.0 = exact match, 1.0 = very loose)
+      includeScore: true,
+      getFn: (obj, path) => normalizeString(obj[path]),
+    };
+    setFuse(new Fuse(Category.categorias, fuseOptions));
   }, []);
 
   const fetchImage = () => {
@@ -208,15 +219,33 @@ const Botonera = ({
       });
   };
 
+  const findBestMatch = (input, items, key = 'nombre') => {
+    if (!fuse || !input || !items) return null;
+    const normalizedInput = normalizeString(input);
+    const tempFuse = new Fuse(items, {
+      keys: [key],
+      threshold: 0.3,
+      includeScore: true,
+      getFn: (obj, path) => normalizeString(obj[path]),
+    });
+    const results = tempFuse.search(normalizedInput);
+    return results.length > 0 ? results[0].item : null;
+  };
+
   const openModal = (categoryTitle) => {
-    const category = Category.categorias.find(cat => cat.nombre === categoryTitle);
-    setCurrentCategory(category);
-    setExpandedSubcategories({});
-    setIsModalOpen(true);
-    setSelectedCategory(categoryTitle);
-    setSelectedSubcategory(null);
-    setSelectedSubsubcategory(null);
-    console.log("Categoría seleccionada:", categoryTitle);
+    const normalizedTitle = normalizeString(categoryTitle);
+    const matchedCategory = fuse.search(normalizedTitle)[0]?.item || Category.categorias.find(cat => normalizeString(cat.nombre) === normalizedTitle);
+    if (matchedCategory) {
+      setCurrentCategory(matchedCategory);
+      setExpandedSubcategories({});
+      setIsModalOpen(true);
+      setSelectedCategory(matchedCategory.nombre);
+      setSelectedSubcategory(null);
+      setSelectedSubsubcategory(null);
+      console.log("Categoría seleccionada:", matchedCategory.nombre);
+    } else {
+      console.warn("No se encontró la categoría:", categoryTitle);
+    }
   };
 
   const closeModal = () => {
@@ -226,19 +255,40 @@ const Botonera = ({
   };
 
   const toggleSubcategory = (subcatName) => {
-    setExpandedSubcategories(prev => ({
-      ...prev,
-      [subcatName]: !prev[subcatName]
-    }));
-    setSelectedSubcategory(subcatName);
-    setSelectedSubsubcategory(null);
-    console.log("Subcategoría seleccionada:", subcatName);
+    const normalizedSubcat = normalizeString(subcatName);
+    const matchedSubcat = findBestMatch(normalizedSubcat, currentCategory?.subcategorias || []);
+    if (matchedSubcat) {
+      setExpandedSubcategories(prev => ({
+        ...prev,
+        [matchedSubcat.nombre]: !prev[matchedSubcat.nombre]
+      }));
+      setSelectedSubcategory(matchedSubcat.nombre);
+      setSelectedSubsubcategory(null);
+      console.log("Subcategoría seleccionada:", matchedSubcat.nombre);
+    } else {
+      console.warn("No se encontró la subcategoría:", subcatName);
+    }
   };
 
   const selectSubsubcategory = (subsubcat) => {
-    setSelectedSubsubcategory(subsubcat);
-    console.log("Subsubcategoría seleccionada:", subsubcat);
-    closeModal();
+    const normalizedSubsubcat = normalizeString(subsubcat);
+    const subcatWithSubsubcats = currentCategory?.subcategorias.find(subcat => 
+      subcat.subsubcategorias?.some(ssc => normalizeString(ssc) === normalizedSubsubcat)
+    );
+    if (subcatWithSubsubcats) {
+      const matchedSubsubcat = subcatWithSubsubcats.subsubcategorias.find(ssc => 
+        normalizeString(ssc) === normalizedSubsubcat
+      );
+      if (matchedSubsubcat) {
+        setSelectedSubsubcategory(matchedSubsubcat);
+        console.log("Subsubcategoría seleccionada:", matchedSubsubcat);
+        closeModal();
+      } else {
+        console.warn("No se encontró la subsubcategoría:", subsubcat);
+      }
+    } else {
+      console.warn("No se encontró la subsubcategoría:", subsubcat);
+    }
   };
 
   const handleMouseEnter = (event) => {

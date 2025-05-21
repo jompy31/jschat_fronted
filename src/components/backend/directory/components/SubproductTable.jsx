@@ -35,19 +35,19 @@ const SubproductTable = ({
       { Header: "Email", accessor: "email" },
       { Header: "Dirección", accessor: "address" },
       { Header: "Página Web", accessor: "url" },
-      { Header: "Dirección Maps", accessor: "addressmap" },
-      {
-        Header: "Detalles",
-        accessor: "details",
-        Cell: ({ row }) => (
-          <button
-            onClick={() => toggleRow(row.original.id)}
-            className="text-blue-600 hover:underline"
-          >
-            {expandedRows[row.original.id] ? "Ocultar" : "Mostrar"}
-          </button>
-        ),
-      },
+      // { Header: "Dirección Maps", accessor: "addressmap" },
+      // {
+      //   Header: "Detalles",
+      //   accessor: "details",
+      //   Cell: ({ row }) => (
+      //     <button
+      //       onClick={() => toggleRow(row.original.id)}
+      //       className="text-blue-600 hover:underline"
+      //     >
+      //       {expandedRows[row.original.id] ? "Ocultar" : "Mostrar"}
+      //     </button>
+      //   ),
+      // },
       {
         Header: "Acciones",
         Cell: ({ row }) => (

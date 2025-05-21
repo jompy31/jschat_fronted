@@ -30,9 +30,10 @@ const NewsModal = ({
       className="z-50"
       aria-labelledby="news-modal-title"
       backdrop="static"
+      style={{marginTop:"-5%"}}
     >
       <div className="bg-white rounded-lg shadow-lg max-h-[80vh] overflow-y-auto relative z-50">
-        <Modal.Header className="border-b-0 px-6 pt-6 sticky top-0 bg-white z-10">
+        <Modal.Header className="border-b-0 px-3 pt-6 sticky top-0 bg-white z-10">
           <Modal.Title
             id="news-modal-title"
             className="text-2xl font-semibold text-gray-800"

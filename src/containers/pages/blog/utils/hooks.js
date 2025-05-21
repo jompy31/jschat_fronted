@@ -83,39 +83,58 @@ export const useBlogManagement = () => {
   }, []);
 
   const handleCreateBlogPost = async () => {
-    const data = new FormData();
-    data.append("title", title);
-    data.append("content", content);
-    data.append("image", image);
-
-    await createBlogPost(data, token);
-    const posts = await fetchBlogPosts();
-    setBlogPosts(posts);
-    setTitle("");
-    setContent("");
-    setImage(null);
-  };
-
-  const handleUpdateBlogPost = async () => {
-    if (selectedBlogId) {
+    try {
       const data = new FormData();
       data.append("title", title);
       data.append("content", content);
-      if (image && typeof image === "object") {
-        data.append("image", image);
-      }
+      data.append("image", image);
 
-      await updateBlogPost(selectedBlogId, data, token);
+      await createBlogPost(data, token);
       const posts = await fetchBlogPosts();
       setBlogPosts(posts);
-      closeEditModal();
+      setTitle("");
+      setContent("");
+      setImage(null);
+      closeEditModal(); // Close modal after successful creation
+      toast.success("¡Publicación creada exitosamente!");
+    } catch (error) {
+      console.error("Error creating blog post:", error);
+      toast.error("Error al crear la publicación. Por favor, intenta de nuevo.");
+    }
+  };
+
+  const handleUpdateBlogPost = async () => {
+    try {
+      if (selectedBlogId) {
+        const data = new FormData();
+        data.append("title", title);
+        data.append("content", content);
+        if (image && typeof image === "object") {
+          data.append("image", image);
+        }
+
+        await updateBlogPost(selectedBlogId, data, token);
+        const posts = await fetchBlogPosts();
+        setBlogPosts(posts);
+        closeEditModal(); // Already closes modal
+        toast.success("¡Publicación actual  actualizada exitosamente!");
+      }
+    } catch (error) {
+      console.error("Error updating blog post:", error);
+      toast.error("Error al actualizar la publicación. Por favor, intenta de nuevo.");
     }
   };
 
   const handleDeleteBlogPost = async (id) => {
-    await deleteBlogPost(id, token);
-    const posts = await fetchBlogPosts();
-    setBlogPosts(posts);
+    try {
+      await deleteBlogPost(id, token);
+      const posts = await fetchBlogPosts();
+      setBlogPosts(posts);
+      toast.success("¡Publicación eliminada exitosamente!");
+    } catch (error) {
+      console.error("Error deleting blog post:", error);
+      toast.error("Error al eliminar la publicación.");
+    }
   };
 
   const openEditModal = (id) => {
@@ -133,6 +152,7 @@ export const useBlogManagement = () => {
     setSelectedBlogId(null);
     setTitle("");
     setContent("");
+    setImage(null);
     setIsModalOpen(false);
   };
 
@@ -190,6 +210,7 @@ export const useBlogManagement = () => {
           comment: post.id === blogPostId ? "" : post.comment,
         }))
       );
+      toast.success("¡Comentario creado exitosamente!");
     } catch (error) {
       console.error("Error creating comment:", error);
       alert("Error al crear el comentario. Por favor, intenta de nuevo.");
@@ -202,8 +223,6 @@ export const useBlogManagement = () => {
         throw new Error("User not authenticated");
       }
       await deleteComment(blogPostId, commentId, token);
-      // console.log("blogPostId", blogPostId, "commentId", commentId, "user.token", user.token)
-      // Update blogPosts state to remove the deleted comment
       setBlogPosts((prevPosts) =>
         prevPosts.map((post) =>
           post.id === blogPostId

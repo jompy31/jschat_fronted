@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
@@ -69,119 +69,102 @@ const CompanyModal = ({ show, handleClose, company, handleSave }) => {
 
   return (
     <div className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ${show ? 'block' : 'hidden'}`}>
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-gray-800">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl p-8">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-gray-800">
             {company ? 'Editar Empresa' : 'Crear Empresa'}
           </h2>
           <button
             onClick={handleClose}
-            className="text-gray-500 hover:text-gray-700 text-2xl"
+            className="text-gray-500 hover:text-gray-700 text-2xl font-semibold"
           >
             ×
           </button>
         </div>
-        <Form onSubmit={handleSubmit} className="space-y-4">
-          <Form.Group controlId="formCompanyName">
-            <Form.Label className="text-sm font-medium text-gray-700">Nombre</Form.Label>
-            <Form.Control
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+            <label className="text-sm font-medium text-gray-700 self-center text-left">Nombre</label>
+            <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
             />
-          </Form.Group>
-          <Form.Group controlId="formCompanyLogo">
-            <Form.Label className="text-sm font-medium text-gray-700">Logo</Form.Label>
-            <Form.Control
+            <label className="text-sm font-medium text-gray-700 self-center text-left">Logo</label>
+            <input
               type="file"
               onChange={(e) => setLogo(e.target.files[0])}
-              className="border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
             />
-          </Form.Group>
-          <Form.Group controlId="formCompanyWebsite">
-            <Form.Label className="text-sm font-medium text-gray-700">Sitio Web</Form.Label>
-            <Form.Control
+            <label className="text-sm font-medium text-gray-700 self-center text-left">Sitio Web</label>
+            <input
               type="text"
               value={website}
               onChange={(e) => setWebsite(e.target.value)}
-              className="border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
             />
-          </Form.Group>
-          <Form.Group controlId="formCompanyDescription">
-            <Form.Label className="text-sm font-medium text-gray-700">Descripción</Form.Label>
-            <Form.Control
-              as="textarea"
+            <label className="text-sm font-medium text-gray-700 self-center text-left">Descripción</label>
+            <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={4}
-              className="border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
             />
-          </Form.Group>
-          <Form.Group controlId="formCompanyEmail">
-            <Form.Label className="text-sm font-medium text-gray-700">Email de Contacto</Form.Label>
-            <Form.Control
+            <label className="text-sm font-medium text-gray-700 self-center text-left">Email de Contacto</label>
+            <input
               type="email"
               value={contactEmail}
               onChange={(e) => setContactEmail(e.target.value)}
-              className="border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
             />
-          </Form.Group>
-          <Form.Group controlId="formCompanyPhone">
-            <Form.Label className="text-sm font-medium text-gray-700">Número de Teléfono</Form.Label>
-            <Form.Control
+            <label className="text-sm font-medium text-gray-700 self-center text-left">Número de Teléfono</label>
+            <input
               type="text"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
-              className="border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
             />
-          </Form.Group>
-          <Form.Group controlId="formCompanyAddress">
-            <Form.Label className="text-sm font-medium text-gray-700">Dirección</Form.Label>
-            <Form.Control
+            <label className="text-sm font-medium text-gray-700 self-center text-left">Dirección</label>
+            <input
               type="text"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              className="border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
             />
-          </Form.Group>
-          <Form.Group controlId="formCompanyIndustry">
-            <Form.Label className="text-sm font-medium text-gray-700">Industria</Form.Label>
-            <Form.Control
+            <label className="text-sm font-medium text-gray-700 self-center text-left">Industria</label>
+            <input
               type="text"
               value={industry}
               onChange={(e) => setIndustry(e.target.value)}
-              className="border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
             />
-          </Form.Group>
-          <Form.Group controlId="formCompanyEstablishedDate">
-            <Form.Label className="text-sm font-medium text-gray-700">Fecha de Creación</Form.Label>
+            <label className="text-sm font-medium text-gray-700 self-center text-left">Fecha de Creación</label>
             <DatePicker
               selected={establishedDate}
               onChange={(date) => setEstablishedDate(date)}
               dateFormat="yyyy-MM-dd"
-              className="border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 w-full"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
               placeholderText="Selecciona una fecha"
             />
-          </Form.Group>
-          <div className="flex justify-end space-x-2">
+          </div>
+          <div className="flex justify-end space-x-3 mt-6">
             <Button
               variant="secondary"
               onClick={handleClose}
-              className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
+              className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-md transition-colors"
             >
               Cerrar
             </Button>
             <Button
               variant="primary"
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition-colors"
             >
               Guardar
             </Button>
           </div>
-        </Form>
+        </form>
       </div>
     </div>
   );

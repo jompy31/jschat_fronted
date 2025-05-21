@@ -4,11 +4,12 @@ import { Button, Form } from 'react-bootstrap';
 const SkillModal = ({ show, handleClose, skill, handleSave }) => {
   const [name, setName] = useState(skill ? skill.name : '');
   const [description, setDescription] = useState(skill ? skill.description : '');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     if (skill) {
-      setName(skill.name);
-      setDescription(skill.description);
+      setName(skill.name || '');
+      setDescription(skill.description || '');
     } else {
       setName('');
       setDescription('');
@@ -17,9 +18,20 @@ const SkillModal = ({ show, handleClose, skill, handleSave }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleSave({ id: skill ? skill.id : null, name, description });
+    if (!name.trim()) {
+      setErrorMessage('El nombre de la habilidad es obligatorio.');
+      return;
+    }
+    // Create JSON object for the skill
+    const skillData = {
+      name: name.trim(),
+      description: description.trim() || "", // Ensure description is a string
+    };
+    console.log("Submitting skill from SkillModal:", JSON.stringify(skillData, null, 2));
+    handleSave(skillData);
     setName('');
     setDescription('');
+    setErrorMessage('');
     handleClose();
   };
 
@@ -37,6 +49,11 @@ const SkillModal = ({ show, handleClose, skill, handleSave }) => {
             ×
           </button>
         </div>
+        {errorMessage && (
+          <div className="alert alert-danger" role="alert">
+            {errorMessage}
+          </div>
+        )}
         <Form onSubmit={handleSubmit} className="space-y-4">
           <Form.Group controlId="formSkillName">
             <Form.Label className="text-sm font-medium text-gray-700">Nombre</Form.Label>
@@ -46,17 +63,18 @@ const SkillModal = ({ show, handleClose, skill, handleSave }) => {
               onChange={(e) => setName(e.target.value)}
               required
               className="border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Ingrese el nombre de la habilidad"
             />
           </Form.Group>
           <Form.Group controlId="formSkillDescription">
-            <Form.Label className="text-sm font-medium text-gray-700">Descripción</Form.Label>
+            <Form.Label className="text-sm font-medium text-gray-700">Descripción (Opcional)</Form.Label>
             <Form.Control
               as="textarea"
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              required
               className="border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Ingrese la descripción de la habilidad"
             />
           </Form.Group>
           <div className="flex justify-end space-x-2">

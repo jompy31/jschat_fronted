@@ -1,38 +1,42 @@
 import React from "react";
-import useCarousel from "../hooks/useCarousel";
 import Publicidad from "../../../../../assets/catalogo/webp/visibilidad.webp";
 
-const CouponCarousel = ({ coupons, subproductData }) => {
-  const { carouselPosition, carouselRef } = useCarousel(coupons);
-
+const CouponGrid = ({ coupons, subproductData }) => {
   if (!coupons?.length) return null;
 
   return (
-    <div style={{ width: "100%", overflow: "hidden" }}>
+    <div
+      style={{
+        width: "100%",
+        padding: "20px",
+        boxSizing: "border-box",
+      }}
+    >
       <div
-        ref={carouselRef}
         style={{
-          display: "flex",
-          flexWrap: "nowrap",
-          transform: `translateX(${carouselPosition}%)`,
-          transition: "transform 0.05s linear",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
           gap: "20px",
+          maxWidth: "1200px", // Limita el ancho máximo para mejor legibilidad
+          margin: "0 auto", // Centra la cuadrícula
         }}
       >
-        {coupons.concat(coupons.length <= 3 ? coupons : []).map((coupon, index) => {
+        {coupons.map((coupon) => {
           const discountedPrice = (
             coupon.price * (1 - coupon.discount / 100)
           ).toFixed(2);
 
           return (
             <div
-              key={`${coupon.id}-${index}`}
+              key={coupon.id}
               className="card"
               style={{
-                flex: "0 0 300px",
                 padding: "15px",
                 textAlign: "left",
                 transition: "transform 0.2s ease, box-shadow 0.3s ease",
+                background: "#fff",
+                borderRadius: "8px",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = "scale(1.05)";
@@ -122,4 +126,4 @@ const CouponCarousel = ({ coupons, subproductData }) => {
   );
 };
 
-export default CouponCarousel;
+export default CouponGrid;

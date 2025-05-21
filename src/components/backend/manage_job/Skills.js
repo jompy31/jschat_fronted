@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Modal, Form } from "react-bootstrap";
+import { Table, Button, Form } from "react-bootstrap";
+import SkillModal from "./job_modal/skill_model";
 import JobDataService from "../../../services/employee";
 
 const Skills = ({ token, currentUser }) => {
   const [skills, setSkills] = useState([]);
-  const [filteredSkills, setFilteredSkills] = useState([]); // Estado para los resultados filtrados
+  const [filteredSkills, setFilteredSkills] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5); // Mostrar 5 elementos por página
+  const [itemsPerPage] = useState(5);
   const [searchQuery, setSearchQuery] = useState("");
-
-  const [currentSkill, setCurrentSkill] = useState(null);
   const [showSkillModal, setShowSkillModal] = useState(false);
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
+  const [currentSkill, setCurrentSkill] = useState(null);
 
   useEffect(() => {
     loadSkills();
@@ -27,7 +25,7 @@ const Skills = ({ token, currentUser }) => {
       .then((response) => {
         setSkills(response.data);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => console.error("Error loading skills:", error));
   };
 
   const deleteSkill = (skillId) => {
@@ -35,34 +33,40 @@ const Skills = ({ token, currentUser }) => {
       .then(() => {
         loadSkills();
       })
-      .catch((error) => console.error(error));
+      .catch((error) => console.error("Error deleting skill:", error));
   };
 
   const handleSaveSkill = (skill) => {
-    const formData = new FormData();
-    formData.append("name", skill.name);
-    formData.append("description", skill.description);
-
-    JobDataService.createSkill(formData, token)
-      .then(() => {
+    // Log the skill data in JSON format
+    console.log("Skill in JSON format:", JSON.stringify(skill, null, 2));
+  
+    // Send JSON data to the API
+    const skillData = {
+      name: skill.name,
+      description: skill.description || "", // Ensure description is a string, even if empty
+    };
+  
+    console.log("Sending POST request to /api/skills/ with data:", skillData);
+  
+    JobDataService.createSkill(skillData, token)
+      .then((response) => {
+        console.log("Skill created successfully:", response.data);
         loadSkills();
         handleCloseModal();
       })
-      .catch((error) => console.error("Error al crear habilidad", error));
+      .catch((error) => {
+        console.error("Error creating skill:", {
+          message: error.message,
+          response: error.response ? error.response.data : null,
+          status: error.response ? error.response.status : null,
+        });
+        // Display error to user
+        alert(`Error creating skill: ${error.response ? JSON.stringify(error.response.data) : error.message}`);
+      });
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (name && description) {
-      handleSaveSkill({ id: currentSkill ? currentSkill.id : null, name, description });
-    }
-  };
-
   const handleCloseModal = () => {
     setShowSkillModal(false);
     setCurrentSkill(null);
-    setName('');
-    setDescription('');
   };
 
   const handleSearch = () => {
@@ -71,10 +75,9 @@ const Skills = ({ token, currentUser }) => {
       skill.description.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredSkills(filtered);
-    setCurrentPage(1); // Reiniciar a la página 1 después de la búsqueda
+    setCurrentPage(1);
   };
 
-  // Calcular los elementos de la página actual
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredSkills.slice(indexOfFirstItem, indexOfLastItem);
@@ -95,7 +98,6 @@ const Skills = ({ token, currentUser }) => {
     <div>
       <h2>Habilidades</h2>
 
-      {/* Buscar habilidades */}
       <Form.Control
         type="text"
         placeholder="Buscar por nombre o descripción..."
@@ -117,7 +119,11 @@ const Skills = ({ token, currentUser }) => {
         }}
       />
 
-      <Button variant="primary" onClick={() => setShowSkillModal(true)} style={{ marginBottom: '10px' }}>
+      <Button
+        variant="primary"
+        onClick={() => setShowSkillModal(true)}
+        style={{ marginBottom: '10px' }}
+      >
         Crear Habilidad
       </Button>
 
@@ -135,7 +141,10 @@ const Skills = ({ token, currentUser }) => {
               <td>{skill.name}</td>
               <td>{skill.description}</td>
               <td>
-                <Button variant="danger" onClick={() => deleteSkill(skill.id)}>
+                <Button
+                  variant="danger"
+                  onClick={() => deleteSkill(skill.id)}
+                >
                   Eliminar
                 </Button>
               </td>
@@ -144,7 +153,6 @@ const Skills = ({ token, currentUser }) => {
         </tbody>
       </Table>
 
-      {/* Paginación */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Button onClick={prevPage} disabled={currentPage === 1}>
           Anterior
@@ -160,37 +168,12 @@ const Skills = ({ token, currentUser }) => {
         </Button>
       </div>
 
-      {/* Modal para crear/editar habilidades */}
-      <Modal show={showSkillModal} onHide={handleCloseModal} backdrop="true" keyboard={true}>
-       
-          <Modal.Title>{currentSkill ? "Editar Habilidad" : "Crear Habilidad"}</Modal.Title>
-
-        <Modal.Body>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="formSkillName">
-              <Form.Label>Nombre</Form.Label>
-              <Form.Control
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </Form.Group>
-            <Form.Group controlId="formSkillDescription">
-              <Form.Label>Descripción</Form.Label>
-              <Form.Control
-                type="text"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                required
-              />
-            </Form.Group>
-            <Button variant="primary" type="submit" style={{ marginTop: '10px' }}>
-              Guardar
-            </Button>
-          </Form>
-        </Modal.Body>
-      </Modal>
+      <SkillModal
+        show={showSkillModal}
+        handleClose={handleCloseModal}
+        skill={currentSkill}
+        handleSave={handleSaveSkill}
+      />
     </div>
   );
 };

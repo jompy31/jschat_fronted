@@ -272,11 +272,66 @@ const BusinessInfo = ({ subproductData, isMobile, isMini }) => {
               }}
             />
           )}
-          {!subproductData.certified && (
-            <p style={{ marginTop: "1rem", color: "#333" }}>
-              ¿Quieres ser un proveedor certificado? Consulta al{" "}
-              <strong>8788-6767</strong> cómo ser proveedor certificado de ABCupon.
-            </p>
+        </p>
+        {!subproductData.certified && (
+          <p style={{ marginTop: "0.5rem", marginBottom: "1rem", color: "#333" }}>
+            ¿Quieres ser un proveedor certificado? Consulta al{" "}
+            <strong>8788-6767</strong> cómo ser proveedor certificado de ABCupon.
+          </p>
+        )}
+        <p
+          style={{
+            fontSize: "1.2em",
+            marginBottom: "1rem",
+            color: "#333",
+            marginRight: "24%",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          {subproductData.point_of_sale ? (
+            <>
+              <strong>Punto de venta certificado: </strong>
+              <span
+                style={{
+                  marginLeft: "10px",
+                  width: "20px",
+                  height: "20px",
+                  border: "2px solid #4CAF50",
+                  borderRadius: "4px",
+                  display: "inline-block",
+                  backgroundColor: "#4CAF50",
+                  position: "relative",
+                }}
+              >
+                <span
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    color: "white",
+                    fontSize: "14px",
+                  }}
+                >
+                  ✔
+                </span>
+              </span>
+            </>
+          ) : (
+            <>
+              <strong>Punto de venta: </strong>
+              <span
+                style={{
+                  marginLeft: "10px",
+                  width: "20px",
+                  height: "20px",
+                  border: "2px solid #ccc",
+                  borderRadius: "4px",
+                  display: "inline-block",
+                }}
+              />
+            </>
           )}
         </p>
       </div>

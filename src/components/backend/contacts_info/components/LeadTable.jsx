@@ -5,6 +5,7 @@ import { Download, Edit, Delete, Comment, Visibility } from "@mui/icons-material
 
 const LeadTable = ({
   leads,
+  totalCount,
   searchTerm,
   setSearchTerm,
   currentPage,
@@ -33,16 +34,16 @@ const LeadTable = ({
         </Tooltip>
       ),
     },
-    { field: "name", headerName: "Empresa", width: 200 },
-    { field: "email", headerName: "Correo", width: 200 },
+    { field: "name", headerName: "Empresa", width: 150 },
+    { field: "email", headerName: "Correo", width: 150 },
     { field: "number", headerName: "Número", width: 120 },
     { field: "description", headerName: "Descripción", width: 200 },
     { field: "priority", headerName: "Prioridad", width: 100 },
-    { field: "status", headerName: "Estado", width: 120 },
+    { field: "status", headerName: "Estado", width: 80 },
     {
       field: "lastComment",
       headerName: "Comentarios",
-      width: 150,
+      width: 180,
       renderCell: (params) => (
         <Box>
           {params.row.lastComment ? (
@@ -156,11 +157,12 @@ const LeadTable = ({
     },
   ];
 
-  const filteredLeads = leads.filter(
-    (lead) =>
-      lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      lead.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Remove client-side filtering if server-side filtering is implemented
+  // const filteredLeads = leads.filter(
+  //   (lead) =>
+  //     lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //     lead.email.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
 
   return (
     <Box sx={{ width: "100%", mt: 2 }}>
@@ -174,12 +176,13 @@ const LeadTable = ({
       />
       <Box sx={{ height: 500, width: "100%" }}>
         <DataGrid
-          rows={filteredLeads}
+          rows={leads} // Use leads directly if server-side filtering is implemented
           columns={columns}
-          pageSize={10}
-          rowsPerPageOptions={[10, 25, 50]}
-          onPageChange={(newPage) => handlePageChange(newPage + 1)}
-          page={currentPage - 1}
+          rowCount={totalCount}
+          paginationMode="server"
+          pageSizeOptions={[10, 25, 50]}
+          paginationModel={{ page: currentPage - 1, pageSize: 10 }}
+          onPaginationModelChange={({ page, pageSize }) => handlePageChange(page + 1, pageSize)}
           disableSelectionOnClick
           sx={{
             "& .MuiDataGrid-columnHeaders": {

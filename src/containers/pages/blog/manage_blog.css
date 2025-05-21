@@ -79,3 +79,19 @@
 .preview-card img {
   max-height: 150px !important;
 }
+
+.create-blog-btn:hover {
+  transform: scale(1.1); /* Slight scale-up on hover */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4); /* Enhanced shadow */
+}
+
+.create-blog-btn:active {
+  transform: scale(0.95); /* Subtle press effect */
+}
+
+@media (max-width: 768px) {
+  .create-blog-button {
+    top: 70px !important; /* Adjust for smaller screens */
+    left: 15px !important;
+  }
+}
