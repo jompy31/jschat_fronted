@@ -2,10 +2,10 @@ const ENV = process.env.NODE_ENV;
 
 const environments = {
   development: {
-    API_URL: "http://127.0.0.1:8000/api",
+    API_URL: "https://abcupon.com/api",
   },
   production: {
-    API_URL: "http://127.0.0.1:8000/api",
+    API_URL: "https://abcupon.com/api",
   },
 };
 
