@@ -51,7 +51,7 @@ const ClassifiedList = ({
                   alt={category}
                   style={{
                     width: isMobile ? "120px" : "180px",
-                    height: isMobile ? "25px" : "auto",
+                    height: "auto", // Use auto for both mobile and desktop
                     marginTop: catIndex === 0 ? "30px" : "20px",
                     marginBottom: "30px",
                     transform: `scale(${escala})`,
@@ -182,33 +182,33 @@ const ClassifiedList = ({
                       ☎️{clasificado.phone_number}
                     </p>
                     <div style={{ fontSize: "0.8em", fontFamily: "Arial, sans-serif", color: "black" }}>
-  <div style={{ display: "flex", alignItems: "center", marginBottom: "4px" }}>
-    <span>WS:</span>
-    <a
-      href={`https://${clasificado.whatsapp}`}
-      target="_blank"
-      rel="noopener noreferrer"
-      style={{ color: "blue", textDecoration: "underline", marginLeft: "5px" }}
-    >
-      {`https://${clasificado.whatsapp}`}
-    </a>
-  </div>
-  <div style={{ display: "flex", alignItems: "center" }}>
-    <span>Web:</span>
-    {clasificado.url && (
-      <a
-        href="#"
-        onClick={(e) => {
-          e.preventDefault();
-          openWebPage(clasificado.url);
-        }}
-        style={{ color: "blue", textDecoration: "underline", marginLeft: "5px" }}
-      >
-        {clasificado.url}
-      </a>
-    )}
-  </div>
-</div>
+                      <div style={{ display: "flex", alignItems: "center", marginBottom: "4px" }}>
+                        <span>WS:</span>
+                        <a
+                          href={`https://${clasificado.whatsapp}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ color: "blue", textDecoration: "underline", marginLeft: "5px" }}
+                        >
+                          {`https://${clasificado.whatsapp}`}
+                        </a>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <span>Web:</span>
+                        {clasificado.url && (
+                          <a
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              openWebPage(clasificado.url);
+                            }}
+                            style={{ color: "blue", textDecoration: "underline", marginLeft: "5px" }}
+                          >
+                            {clasificado.url}
+                          </a>
+                        )}
+                      </div>
+                    </div>
 
                     <span style={{ textAlign: "justify", color: "black", fontFamily: "Arial, sans-serif", fontSize: "0.8em" }}>
                       Código: {`${new Date(clasificado.datetime).getFullYear().toString().substring(2, 4)}/${(new Date(clasificado.datetime).getMonth() + 1).toString().padStart(2, '0')}/${new Date(clasificado.datetime).getDate().toString().padStart(2, '0')}/id:${clasificado.id}`}

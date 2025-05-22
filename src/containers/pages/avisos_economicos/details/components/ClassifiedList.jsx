@@ -46,18 +46,18 @@ const ClassifiedList = ({
             {/* Render category image */}
             {imagenCategoria && (
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <img
-                  src={imagenCategoria}
-                  alt={category}
-                  style={{
-                    width: isMobile ? "120px" : "180px",
-                    height: isMobile ? "25px" : "auto",
-                    marginTop: catIndex === 0 ? "30px" : "20px",
-                    marginBottom: "30px",
-                    transform: `scale(${escala})`,
-                  }}
-                />
-              </div>
+              <img
+                src={imagenCategoria}
+                alt={category}
+                style={{
+                  width: isMobile ? "120px" : "180px",
+                  height: "auto", // Use auto for both mobile and desktop
+                  marginTop: catIndex === 0 ? "30px" : "20px",
+                  marginBottom: "30px",
+                  transform: `scale(${escala})`,
+                }}
+              />
+            </div>
             )}
             {/* Render classifieds for this category */}
             {clasificadosInCategory.map((clasificado, index) => {

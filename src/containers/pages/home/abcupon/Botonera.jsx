@@ -323,7 +323,7 @@ const Botonera = ({
       <div />
       <div style={{ zoom: isMini ? "50%" : isMobile ? "70%" : "100%", width: '100%' }}>
         <div className="values__right text-center" style={{ display: 'flex', flexDirection: 'column', alignItems: isMobile ? 'flex-start' : 'center' }}>
-          <h2 style={{ color: 'black', textShadow: '2px 2px 4px black', marginTop: isMini ? "-8%" : isMobile ? "5%" : '0%' }}>
+          <h2 style={{ color: 'black', textShadow: '2px 2px 4px black', marginTop: isMini ? "-8%" : isMobile ? "5%" : '3%' }}>
             Botonera de categorías, presionar para ver subcategorías
           </h2>
           <div className="values__wrapper">

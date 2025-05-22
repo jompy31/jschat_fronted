@@ -79,78 +79,83 @@ const Formulario_directorio = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validar campos obligatorios
+    // Validar campos obligatorios (solo comercio)
     const requiredFields = [
       formData.comercio.nombreComercio,
       formData.comercio.nombreResponsable,
       formData.comercio.numeroIdentificacion,
       formData.comercio.telefono,
+      formData.comercio.provincia,
+      formData.comercio.canton,
+      formData.comercio.distrito,
       formData.comercio.direccionExacta,
-      formData.pagos.metodoPago,
-      formData.pagos.titularCuenta,
-      formData.acuerdo.nombreRepresentante,
-      formData.promotor.codigoPromotor,
     ];
 
     if (requiredFields.some((field) => !field)) {
-      toast.error('Por favor completa todos los campos obligatorios.');
+      toast.error('Por favor completa todos los campos obligatorios del comercio.');
       return;
+    }
+
+    // Preparar el mensaje
+    let message = `
+      Fecha de Afiliación: ${new Date().toLocaleDateString()}
+      Código de Promotor: ${formData.promotor.codigoPromotor || 'No proporcionado'}
+
+      **Datos del Comercio**
+      Nombre del Comercio: ${formData.comercio.nombreComercio}
+      Propietario/Responsable: ${formData.comercio.nombreResponsable}
+      Tipo de Identificación: ${formData.comercio.tipoIdentificacion || 'No proporcionado'}
+      Número de Identificación: ${formData.comercio.numeroIdentificacion}
+      Teléfono: ${formData.comercio.telefono}
+      WhatsApp: ${formData.comercio.whatsapp || 'No proporcionado'}
+      Correo: ${formData.comercio.correo || 'No proporcionado'}
+      Ubicación: ${formData.comercio.provincia}, ${formData.comercio.canton}, ${formData.comercio.distrito}
+      Dirección Exacta: ${formData.comercio.direccionExacta}
+      Punto de Referencia: ${formData.comercio.puntoReferencia || 'No proporcionado'}
+
+      **Datos para Entrega**
+      Dirección de Entrega: ${formData.entrega.direccionEntrega || formData.comercio.direccionExacta}
+      Ubicación Entrega: ${formData.entrega.provinciaEntrega || formData.comercio.provincia}, ${formData.entrega.cantonEntrega || formData.comercio.canton}, ${formData.entrega.distritoEntrega || formData.comercio.distrito}
+      Punto de Referencia: ${formData.entrega.puntoReferenciaEntrega || 'No proporcionado'}
+      Horario Preferido: ${formData.entrega.horarioEntrega || 'No proporcionado'}
+      Día Preferido: ${formData.entrega.diaPreferido || 'No proporcionado'}
+      Persona Autorizada: ${formData.entrega.personaAutorizada || 'No proporcionado'}
+      Teléfono Autorizada: ${formData.entrega.telefonoAutorizada || 'No proporcionado'}
+
+      **Datos para Pagos**
+      Método de Pago: ${formData.pagos.metodoPago || 'No proporcionado'}
+      Teléfono SINPE: ${formData.pagos.telefonoSinpe || 'No proporcionado'}
+      Banco: ${formData.pagos.banco || 'No proporcionado'}
+      Número de Cuenta (IBAN): ${formData.pagos.numeroCuenta || 'No proporcionado'}
+      Titular de la Cuenta: ${formData.pagos.titularCuenta || 'No proporcionado'}
+
+      **Acuerdo de Afiliación**
+      Representante: ${formData.acuerdo.nombreRepresentante || 'No proporcionado'}
+      Comercio: ${formData.acuerdo.nombreComercio || 'No proporcionado'}
+      Observaciones: ${formData.acuerdo.observaciones || 'No proporcionado'}
+
+      **Promotor**
+      Nombre del Promotor: ${formData.promotor.nombrePromotor || 'No proporcionado'}
+      Cédula del Promotor: ${formData.promotor.cedulaPromotor || 'No proporcionado'}
+    `;
+
+    // Truncar el mensaje a 4000 caracteres
+    if (message.length > 4000) {
+      message = message.slice(0, 3997) + '...';
+      toast.warn('El mensaje fue cortado porque excedía los 4000 caracteres.');
     }
 
     // Preparar datos para el correo
     const emailData = {
       subject: 'Formulario de Afiliación ABCupon',
-      message: `
-        Fecha de Afiliación: ${new Date().toLocaleDateString()}
-        Código de Promotor: ${formData.promotor.codigoPromotor}
-
-        **Datos del Comercio**
-        Nombre del Comercio: ${formData.comercio.nombreComercio}
-        Propietario/Responsable: ${formData.comercio.nombreResponsable}
-        Tipo de Identificación: ${formData.comercio.tipoIdentificacion}
-        Número de Identificación: ${formData.comercio.numeroIdentificacion}
-        Teléfono: ${formData.comercio.telefono}
-        WhatsApp: ${formData.comercio.whatsapp}
-        Correo: ${formData.comercio.correo}
-        Ubicación: ${formData.comercio.provincia}, ${formData.comercio.canton}, ${
-        formData.comercio.distrito
-      }
-        Dirección Exacta: ${formData.comercio.direccionExacta}
-        Punto de Referencia: ${formData.comercio.puntoReferencia}
-
-        **Datos para Entrega**
-        Dirección de Entrega: ${formData.entrega.direccionEntrega || formData.comercio.direccionExacta}
-        Ubicación Entrega: ${formData.entrega.provinciaEntrega || formData.comercio.provincia}, ${
-        formData.entrega.cantonEntrega || formData.comercio.canton
-      }, ${formData.entrega.distritoEntrega || formData.comercio.distrito}
-        Punto de Referencia: ${formData.entrega.puntoReferenciaEntrega}
-        Horario Preferido: ${formData.entrega.horarioEntrega}
-        Día Preferido: ${formData.entrega.diaPreferido}
-        Persona Autorizada: ${formData.entrega.personaAutorizada}
-        Teléfono Autorizada: ${formData.entrega.telefonoAutorizada}
-
-        **Datos para Pagos**
-        Método de Pago: ${formData.pagos.metodoPago}
-        Teléfono SINPE: ${formData.pagos.telefonoSinpe}
-        Banco: ${formData.pagos.banco}
-        Número de Cuenta (IBAN): ${formData.pagos.numeroCuenta}
-        Titular de la Cuenta: ${formData.pagos.titularCuenta}
-
-        **Acuerdo de Afiliación**
-        Representante: ${formData.acuerdo.nombreRepresentante}
-        Comercio: ${formData.acuerdo.nombreComercio}
-        Observaciones: ${formData.acuerdo.observaciones}
-
-        **Promotor**
-        Nombre del Promotor: ${formData.promotor.nombrePromotor}
-        Cédula del Promotor: ${formData.promotor.cedulaPromotor}
-      `,
+      message: message,
       from_email: 'soporte@abcupon.com',
-      recipient_list: ['soporte@abcupon.com'],
+      recipient_list: ['soporte@abcupon.com'].join(','),
+      attachments: [],
     };
 
     try {
-      const response = await axios.post('https://abcupon.com/api/send-email/', emailData, {
+      const response = await axios.post('http://localhost:8000/api/send-email/', emailData, {
         headers: { 'Content-Type': 'application/json' },
       });
 
@@ -168,8 +173,12 @@ const Formulario_directorio = () => {
         toast.error('Error al enviar el formulario.');
       }
     } catch (error) {
-      console.error('Error:', error);
-      toast.error('No se pudo enviar el formulario. Verifica la conexión.');
+      console.error('Error al enviar el correo:', error);
+      if (error.response && error.response.data && error.response.data.message) {
+        toast.error(`No se pudo enviar el formulario: ${error.response.data.message.join(', ')}`);
+      } else {
+        toast.error('No se pudo enviar el formulario. Verifica la conexión o la configuración del servidor.');
+      }
     }
   };
 
@@ -329,7 +338,7 @@ const Formulario_directorio = () => {
                   <input
                     type="text"
                     name="puntoReferencia"
-                    placeholder="Punto de Referencia"
+                    placeholder="Punto de Referencia (opcional)"
                     value={formData.comercio.puntoReferencia}
                     onChange={(e) => handleInputChange(e, 'comercio')}
                     className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -339,7 +348,7 @@ const Formulario_directorio = () => {
 
               {/* Sección 2: Datos para Entrega */}
               <div className="border-b pb-4">
-                <h3 className="text-xl font-semibold text-gray-800 mb-4">Datos para Entrega de Materiales</h3>
+                <h3 className="text-xl font-semibold text-gray-800 mb-4">Datos para Entrega de Materiales (Opcional)</h3>
                 <input
                   type="text"
                   name="direccionEntrega"
@@ -423,7 +432,7 @@ const Formulario_directorio = () => {
                 <input
                   type="text"
                   name="diaPreferido"
-                  placeholder="Día Preferido (opcional)"
+                  placeholder="Día Preferido"
                   value={formData.entrega.diaPreferido}
                   onChange={(e) => handleInputChange(e, 'entrega')}
                   className="border border-gray-300 rounded-lg p-3 w-full mt-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -431,26 +440,24 @@ const Formulario_directorio = () => {
                 <input
                   type="text"
                   name="personaAutorizada"
-                  placeholder="Persona Autorizada *"
+                  placeholder="Persona Autorizada"
                   value={formData.entrega.personaAutorizada}
                   onChange={(e) => handleInputChange(e, 'entrega')}
                   className="border border-gray-300 rounded-lg p-3 w-full mt-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
                 />
                 <input
                   type="tel"
                   name="telefonoAutorizada"
-                  placeholder="Teléfono de Persona Autorizada *"
+                  placeholder="Teléfono de Persona Autorizada"
                   value={formData.entrega.telefonoAutorizada}
                   onChange={(e) => handleInputChange(e, 'entrega')}
                   className="border border-gray-300 rounded-lg p-3 w-full mt-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
                 />
               </div>
 
               {/* Sección 3: Datos para Pagos */}
               <div className="border-b pb-4">
-                <h3 className="text-xl font-semibold text-gray-800 mb-4">Datos para Depósito de Pagos</h3>
+                <h3 className="text-xl font-semibold text-gray-800 mb-4">Datos para Depósito de Pagos (Opcional)</h3>
                 <div className="flex flex-wrap gap-4 mb-4">
                   <label className="flex items-center">
                     <input
@@ -508,76 +515,69 @@ const Formulario_directorio = () => {
                 <input
                   type="text"
                   name="numeroCuenta"
-                  placeholder="Número de Cuenta (IBAN) *"
+                  placeholder="Número de Cuenta (IBAN)"
                   value={formData.pagos.numeroCuenta}
                   onChange={(e) => handleInputChange(e, 'pagos')}
                   className="border border-gray-300 rounded-lg p-3 w-full mt-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
                 />
                 <input
                   type="text"
                   name="titularCuenta"
-                  placeholder="Titular de la Cuenta *"
+                  placeholder="Titular de la Cuenta"
                   value={formData.pagos.titularCuenta}
                   onChange={(e) => handleInputChange(e, 'pagos')}
                   className="border border-gray-300 rounded-lg p-3 w-full mt-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
                 />
               </div>
 
               {/* Sección 4: Acuerdo de Afiliación */}
               <div className="border-b pb-4">
-                <h3 className="text-xl font-semibold text-gray-800 mb-4">Acuerdo de Afiliación</h3>
+                <h3 className="text-xl font-semibold text-gray-800 mb-4">Acuerdo de Afiliación (Opcional)</h3>
                 <p className="text-gray-600 mb-4">
                   Yo, <input
                     type="text"
                     name="nombreRepresentante"
-                    placeholder="Nombre del Representante *"
+                    placeholder="Nombre del Representante"
                     value={formData.acuerdo.nombreRepresentante}
                     onChange={(e) => handleInputChange(e, 'acuerdo')}
                     className="border border-gray-300 rounded-lg p-2 inline-block w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
                   />, en representación de <input
                     type="text"
                     name="nombreComercio"
-                    placeholder="Nombre del Comercio *"
+                    placeholder="Nombre del Comercio"
                     value={formData.acuerdo.nombreComercio}
                     onChange={(e) => handleInputChange(e, 'acuerdo')}
                     className="border border-gray-300 rounded-lg p-2 inline-block w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
                   />, acepto participar como comercio afiliado de ABCupon a partir de abril de 2025. Entiendo que debo exhibir el catálogo físico, rótulos y volantes proporcionados gratuitamente. Recibiré una comisión del 10% sobre ventas generadas, sin obligación de venta directa ni inversión económica. Puedo retirarme notificando a ABCupon sin penalización.
                 </p>
               </div>
 
               {/* Sección 5: Promotor */}
               <div className="border-b pb-4">
-                <h3 className="text-xl font-semibold text-gray-800 mb-4">Datos del Promotor</h3>
+                <h3 className="text-xl font-semibold text-gray-800 mb-4">Datos del Promotor (Opcional)</h3>
                 <input
                   type="text"
                   name="codigoPromotor"
-                  placeholder="Código de Promotor *"
+                  placeholder="Código de Promotor"
                   value={formData.promotor.codigoPromotor}
                   onChange={(e) => handleInputChange(e, 'promotor')}
                   className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
                 />
                 <input
                   type="text"
                   name="nombrePromotor"
-                  placeholder="Nombre del Promotor *"
+                  placeholder="Nombre del Promotor"
                   value={formData.promotor.nombrePromotor}
                   onChange={(e) => handleInputChange(e, 'promotor')}
                   className="border border-gray-300 rounded-lg p-3 w-full mt-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
                 />
                 <input
                   type="text"
                   name="cedulaPromotor"
-                  placeholder="Cédula del Promotor *"
+                  placeholder="Cédula del Promotor"
                   value={formData.promotor.cedulaPromotor}
                   onChange={(e) => handleInputChange(e, 'promotor')}
                   className="border border-gray-300 rounded-lg p-3 w-full mt-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
                 />
               </div>
 

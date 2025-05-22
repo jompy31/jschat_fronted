@@ -95,7 +95,7 @@ const SubproductDetails = () => {
         <meta property="og:type" content="website" />
       </Helmet>
 
-      <div className="landing-page" style={{marginTop:"5%"}}>
+      <div className="landing-page" style={{ marginTop: "5%" }}>
         {subproductData && (
           <>
             {/* <div className="logo-section">
@@ -179,40 +179,13 @@ const SubproductDetails = () => {
                 />
               </div>
             )}
-            {subproductData.point_of_sale && (
-          <div
-            style={{
-              border: "2px solid #ccc",
-              borderRadius: "10px",
-              padding: "20px",
-              boxShadow: "5px 5px 10px #888888",
-              backgroundColor: "white",
-              margin: "20px 10px",
-              // maxWidth: isMobile ? "100%" : "80%",
-              boxSizing: "border-box",
-            }}
-          >
-            <h2
-              style={{
-                fontSize: "2em",
-                color: "red",
-                textShadow: "2px 2px 4px #000",
-                fontWeight: "bold",
-                marginBottom: "20px",
-                textAlign: "center",
-              }}
-            >
-              Catálogo de Productos
-            </h2>
-            <Catalogo />
-          </div>
-        )}
+
             {subproductData.file && (
               <div className="card">
                 <MediaDisplay subproductData={subproductData} isMobile={isMobile} />
               </div>
             )}
-            
+
             <WhatsAppModal
               subproductData={subproductData}
               services={services}
@@ -224,18 +197,46 @@ const SubproductDetails = () => {
               calculateTotal={calculateTotal}
               calculateTotalCombos={calculateTotalCombos}
             />
+            <div ref={componentRef1} className="card">
+              {subproductData.point_of_sale && (
+                <div
+                  style={{
+                    border: "2px solid #ccc",
+                    borderRadius: "10px",
+                    padding: "20px",
+                    boxShadow: "5px 5px 10px #888888",
+                    backgroundColor: "white",
+                    margin: "20px 10px",
+                    // maxWidth: isMobile ? "100%" : "80%",
+                    boxSizing: "border-box",
+                  }}
+                >
+                  <h2
+                    style={{
+                      fontSize: "2em",
+                      color: "red",
+                      textShadow: "2px 2px 4px #000",
+                      fontWeight: "bold",
+                      marginBottom: "20px",
+                      textAlign: "center",
+                    }}
+                  >
+                    Catálogo de Productos
+                  </h2>
+                  <Catalogo />
+                </div>
+              )}
+            </div>
             <div ref={componentRef} className="card">
-            <Avisoseconomicos
+              <Avisoseconomicos
                 email={subproductData.point_of_sale ? "avisos_economicos@abcupon.com" : subproductData.email}
                 name={subproductData.name}
               />
             </div>
-            <div ref={componentRef1} className="card">
-              {/* Reviews component placeholder */}
-            </div>
+
           </>
         )}
-        
+
       </div>
     </>
   );

@@ -224,7 +224,7 @@ function Home({ products, clasificados, subproducts, services }) {
       >
         ENCUENTRELO DESDE LA BOTONERA
       </div>
-      <div>
+      <div >
         <Botonera
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
