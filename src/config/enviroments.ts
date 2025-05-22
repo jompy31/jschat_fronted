@@ -2,7 +2,7 @@ const ENV = process.env.NODE_ENV;
 
 const environments = {
   development: {
-    API_URL: "https://abcupon.com/api",
+    API_URL: "http://localhost:8000/api",
   },
   production: {
     API_URL: "https://abcupon.com/api",

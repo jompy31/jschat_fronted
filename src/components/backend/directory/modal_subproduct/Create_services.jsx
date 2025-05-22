@@ -25,7 +25,7 @@ const CreateServicesModal = ({ show, onHide, selectedSubproduct }) => {
       fetchServicesAndCombos(selectedSubproduct.id);
     }
   }, [selectedSubproduct, currentServicesPage, currentCombosPage, serviceSearchTerm]);
-
+  
   const fetchServicesAndCombos = async (subproductId) => {
     setLoading(true);
     try {
@@ -33,6 +33,7 @@ const CreateServicesModal = ({ show, onHide, selectedSubproduct }) => {
         fetchServices(setServices, setTotalServices, subproductId, token, currentServicesPage, itemsPerPage, serviceSearchTerm),
         fetchCombos(setCombos, setTotalCombos, subproductId, token, currentCombosPage, itemsPerPage),
       ]);
+      console.log("Combos loaded:", combos); // Añade esto para depurar
     } catch (error) {
       setError("Error al cargar servicios o combos: " + (error.response?.data?.error || error.message));
     } finally {

@@ -176,21 +176,14 @@ class ProductDataService {
   });
 }
 
-  getAllCombosForSubProduct(subProductId, token) {
-    this.setAuthHeader(token);
-    return axios
-      .get(`${config.API_URL}/products/subproducts/${subProductId}/services/`)
-      .then((response) => {
-        const serviceIds = response.data.map((service) => service.id);
-        return axios.get(`${config.API_URL}/products/combos/`).then((comboResponse) => {
-          const filteredCombos = comboResponse.data.filter((combo) =>
-            combo.services.some((service) => serviceIds.includes(service.id))
-          );
-          return { data: filteredCombos };
-        });
-      });
-  }
-
+getAllCombosForSubProduct(subProductId, token, page = 1, page_size = 1000) {
+  this.setAuthHeader(token);
+  return axios.get(`${config.API_URL}/products/subproducts/${subProductId}/combos/`, {
+    params: { page, page_size },
+  }).then((response) => {
+    return { data: response.data.results || response.data, count: response.data.count || response.data.length };
+  });
+}
   createCombo(data, token) {
     this.setAuthHeader(token);
     return axios.post(`${config.API_URL}/products/combos/`, data);
