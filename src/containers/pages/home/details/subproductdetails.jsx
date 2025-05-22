@@ -56,6 +56,16 @@ const SubproductDetails = () => {
       : subproductData.description
     : `Descubre ${subproductData?.name} en ABCupon, tu directorio de comercios.`;
 
+  // Check if there's no meaningful content to display
+  const hasNoContent =
+    !subproductData?.logo &&
+    services.length === 0 &&
+    subCombos.length === 0 &&
+    coupons.length === 0 &&
+    businessHours.length === 0 &&
+    teamMembers.length === 0 &&
+    !subproductData?.file;
+
   if (isLoading) {
     return (
       <div className="landing-page">
@@ -95,15 +105,39 @@ const SubproductDetails = () => {
         <meta property="og:type" content="website" />
       </Helmet>
 
-      <div className="landing-page" style={{ marginTop: "5%" }}>
+      <div className="landing-page" style={{ marginTop: "5%", position: "relative" }}>
         {subproductData && (
           <>
-            {/* <div className="logo-section">
-              <img
-                src={subproductData.logo || Publicidad}
-                alt={`Logo de ${subproductData.name}`}
-              />
-            </div> */}
+            {hasNoContent && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%) rotate(15deg)",
+                  backgroundColor: "white",
+                  border: "2px solid black",
+                  borderRadius: "10px",
+                  padding: "20px 40px",
+ Saunders: "0.8",
+                  zIndex: 10,
+                  textAlign: "center",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+                  pointerEvents: "none",
+                }}
+              >
+                <p
+                  style={{
+                    color: "red",
+                    fontSize: "1.5em",
+                    fontWeight: "bold",
+                    margin: 0,
+                  }}
+                >
+                  Esta es una muestra de prueba sin valor comercial
+                </p>
+              </div>
+            )}
             <div className="card">
               <BusinessInfo
                 subproductData={subproductData}
@@ -179,13 +213,11 @@ const SubproductDetails = () => {
                 />
               </div>
             )}
-
             {subproductData.file && (
               <div className="card">
                 <MediaDisplay subproductData={subproductData} isMobile={isMobile} />
               </div>
             )}
-
             <WhatsAppModal
               subproductData={subproductData}
               services={services}
@@ -207,7 +239,6 @@ const SubproductDetails = () => {
                     boxShadow: "5px 5px 10px #888888",
                     backgroundColor: "white",
                     margin: "20px 10px",
-                    // maxWidth: isMobile ? "100%" : "80%",
                     boxSizing: "border-box",
                   }}
                 >
@@ -227,16 +258,16 @@ const SubproductDetails = () => {
                 </div>
               )}
             </div>
-            <div ref={componentRef} className="card">
-              <Avisoseconomicos
-                email={subproductData.point_of_sale ? "avisos_economicos@abcupon.com" : subproductData.email}
-                name={subproductData.name}
-              />
-            </div>
-
+            {!hasNoContent && (
+              <div ref={componentRef} className="card">
+                <Avisoseconomicos
+                  email={subproductData.point_of_sale ? "avisos_economicos@abcupon.com" : subproductData.email}
+                  name={subproductData.name}
+                />
+              </div>
+            )}
           </>
         )}
-
       </div>
     </>
   );

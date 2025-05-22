@@ -50,7 +50,7 @@ const ClassifiedList = ({
                   src={imagenCategoria}
                   alt={category}
                   style={{
-                    width: isMobile ? "120px" : "180px",
+                    width: isMobile ? "50%" : "60%",
                     height: "auto", // Use auto for both mobile and desktop
                     marginTop: catIndex === 0 ? "30px" : "20px",
                     marginBottom: "30px",
