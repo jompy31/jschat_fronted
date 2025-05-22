@@ -155,7 +155,7 @@ const Formulario_directorio = () => {
     };
 
     try {
-      const response = await axios.post('http://localhost:8000/api/send-email/', emailData, {
+      const response = await axios.post('https://abcupon.com/api/send-email/', emailData, {
         headers: { 'Content-Type': 'application/json' },
       });
 
