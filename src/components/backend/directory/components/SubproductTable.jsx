@@ -35,19 +35,6 @@ const SubproductTable = ({
       { Header: "Email", accessor: "email" },
       { Header: "Dirección", accessor: "address" },
       { Header: "Página Web", accessor: "url" },
-      // { Header: "Dirección Maps", accessor: "addressmap" },
-      // {
-      //   Header: "Detalles",
-      //   accessor: "details",
-      //   Cell: ({ row }) => (
-      //     <button
-      //       onClick={() => toggleRow(row.original.id)}
-      //       className="text-blue-600 hover:underline"
-      //     >
-      //       {expandedRows[row.original.id] ? "Ocultar" : "Mostrar"}
-      //     </button>
-      //   ),
-      // },
       {
         Header: "Acciones",
         Cell: ({ row }) => (
@@ -94,61 +81,67 @@ const SubproductTable = ({
           style={{ width: "100%" }}
         >
           <thead className="bg-gray-50">
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column, index) => (
-                  <th
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider truncate"
-                    style={{
-                      width: index === 0
-                        ? "20%" // Nombre
-                        : index === 1
-                        ? "15%" // Teléfono
-                        : index === 2
-                        ? "20%" // Email
-                        : index === 3
-                        ? "20%" // Dirección
-                        : index === 4
-                        ? "15%" // Página Web
-                        : index === 5
-                        ? "15%" // Dirección Maps
-                        : index === 6
-                        ? "10%" // Detalles
-                        : "10%", // Acciones
-                    }}
-                  >
-                    <div className="flex items-center">
-                      {column.render("Header")}
-                      {column.isSorted && (
-                        <FaSort
-                          className={`ml-1 ${
-                            column.isSortedDesc ? "rotate-180" : ""
-                          }`}
-                        />
-                      )}
-                    </div>
-                  </th>
-                ))}
-              </tr>
-            ))}
+            {headerGroups.map((headerGroup) => {
+              const { key, ...headerGroupProps } = headerGroup.getHeaderGroupProps();
+              return (
+                <tr key={key} {...headerGroupProps}>
+                  {headerGroup.headers.map((column, index) => {
+                    const { key: columnKey, ...columnProps } = column.getHeaderProps(column.getSortByToggleProps());
+                    return (
+                      <th
+                        key={columnKey}
+                        {...columnProps}
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider truncate"
+                        style={{
+                          width: index === 0
+                            ? "20%" // Nombre
+                            : index === 1
+                            ? "15%" // Teléfono
+                            : index === 2
+                            ? "20%" // Email
+                            : index === 3
+                            ? "20%" // Dirección
+                            : index === 4
+                            ? "15%" // Página Web
+                            : "10%", // Acciones
+                        }}
+                      >
+                        <div className="flex items-center">
+                          {column.render("Header")}
+                          {column.isSorted && (
+                            <FaSort
+                              className={`ml-1 ${column.isSortedDesc ? "rotate-180" : ""}`}
+                            />
+                          )}
+                        </div>
+                      </th>
+                    );
+                  })}
+                </tr>
+              );
+            })}
           </thead>
           <tbody {...getTableBodyProps()} className="bg-white divide-y divide-gray-200">
             {rows.map((row) => {
               prepareRow(row);
               const isExpanded = expandedRows[row.original.id];
+              const { key, ...rowProps } = row.getRowProps();
               return (
-                <React.Fragment key={row.id}>
-                  <tr {...row.getRowProps()}>
-                    {row.cells.map((cell) => (
-                      <td
-                        {...cell.getCellProps()}
-                        className="px-6 py-4 text-sm text-gray-500 truncate"
-                        title={typeof cell.value === "string" ? cell.value : ""}
-                      >
-                        {cell.render("Cell")}
-                      </td>
-                    ))}
+                <React.Fragment key={key}>
+                  <tr {...rowProps}>
+                    {row.cells.map((cell) => {
+                      const { key: cellKey, ...cellProps } = cell.getCellProps();
+                      return (
+                        <td
+                          key={cellKey}
+                          {...cellProps}
+                          className="px-6 py-4 text-sm text-gray-500 truncate"
+                          title={typeof cell.value === "string" ? cell.value : ""}
+                        >
+                          {cell.render("Cell")}
+                        </td>
+                      );
+                    })}
                   </tr>
                   {isExpanded && (
                     <tr>

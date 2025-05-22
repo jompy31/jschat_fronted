@@ -47,6 +47,8 @@ const Directory = () => {
   const [subproductLogo, setSubproductLogo] = useState(null);
   const [subproductFile, setSubproductFile] = useState(null);
   const [businessHours, setBusinessHours] = useState([]);
+  const [totalCombos, setTotalCombos] = useState(0);
+  const [totalServices, setTotalServices] = useState(0);
   const [teamMembers, setTeamMembers] = useState([]);
   const [coupons, setCoupons] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -71,8 +73,8 @@ const Directory = () => {
     setIsLoading(true);
     Promise.all([
       fetchProducts(setProducts, setSubproducts, token).finally(() => setIsLoading(false)),
-      fetchCombos(setCombos, token),
-      fetchServices(setServices, token),
+      fetchCombos(setCombos, setTotalCombos, null, token), // Pass setTotalCombos and null for subproductId
+      fetchServices(setServices, setTotalServices, null, token),
     ]);
   }, [token]);
 

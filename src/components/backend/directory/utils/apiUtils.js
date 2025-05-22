@@ -3,13 +3,15 @@ import ProductDataService from "../../../../services/products";
 export const fetchProducts = async (setProducts, setSubproducts, token) => {
   try {
     const response = await ProductDataService.getAll(token);
-    setProducts(response.data);
-    const allSubproducts = response.data.flatMap((product) =>
+    const productsData = response.data.results || response.data; // Usar results si existe, sino response.data
+    setProducts(Array.isArray(productsData) ? productsData : []); // Asegurar que siempre sea un array
+    const allSubproducts = productsData.flatMap((product) =>
       product.subproducts || []
     );
     setSubproducts(allSubproducts);
   } catch (error) {
     console.error("Error al recuperar productos:", error);
+    setProducts([]); // En caso de error, establecer un array vacío
   }
 };
 
@@ -23,22 +25,64 @@ export const fetchSubproducts = async (setSubproducts, setTotalSubproducts, toke
   }
 };
 
-export const fetchCombos = async (setCombos, setTotalCombos, subproductId, token, page = 1, page_size = 10) => {
+export const fetchCombos = async (
+  setCombos,
+  setTotalCombos = () => {},
+  subproductId,
+  token,
+  page = 1,
+  page_size = 10
+) => {
+  if (!subproductId) {
+    console.warn("No subproductId provided for fetching combos");
+    setCombos([]);
+    setTotalCombos(0);
+    return;
+  }
   try {
-    const response = await ProductDataService.getAllCombosForSubProduct(subproductId, token, page, page_size);
-    setCombos(response.data.results || response.data);
-    setTotalCombos(response.data.count || 0);
+    const response = await ProductDataService.getAllCombosForSubProduct(
+      subproductId,
+      token,
+      page,
+      page_size
+    );
+    setCombos(response.data || []);
+    setTotalCombos(response.count || 0);
   } catch (error) {
     console.error("Error al recuperar combos:", error);
+    setCombos([]);
+    setTotalCombos(0);
   }
 };
 
-export const fetchServices = async (setServices, setTotalServices, subproductId, token, page = 1, page_size = 10, search = "") => {
+export const fetchServices = async (
+  setServices,
+  setTotalServices = () => {},
+  subproductId,
+  token,
+  page = 1,
+  page_size = 10,
+  search = ""
+) => {
+  if (!subproductId) {
+    console.warn("No subproductId provided for fetching services");
+    setServices([]);
+    setTotalServices(0);
+    return;
+  }
   try {
-    const response = await ProductDataService.getAllServicesForSubProduct(subproductId, token, page, page_size, search);
+    const response = await ProductDataService.getAllServicesForSubProduct(
+      subproductId,
+      token,
+      page,
+      page_size,
+      search
+    );
     setServices(response.data.results || response.data);
     setTotalServices(response.data.count || 0);
   } catch (error) {
     console.error("Error al recuperar servicios:", error);
+    setServices([]);
+    setTotalServices(0);
   }
 };

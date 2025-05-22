@@ -134,12 +134,13 @@ class ProductDataService {
     return axios.delete(`${config.API_URL}/products/subproducts/${subProductId}/coupons/${couponId}/`);
   }
 
-  getAllServices(token) {
+  getAllServices(token, page = 1, page_size = 1000) {
     this.setAuthHeader(token);
-    return axios.get(`${config.API_URL}/products/services/`).then((response) => {
-      return { data: response.data.results || response.data };
+    return axios.get(`${config.API_URL}/products/services/`, {
+      params: { page, page_size },
     });
   }
+  
 
   getAllServicesForSubProduct(subProductId, token) {
     this.setAuthHeader(token);
@@ -168,10 +169,12 @@ class ProductDataService {
     return axios.delete(`${config.API_URL}/products/subproducts/${subProductId}/services/${serviceId}/`);
   }
 
-  getAllCombos(token) {
+  getAllCombos(token, page = 1, page_size = 1000) {
     this.setAuthHeader(token);
-    return axios.get(`${config.API_URL}/products/combos/`);
-  }
+    return axios.get(`${config.API_URL}/products/combos/`, {
+    params: { page, page_size },
+  });
+}
 
   getAllCombosForSubProduct(subProductId, token) {
     this.setAuthHeader(token);
