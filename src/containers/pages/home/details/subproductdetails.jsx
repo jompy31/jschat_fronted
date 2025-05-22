@@ -112,14 +112,14 @@ const SubproductDetails = () => {
               <div
                 style={{
                   position: "absolute",
-                  top: "50%",
+                  top: "65%",
                   left: "50%",
                   transform: "translate(-50%, -50%) rotate(15deg)",
                   backgroundColor: "white",
                   border: "2px solid black",
                   borderRadius: "10px",
                   padding: "20px 40px",
- Saunders: "0.8",
+                  Saunders: "0.8",
                   zIndex: 10,
                   textAlign: "center",
                   boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
