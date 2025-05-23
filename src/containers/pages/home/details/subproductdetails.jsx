@@ -138,7 +138,7 @@ const SubproductDetails = () => {
                 </p>
               </div>
             )}
-            <div className="card">
+            <div className="card" style={{ marginTop: isMobile ? "20%" : "0" }}>
               <BusinessInfo
                 subproductData={subproductData}
                 isMobile={isMobile}

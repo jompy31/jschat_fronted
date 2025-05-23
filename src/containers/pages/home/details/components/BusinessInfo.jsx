@@ -3,6 +3,17 @@ import Publicidad from "../../../../../assets/catalogo/webp/visibilidad.webp";
 import { openURL } from "../utils/formatUtils";
 
 const BusinessInfo = ({ subproductData, isMobile, isMini }) => {
+  // Define logo styles based on device type
+  const logoStyles = {
+    maxWidth: isMobile ? "100%" : "50%", // Full width on mobile, 50% on desktop
+    maxHeight: isMobile ? "40vw" : "40vh", // Smaller height on mobile
+    width: "auto", // Maintain aspect ratio
+    height: "auto", // Maintain aspect ratio
+    border: "2px solid red",
+    boxShadow: "0 0 10px black",
+    borderRadius: "10px",
+  };
+
   return (
     <div
       style={{
@@ -14,7 +25,7 @@ const BusinessInfo = ({ subproductData, isMobile, isMini }) => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "white",
+        background: "white",
         marginBottom: "20px",
         lineHeight: "1.5",
       }}
@@ -23,25 +34,13 @@ const BusinessInfo = ({ subproductData, isMobile, isMini }) => {
         <img
           src={subproductData.logo}
           alt={`Logo de ${subproductData.name}`}
-          style={{
-            maxWidth: "80vh",
-            maxHeight: "80vh",
-            border: "2px solid red",
-            boxShadow: "0 0 10px black",
-            borderRadius: "10px",
-          }}
+          style={logoStyles}
         />
       ) : (
         <img
           src={Publicidad}
           alt={`Publicidad de ${subproductData.name} en ABCupon`}
-          style={{
-            maxWidth: "50%",
-            maxHeight: "80vh",
-            border: "2px solid red",
-            boxShadow: "0 0 10px black",
-            borderRadius: "10px",
-          }}
+          style={logoStyles}
         />
       )}
       <h1

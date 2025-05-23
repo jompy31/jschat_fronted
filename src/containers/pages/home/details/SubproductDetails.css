@@ -253,3 +253,8 @@
   }
 }
 
+@media (max-width: 768px) {
+  .card.business-info {
+    margin-top: 15%;
+  }
+}
