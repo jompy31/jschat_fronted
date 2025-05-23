@@ -14,13 +14,15 @@ const Publiembudo = () => {
     };
 
     return (
-        <div style={{ background: "linear-gradient(135deg, #0f2027, #203a43, #2c5364)" }}>
-            <div className="publiembudo-container fullscreen">
+        <div className="publiembudo-wrapper">
+            <div className="publiembudo-container">
                 <h1 className="publiembudo-title">Descubre el Combo Ideal para Ti</h1>
-                <div className="combo-grid full-focus">
+                <div className="combo-grid">
                     {data.map((combo, index) => (
                         <div
-                            className={`combo-card ${index === 1 ? "center-focus" : ""} ${hoveredIndex === index ? "hovered" : ""}`}
+                            className={`combo-card ${index === 1 ? "center-focus" : ""} ${
+                                hoveredIndex === index ? "hovered" : ""
+                            }`}
                             key={index}
                             onMouseEnter={() => setHoveredIndex(index)}
                             onMouseLeave={() => setHoveredIndex(null)}

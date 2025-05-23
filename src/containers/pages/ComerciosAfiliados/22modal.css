@@ -304,3 +304,78 @@
 .reserve-button:hover {
   background-color: #0056b3;
 }
+
+.filters {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.filter {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.filter label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.filter-input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  width: 100%;
+}
+@media (max-width: 768px) {
+  .filters {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .filter {
+    width: 100%;
+  }
+
+  .filter-input {
+    width: 100%;
+  }
+}
+
+@media (max-width: 340px) {
+  .filters {
+    gap: 8px;
+  }
+
+  .filter label {
+    font-size: 14px;
+  }
+
+  .filter-input {
+    font-size: 14px;
+    padding: 6px;
+  }
+}
+
+@media (max-width: 768px) {
+  .map-container {
+    height: 300px; /* Reduced height for mobile */
+    margin-bottom: 200px;
+  }
+  .properties-list {
+    margin-top: 320px; /* Enough margin to clear the map */
+  }
+}
+
+@media (max-width: 340px) {
+  .map-container {
+    margin-bottom: 0px;
+  }
+  .properties-list {
+    margin-top: 25px !important; /* Further increase for smaller screens */
+  }
+}
+

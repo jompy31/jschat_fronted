@@ -1,42 +1,48 @@
-/* Pantalla completa y estilo general */
-.publiembudo-container {
-    font-family: "Poppins", sans-serif;
-    padding: 2rem;
+/* General wrapper for background and full-screen layout */
+.publiembudo-wrapper {
     background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    color: white;
-    text-align: center;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
-    margin-top: 6%;
 }
 
+/* Container for the main content */
+.publiembudo-container {
+    font-family: "Poppins", sans-serif;
+    padding: 2rem 1rem;
+    color: white;
+    text-align: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Title styling */
 .publiembudo-title {
-    font-size: 2.5rem;
-    margin-bottom: 5%;
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
+    margin-bottom: 2rem;
     text-shadow: 0 0 10px #00ffe0;
 }
 
-/* Diseño de la cuadrícula */
+/* Grid for combo cards */
 .combo-grid {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    align-items: flex-start;
     gap: 1.5rem;
     width: 100%;
-    max-width: 1200px;
 }
 
-/* Estilo de las tarjetas */
+/* Combo card styling */
 .combo-card {
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 15px;
     padding: 1.5rem;
-    width: 300px;
+    width: 100%;
+    max-width: 300px;
     box-shadow: 0 0 20px rgba(0, 255, 224, 0.4);
     transition: transform 0.3s, box-shadow 0.3s;
     backdrop-filter: blur(10px);
@@ -46,20 +52,22 @@
     text-align: center;
 }
 
+/* Center-focus card */
 .combo-card.center-focus {
-    width: 400px;
-    transform: scale(1.1);
+    max-width: 350px;
+    transform: scale(1.05);
     box-shadow: 0 0 30px rgba(0, 255, 224, 0.8);
 }
 
+/* Hover effect */
 .combo-card.hovered {
     transform: translateY(-10px);
     box-shadow: 0 0 30px rgba(0, 255, 224, 0.8);
 }
 
-/* Estilo del contenido */
+/* Card content */
 .combo-name {
-    font-size: 1.5rem;
+    font-size: clamp(1.2rem, 4vw, 1.5rem);
     color: #00ffe0;
     margin-bottom: 1rem;
 }
@@ -74,11 +82,11 @@
 .combo-bullet {
     margin: 0.5rem 0;
     color: #cceeff;
-    font-size: 0.95rem;
+    font-size: clamp(0.85rem, 2.5vw, 0.95rem);
 }
 
 .combo-price {
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 3vw, 1.2rem);
     margin-bottom: 0.5rem;
 }
 
@@ -86,16 +94,17 @@
     color: #ffcc00;
     font-weight: bold;
     margin-bottom: 1rem;
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
 }
 
-/* Botón Cotizar */
+/* Quote button */
 .quote-button {
     background: #00ffe0;
     color: #000;
     padding: 0.8rem 1.5rem;
     border: none;
     border-radius: 5px;
-    font-size: 1rem;
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
     font-weight: bold;
     cursor: pointer;
     transition: background 0.3s, color 0.3s;
@@ -105,4 +114,53 @@
 .quote-button:hover {
     background: #ffcc00;
     color: #000;
+}
+
+/* Media Queries for Mobile and Tablet */
+@media (max-width: 768px) {
+    .publiembudo-wrapper {
+        margin-top: 120px;
+    }
+    
+    .publiembudo-container {
+        padding: 1rem;
+    }
+
+    .combo-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .combo-card {
+        max-width: 90%;
+        margin: 0 auto;
+    }
+
+    .combo-card.center-focus {
+        max-width: 90%;
+        transform: scale(1);
+    }
+
+    .combo-card.hovered {
+        transform: translateY(0);
+    }
+
+    .publiembudo-title {
+        margin-bottom: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    
+    .publiembudo-title {
+        font-size: clamp(1.5rem, 6vw, 2rem);
+    }
+
+    .combo-card {
+        padding: 1rem;
+    }
+
+    .quote-button {
+        padding: 0.6rem 1.2rem;
+    }
 }

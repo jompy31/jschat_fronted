@@ -21,7 +21,7 @@ const PaginationControls = ({ totalJobs, jobsPerPage, currentPage, setCurrentPag
   );
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", marginTop: "10%" }}>
+    <div style={{ display: "flex", justifyContent: "center", marginTop: "20%" }}>
       {/* Previous Button */}
       <Button
         onClick={() => setCurrentPage(currentPage - 1)}

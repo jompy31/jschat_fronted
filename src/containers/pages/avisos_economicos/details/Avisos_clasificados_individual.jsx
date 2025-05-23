@@ -81,7 +81,7 @@ const ClasificadosComponent = ({ email, name }) => {
   const clasificadosToUse = filteredClasificados.length > 0 ? filteredClasificados : clasificados;
 
   return (
-    <div style={{ marginTop: isMini ? "40%" : "8%", zoom: isMini ? "30%" : "100%" }}>
+    <div style={{ marginTop: isMobile ? "30%": isMini ? "40%" : "8%", zoom: isMobile ? "40%": isMini ? "30%" : "100%" }}>
       <ScrollToTopButton isMobile={isMobile} setFilteredClasificados={setFilteredClasificados} />
       <div style={{
         backgroundColor: '#f6f0d9',

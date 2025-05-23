@@ -135,8 +135,9 @@ const BolsaEmpleo = () => {
   return (
     <div
       className="job-listing-container"
-      style={{ marginTop: isMobile ? "20%" : "8%", zoom: isMini ? "30%" : "100%" }}
+      style={{ marginTop: isMobile ? "30%" : "8%", zoom: isMobile ? "40%": isMini ? "10%" : "100%", marginBottom: isMobile ? "40%": isMini ? "10%" : "0%"}}
     >
+      
       <div
         style={{
           display: "flex",
@@ -227,6 +228,7 @@ const BolsaEmpleo = () => {
         jobsPerPage={JOBS_PER_PAGE}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
+      
       />
 
       <JobModal

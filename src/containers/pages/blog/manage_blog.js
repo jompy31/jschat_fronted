@@ -104,7 +104,7 @@ const ManageBlog = () => {
             className="blog-title"
             style={{
               fontFamily: "'Poppins', sans-serif", // Modern, clean font
-              fontSize: "2.5rem", // Larger for prominence
+              fontSize: "2.0rem", // Larger for prominence
               fontWeight: 700, // Bold for emphasis
               background: "linear-gradient(90deg, #ff416c, #ff4b2b)", // Vibrant gradient
               WebkitBackgroundClip: "text", // Gradient text effect
@@ -112,7 +112,7 @@ const ManageBlog = () => {
               textShadow: "1px 1px 3px rgba(0, 0, 0, 0.2)", // Subtle shadow
               marginBottom: "20px", // Space below title
               textTransform: "uppercase", // Matches social media aesthetic
-              letterSpacing: "1px", // Slight spacing for readability
+              letterSpacing: "0.5px", // Slight spacing for readability
             }}
           >
             Publicaciones del Blog ABCupon
