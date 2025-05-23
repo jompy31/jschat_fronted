@@ -1,9 +1,10 @@
 import React, { useRef, useState } from 'react';
-import Contraportada from '../../../assets/catalogo/contraportada2.jpg';
+import Contraportada from '../../../assets/catalogo/requisitos_propiedades.jpg';
+import Valeautos from '../../../assets/catalogo/requisitos_valeautos.jpg';
 
 const Catalogo = () => {
   const catalogoRef = useRef(null);
-  const [fullScreen, setFullScreen] = useState(false);
+  const [fullScreen, setFullScreen] = useState(null); // Cambiado a null para identificar qué imagen está en pantalla completa
   const [zoom, setZoom] = useState(1);
 
   const scrollToCatalogo = () => {
@@ -12,12 +13,12 @@ const Catalogo = () => {
     }
   };
 
-  const handleImageClick = () => {
-    setFullScreen(true);
+  const handleImageClick = (image) => {
+    setFullScreen(image);
   };
 
   const handleCloseFullScreen = () => {
-    setFullScreen(false);
+    setFullScreen(null);
     setZoom(1);
   };
 
@@ -28,61 +29,76 @@ const Catalogo = () => {
   };
 
   const handleClickZoom = (event) => {
-    event.stopPropagation(); // Evita que se cierre la imagen
-    setZoom((prevZoom) => (prevZoom === 1 ? 2 : 1)); // Alterna entre zoom 1x y 2x
+    event.stopPropagation();
+    setZoom((prevZoom) => (prevZoom === 1 ? 2 : 1));
   };
 
   return (
     <div>
-      {/* Sección de la contraportada */}
-      <div 
-        style={{ 
-          width: '100vw', 
-          height: '80vh', 
-          display: 'flex', 
-          justifyContent: 'center', 
+      {/* Sección de contraportada y valeautos */}
+      <div
+        style={{
+          width: '100vw',
+          height: '80vh',
+          display: 'flex',
+          justifyContent: 'center',
           alignItems: 'center',
-          marginTop: "6%"
+          marginTop: '6%',
+          gap: '20px', // Espacio entre las imágenes
         }}
       >
-        <img 
-          src={Contraportada} 
-          alt="Contraportada" 
-          style={{ 
-            maxWidth: '100%', 
-            maxHeight: '100%', 
-            objectFit: 'contain', 
-            cursor: 'pointer' 
-          }} 
-          onClick={handleImageClick}
+        {/* Imagen de Contraportada */}
+        <img
+          src={Contraportada}
+          alt="Contraportada"
+          style={{
+            width: '40%', // Ajustado para que ambas quepan
+            height: '100%',
+            objectFit: 'contain',
+            cursor: 'pointer',
+            aspectRatio: '8.5 / 11', // Proporción de tamaño carta
+          }}
+          onClick={() => handleImageClick('contraportada')}
+        />
+        {/* Imagen de Valeautos */}
+        <img
+          src={Valeautos}
+          alt="Valeautos"
+          style={{
+            width: '40%', // Ajustado para que ambas quepan
+            height: '100%',
+            objectFit: 'contain',
+            cursor: 'pointer',
+            aspectRatio: '8.5 / 11', // Proporción de tamaño carta
+          }}
+          onClick={() => handleImageClick('valeautos')}
         />
       </div>
 
       {/* Botón "Ver más productos" */}
       <div style={{ textAlign: 'center', margin: '10px 0' }}>
-  <button 
-    onClick={scrollToCatalogo} 
-    style={{ 
-      padding: '15px 30px', 
-      fontSize: '18px', 
-      backgroundColor: '#008000', // Verde
-      color: 'white', 
-      border: 'none', 
-      borderRadius: '5px', 
-      cursor: 'pointer', 
-      transition: '0.3s ease' 
-    }}
-    onMouseOver={(e) => {
-      e.target.style.backgroundColor = '#000000'; // Negro
-    }}
-    onMouseOut={(e) => {
-      e.target.style.backgroundColor = '#008000'; // Verde
-    }}
-  >
-    Ver Catálogo
-  </button>
-</div>
-
+        <button
+          onClick={scrollToCatalogo}
+          style={{
+            padding: '15px 30px',
+            fontSize: '18px',
+            backgroundColor: '#008000',
+            color: 'white',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            transition: '0.3s ease',
+          }}
+          onMouseOver={(e) => {
+            e.target.style.backgroundColor = '#000000';
+          }}
+          onMouseOut={(e) => {
+            e.target.style.backgroundColor = '#008000';
+          }}
+        >
+          Ver Catálogo
+        </button>
+      </div>
 
       {/* Sección del catálogo */}
       <div ref={catalogoRef} style={{ marginTop: '6%' }}>
@@ -99,7 +115,7 @@ const Catalogo = () => {
 
       {/* Modal de imagen en pantalla completa */}
       {fullScreen && (
-        <div 
+        <div
           style={{
             position: 'fixed',
             top: 0,
@@ -114,16 +130,16 @@ const Catalogo = () => {
           }}
           onClick={handleCloseFullScreen}
         >
-          <img 
-            src={Contraportada} 
-            alt="Contraportada" 
-            style={{ 
+          <img
+            src={fullScreen === 'contraportada' ? Contraportada : Valeautos}
+            alt={fullScreen === 'contraportada' ? 'Contraportada' : 'Valeautos'}
+            style={{
               transform: `scale(${zoom})`,
-              maxWidth: '90vw', 
-              maxHeight: '90vh', 
+              maxWidth: '90vw',
+              maxHeight: '90vh',
               cursor: 'zoom-in',
-              transition: 'transform 0.2s ease-in-out'
-            }} 
+              transition: 'transform 0.2s ease-in-out',
+            }}
             onWheel={handleZoom}
             onClick={handleClickZoom}
           />
