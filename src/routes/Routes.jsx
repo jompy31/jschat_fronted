@@ -24,6 +24,7 @@ const AvisosClasificados = lazy(() => import("../containers/pages/avisos_economi
 const Bolsaempleo = lazy(() => import("../containers/pages/bolsa_empleo/bolsaempleo.jsx"));
 const Cotizador = lazy(() => import("../containers/pages/cotizador/Cotizador.jsx"));
 const Blog = lazy(() => import("../containers/pages/blog/manage_blog.js"));
+const Contactenos = lazy(() => import("../containers/pages/Contactenos"))
 const Login = lazy(() => import("../components/login/login"));
 const Signup = lazy(() => import("../components/login/signup"));
 const UserList1 = lazy(() => import("../components/login/CurrentUser"));
@@ -179,6 +180,7 @@ function App() {
               <Route path="/bolsadeempleo/:id" element={<Bolsaempleo />} />
               <Route path="/cotizador" element={<Cotizador />} />
               <Route path="/blog" element={<Blog />} />
+              <Route path="/contacto" element={<> {" "} <Contactenos />{" "} </>} />
               <Route path="/login" element={<Login login={login} />} />
               <Route path="/signup" element={<Signup signup={signup} />} />
               <Route path="/register" element={<Register signup={signup} />} />

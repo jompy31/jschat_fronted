@@ -10,7 +10,7 @@ const navigation = {
   support: [{ name: 'Contactenos', href: '/contacto' }],
   company: [
     { name: 'Avisos Economicos', href: '/avisos_economicos' },
-    { name: 'Directorio Comercial', href: '/directorio_comercial' },
+    { name: 'Directorio Comercial', href: '/' },
     { name: 'Bolsa de Empleo', href: '/bolsadeempleo' },
     { name: 'Cotizador', href: '/cotizador' },
     { name: 'Blog', href: '/blog' },

@@ -1,11 +1,25 @@
 import React, { useRef, useState } from 'react';
-import Contraportada from '../../../assets/catalogo/requisitos_propiedades.jpg';
-import Valeautos from '../../../assets/catalogo/requisitos_valeautos.jpg';
+import Contraportada from '../../../assets/catalogo/requisitos_propiedades.pdf';
+import Valeautos from '../../../assets/catalogo/requisitos_valeautos.pdf';
+import Sucesorios from '../../../assets/catalogo/requisitos_sucesorios.pdf'; // Asegúrate de que este archivo exista
+import Contraportadaimg from '../../../assets/catalogo/requisitos_propiedades.jpg';
+import Valeautosimg from '../../../assets/catalogo/requisitos_valeautos.jpg';
+import Sucesoriosimg from '../../../assets/catalogo/requisitos_sucesorios.jpg';
+import { useMediaQuery } from 'react-responsive';
 
 const Catalogo = () => {
   const catalogoRef = useRef(null);
-  const [fullScreen, setFullScreen] = useState(null); // Cambiado a null para identificar qué imagen está en pantalla completa
-  const [zoom, setZoom] = useState(1);
+  const [fullScreen, setFullScreen] = useState(null);
+  const [currentPdfIndex, setCurrentPdfIndex] = useState(0);
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
+  const isMini = useMediaQuery({ query: '(max-width: 340px)' });
+
+  const pdfs = [
+    { src: Contraportada, img: Contraportadaimg, alt: 'Contraportada' },
+    { src: Valeautos, img: Valeautosimg, alt: 'Valeautos' },
+    { src: Sucesorios, img: Sucesoriosimg, alt: 'Sucesorios' },
+  ];
 
   const scrollToCatalogo = () => {
     if (catalogoRef.current) {
@@ -13,66 +27,88 @@ const Catalogo = () => {
     }
   };
 
-  const handleImageClick = (image) => {
-    setFullScreen(image);
+  const handlePdfClick = (index) => {
+    console.log('Índice seleccionado:', index, 'PDF:', pdfs[index].src);
+    setFullScreen(pdfs[index].src);
+    setCurrentPdfIndex(index);
+    setZoomLevel(1);
   };
 
   const handleCloseFullScreen = () => {
     setFullScreen(null);
-    setZoom(1);
+    setZoomLevel(1);
   };
 
-  const handleZoom = (event) => {
-    event.preventDefault();
-    const zoomAmount = event.deltaY > 0 ? 0.9 : 1.1;
-    setZoom((prevZoom) => Math.max(1, Math.min(prevZoom * zoomAmount, 3)));
+  const handleNextPdf = () => {
+    const nextIndex = (currentPdfIndex + 1) % pdfs.length;
+    console.log('Siguiente PDF, índice:', nextIndex, 'PDF:', pdfs[nextIndex].src);
+    setCurrentPdfIndex(nextIndex);
+    setFullScreen(pdfs[nextIndex].src);
+    setZoomLevel(1);
   };
 
-  const handleClickZoom = (event) => {
-    event.stopPropagation();
-    setZoom((prevZoom) => (prevZoom === 1 ? 2 : 1));
+  const handlePrevPdf = () => {
+    const prevIndex = (currentPdfIndex - 1 + pdfs.length) % pdfs.length;
+    console.log('PDF anterior, índice:', prevIndex, 'PDF:', pdfs[prevIndex].src);
+    setCurrentPdfIndex(prevIndex);
+    setFullScreen(pdfs[prevIndex].src);
+    setZoomLevel(1);
+  };
+
+  const handleZoomIn = () => {
+    setZoomLevel((prev) => Math.min(prev + 0.2, 3));
+  };
+
+  const handleZoomOut = () => {
+    setZoomLevel((prev) => Math.max(prev - 0.2, 0.5));
   };
 
   return (
     <div>
-      {/* Sección de contraportada y valeautos */}
+      {/* Sección de PDFs */}
       <div
         style={{
           width: '100vw',
-          height: '80vh',
+          height: isMobile ? '40vh' : '80vh',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          marginTop: '6%',
-          gap: '20px', // Espacio entre las imágenes
+          marginTop: isMobile ? '20%' : '6%',
+          gap: '20px',
         }}
       >
-        {/* Imagen de Contraportada */}
-        <img
-          src={Contraportada}
-          alt="Contraportada"
-          style={{
-            width: '40%', // Ajustado para que ambas quepan
-            height: '100%',
-            objectFit: 'contain',
-            cursor: 'pointer',
-            aspectRatio: '8.5 / 11', // Proporción de tamaño carta
-          }}
-          onClick={() => handleImageClick('contraportada')}
-        />
-        {/* Imagen de Valeautos */}
-        <img
-          src={Valeautos}
-          alt="Valeautos"
-          style={{
-            width: '40%', // Ajustado para que ambas quepan
-            height: '100%',
-            objectFit: 'contain',
-            cursor: 'pointer',
-            aspectRatio: '8.5 / 11', // Proporción de tamaño carta
-          }}
-          onClick={() => handleImageClick('valeautos')}
-        />
+        {pdfs.map((pdf, index) => (
+          <div
+            key={index}
+            style={{
+              width: '30%',
+              height: '100%',
+              cursor: 'pointer',
+              position: 'relative',
+              overflow: 'hidden',
+              border: '1px solid lightgray',
+              aspectRatio: '8.5 / 11',
+            }}
+            onClick={() => handlePdfClick(index)}
+          >
+            <img
+              src={pdf.img}
+              alt={pdf.alt}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+                transition: 'transform 0.3s ease',
+              }}
+              onMouseOver={(e) => {
+                e.target.style.transform = 'scale(1.05)';
+              }}
+              onMouseOut={(e) => {
+                e.target.style.transform = 'scale(1)';
+              }}
+            />
+          </div>
+        ))}
       </div>
 
       {/* Botón "Ver más productos" */}
@@ -113,7 +149,7 @@ const Catalogo = () => {
         ></iframe>
       </div>
 
-      {/* Modal de imagen en pantalla completa */}
+      {/* Modal de PDF en pantalla completa */}
       {fullScreen && (
         <div
           style={{
@@ -130,19 +166,117 @@ const Catalogo = () => {
           }}
           onClick={handleCloseFullScreen}
         >
-          <img
-            src={fullScreen === 'contraportada' ? Contraportada : Valeautos}
-            alt={fullScreen === 'contraportada' ? 'Contraportada' : 'Valeautos'}
+          <div
             style={{
-              transform: `scale(${zoom})`,
-              maxWidth: '90vw',
-              maxHeight: '90vh',
-              cursor: 'zoom-in',
-              transition: 'transform 0.2s ease-in-out',
+              position: 'relative',
+              width: '90vw',
+              height: '90vh',
+              overflow: 'auto',
             }}
-            onWheel={handleZoom}
-            onClick={handleClickZoom}
-          />
+            onClick={(e) => e.stopPropagation()}
+          >
+            <iframe
+              src={fullScreen}
+              title={pdfs[currentPdfIndex].alt}
+              style={{
+                width: '100%',
+                height: '100%',
+                border: 'none',
+                transform: `scale(${zoomLevel})`,
+                transformOrigin: 'top left',
+                transition: 'transform 0.3s ease',
+              }}
+            />
+            <button
+              onClick={handlePrevPdf}
+              style={{
+                position: 'absolute',
+                left: '10px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                padding: '10px',
+                fontSize: '24px',
+                backgroundColor: 'black',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+              }}
+            >
+              &lt;
+            </button>
+            <button
+              onClick={handleNextPdf}
+              style={{
+                position: 'absolute',
+                right: '10px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                padding: '10px',
+                fontSize: '24px',
+                backgroundColor: 'black',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+              }}
+            >
+              &gt;
+            </button>
+            <button
+              onClick={handleZoomIn}
+              style={{
+                position: 'absolute',
+                bottom: '10px',
+                left: '50%',
+                transform: 'translateX(-60px)',
+                padding: '10px',
+                fontSize: '18px',
+                backgroundColor: 'blue',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+              }}
+            >
+              +
+            </button>
+            <button
+              onClick={handleZoomOut}
+              style={{
+                position: 'absolute',
+                bottom: '10px',
+                left: '50%',
+                transform: 'translateX(10px)',
+                padding: '10px',
+                fontSize: '18px',
+                backgroundColor: 'red',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+              }}
+            >
+              -
+            </button>
+            <button
+              onClick={handleCloseFullScreen}
+              style={{
+                position: 'absolute',
+                top: '10px',
+                right: '10px',
+                padding: '10px',
+                fontSize: '18px',
+                backgroundColor: '#ff0000',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+              }}
+            >
+              X
+            </button>
+          </div>
         </div>
       )}
     </div>

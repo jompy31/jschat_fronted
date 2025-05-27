@@ -118,8 +118,44 @@ const ComerciosAfiliados = ({ subproducts }) => {
   };
 
   const filterProperties = () => {
-    setFilteredProperties(properties); // Sin filtros
-  };
+  let filtered = properties;
+
+  // Filtrar por país
+  if (country) {
+    filtered = filtered.filter(
+      (property) =>
+        normalizeText(property.country) === normalizeText(country)
+    );
+  }
+
+  // Filtrar por provincia
+  if (province) {
+    filtered = filtered.filter(
+      (property) =>
+        normalizeText(property.province) === normalizeText(province)
+    );
+  }
+
+  // Filtrar por cantón
+  if (canton) {
+    filtered = filtered.filter(
+      (property) =>
+        normalizeText(property.canton) === normalizeText(canton)
+    );
+  }
+
+  // Filtrar por tipo de propiedad (si aplica)
+  if (propertyTypeSelected) {
+    filtered = filtered.filter(
+      (property) =>
+        normalizeText(property.property_type) ===
+        normalizeText(propertyTypeSelected)
+    );
+  }
+
+  setFilteredProperties(filtered);
+  console.log("Filtered Properties:", filtered); // Para depuración
+};
 
   const handlePropertyTypeClick = (type) => {
     if (propertyTypeSelected === type) {
