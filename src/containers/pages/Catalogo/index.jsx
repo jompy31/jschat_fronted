@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import Contraportada from '../../../assets/catalogo/requisitos_propiedades.pdf';
 import Valeautos from '../../../assets/catalogo/requisitos_valeautos.pdf';
-import Sucesorios from '../../../assets/catalogo/requisitos_sucesorios.pdf'; // Asegúrate de que este archivo exista
+import Sucesorios from '../../../assets/catalogo/requisitos_sucesorios.pdf';
 import Contraportadaimg from '../../../assets/catalogo/requisitos_propiedades.jpg';
 import Valeautosimg from '../../../assets/catalogo/requisitos_valeautos.jpg';
 import Sucesoriosimg from '../../../assets/catalogo/requisitos_sucesorios.jpg';
@@ -27,9 +27,15 @@ const Catalogo = () => {
     }
   };
 
-  const handlePdfClick = (index) => {
-    console.log('Índice seleccionado:', index, 'PDF:', pdfs[index].src);
-    setFullScreen(pdfs[index].src);
+  const handleImageClick = (index) => {
+    console.log('Índice seleccionado:', index, 'Imagen:', pdfs[index].img);
+    if (isMobile) {
+      // On mobile, show the image in fullscreen
+      setFullScreen(pdfs[index].img);
+    } else {
+      // On non-mobile, show the PDF
+      setFullScreen(pdfs[index].src);
+    }
     setCurrentPdfIndex(index);
     setZoomLevel(1);
   };
@@ -41,17 +47,17 @@ const Catalogo = () => {
 
   const handleNextPdf = () => {
     const nextIndex = (currentPdfIndex + 1) % pdfs.length;
-    console.log('Siguiente PDF, índice:', nextIndex, 'PDF:', pdfs[nextIndex].src);
+    console.log('Siguiente elemento, índice:', nextIndex);
     setCurrentPdfIndex(nextIndex);
-    setFullScreen(pdfs[nextIndex].src);
+    setFullScreen(isMobile ? pdfs[nextIndex].img : pdfs[nextIndex].src);
     setZoomLevel(1);
   };
 
   const handlePrevPdf = () => {
     const prevIndex = (currentPdfIndex - 1 + pdfs.length) % pdfs.length;
-    console.log('PDF anterior, índice:', prevIndex, 'PDF:', pdfs[prevIndex].src);
+    console.log('Elemento anterior, índice:', prevIndex);
     setCurrentPdfIndex(prevIndex);
-    setFullScreen(pdfs[prevIndex].src);
+    setFullScreen(isMobile ? pdfs[prevIndex].img : pdfs[prevIndex].src);
     setZoomLevel(1);
   };
 
@@ -65,7 +71,7 @@ const Catalogo = () => {
 
   return (
     <div>
-      {/* Sección de PDFs */}
+      {/* Sección de Imágenes */}
       <div
         style={{
           width: '100vw',
@@ -89,7 +95,7 @@ const Catalogo = () => {
               border: '1px solid lightgray',
               aspectRatio: '8.5 / 11',
             }}
-            onClick={() => handlePdfClick(index)}
+            onClick={() => handleImageClick(index)}
           >
             <img
               src={pdf.img}
@@ -101,10 +107,14 @@ const Catalogo = () => {
                 transition: 'transform 0.3s ease',
               }}
               onMouseOver={(e) => {
-                e.target.style.transform = 'scale(1.05)';
+                if (!isMobile) {
+                  e.target.style.transform = 'scale(1.05)';
+                }
               }}
               onMouseOut={(e) => {
-                e.target.style.transform = 'scale(1)';
+                if (!isMobile) {
+                  e.target.style.transform = 'scale(1)';
+                }
               }}
             />
           </div>
@@ -149,7 +159,7 @@ const Catalogo = () => {
         ></iframe>
       </div>
 
-      {/* Modal de PDF en pantalla completa */}
+      {/* Modal de pantalla completa */}
       {fullScreen && (
         <div
           style={{
@@ -175,18 +185,33 @@ const Catalogo = () => {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <iframe
-              src={fullScreen}
-              title={pdfs[currentPdfIndex].alt}
-              style={{
-                width: '100%',
-                height: '100%',
-                border: 'none',
-                transform: `scale(${zoomLevel})`,
-                transformOrigin: 'top left',
-                transition: 'transform 0.3s ease',
-              }}
-            />
+            {isMobile ? (
+              <img
+                src={fullScreen}
+                alt={pdfs[currentPdfIndex].alt}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                  transform: `scale(${zoomLevel})`,
+                  transformOrigin: 'top left',
+                  transition: 'transform 0.3s ease',
+                }}
+              />
+            ) : (
+              <iframe
+                src={fullScreen}
+                title={pdfs[currentPdfIndex].alt}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  border: 'none',
+                  transform: `scale(${zoomLevel})`,
+                  transformOrigin: 'top left',
+                  transition: 'transform 0.3s ease',
+                }}
+              />
+            )}
             <button
               onClick={handlePrevPdf}
               style={{
