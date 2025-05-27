@@ -230,34 +230,36 @@ const SubproductDetails = () => {
               calculateTotalCombos={calculateTotalCombos}
             />
             <div ref={componentRef1} className="card">
-              {subproductData.point_of_sale && (
-                <div
-                  style={{
-                    border: "2px solid #ccc",
-                    borderRadius: "10px",
-                    padding: "20px",
-                    boxShadow: "5px 5px 10px #888888",
-                    backgroundColor: "white",
-                    margin: "20px 10px",
-                    boxSizing: "border-box",
-                  }}
-                >
-                  <h2
-                    style={{
-                      fontSize: "2em",
-                      color: "red",
-                      textShadow: "2px 2px 4px #000",
-                      fontWeight: "bold",
-                      marginBottom: "20px",
-                      textAlign: "center",
-                    }}
-                  >
-                    Catálogo de Productos
-                  </h2>
-                  <Catalogo />
-                </div>
-              )}
-            </div>
+  {subproductData.point_of_sale && (
+    <div
+      style={{
+        border: "2px solid #ccc",
+        borderRadius: "10px",
+        padding: "20px",
+        boxShadow: "5px 5px 10px #888888",
+        backgroundColor: "white",
+        margin: "20px 10px",
+        boxSizing: "border-box",
+      }}
+    >
+      <h2
+        style={{
+          fontSize: "2em",
+          color: "red",
+          textShadow: "2px 2px 4px #000",
+          fontWeight: "bold",
+          marginBottom: "20px",
+          textAlign: "center",
+        }}
+      >
+        Catálogo de Productos
+      </h2>
+      <div className="catalog-container">
+        <Catalogo />
+      </div>
+    </div>
+  )}
+</div>
             {!hasNoContent && (
               <div ref={componentRef} className="card">
                 <Avisoseconomicos

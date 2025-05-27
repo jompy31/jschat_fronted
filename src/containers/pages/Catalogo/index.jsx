@@ -75,7 +75,7 @@ const Catalogo = () => {
       <div
         style={{
           width: '100vw',
-          height: isMobile ? '40vh' : '80vh',
+          height: isMini ? '50vh' : isMobile ? '30vh' : '80vh',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
