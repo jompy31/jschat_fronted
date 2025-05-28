@@ -117,46 +117,46 @@ const ManageJobs = () => {
   }, [token]);
 
   const loadAllData = async () => {
-    try {
-      const [
-        companiesRes,
-        categoriesRes,
-        postingsRes,
-        applicationsRes,
-        experienceLevelsRes,
-        benefitsRes,
-        tagsRes,
-        skillsRes,
-      ] = await Promise.all([
-        getAllCompanies(token),
-        getAllJobCategories(token),
-        getAllJobPostings(token),
-        getAllJobApplications(token),
-        getAllExperienceLevels(token),
-        getAllBenefits(token),
-        getAllJobTags(token),
-        getAllSkills(token),
-      ]);
-      setCompanies(Array.isArray(companiesRes.data) ? companiesRes.data : []);
-      setJobCategories(Array.isArray(categoriesRes.data) ? categoriesRes.data : []);
-      setJobPostings(Array.isArray(postingsRes.data) ? postingsRes.data : []);
-      setJobApplications(Array.isArray(applicationsRes.data) ? applicationsRes.data : []);
-      setExperienceLevels(Array.isArray(experienceLevelsRes.data) ? experienceLevelsRes.data : []);
-      setBenefits(Array.isArray(benefitsRes.data) ? benefitsRes.data : []);
-      setJobTags(Array.isArray(tagsRes.data) ? tagsRes.data : []);
-      setSkills(Array.isArray(skillsRes.data) ? skillsRes.data : []);
-    } catch (error) {
-      console.error('Error loading data:', error);
-      setCompanies([]);
-      setJobCategories([]);
-      setJobPostings([]);
-      setJobApplications([]);
-      setExperienceLevels([]);
-      setBenefits([]);
-      setJobTags([]);
-      setSkills([]);
-    }
-  };
+  try {
+    const [
+      companiesRes,
+      categoriesRes,
+      postingsRes,
+      applicationsRes,
+      experienceLevelsRes,
+      benefitsRes,
+      tagsRes,
+      skillsRes,
+    ] = await Promise.all([
+      getAllCompanies(token),
+      getAllJobCategories(token),
+      getAllJobPostings(token),
+      getAllJobApplications(token), // Usa la función modificada
+      getAllExperienceLevels(token),
+      getAllBenefits(token),
+      getAllJobTags(token),
+      getAllSkills(token),
+    ]);
+    setCompanies(Array.isArray(companiesRes.data) ? companiesRes.data : []);
+    setJobCategories(Array.isArray(categoriesRes.data) ? categoriesRes.data : []);
+    setJobPostings(Array.isArray(postingsRes.data) ? postingsRes.data : []);
+    setJobApplications(Array.isArray(applicationsRes.data) ? applicationsRes.data : []);
+    setExperienceLevels(Array.isArray(experienceLevelsRes.data) ? experienceLevelsRes.data : []);
+    setBenefits(Array.isArray(benefitsRes.data) ? benefitsRes.data : []);
+    setJobTags(Array.isArray(tagsRes.data) ? tagsRes.data : []);
+    setSkills(Array.isArray(skillsRes.data) ? skillsRes.data : []);
+  } catch (error) {
+    console.error('Error loading data:', error);
+    setCompanies([]);
+    setJobCategories([]);
+    setJobPostings([]);
+    setJobApplications([]);
+    setExperienceLevels([]);
+    setBenefits([]);
+    setJobTags([]);
+    setSkills([]);
+  }
+};
 
   const handleSaveCompany = async (companyData) => {
     try {
@@ -322,20 +322,23 @@ const ManageJobs = () => {
     { key: 'description', label: 'Descripción' },
   ];
 
-  const jobApplicationColumns = [
-    { 
-      key: 'job', 
-      label: 'Puesto',
-      render: (application) => application.job?.title || 'N/A'
-    },
-    { 
-      key: 'applicant', 
-      label: 'Nombre del Candidato',
-      render: (application) => application.applicant?.username || 'N/A'
-    },
-    { key: 'cover_letter', label: 'Presentación' },
-    { key: 'status', label: 'Estado de Aplicación' },
-  ];
+ const jobApplicationColumns = [
+  {
+    key: 'job',
+    label: 'Puesto',
+    render: (application) => application.job?.title || 'N/A'
+  },
+  {
+    key: 'applicant',
+    label: 'Nombre del Candidato',
+    render: (application) =>
+      application.applicant
+        ? `${application.applicant.first_name} ${application.applicant.last_name || ''}`
+        : 'N/A'
+  },
+  { key: 'cover_letter', label: 'Presentación' },
+  { key: 'status', label: 'Estado de Aplicación' },
+];
 
   const sections = [
     { id: 'candidates', label: 'Candidatos' },
@@ -616,12 +619,13 @@ const ManageJobs = () => {
         companies={Array.isArray(companies) ? companies : []}
       />
       <JobApplicationModal
-        show={showJobApplicationModal}
-        handleClose={() => setShowJobApplicationModal(false)}
-        jobApplication={currentJobApplication}
-        jobPostings={Array.isArray(jobPostings) ? jobPostings : []}
-        handleSave={handleSaveJobApplication}
-      />
+  show={showJobApplicationModal}
+  handleClose={() => setShowJobApplicationModal(false)}
+  jobApplication={currentJobApplication}
+  jobPostings={Array.isArray(jobPostings) ? jobPostings : []}
+  handleSave={handleSaveJobApplication}
+  token={token} // Ensure token is passed
+/>
     </div>
   );
 };

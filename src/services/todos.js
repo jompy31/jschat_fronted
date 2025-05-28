@@ -75,9 +75,11 @@ class TodoDataService {
   }
 
   // Skills
-  getAllSkills(token) {
-    axios.defaults.headers.common[`Authorization`] = `Token ` + token;
-    return axios.get(`${config.API_URL}/skills/`);
+  getAllSkills(token, page = 1, page_size = 100) {
+    this.setAuthHeader(token);
+    return axios.get(`${config.API_URL}/skills/`, {
+      params: { page, page_size },
+    });
   }
 
   createSkill(data, token) {

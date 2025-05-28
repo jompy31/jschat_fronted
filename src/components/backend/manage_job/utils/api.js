@@ -61,10 +61,61 @@ export const createJobPosting = (data, token) => JobDataService.createJobPosting
 export const updateJobPosting = (id, data, token) => JobDataService.updateJobPosting(id, data, token);
 export const deleteJobPosting = (id, token) => JobDataService.deleteJobPosting(id, token);
 
-export const getAllJobApplications = (token) => JobDataService.getAllJobApplications(token).then(response => ({
-  ...response,
-  data: Array.isArray(response.data.results) ? response.data.results : response.data
-}));
+export const getAllJobApplications = async (token) => {
+  try {
+    const response = await JobDataService.getAllJobApplications(token);
+    console.log('Job Applications Response:', response.data);
+    let jobApplications = Array.isArray(response.data.results) ? response.data.results : response.data;
+
+    // Obtener datos de jobPostings y users
+    const [jobPostingsRes, usersRes] = await Promise.all([
+      getAllJobPostings(token),
+      getUserList(token),
+    ]);
+    const jobPostings = Array.isArray(jobPostingsRes.data) ? jobPostingsRes.data : [];
+    const users = Array.isArray(usersRes.data) ? usersRes.data : [];
+
+    // Mapear datos de job y applicant
+    jobApplications = jobApplications.map(application => {
+      let job = null;
+      let applicant = null;
+
+      // Mapear job
+      if (application.job) {
+        if (typeof application.job === 'number' || typeof application.job === 'string') {
+          job = jobPostings.find(j => j.id === parseInt(application.job) || j.id === application.job);
+        } else if (typeof application.job === 'string' && application.job.includes('/api/employee/jobs/')) {
+          const jobId = application.job.split('/').filter(Boolean).pop();
+          job = jobPostings.find(j => j.id === parseInt(jobId));
+        } else if (typeof application.job === 'object' && application.job.title) {
+          job = application.job;
+        }
+      }
+
+      // Mapear applicant
+      if (application.applicant) {
+        if (typeof application.applicant === 'number' || typeof application.applicant === 'string') {
+          applicant = users.find(u => u.id === parseInt(application.applicant) || u.id === application.applicant);
+        } else if (typeof application.applicant === 'string' && application.applicant.includes('/api/users/')) {
+          const userId = application.applicant.split('/').filter(Boolean).pop();
+          applicant = users.find(u => u.id === parseInt(userId));
+        } else if (typeof application.applicant === 'object' && (application.applicant.first_name || application.applicant.id)) {
+          applicant = application.applicant;
+        }
+      }
+
+      return { ...application, job, applicant };
+    });
+
+    return {
+      ...response,
+      data: jobApplications,
+    };
+  } catch (error) {
+    console.error('Error fetching job applications:', error);
+    throw error;
+  }
+};
 export const createJobApplication = (data, token, jobId) => JobDataService.createJobApplication(data, token, jobId);
 export const updateJobApplication = (id, data, token) => JobDataService.updateJobApplication(id, data, token);
 export const deleteJobApplication = (jobId, token, applicationId) => JobDataService.deleteJobApplication(jobId, token, applicationId);
@@ -93,7 +144,7 @@ export const createExperienceLevel = (data, token) => JobDataService.createExper
 export const updateExperienceLevel = (id, data, token) => JobDataService.updateExperienceLevel(id, data, token);
 export const deleteExperienceLevel = (id, token) => JobDataService.deleteExperienceLevel(id, token);
 
-export const getAllSkills = (token) => JobDataService.getAllSkills(token).then(response => ({
+export const getAllSkills = (token) => TodoDataService.getAllSkills(token).then(response => ({
   ...response,
   data: Array.isArray(response.data.results) ? response.data.results : response.data
 }));
