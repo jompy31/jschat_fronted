@@ -55,17 +55,12 @@ const SubproductTable = ({
         ),
       },
     ],
-    [handleShowServicesModal, handleEditSubproduct, handleDeleteS, expandedRows]
+    [handleShowServicesModal, handleEditSubproduct, handleDeleteS]
   );
 
+  // Use filteredSubproducts directly, ensuring it's an array
   const data = React.useMemo(
-    () =>
-      filteredSubproducts.filter(
-        (subproduct, index, self) =>
-          self.findIndex(
-            (s) => s.name === subproduct.name && s.email === subproduct.email
-          ) === index
-      ),
+    () => (Array.isArray(filteredSubproducts) ? filteredSubproducts : []),
     [filteredSubproducts]
   );
 
@@ -150,7 +145,7 @@ const SubproductTable = ({
                           <div>
                             <h4 className="font-semibold">Horas de Operación</h4>
                             <ul className="list-disc pl-5">
-                              {row.original.businessHours?.map((hour, index) => (
+                              {row.original.business_hours?.map((hour, index) => (
                                 <li key={index} className="truncate">
                                   {hour.day}: {hour.start_time} - {hour.end_time}
                                 </li>
@@ -159,7 +154,7 @@ const SubproductTable = ({
                           </div>
                           <div>
                             <h4 className="font-semibold">Miembros del Equipo</h4>
-                            {row.original.teamMembers?.map((member) => (
+                            {row.original.team_members?.map((member) => (
                               <div key={member.id} className="flex items-center mb-2">
                                 <img
                                   src={member.photo}
