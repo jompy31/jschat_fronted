@@ -262,15 +262,24 @@ const ManageJobs = () => {
   };
 
   const handleSaveJobApplication = async (jobApplication) => {
-    try {
-      const id = jobApplication.formData.get('id');
-      await createJobApplication(jobApplication.formData, token, id);
-      setShowJobApplicationModal(false);
-      await loadAllData();
-    } catch (error) {
-      console.error('Error saving job application:', error);
+  try {
+    const id = jobApplication.formData.get('id');
+    console.log("probando id de jobappli", jobApplication.id)
+    if (id) {
+      // Update existing application
+      const jobId = jobApplication.formData.get('job'); // Get jobId from formData
+      await updateJobApplication(jobId, jobApplication.id, token);
+    } else {
+      // Create new application
+      const jobId = jobApplication.formData.get('job');
+      await createJobApplication(jobApplication.formData, token, jobId);
     }
-  };
+    setShowJobApplicationModal(false);
+    await loadAllData();
+  } catch (error) {
+    console.error('Error saving job application:', error);
+  }
+};
 
   const handleShowCompanyDetails = (company) => {
     setCurrentCompany(company);

@@ -92,6 +92,10 @@ class JobDataService {
       params: { page, page_size },
     });
   }
+  updateJobApplication(jobId, applicationId, data, token) {
+  this.setAuthHeaders(token);
+  return axios.put(`${config.API_URL}/employee/jobs/${jobId}/apply/${applicationId}/`, data);
+}
 
   deleteJobApplication(jobId, token, applicationId) {
     this.setAuthHeaders(token);

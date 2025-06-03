@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import Contraportada from '../../../assets/catalogo/requisitos_propiedades.pdf';
 import Valeautos from '../../../assets/catalogo/requisitos_valeautos.pdf';
 import Sucesorios from '../../../assets/catalogo/requisitos_sucesorios.pdf';
@@ -30,10 +31,8 @@ const Catalogo = () => {
   const handleImageClick = (index) => {
     console.log('Índice seleccionado:', index, 'Imagen:', pdfs[index].img);
     if (isMobile) {
-      // On mobile, show the image in fullscreen
       setFullScreen(pdfs[index].img);
     } else {
-      // On non-mobile, show the PDF
       setFullScreen(pdfs[index].src);
     }
     setCurrentPdfIndex(index);
@@ -71,6 +70,17 @@ const Catalogo = () => {
 
   return (
     <div>
+      {/* Meta tags con Helmet */}
+      <Helmet>
+        <title>Catálogo de Servicios de ABCupon</title>
+        <meta
+          name="description"
+          content="Explora el catálogo de servicios de ABCupon, que incluye requisitos para propiedades, valeautos y sucesorios, diseñado para ofrecerte soluciones integrales."
+        />
+        <meta name="keywords" content="ABCupon, catálogo de servicios, propiedades, valeautos, sucesorios" />
+        <meta name="robots" content="index, follow" />
+      </Helmet>
+
       {/* Sección de Imágenes */}
       <div
         style={{
