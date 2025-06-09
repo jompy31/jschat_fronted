@@ -117,7 +117,7 @@ export const getAllJobApplications = async (token) => {
   }
 };
 export const createJobApplication = (data, token, jobId) => JobDataService.createJobApplication(data, token, jobId);
-export const updateJobApplication = (id, data, token) => JobDataService.updateJobApplication(id, data, token);
+export const updateJobApplication = (id, applicationId, data, token) => JobDataService.updateJobApplication(id, applicationId, data, token);
 export const deleteJobApplication = (jobId, token, applicationId) => JobDataService.deleteJobApplication(jobId, token, applicationId);
 
 export const getAllJobQuestions = (token) => JobDataService.getAllJobQuestions(token).then(response => ({

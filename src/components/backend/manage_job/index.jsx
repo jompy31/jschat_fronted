@@ -264,20 +264,27 @@ const ManageJobs = () => {
   const handleSaveJobApplication = async (jobApplication) => {
   try {
     const id = jobApplication.formData.get('id');
-    console.log("probando id de jobappli", jobApplication.id)
+    const jobId = jobApplication.formData.get('job');
+    console.log('Token in handleSaveJobApplication:', token); // Log the token
+    console.log('User in handleSaveJobApplication:', user);
+    console.log('FormData contents:');
+    for (let [key, value] of jobApplication.formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+    if (!token) {
+      throw new Error('No authentication token provided');
+    }
     if (id) {
       // Update existing application
-      const jobId = jobApplication.formData.get('job'); // Get jobId from formData
-      await updateJobApplication(jobId, jobApplication.id, token);
+      await updateJobApplication(jobId, id, jobApplication.formData, token);
     } else {
       // Create new application
-      const jobId = jobApplication.formData.get('job');
       await createJobApplication(jobApplication.formData, token, jobId);
     }
     setShowJobApplicationModal(false);
     await loadAllData();
   } catch (error) {
-    console.error('Error saving job application:', error);
+    console.error('Error saving job application:', error.response?.data || error.message);
   }
 };
 
@@ -548,7 +555,10 @@ const ManageJobs = () => {
                 <div className="flex justify-between items-center mb-4">
                   <h2 className="text-xl font-semibold text-gray-800">Aplicaciones de Trabajo</h2>
                   <Button
-                    onClick={() => setShowJobApplicationModal(true)}
+                    onClick={() => {
+                      setCurrentJobApplication(null); // Reiniciar currentJobApplication
+                      setShowJobApplicationModal(true);
+                    }}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
                   >
                     Crear Aplicación
@@ -570,7 +580,7 @@ const ManageJobs = () => {
                       label: 'Eliminar',
                       variant: 'danger',
                       onClick: (application) =>
-                        deleteJobApplication(application.job, token, application.id).then(loadAllData),
+                        deleteJobApplication(application.job.id, token, application.id).then(loadAllData),
                     },
                   ]}
                 />
