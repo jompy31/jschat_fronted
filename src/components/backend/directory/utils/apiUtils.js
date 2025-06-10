@@ -17,13 +17,24 @@ export const fetchProducts = async (setProducts, setSubproducts, token) => {
 
 export const fetchSubproducts = async (setSubproducts, setTotalSubproducts, token, page, page_size, searchTerm = "") => {
   try {
-    const response = await ProductDataService.getAllSubProduct(token, page, page_size, searchTerm);
+    let response;
+    if (searchTerm.trim()) {
+      // Usar el endpoint de búsqueda cuando hay un término de búsqueda
+      response = await ProductDataService.searchSubProduct(token, searchTerm, page, page_size);
+    } else {
+      // Usar el endpoint original cuando no hay término de búsqueda
+      response = await ProductDataService.getAllSubProduct(token, page, page_size);
+    }
     setSubproducts(response.data.results || response.data);
     setTotalSubproducts(response.data.count || 0);
   } catch (error) {
     console.error("Error al recuperar subproductos:", error);
+    setSubproducts([]);
+    setTotalSubproducts(0);
   }
 };
+
+
 
 export const fetchCombos = async (
   setCombos,

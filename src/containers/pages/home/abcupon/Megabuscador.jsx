@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { FaMicrophone } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { FaMicrophone, FaSearch } from "react-icons/fa";
 import Fuse from "fuse.js";
 import "./Megabuscador.css";
 import { useMediaQuery } from "react-responsive";
-import faqData from "./faqData.json"; // Importa el archivo faqData.json
+import faqData from "./faqData.json";
+import ProductDataService from "../../../../services/products";
 
 const Megabuscador = ({ products, clasificados, subproducts, services }) => {
   const [query, setQuery] = useState("");
@@ -17,9 +19,7 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
   const resultsPerPage = 2;
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const isMini = useMediaQuery({ query: "(max-width: 340px)" });
-  // useEffect(() => {
-  //   console.log("Subproducts received:", subproducts);
-  // }, [subproducts]);
+  const token = useSelector((state) => state.authentication.token);
 
   // Normalize string function
   const normalizeString = (str) => {
@@ -31,7 +31,7 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
       .trim();
   };
 
-  // Check if data is loaded and log services and subproducts
+  // Check if data is loaded
   useEffect(() => {
     if (
       Array.isArray(products) &&
@@ -46,9 +46,6 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
     ) {
       setDataLoaded(true);
       setError(null);
-      console.log("Services data:", services);
-      console.log("Subproducts data:", subproducts);
-      console.log("FAQ data:", faqData);
     } else {
       setDataLoaded(false);
     }
@@ -56,46 +53,15 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
 
   // Fuse.js configurations
   const serviceFuse = new Fuse(services, {
-    keys: [
-      "name",
-      "description",
-      "category",
-      "subcategory",
-      "subsubcategory",
-    ],
+    keys: ["name", "description", "category", "subcategory", "subsubcategory"],
     threshold: 0.3,
     includeScore: true,
     getFn: (obj, path) => normalizeString(Fuse.config.getFn(obj, path)),
   });
 
   const classifiedFuse = new Fuse(clasificados, {
-    keys: [
-      "title",
-      "category",
-      "subcategory",
-      "subsubcategory",
-      "description",
-      "url",
-    ],
+    keys: ["title", "category", "subcategory", "subsubcategory", "description", "url"],
     threshold: 0.3,
-    includeScore: true,
-    getFn: (obj, path) => normalizeString(Fuse.config.getFn(obj, path)),
-  });
-
-  const subproductFuse = new Fuse(subproducts, {
-    keys: [
-      { name: "name", weight: 0.4 }, // Mayor peso para el nombre
-      { name: "comercial_activity", weight: 0.3 }, // Peso para actividad comercial
-      { name: "description", weight: 0.2 }, // Incluir descripción
-      { name: "address", weight: 0.1 },
-      { name: "contact_name", weight: 0.1 },
-      { name: "email", weight: 0.1 },
-      { name: "province", weight: 0.1 },
-      { name: "canton", weight: 0.1 },
-      { name: "distrito", weight: 0.1 },
-      { name: "url", weight: 0.1 },
-    ],
-    threshold: 0.4,
     includeScore: true,
     getFn: (obj, path) => normalizeString(Fuse.config.getFn(obj, path)),
   });
@@ -107,7 +73,6 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
     getFn: (obj, path) => normalizeString(Fuse.config.getFn(obj, path)),
   });
 
-  // Fuse.js para FAQs con umbral más estricto
   const faqFuse = new Fuse(faqData, {
     keys: ["question", "answer"],
     threshold: 0.2,
@@ -123,151 +88,107 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
     }
   }, [query]);
 
-  const handleInputChange = (e) => {
-    const value = e.target.value;
-    setQuery(value);
-
-    if (value && dataLoaded) {
-      setIsLoading(true);
-      const normalizedQuery = normalizeString(value);
-
-      // Obtener resultados de FAQs primero
-      const faqResults = faqFuse.search(normalizedQuery).map((result) => ({
-        ...result.item,
-        type: "faq",
-        url: "/faq",
-        score: result.score,
-      }));
-
-      // Obtener resultados de subproductos
-      const subproductResults = subproductFuse.search(normalizedQuery).map((result) => ({
-        ...result.item,
-        type: "subproduct",
-        score: result.score,
-      }));
-
-      // Obtener otros resultados
-      const serviceResults = serviceFuse.search(normalizedQuery).map((result) => ({
-        ...result.item,
-        type: "service",
-        score: result.score,
-      }));
-      const classifiedResults = classifiedFuse.search(normalizedQuery).map((result) => ({
-        ...result.item,
-        type: "classified",
-        score: result.score,
-      }));
-      const productResults = productFuse.search(normalizedQuery).map((result) => ({
-        ...result.item,
-        type: "product",
-        score: result.score,
-      }));
-
-      // Combinar resultados con prioridad: FAQs > Subproductos > Servicios > Productos > Clasificados
-      const combinedResults = [
-        ...faqResults,
-        ...subproductResults,
-        ...serviceResults,
-        ...productResults,
-        ...classifiedResults,
-      ];
-
-      // Ordenar por puntaje para mantener relevancia
-      const sortedResults = combinedResults.sort((a, b) => a.score - b.score);
-
-      // Limitar sugerencias a 5
-      setSuggestions(sortedResults.slice(0, 5));
-      setIsLoading(false);
-    } else {
-      setSuggestions([]);
-      setIsLoading(false);
-    }
-  };
-
-  const handleSuggestionClick = (suggestion) => {
-    setQuery(suggestion.name || suggestion.title || suggestion.question || "");
-    if (suggestion.type === "service") {
-      const relatedSubproduct = subproducts.find(
-        (subproduct) => subproduct.id === suggestion.subproduct
-      );
-      setResults([{ ...suggestion, relatedSubproduct: relatedSubproduct || null }]);
-    } else {
-      setResults([suggestion]);
-    }
-    setSuggestions([]);
-    setCurrentPage(1);
-    setIsLoading(false);
-  };
-
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (query && dataLoaded) {
       setIsLoading(true);
+      setError(null);
       const normalizedQuery = normalizeString(query);
 
-      // Obtener resultados de FAQs primero
-      const faqResults = faqFuse.search(normalizedQuery).map((result) => ({
-        ...result.item,
-        type: "faq",
-        url: "/faq",
-        score: result.score,
-      }));
+      try {
+        // Search subproducts via backend API
+        let subproductResults = [];
+        if (normalizedQuery) {
+          const response = await ProductDataService.searchSubProduct(token, normalizedQuery, 1, 1000);
+          subproductResults = (response.data.results || response.data).map(item => ({
+            ...item,
+            type: "subproduct",
+            score: 0, // Default score since backend doesn't provide one
+          }));
+        } else {
+          subproductResults = subproducts.map(item => ({
+            ...item,
+            type: "subproduct",
+            score: 0,
+          }));
+        }
 
-      // Obtener resultados de subproductos
-      const subproductResults = subproductFuse.search(normalizedQuery).map((result) => ({
-        ...result.item,
-        type: "subproduct",
-        score: result.score,
-      }));
-
-      // Obtener resultados de servicios con subproductos relacionados
-      const serviceResults = serviceFuse.search(normalizedQuery).map((result) => {
-        const relatedSubproduct = subproducts.find(
-          (subproduct) => subproduct.id === result.item.subproduct
-        );
-        return {
+        // Search other data types with Fuse.js
+        const faqResults = faqFuse.search(normalizedQuery).map((result) => ({
           ...result.item,
-          type: "service",
-          relatedSubproduct: relatedSubproduct || null,
+          type: "faq",
+          url: "/faq",
           score: result.score,
-        };
-      });
+        }));
 
-      // Obtener otros resultados
-      const classifiedResults = classifiedFuse.search(normalizedQuery).map((result) => ({
-        ...result.item,
-        type: "classified",
-        score: result.score,
-      }));
-      const productResults = productFuse.search(normalizedQuery).map((result) => ({
-        ...result.item,
-        type: "product",
-        score: result.score,
-      }));
+        const serviceResults = serviceFuse.search(normalizedQuery).map((result) => {
+          const relatedSubproduct = subproducts.find(
+            (subproduct) => subproduct.id === result.item.subproduct
+          );
+          return {
+            ...result.item,
+            type: "service",
+            relatedSubproduct: relatedSubproduct || null,
+            score: result.score,
+          };
+        });
 
-      // Combinar resultados con prioridad: FAQs > Subproductos > Servicios > Productos > Clasificados
-      const combinedResults = [
-        ...faqResults,
-        ...subproductResults,
-        ...serviceResults,
-        ...productResults,
-        ...classifiedResults,
-      ];
+        const classifiedResults = classifiedFuse.search(normalizedQuery).map((result) => ({
+          ...result.item,
+          type: "classified",
+          score: result.score,
+        }));
 
-      // Ordenar por puntaje para mantener relevancia
-      const sortedResults = combinedResults.sort((a, b) => a.score - b.score);
+        const productResults = productFuse.search(normalizedQuery).map((result) => ({
+          ...result.item,
+          type: "product",
+          score: result.score,
+        }));
 
-      setResults(sortedResults);
+        // Combine results with priority: FAQs > Subproducts > Services > Products > Classifieds
+        const combinedResults = [
+          ...faqResults,
+          ...subproductResults,
+          ...serviceResults,
+          ...productResults,
+          ...classifiedResults,
+        ];
+
+        // Sort by score (Fuse.js results) and type (to maintain priority)
+        const sortedResults = combinedResults.sort((a, b) => {
+          if (a.type === "subproduct" && b.type !== "subproduct") return -1;
+          if (a.type !== "subproduct" && b.type === "subproduct") return 1;
+          return a.score - b.score;
+        });
+
+        setResults(sortedResults);
+        setSuggestions([]);
+        setCurrentPage(1);
+      } catch (err) {
+        console.error("Error searching subproducts:", err);
+        setError("Error al buscar subproductos. Intente de nuevo.");
+        setResults([]);
+        setSuggestions([]);
+      } finally {
+        setIsLoading(false);
+      }
+    } else if (query && !dataLoaded) {
+      setError("Datos no cargados. Espere un momento.");
+      setIsLoading(false);
+    } else {
+      setResults(subproducts.map(item => ({ ...item, type: "subproduct", score: 0 })));
       setSuggestions([]);
       setCurrentPage(1);
       setIsLoading(false);
-    } else if (query && !dataLoaded) {
-      setIsLoading(true);
-    } else {
-      setIsLoading(false);
     }
   };
 
-  const handleMicClick = () => {
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
+  const handleMicClick = async () => {
     if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
       alert("Tu navegador no soporta el reconocimiento de voz.");
       return;
@@ -284,71 +205,89 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
       setIsSpeaking(false);
     };
 
-    recognition.onresult = (event) => {
+    recognition.onresult = async (event) => {
       const speechToText = event.results[0][0].transcript;
       setQuery(speechToText);
       if (dataLoaded) {
         setIsLoading(true);
         const normalizedQuery = normalizeString(speechToText);
 
-        // Obtener resultados de FAQs primero
-        const faqResults = faqFuse.search(normalizedQuery).map((result) => ({
-          ...result.item,
-          type: "faq",
-          url: "/faq",
-          score: result.score,
-        }));
+        try {
+          // Search subproducts via backend API
+          let subproductResults = [];
+          if (normalizedQuery) {
+            const response = await ProductDataService.searchSubProduct(token, normalizedQuery, 1, 1000);
+            subproductResults = (response.data.results || response.data).map(item => ({
+              ...item,
+              type: "subproduct",
+              score: 0,
+            }));
+          } else {
+            subproductResults = subproducts.map(item => ({
+              ...item,
+              type: "subproduct",
+              score: 0,
+            }));
+          }
 
-        // Obtener resultados de subproductos
-        const subproductResults = subproductFuse.search(normalizedQuery).map((result) => ({
-          ...result.item,
-          type: "subproduct",
-          score: result.score,
-        }));
-
-        // Obtener resultados de servicios con subproductos relacionados
-        const serviceResults = serviceFuse.search(normalizedQuery).map((result) => {
-          const relatedSubproduct = subproducts.find(
-            (subproduct) => subproduct.id === result.item.subproduct
-          );
-          return {
+          // Search other data types with Fuse.js
+          const faqResults = faqFuse.search(normalizedQuery).map((result) => ({
             ...result.item,
-            type: "service",
-            relatedSubproduct: relatedSubproduct || null,
+            type: "faq",
+            url: "/faq",
             score: result.score,
-          };
-        });
+          }));
 
-        // Obtener otros resultados
-        const classifiedResults = classifiedFuse.search(normalizedQuery).map((result) => ({
-          ...result.item,
-          type: "classified",
-          score: result.score,
-        }));
-        const productResults = productFuse.search(normalizedQuery).map((result) => ({
-          ...result.item,
-          type: "product",
-          score: result.score,
-        }));
+          const serviceResults = serviceFuse.search(normalizedQuery).map((result) => {
+            const relatedSubproduct = subproducts.find(
+              (subproduct) => subproduct.id === result.item.subproduct
+            );
+            return {
+              ...result.item,
+              type: "service",
+              relatedSubproduct: relatedSubproduct || null,
+              score: result.score,
+            };
+          });
 
-        // Combinar resultados con prioridad: FAQs > Subproductos > Servicios > Productos > Clasificados
-        const combinedResults = [
-          ...faqResults,
-          ...subproductResults,
-          ...serviceResults,
-          ...productResults,
-          ...classifiedResults,
-        ];
+          const classifiedResults = classifiedFuse.search(normalizedQuery).map((result) => ({
+            ...result.item,
+            type: "classified",
+            score: result.score,
+          }));
 
-        // Ordenar por puntaje para mantener relevancia
-        const sortedResults = combinedResults.sort((a, b) => a.score - b.score);
+          const productResults = productFuse.search(normalizedQuery).map((result) => ({
+            ...result.item,
+            type: "product",
+            score: result.score,
+          }));
 
-        setResults(sortedResults);
-        setSuggestions([]);
-        setCurrentPage(1);
-        setIsLoading(false);
-      } else {
-        setIsLoading(true);
+          // Combine and sort results
+          const combinedResults = [
+            ...faqResults,
+            ...subproductResults,
+            ...serviceResults,
+            ...productResults,
+            ...classifiedResults,
+          ];
+
+          const sortedResults = combinedResults.sort((a, b) => {
+            if (a.type === "subproduct" && b.type !== "subproduct") return -1;
+            if (a.type !== "subproduct" && b.type === "subproduct") return 1;
+            return a.score - b.score;
+          });
+
+          setResults(sortedResults);
+          setSuggestions([]);
+          setCurrentPage(1);
+        } catch (err) {
+          console.error("Error searching subproducts:", err);
+          setError("Error al buscar subproductos. Intente de nuevo.");
+          setResults([]);
+          setSuggestions([]);
+        } finally {
+          setIsLoading(false);
+        }
       }
     };
 
@@ -358,12 +297,6 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
     };
 
     recognition.start();
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
   };
 
   const paginateResults = (results) => {
@@ -386,42 +319,53 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
 
   const paginatedResults = paginateResults(results);
 
-  const handleCategoryClick = () => {
+  const handleCategoryClick = async () => {
     setQuery("Clasificados");
     if (dataLoaded) {
       setIsLoading(true);
-      const classifiedResults = classifiedFuse
-        .search("Clasificados")
-        .map((result) => ({
+      try {
+        // Use initial subproducts for "Clasificados" search
+        const subproductResults = subproducts.map(item => ({
+          ...item,
+          type: "subproduct",
+          score: 0,
+        }));
+
+        const classifiedResults = classifiedFuse.search("Clasificados").map((result) => ({
           ...result.item,
           type: "classified",
+          score: result.score,
         }));
-      const subproductResults = subproductFuse
-        .search("Clasificados")
-        .map((result) => ({
+
+        const productResults = productFuse.search("Clasificados").map((result) => ({
           ...result.item,
-          type: "subproduct",
+          type: "product",
+          score: result.score,
         }));
-      const productResults = productFuse.search("Clasificados").map((result) => ({
-        ...result.item,
-        type: "product",
-      }));
-      const faqResults = faqFuse.search("Clasificados").map((result) => ({
-        ...result.item,
-        type: "faq",
-        url: "/faq",
-      }));
-      setResults([
-        ...faqResults,
-        ...subproductResults,
-        ...productResults,
-        ...classifiedResults,
-      ]);
-      setSuggestions([]);
-      setCurrentPage(1);
-      setIsLoading(false);
-    } else {
-      setIsLoading(true);
+
+        const faqResults = faqFuse.search("Clasificados").map((result) => ({
+          ...result.item,
+          type: "faq",
+          url: "/faq",
+          score: result.score,
+        }));
+
+        const combinedResults = [
+          ...faqResults,
+          ...subproductResults,
+          ...productResults,
+          ...classifiedResults,
+        ];
+
+        setResults(combinedResults);
+        setSuggestions([]);
+        setCurrentPage(1);
+      } catch (err) {
+        console.error("Error processing category click:", err);
+        setError("Error al procesar la búsqueda de clasificados.");
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -437,15 +381,25 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
             className="search-input"
             placeholder="Buscar en ABCupon..."
             value={query}
-            onChange={handleInputChange}
+            onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyPress}
+            disabled={isLoading}
           />
-          <span className="mic-icon" onClick={handleMicClick}>
+          {isLoading ? (
+            <span className="search-icon loading">
+              <div className="spinner"></div>
+            </span>
+          ) : (
+            <span className="search-icon" onClick={handleSearch}>
+              <FaSearch />
+            </span>
+          )}
+          <span className={`mic-icon ${isSpeaking ? "speaking" : ""}`} onClick={handleMicClick}>
             <FaMicrophone />
           </span>
         </div>
         <div className="buttons">
-          <button className="search-button" onClick={handleSearch}>
+          <button className="search-button" onClick={handleSearch} disabled={isLoading}>
             Buscar
           </button>
         </div>
@@ -466,12 +420,12 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
           <p
             key={index}
             className="suggestion-item"
-            onClick={() => handleSuggestionClick(suggestion)}
+            onClick={() => {
+              setQuery(suggestion.name || suggestion.title || suggestion.question || "");
+              handleSearch();
+            }}
           >
-            {suggestion.name ||
-              suggestion.title ||
-              suggestion.question ||
-              "Sin título"}
+            {suggestion.name || suggestion.title || suggestion.question || "Sin título"}
           </p>
         ))}
       </div>
@@ -494,10 +448,7 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
               rel={result.type === "faq" ? "" : "noopener noreferrer"}
               className="result-title"
             >
-              {result.name ||
-                result.title ||
-                result.question ||
-                "Título no disponible"}
+              {result.name || result.title || result.question || "Título no disponible"}
             </a>
             <p className="result-description">
               {result.type === "faq"
@@ -512,13 +463,11 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
                   "¿Deseas rellenar con la información de su negocio? Contacténos al 8687-6767"}
             </p>
             <p className="result-details">
-              {result.comercial_activity &&
-                `Actividad: ${result.comercial_activity}`}
+              {result.comercial_activity && `Actividad: ${result.comercial_activity}`}
               {result.province && ` | Provincia: ${result.province}`}
               {result.canton && ` | Cantón: ${result.canton}`}
               {result.category && ` | Categoría: ${result.category}`}
-              {result.price &&
-                ` | Precio: ₡${parseFloat(result.price).toLocaleString()}`}
+              {result.price && ` | Precio: ₡${parseFloat(result.price).toLocaleString()}`}
               {result.type === "faq" && " | Pregunta Frecuente"}
             </p>
             {result.type === "service" && result.relatedSubproduct && (
@@ -564,15 +513,11 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
             </a>
           </div>
         ))}
-        {results.length === 0 &&
-          !suggestions.length &&
-          query &&
-          !isLoading &&
-          !error && (
-            <p className="no-results">
-              No se encontraron resultados para "{query}".
-            </p>
-          )}
+        {results.length === 0 && query && !isLoading && !error && (
+          <p className="no-results">
+            No se encontraron resultados para "{query}".
+          </p>
+        )}
       </div>
       {results.length > resultsPerPage && (
         <div className="pagination">

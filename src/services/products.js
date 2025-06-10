@@ -38,6 +38,12 @@ class ProductDataService {
       params: { page, page_size },
     });
   }
+  searchSubProduct(token, query, page = 1, page_size = 1000) {
+    this.setAuthHeader(token);
+    return axios.get(`${config.API_URL}/products/subproducts/search/`, {
+      params: { query, page, page_size },
+    });
+  }
   
   getPointOfSaleSubProducts(token, page = 1, page_size = 100) {
     this.setAuthHeader(token);

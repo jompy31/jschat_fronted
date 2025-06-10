@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import moment from "moment";
-import { FaPlus, FaSearch, FaFileCsv } from "react-icons/fa";
+import { FaPlus, FaFileCsv } from "react-icons/fa";
 import CreateSubproduct from "./modal_subproduct/Create_subproduct";
 import CreateServicesModal from "./modal_subproduct/Create_services";
 import SubproductTable from "./components/SubproductTable";
@@ -11,12 +10,10 @@ import SearchBar from "./components/SearchBar";
 import { fetchProducts, fetchSubproducts, fetchCombos, fetchServices } from "./utils/apiUtils";
 import { handleCsvUpload } from "./utils/csvUtils";
 import ProductDataService from "../../../services/products";
-import debounce from "lodash/debounce";
 
 const Directory = () => {
   const [products, setProducts] = useState([]);
   const [subproducts, setSubproducts] = useState([]);
-  const [filteredSubproducts, setFilteredSubproducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentSubproductsPage, setCurrentSubproductsPage] = useState(1);
   const [totalSubproducts, setTotalSubproducts] = useState(0);
@@ -60,105 +57,27 @@ const Directory = () => {
   const token = useSelector((state) => state.authentication.token);
   const subproductsPerPage = 10;
 
-  const debouncedFetchSubproducts = useCallback(
-    debounce((token, page, pageSize, search) => {
-      setIsLoading(true);
-      fetchSubproducts(setSubproducts, setTotalSubproducts, token, page, pageSize, search)
-        .finally(() => setIsLoading(false));
-    }, 500),
-    []
-  );
-
   useEffect(() => {
     setIsLoading(true);
     Promise.all([
-      fetchProducts(setProducts, setSubproducts, token).finally(() => setIsLoading(false)),
+      fetchProducts(setProducts, setSubproducts, token),
       fetchCombos(setCombos, setTotalCombos, null, token),
       fetchServices(setServices, setTotalServices, null, token),
-    ]);
+    ]).finally(() => setIsLoading(false));
   }, [token]);
 
   useEffect(() => {
-    debouncedFetchSubproducts(token, currentSubproductsPage, subproductsPerPage, searchTerm);
-  }, [token, currentSubproductsPage, searchTerm, debouncedFetchSubproducts]);
+    setIsLoading(true);
+    fetchSubproducts(setSubproducts, setTotalSubproducts, token, currentSubproductsPage, subproductsPerPage, "")
+      .finally(() => setIsLoading(false));
+  }, [token, currentSubproductsPage]);
 
-  // Client-side filtering with prioritization
-  useEffect(() => {
-    if (!searchTerm.trim()) {
-      setFilteredSubproducts(subproducts);
-      return;
-    }
-
-    const searchLower = searchTerm.toLowerCase().trim();
-
-    // Filter and prioritize subproducts
-    const filtered = subproducts
-      .map((subproduct) => {
-        let priority = 0;
-        let matches = [];
-
-        // Priority 1: Name
-        if (subproduct.name?.toLowerCase().includes(searchLower)) {
-          priority = 4;
-          matches.push(`name: ${subproduct.name}`);
-        }
-        // Priority 2: Description
-        else if (subproduct.description?.toLowerCase().includes(searchLower)) {
-          priority = 3;
-          matches.push(`description: ${subproduct.description}`);
-        }
-        // Priority 3: Email
-        else if (subproduct.email?.toLowerCase().includes(searchLower)) {
-          priority = 2;
-          matches.push(`email: ${subproduct.email}`);
-        }
-        // Priority 4: Other fields
-        else if (
-          subproduct.address?.toLowerCase().includes(searchLower) ||
-          subproduct.phone?.toLowerCase().includes(searchLower) ||
-          subproduct.url?.toLowerCase().includes(searchLower) ||
-          subproduct.country?.toLowerCase().includes(searchLower) ||
-          subproduct.province?.toLowerCase().includes(searchLower) ||
-          subproduct.canton?.toLowerCase().includes(searchLower) ||
-          subproduct.distrito?.toLowerCase().includes(searchLower) ||
-          subproduct.contact_name?.toLowerCase().includes(searchLower) ||
-          subproduct.phone_number?.toLowerCase().includes(searchLower) ||
-          subproduct.comercial_activity?.toLowerCase().includes(searchLower) ||
-          subproduct.constitucion?.toLowerCase().includes(searchLower) ||
-          subproduct.pay_method?.toLowerCase().includes(searchLower) ||
-          subproduct.subcategory?.toLowerCase().includes(searchLower) ||
-          subproduct.subsubcategory?.toLowerCase().includes(searchLower) ||
-          subproduct.product_names?.toLowerCase().includes(searchLower)
-        ) {
-          priority = 1;
-          matches.push(
-            subproduct.address ? `address: ${subproduct.address}` : "",
-            subproduct.phone ? `phone: ${subproduct.phone}` : "",
-            subproduct.url ? `url: ${subproduct.url}` : "",
-            subproduct.country ? `country: ${subproduct.country}` : "",
-            subproduct.province ? `province: ${subproduct.province}` : "",
-            subproduct.canton ? `canton: ${subproduct.canton}` : "",
-            subproduct.distrito ? `distrito: ${subproduct.distrito}` : "",
-            subproduct.contact_name ? `contact_name: ${subproduct.contact_name}` : "",
-            subproduct.phone_number ? `phone_number: ${subproduct.phone_number}` : "",
-            subproduct.comercial_activity ? `comercial_activity: ${subproduct.comercial_activity}` : "",
-            subproduct.constitucion ? `constitucion: ${subproduct.constitucion}` : "",
-            subproduct.pay_method ? `pay_method: ${subproduct.pay_method}` : "",
-            subproduct.subcategory ? `subcategory: ${subproduct.subcategory}` : "",
-            subproduct.subsubcategory ? `subsubcategory: ${subproduct.subsubcategory}` : "",
-            subproduct.product_names ? `product_names: ${subproduct.product_names}` : ""
-          );
-        }
-
-        return { ...subproduct, priority, matches };
-      })
-      .filter((subproduct) => subproduct.priority > 0) // Only include subproducts with matches
-      .sort((a, b) => b.priority - a.priority); // Sort by priority (descending)
-
-    setFilteredSubproducts(filtered);
-  }, [subproducts, searchTerm]);
-
-  // ... (rest of the component remains unchanged)
+  const handleSearch = () => {
+    setIsLoading(true);
+    setCurrentSubproductsPage(1); // Reset to page 1 on new search
+    fetchSubproducts(setSubproducts, setTotalSubproducts, token, 1, subproductsPerPage, searchTerm)
+      .finally(() => setIsLoading(false));
+  };
 
   const handleCreate = () => {
     setEditingSubproduct(null);
@@ -199,7 +118,6 @@ const Directory = () => {
 
   const handleEditSubproducts = async (subproductId) => {
     const editedSubProduct = new FormData();
-    // ... (rest of the handleEditSubproducts function remains unchanged)
     try {
       setIsLoading(true);
       const response = await ProductDataService.updateSubProduct(subproductId, editedSubProduct, token);
@@ -216,7 +134,6 @@ const Directory = () => {
 
   const handleSaveSubproducts = async (subproductData) => {
     const newSubProduct = new FormData();
-    // ... (rest of the handleSaveSubproducts function remains unchanged)
     try {
       setIsLoading(true);
       const response = await ProductDataService.createSubProduct(newSubProduct, token);
@@ -337,7 +254,7 @@ const Directory = () => {
             </div>
 
             <div className="mb-4 flex justify-between items-center">
-              <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+              <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} isSearching={isLoading} onSearch={handleSearch} />
               <CsvUpload
                 csvFile={csvFile}
                 setCsvFile={setCsvFile}
@@ -352,7 +269,7 @@ const Directory = () => {
             )}
 
             <SubproductTable
-              filteredSubproducts={filteredSubproducts}
+              filteredSubproducts={subproducts}
               handleShowServicesModal={(subproduct) => {
                 setSelectedSubproduct(subproduct);
                 setShowServicesModal(true);
