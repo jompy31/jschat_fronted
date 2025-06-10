@@ -17,7 +17,7 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTriggered, setSearchTriggered] = useState(false);
-  const resultsPerPage = 2;
+  const resultsPerPage = 4;
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const isMini = useMediaQuery({ query: "(max-width: 340px)" });
   const token = useSelector((state) => state.authentication.token);
