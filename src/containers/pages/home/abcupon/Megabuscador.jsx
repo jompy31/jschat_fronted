@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { FaMicrophone, FaSearch } from "react-icons/fa";
+import { FaMicrophone, FaSearch, FaStar } from "react-icons/fa";
 import Fuse from "fuse.js";
 import "./Megabuscador.css";
 import { useMediaQuery } from "react-responsive";
@@ -16,6 +16,7 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTriggered, setSearchTriggered] = useState(false);
   const resultsPerPage = 2;
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const isMini = useMediaQuery({ query: "(max-width: 340px)" });
@@ -85,6 +86,7 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
       setResults([]);
       setSuggestions([]);
       setIsLoading(false);
+      setSearchTriggered(false);
     }
   }, [query]);
 
@@ -92,6 +94,7 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
     if (query && dataLoaded) {
       setIsLoading(true);
       setError(null);
+      setSearchTriggered(true);
       const normalizedQuery = normalizeString(query);
 
       try {
@@ -102,7 +105,7 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
           subproductResults = (response.data.results || response.data).map(item => ({
             ...item,
             type: "subproduct",
-            score: 0, // Default score since backend doesn't provide one
+            score: 0,
           }));
         } else {
           subproductResults = subproducts.map(item => ({
@@ -153,8 +156,12 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
           ...classifiedResults,
         ];
 
-        // Sort by score (Fuse.js results) and type (to maintain priority)
+        // Sort by score (Fuse.js results), type, and point_of_sale
         const sortedResults = combinedResults.sort((a, b) => {
+          if (a.type === "subproduct" && b.type === "subproduct") {
+            if (a.point_of_sale && !b.point_of_sale) return -1;
+            if (!a.point_of_sale && b.point_of_sale) return 1;
+          }
           if (a.type === "subproduct" && b.type !== "subproduct") return -1;
           if (a.type !== "subproduct" && b.type === "subproduct") return 1;
           return a.score - b.score;
@@ -174,11 +181,13 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
     } else if (query && !dataLoaded) {
       setError("Datos no cargados. Espere un momento.");
       setIsLoading(false);
+      setSearchTriggered(true);
     } else {
       setResults(subproducts.map(item => ({ ...item, type: "subproduct", score: 0 })));
       setSuggestions([]);
       setCurrentPage(1);
       setIsLoading(false);
+      setSearchTriggered(true);
     }
   };
 
@@ -210,6 +219,7 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
       setQuery(speechToText);
       if (dataLoaded) {
         setIsLoading(true);
+        setSearchTriggered(true);
         const normalizedQuery = normalizeString(speechToText);
 
         try {
@@ -272,6 +282,10 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
           ];
 
           const sortedResults = combinedResults.sort((a, b) => {
+            if (a.type === "subproduct" && b.type === "subproduct") {
+              if (a.point_of_sale && !b.point_of_sale) return -1;
+              if (!a.point_of_sale && b.point_of_sale) return 1;
+            }
             if (a.type === "subproduct" && b.type !== "subproduct") return -1;
             if (a.type !== "subproduct" && b.type === "subproduct") return 1;
             return a.score - b.score;
@@ -323,6 +337,7 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
     setQuery("Clasificados");
     if (dataLoaded) {
       setIsLoading(true);
+      setSearchTriggered(true);
       try {
         // Use initial subproducts for "Clasificados" search
         const subproductResults = subproducts.map(item => ({
@@ -357,7 +372,18 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
           ...classifiedResults,
         ];
 
-        setResults(combinedResults);
+        // Sort with point_of_sale priority
+        const sortedResults = combinedResults.sort((a, b) => {
+          if (a.type === "subproduct" && b.type === "subproduct") {
+            if (a.point_of_sale && !b.point_of_sale) return -1;
+            if (!a.point_of_sale && b.point_of_sale) return 1;
+          }
+          if (a.type === "subproduct" && b.type !== "subproduct") return -1;
+          if (a.type !== "subproduct" && b.type === "subproduct") return 1;
+          return a.score - b.score;
+        });
+
+        setResults(sortedResults);
         setSuggestions([]);
         setCurrentPage(1);
       } catch (err) {
@@ -432,24 +458,32 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
       <div className="search-results">
         {paginatedResults.map((result, index) => (
           <div key={index} className="result-item">
-            <a
-              href={
-                result.type === "faq"
-                  ? "/faq"
-                  : result.type === "service" && result.relatedSubproduct?.email
-                  ? `https://abcupon.com/servicios/${result.relatedSubproduct.email}`
-                  : result.url ||
-                    result.link ||
-                    (result.email
-                      ? `https://abcupon.com/servicios/${result.email}`
-                      : "https://abcupon.com/avisos_economicos")
-              }
-              target={result.type === "faq" ? "_self" : "_blank"}
-              rel={result.type === "faq" ? "" : "noopener noreferrer"}
-              className="result-title"
-            >
-              {result.name || result.title || result.question || "Título no disponible"}
-            </a>
+            <div className="result-title-container">
+              <a
+                href={
+                  result.type === "faq"
+                    ? "/faq"
+                    : result.type === "service" && result.relatedSubproduct?.email
+                    ? `https://abcupon.com/servicios/${result.relatedSubproduct.email}`
+                    : result.url ||
+                      result.link ||
+                      (result.email
+                        ? `https://abcupon.com/servicios/${result.email}`
+                        : "https://abcupon.com/avisos_economicos")
+                }
+                target={result.type === "faq" ? "_self" : "_blank"}
+                rel={result.type === "faq" ? "" : "noopener noreferrer"}
+                className="result-title"
+              >
+                {result.name || result.title || result.question || "Título no disponible"}
+              </a>
+              {result.type === "subproduct" && result.point_of_sale && (
+                <span className="point-of-sale-star-container">
+                  <FaStar className="point-of-sale-star" />
+                  <span className="point-of-sale-tooltip">Punto de venta</span>
+                </span>
+              )}
+            </div>
             <p className="result-description">
               {result.type === "faq"
                 ? Array.isArray(result.answer)
@@ -481,6 +515,12 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
                     >
                       {result.relatedSubproduct.name || "Subproducto sin nombre"}
                     </a>
+                    {result.relatedSubproduct.point_of_sale && (
+                      <span className="point-of-sale-star-container">
+                        <FaStar className="point-of-sale-star" />
+                        <span className="point-of-sale-tooltip">Punto de venta</span>
+                      </span>
+                    )}
                   </li>
                 </ul>
               </div>
@@ -513,9 +553,14 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
             </a>
           </div>
         ))}
-        {results.length === 0 && query && !isLoading && !error && (
+        {query && !isLoading && !error && !searchTriggered && (
           <p className="no-results">
-            No se encontraron resultados para "{query}".
+            Presione Enter o haga clic en el buscador para buscar en nuestro directorio.
+          </p>
+        )}
+        {results.length === 0 && query && !isLoading && !error && searchTriggered && (
+          <p className="no-results">
+            En caso de no aparecer la empresa deseada, por favor contactar al 2220-2290.
           </p>
         )}
       </div>
