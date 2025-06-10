@@ -480,7 +480,7 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
               {result.type === "subproduct" && result.point_of_sale && (
                 <span className="point-of-sale-star-container">
                   <FaStar className="point-of-sale-star" />
-                  <span className="point-of-sale-tooltip">Punto de venta</span>
+                  <span className="point-of-sale-tooltip">Punto de venta ABCupon</span>
                 </span>
               )}
             </div>
