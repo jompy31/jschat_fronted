@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { FaMicrophone, FaSearch, FaStar } from "react-icons/fa";
+import { FaMicrophone, FaSearch, FaStar, FaCheckCircle } from "react-icons/fa";
 import Fuse from "fuse.js";
 import "./Megabuscador.css";
 import { useMediaQuery } from "react-responsive";
@@ -17,7 +17,7 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTriggered, setSearchTriggered] = useState(false);
-  const resultsPerPage = 4;
+  const resultsPerPage = 2;
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const isMini = useMediaQuery({ query: "(max-width: 340px)" });
   const token = useSelector((state) => state.authentication.token);
@@ -156,11 +156,17 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
           ...classifiedResults,
         ];
 
-        // Sort by score (Fuse.js results), type, and point_of_sale
+        // Sort by score, type, point_of_sale, and certified
         const sortedResults = combinedResults.sort((a, b) => {
           if (a.type === "subproduct" && b.type === "subproduct") {
+            // Priorizar point_of_sale=true
             if (a.point_of_sale && !b.point_of_sale) return -1;
             if (!a.point_of_sale && b.point_of_sale) return 1;
+            // Si ambos tienen o no tienen point_of_sale, priorizar certified=true
+            if (a.certified && !b.certified) return -1;
+            if (!a.certified && b.certified) return 1;
+            // Si ambos tienen el mismo estado de point_of_sale y certified, ordenar por score
+            return a.score - b.score;
           }
           if (a.type === "subproduct" && b.type !== "subproduct") return -1;
           if (a.type !== "subproduct" && b.type === "subproduct") return 1;
@@ -285,6 +291,9 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
             if (a.type === "subproduct" && b.type === "subproduct") {
               if (a.point_of_sale && !b.point_of_sale) return -1;
               if (!a.point_of_sale && b.point_of_sale) return 1;
+              if (a.certified && !b.certified) return -1;
+              if (!a.certified && b.certified) return 1;
+              return a.score - b.score;
             }
             if (a.type === "subproduct" && b.type !== "subproduct") return -1;
             if (a.type !== "subproduct" && b.type === "subproduct") return 1;
@@ -352,12 +361,7 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
           score: result.score,
         }));
 
-        const productResults = productFuse.search("Clasificados").map((result) => ({
-          ...result.item,
-          type: "product",
-          score: result.score,
-        }));
-
+        const productResults = productFuse.search("");
         const faqResults = faqFuse.search("Clasificados").map((result) => ({
           ...result.item,
           type: "faq",
@@ -372,11 +376,14 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
           ...classifiedResults,
         ];
 
-        // Sort with point_of_sale priority
+        // Sort with point_of_sale and certified priorities
         const sortedResults = combinedResults.sort((a, b) => {
           if (a.type === "subproduct" && b.type === "subproduct") {
             if (a.point_of_sale && !b.point_of_sale) return -1;
             if (!a.point_of_sale && b.point_of_sale) return 1;
+            if (a.certified && !b.certified) return -1;
+            if (!a.certified && b.certified) return 1;
+            return a.score - b.score;
           }
           if (a.type === "subproduct" && b.type !== "subproduct") return -1;
           if (a.type !== "subproduct" && b.type === "subproduct") return 1;
@@ -480,7 +487,13 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
               {result.type === "subproduct" && result.point_of_sale && (
                 <span className="point-of-sale-star-container">
                   <FaStar className="point-of-sale-star" />
-                  <span className="point-of-sale-tooltip">Punto de venta ABCupon</span>
+                  <span className="point-of-sale-tooltip">Punto de venta</span>
+                </span>
+              )}
+              {result.type === "subproduct" && result.certified && (
+                <span className="certified-check-container">
+                  <FaCheckCircle className="certified-check" />
+                  <span className="certified-tooltip">Comercio certificado</span>
                 </span>
               )}
             </div>
@@ -519,6 +532,12 @@ const Megabuscador = ({ products, clasificados, subproducts, services }) => {
                       <span className="point-of-sale-star-container">
                         <FaStar className="point-of-sale-star" />
                         <span className="point-of-sale-tooltip">Punto de venta</span>
+                      </span>
+                    )}
+                    {result.relatedSubproduct.certified && (
+                      <span className="certified-check-container">
+                        <FaCheckCircle className="certified-check" />
+                        <span className="certified-tooltip">Comercio certificado</span>
                       </span>
                     )}
                   </li>

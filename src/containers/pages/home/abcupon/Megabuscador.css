@@ -307,12 +307,12 @@
   color: #ffd700; /* Dorado brillante */
   font-size: 16px;
   transition: transform 0.2s ease, filter 0.2s ease;
-  filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.5)); /* Sombra suave para brillo */
+  filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.5));
 }
 
 .point-of-sale-star:hover {
-  transform: scale(1.2); /* Animación de escala al pasar el mouse */
-  filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.7)); /* Brillo más intenso */
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.7));
 }
 
 .point-of-sale-tooltip {
@@ -334,6 +334,47 @@
 }
 
 .point-of-sale-star-container:hover .point-of-sale-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.certified-check-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.certified-check {
+  color: #28a745; /* Verde éxito */
+  font-size: 16px;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  filter: drop-shadow(0 0 3px rgba(40, 167, 69, 0.5));
+}
+
+.certified-check:hover {
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 5px rgba(40, 167, 69, 0.7));
+}
+
+.certified-tooltip {
+  visibility: hidden;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.certified-check-container:hover .certified-tooltip {
   visibility: visible;
   opacity: 1;
 }
