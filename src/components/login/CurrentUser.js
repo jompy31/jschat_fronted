@@ -1,50 +1,98 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef  } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TodoDataService from '../../services/todos';
 
 const UserList1 = (props) => {
   const [userList, setUserList] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
+  const maxAttempts = 3; // Total attempts (initial + retries)
+  const attemptDelay = 1000; // Delay between attempts in ms
   const navigate = useNavigate();
-  const location = useLocation();
+  const retryCount = useRef(0);
 
-  const getUserList = () => {
-    if (props.token) {
-      TodoDataService.getUserList(props.token)
-        .then((response) => {
-          // Manejar la estructura paginada
-          const users = response.data.results || response.data; // Usa results si existe, sino usa data directamente
-          setUserList(Array.isArray(users) ? users : []);
-        })
-        .catch((e) => {
-          console.error("Error al obtener la lista de usuarios:", e);
-          setUserList([]); // Asegúrate de establecer un array vacío en caso de error
-        });
+  const fetchUserListWithRetry = async () => {
+    setErrorMessage(''); // Reset error message before attempting fetch
+    let attempts = 0;
+    while (attempts < maxAttempts) {
+      console.log('Intentando obtener lista de usuarios. Intento:', attempts + 1);
+      try {
+        const response = await TodoDataService.getUserList(props.token);
+        console.log('Respuesta de la API:', response.data);
+        const users = response.data.results || response.data;
+        if (Array.isArray(users)) {
+          setUserList(users);
+          return; // Success, exit the loop
+        } else {
+          console.error('Datos de usuarios no son un array:', users);
+          setErrorMessage('Formato de datos inválido.');
+        }
+      } catch (e) {
+        console.error('Error en la API:', e.message, e.response?.data);
+        setErrorMessage('Error al cargar datos: ' + (e.message || 'Desconocido'));
+      }
+      attempts++;
+      if (attempts < maxAttempts) {
+        await new Promise(resolve => setTimeout(resolve, attemptDelay));
+      }
+    }
+    // If all attempts fail
+    if (!userList.length) {
+      console.log('Máximo de intentos alcanzado. Forzando recarga.');
+      window.location.reload();
     }
   };
 
-  useEffect(() => {
-    getUserList();
+ useEffect(() => {
+    if (props.token) {
+      fetchUserListWithRetry();
+    } else {
+      console.log('Token no disponible aún. Esperando...');
+      setErrorMessage(''); // Evitar error prematuro
+
+      if (retryCount.current === 0) {
+        retryCount.current += 1;
+        setTimeout(() => {
+          console.log('Reintentando recarga después de 2s...');
+          window.location.reload();
+        }, 2000);
+      } else if (retryCount.current === 1) {
+        retryCount.current += 1;
+        setTimeout(() => {
+          console.log('Segundo intento después de 4s...');
+          window.location.reload();
+        }, 4000);
+      } else {
+        console.log('Token no disponible después de múltiples intentos.');
+      }
+    }
   }, [props.token]);
 
   useEffect(() => {
     if (userList.length > 0 && props.user) {
-      const foundUser = userList.find((user) => user.email === props.user);
-      setCurrentUser(foundUser);
-      localStorage.setItem('currentUser', JSON.stringify(foundUser));
+      console.log('Buscando usuario con username:', props.user);
+      console.log('Lista de usuarios:', userList);
+      const foundUser = userList.find((user) => user.username === props.user);
+      if (foundUser) {
+        console.log('Usuario encontrado:', foundUser);
+        setCurrentUser(foundUser);
+        localStorage.setItem('currentUser', JSON.stringify(foundUser));
+      } else {
+        console.error('Usuario no encontrado en la lista:', props.user);
+        setErrorMessage('Usuario no encontrado.');
+      }
     }
   }, [userList, props.user]);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      navigate('/');
-      window.location.reload();
-    }, 4000);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, []);
+    if (currentUser) {
+      console.log('Usuario actual cargado. Navegando a /');
+      const timeout = setTimeout(() => {
+        navigate('/');
+      }, 1000); // Short delay to show user data before navigating
+      return () => clearTimeout(timeout);
+    }
+  }, [currentUser, navigate]);
 
   const modalOverlayStyle = {
     position: 'fixed',
@@ -139,12 +187,12 @@ const UserList1 = (props) => {
       <style>{keyframes}</style>
       <div style={containerStyle}>
         <div className="loading-logo" style={{ marginBottom: '20px' }}>
-          <img src={require('../../assets/categorias/25.webp')} height="60" alt="Logo" style={{ filter: 'drop-shadow(0 0 5px rgba(0, 0, 0, 0.3))' }} />
+          <img src={require('../../assets/LOGO_rectangular.png')} height="60" alt="Logo" style={{ filter: 'drop-shadow(0 0 5px rgba(0, 0, 0, 0.3))' }} />
         </div>
-        <h1 style={titleStyle}>Bienvenido a ABCupon.com</h1>
-        {currentUser && currentUser.profile_picture && (
+        <h1 style={titleStyle}>Bienvenido a JSport.com</h1>
+        {currentUser && currentUser.userprofile?.profile_picture && (
           <img 
-            src={currentUser.profile_picture} 
+            src={currentUser.userprofile.profile_picture} 
             alt="Perfil" 
             style={profileImageStyle}
             onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
@@ -167,23 +215,17 @@ const UserList1 = (props) => {
             </div>
             <div style={rowStyle}>
               <span style={labelStyle}>Rol:</span>
-              <span style={valueStyle}>{currentUser.staff_status || 'N/A'}</span>
+              <span style={valueStyle}>{currentUser.userprofile?.staff_status || 'N/A'}</span>
             </div>
             <div style={rowStyle}>
               <span style={labelStyle}>Teléfono:</span>
-              <span style={valueStyle}>{currentUser.phone_number || 'N/A'}</span>
-            </div>
-            <div style={rowStyle}>
-              <span style={labelStyle}>Compañía:</span>
-              <span style={valueStyle}>{currentUser.company || 'N/A'}</span>
-            </div>
-            <div style={rowStyle}>
-              <span style={labelStyle}>Nacimiento:</span>
-              <span style={valueStyle}>{currentUser.date_of_birth || 'N/A'}</span>
+              <span style={valueStyle}>{currentUser.userprofile?.phone_number || 'N/A'}</span>
             </div>
           </div>
         ) : (
-          <p style={{ fontFamily: "'Roboto', sans-serif", color: '#333' }}>Usuario no encontrado</p>
+          <p style={{ fontFamily: "'Roboto', sans-serif", color: '#333' }}>
+            {errorMessage || 'Cargando datos del usuario...'}
+          </p>
         )}
       </div>
     </div>

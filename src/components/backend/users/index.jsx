@@ -35,15 +35,14 @@ const UserList = () => {
     first_name: '',
     last_name: '',
     email: '',
-    staff_status: '',
-    password: '',
+    userprofile: { staff_status: '', phone_number: '', address: '' }
   });
   const [newUser, setNewUser] = useState({
     first_name: '',
     last_name: '',
     email: '',
     staff_status: '',
-    password: '',
+    password: ''
   });
   const [currentUser, setCurrentUser] = useState(null);
   const token = useSelector((state) => state.authentication.token);
@@ -54,9 +53,13 @@ const UserList = () => {
     if (currentUserData) {
       try {
         const parsedData = JSON.parse(currentUserData);
-        setCurrentUser(parsedData);
+        setCurrentUser({
+          ...parsedData,
+          staff_status: parsedData.userprofile?.staff_status || 'customer'
+        });
       } catch (error) {
         console.error('Error parsing currentUser data:', error);
+        toast.error('Error al cargar los datos del usuario actual');
       }
     }
   }, []);
@@ -64,6 +67,8 @@ const UserList = () => {
   useEffect(() => {
     if (token) {
       fetchUserList(token, setUserList, setStoredData);
+    } else {
+      toast.error('No se encontró un token de autenticación. Por favor, inicia sesión.');
     }
   }, [token]);
 
@@ -81,8 +86,11 @@ const UserList = () => {
       first_name: user.first_name,
       last_name: user.last_name,
       email: user.email,
-      staff_status: user.staff_status,
-      password: user.password,
+      userprofile: {
+        staff_status: user.staff_status,
+        phone_number: user.phone_number || '',
+        address: user.address || ''
+      }
     });
     setShowModal(true);
   };
@@ -95,7 +103,7 @@ const UserList = () => {
         toast.success('Usuario actualizado correctamente');
       })
       .catch((e) => {
-        console.log(e);
+        console.error('Error al actualizar el usuario:', e);
         toast.error('Error al actualizar el usuario');
       });
   };
@@ -113,7 +121,7 @@ const UserList = () => {
         toast.success('Usuario eliminado correctamente');
       })
       .catch((e) => {
-        console.log(e);
+        console.error('Error al eliminar el usuario:', e);
         toast.error('Error al eliminar el usuario');
       });
   };
@@ -123,14 +131,14 @@ const UserList = () => {
   };
 
   const handleSaveNewUser = () => {
-    TodoDataService.addUser(newUser, token)
+    TodoDataService.signup(newUser)
       .then(() => {
         setShowAddUserModal(false);
         fetchUserList(token, setUserList, setStoredData);
         toast.success('Usuario agregado correctamente');
       })
       .catch((e) => {
-        console.log(e);
+        console.error('Error al agregar el usuario:', e);
         toast.error('Error al agregar el usuario');
       });
   };
@@ -158,7 +166,7 @@ const UserList = () => {
             </div>
           </CurrentUserContext.Provider>
         )}
-        {currentUser && currentUser.staff_status === 'administrator' && (
+        {currentUser && currentUser.staff_status === 'administrator' ? (
           <>
             <div className="mb-6 space-y-4">
               <UserSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
@@ -170,6 +178,8 @@ const UserList = () => {
               usersPerPage={usersPerPage}
               handleEditUser={handleEditUser}
               handleDeleteUser={handleDeleteUser}
+              selectedUser={selectedUser}
+              isModalOpen={showModal || showDeleteConfirmation}
             />
             <PaginationControls
               currentPage={currentPage}
@@ -178,6 +188,10 @@ const UserList = () => {
               handlePageChange={handlePageChange}
             />
           </>
+        ) : (
+          <div className="text-center text-gray-500">
+            No tienes permisos para ver la lista de usuarios.
+          </div>
         )}
         <EditUserModal
           showModal={showModal}

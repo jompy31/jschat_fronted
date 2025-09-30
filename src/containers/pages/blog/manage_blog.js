@@ -115,7 +115,7 @@ const ManageBlog = () => {
               letterSpacing: "0.5px", // Slight spacing for readability
             }}
           >
-            Publicaciones del Blog ABCupon
+            Publicaciones del Blog JSport
           </h2>
           <Row>
             {blogPosts.map((blogPost) => (

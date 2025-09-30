@@ -1,5 +1,4 @@
 import React from "react";
-import { formatUserData } from "../utils/formatUtils";
 
 const EditProfileModal = ({
   editedUser,
@@ -9,11 +8,11 @@ const EditProfileModal = ({
   toggleModal,
   imagePreview,
   profile_picture,
+  isLoading,
 }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
-    const formattedData = formatUserData(editedUser, profile_picture);
-    handleEditUser(formattedData);
+    handleEditUser(editedUser, profile_picture);
   };
 
   return (
@@ -47,56 +46,49 @@ const EditProfileModal = ({
             />
           </div>
           <div className="form-group">
-            <label>Dirección:</label>
+            <label>Correo electrónico:</label>
             <input
-              type="text"
-              name="address"
-              value={editedUser.address || ""}
+              type="email"
+              name="email"
+              value={editedUser.email || ""}
               onChange={handleEditUserChange}
+              required
               className="form-input"
             />
           </div>
-          <div className="form-group">
-            <label>Fecha de nacimiento:</label>
-            <input
-              type="date"
-              name="date_of_birth"
-              value={editedUser.date_of_birth || ""}
-              onChange={handleEditUserChange}
-              className="form-input"
-            />
-          </div>
-          <div className="form-group">
-            <label>Número de teléfono:</label>
-            <input
-              type="text"
-              name="phone_number"
-              value={editedUser.phone_number || ""}
-              onChange={handleEditUserChange}
-              className="form-input"
-            />
-          </div>
-          <div className="form-group">
-            <label>Empresa:</label>
-            <input
-              type="text"
-              name="company"
-              value={editedUser.company || ""}
-              onChange={handleEditUserChange}
-              className="form-input"
-            />
-          </div>
-          <div className="form-group">
-            <label>Buscando trabajo?</label>
+          {/* <div className="form-group">
+            <label>Tipo de usuario:</label>
             <select
-              name="openwork"
-              value={editedUser.openwork ? "yes" : "no"}
+              name="userprofile.staff_status"
+              value={editedUser.userprofile?.staff_status || "customer"}
               onChange={handleEditUserChange}
               className="form-input"
             >
-              <option value="yes">Sí</option>
-              <option value="no">No</option>
+              <option value="customer">Cliente</option>
+              <option value="administrator">Administrador</option>
+              <option value="sales">Ventas</option>
+              <option value="design">Diseño</option>
             </select>
+          </div> */}
+          <div className="form-group">
+            <label>Teléfono:</label>
+            <input
+              type="text"
+              name="userprofile.phone_number"
+              value={editedUser.userprofile?.phone_number || ""}
+              onChange={handleEditUserChange}
+              className="form-input"
+            />
+          </div>
+          <div className="form-group">
+            <label>Dirección:</label>
+            <input
+              type="text"
+              name="userprofile.address"
+              value={editedUser.userprofile?.address || ""}
+              onChange={handleEditUserChange}
+              className="form-input"
+            />
           </div>
           <div className="form-group">
             <label>
@@ -116,18 +108,12 @@ const EditProfileModal = ({
               />
             )}
           </div>
-          <div className="form-group">
-            <label>Resumen de Usuario:</label>
-            <textarea
-              name="user_summary"
-              value={editedUser.user_summary || ""}
-              onChange={handleEditUserChange}
-              rows="4"
-              className="form-textarea"
-            />
-          </div>
-          <button type="submit" className="submit-button">
-            Enviar
+          <button
+            type="submit"
+            className="submit-button"
+            disabled={isLoading}
+          >
+            {isLoading ? "Actualizando..." : "Enviar"}
           </button>
         </form>
       </div>

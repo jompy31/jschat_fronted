@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import logo from '../../assets/logo_abcupon_3.jpg';
+import logo from '../../assets/LOGO_cuadrado.png';
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import publicidadData from '../json/publicidad.json';
@@ -9,11 +9,11 @@ const navigation = {
   solutions: [{ name: 'Preguntas frecuentes', href: '/faq' }],
   support: [{ name: 'Contactenos', href: '/contacto' }],
   company: [
-    { name: 'Avisos Economicos', href: '/avisos_economicos' },
-    { name: 'Directorio Comercial', href: '/' },
-    { name: 'Bolsa de Empleo', href: '/bolsadeempleo' },
-    { name: 'Cotizador', href: '/cotizador' },
-    { name: 'Blog', href: '/blog' },
+{ name: "Catálogo", description: "Explora nuestra colección de productos deportivos", href: "/catalogo", icon: "Package" },
+  { name: "Promociones", description: "Descubre nuestras ofertas exclusivas", href: "/promociones", icon: "Star" },
+  { name: "Sobre Nosotros", description: "Conoce más sobre J SPORT", href: "/sobre-nosotros", icon: "Info" },
+  { name: "Contacto", description: "Ponte en contacto con nosotros", href: "/contacto", icon: "Mail" },
+  { name: "Tienda", description: "Accede a nuestra tienda en línea", href: "/login", icon: "ShoppingCart" },
   ],
   social: [
     {
@@ -92,7 +92,7 @@ function Footer() {
   return (
     <footer
       aria-labelledby="footer-heading"
-      style={{ zoom: isMini ? '20%' : isMobile ? '50%' : '100%', backgroundColor: 'black' }}
+      style={{ zoom: isMini ? '20%' : isMobile ? '50%' : '100%', backgroundColor: '#0A2463' }}
     >
       <h2 id="footer-heading" className="sr-only">
         Pie de página
@@ -171,120 +171,9 @@ function Footer() {
           </div>
         </div>
 
-        <h2
-          style={{
-            color: 'white',
-            WebkitTextStroke: '1px white',
-          }}
-        >
-          REDES SOCIALES ABCUPON
-        </h2>
-
-        <div className="grid grid-cols-3 md:grid-cols-7 gap-4 mb-8" style={{ marginTop: '2%' }}>
-          {publicidadLinks
-            .filter((categoria) => categoria.nombre !== 'Facebook')
-            .map((categoria) => (
-              <div key={categoria.nombre} className="col-span-1 md:col-span-1">
-                <h4 className="font-bold text-white text-center">{categoria.nombre}</h4>
-                <div
-                  className={`grid grid-cols-1 text-white ${
-                    categoria.subcategorias && categoria.subcategorias.length > 1 ? 'md:grid-cols-2' : ''
-                  } gap-2 mt-2`}
-                >
-                  {categoria.subcategorias && categoria.subcategorias.length > 0 ? (
-                    categoria.subcategorias
-                      .sort((a, b) => a.nombre.localeCompare(b.nombre))
-                      .map((subcategoria) => (
-                        <div key={subcategoria.nombre} className="text-center" style={{ color: 'white' }}>
-                          <strong>{subcategoria.nombre}</strong>
-                          <ul className="mt-1 space-y-1">
-                            {subcategoria.grupos && subcategoria.grupos.length > 0 ? (
-                              subcategoria.grupos.map((grupo) => (
-                                <li key={grupo.nombre} className="text-left">
-                                  <a
-                                    href={grupo.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-blue-500 underline hover:text-blue-700"
-                                  >
-                                    {grupo.numero} {grupo.nombre}
-                                  </a>
-                                </li>
-                              ))
-                            ) : null}
-                            {subcategoria.subsubcategorias && subcategoria.subsubcategorias.length > 0 ? (
-                              subcategoria.subsubcategorias.map((subsubcategoria) => (
-                                <div key={subsubcategoria.nombre} className="mt-2">
-                                  <strong>{subsubcategoria.nombre}</strong>
-                                  {subsubcategoria.grupos && subsubcategoria.grupos.length > 0 ? (
-                                    subsubcategoria.grupos.map((grupo) => (
-                                      <li key={grupo.nombre} className="text-left">
-                                        <a
-                                          href={grupo.link}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                          className="text-blue-500 underline hover:text-blue-700"
-                                        >
-                                          {grupo.numero} {grupo.nombre}
-                                        </a>
-                                      </li>
-                                    ))
-                                  ) : null}
-                                </div>
-                              ))
-                            ) : null}
-                          </ul>
-                        </div>
-                      ))
-                  ) : null}
-                </div>
-              </div>
-            ))}
-        </div>
-
-        <div className="mt-8" style={{ width: '50%' }}>
-          <h3 className="text-lg font-bold text-white">Facebook</h3>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <h4 className="font-bold text-white">Fan Page</h4>
-              <ul className="mt-2 space-y-2 text-left">
-                {sortedFanPages.map((fanPage) => (
-                  <li key={fanPage.nombre}>
-                    <a
-                      href={fanPage.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-500 underline hover:text-blue-700"
-                    >
-                      {fanPage.numero} {fanPage.nombre}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold text-white">Grupos Comerciales</h4>
-              <ul className="mt-2 space-y-2 text-left">
-                {sortedCommercialGroups.map((group) => (
-                  <li key={group.nombre}>
-                    <a
-                      href={group.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-500 underline hover:text-blue-700"
-                    >
-                      {group.numero} {group.nombre}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-
         <div className="mt-12 border-t border-gray-200 pt-8">
           <p className="text-base text-gray-400 xl:text-center">
-            © 2025 CREATIVA LABORATORIO SITE WEB ABCupón. Derechos de Autor reservados.
+            © 2025 JSPORT. Derechos de Autor reservados.
           </p>
         </div>
       </div>

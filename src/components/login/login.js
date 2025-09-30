@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Form, Button, Row, Col } from 'react-bootstrap';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
-import logo from '../../assets/imagenes/logo_abcupon.jpg';
+import logo from '../../assets/LOGO_rectangular.png';
 import { Link, useNavigate } from 'react-router-dom';
 import TodoDataService from '../../services/todos';
 import { useDispatch } from 'react-redux';
@@ -9,7 +9,7 @@ import { setAuthentication } from '../../redux/actions/authActions';
 import { useMediaQuery } from 'react-responsive';
 import './login.css';
 
-function Login(props) {
+function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -31,8 +31,8 @@ function Login(props) {
   }, []);
 
   const login = () => {
-    TodoDataService.login({ username: username, password: password })
-      .then(response => {
+    TodoDataService.login({ username, password })
+      .then((response) => {
         const token = response.data.token;
         localStorage.setItem('token', token);
         localStorage.setItem('user', username);
@@ -41,16 +41,9 @@ function Login(props) {
         setError('');
 
         dispatch(setAuthentication(token, username));
-
         navigate('/current_user');
-        setTimeout(() => {
-          window.location.reload();
-          setTimeout(() => {
-            navigate('/');
-          }, 4000);
-        }, 0);
       })
-      .catch(error => {
+      .catch((error) => {
         if (error.response && error.response.status === 400) {
           const errorMessage = error.response.data.error;
           setError(errorMessage);
@@ -73,7 +66,7 @@ function Login(props) {
           <div className="logo-container">
             <img src={logo} alt="ABCupon Logo" className="logo" />
           </div>
-          <Card.Title className="card-title">Bienvenido a ABCupon</Card.Title>
+          <Card.Title className="card-title">Bienvenido a JSport</Card.Title>
           <Card.Text className="card-subtitle">
             Inicie sesión para explorar las nuevas funciones de nuestra plataforma.
           </Card.Text>

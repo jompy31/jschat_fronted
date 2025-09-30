@@ -3,7 +3,7 @@ import { FaSort, FaEdit, FaTrash } from 'react-icons/fa';
 import moment from 'moment';
 import { sortData } from '../utils/sortData';
 
-const UserTable = ({ storedData, currentPage, usersPerPage, handleEditUser, handleDeleteUser }) => {
+const UserTable = ({ storedData, currentPage, usersPerPage, handleEditUser, handleDeleteUser, selectedUser, isModalOpen }) => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
 
   const handleSort = (key) => {
@@ -21,7 +21,7 @@ const UserTable = ({ storedData, currentPage, usersPerPage, handleEditUser, hand
   );
 
   return (
-    <div className="overflow-x-auto bg-white rounded-lg shadow-md">
+    <div className={`overflow-x-auto bg-white rounded-lg shadow-md transition-all duration-300 ${isModalOpen ? 'modal-open' : ''}`}>
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gradient-to-r from-blue-600 to-blue-500 text-white">
           <tr>
@@ -49,35 +49,57 @@ const UserTable = ({ storedData, currentPage, usersPerPage, handleEditUser, hand
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {currentUsers.map((user) => (
-            <tr key={user.id} className="hover:bg-gray-50 transition">
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{user.first_name}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{user.last_name}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{user.email}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{user.staff_status}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {moment(user.created_at).format('YYYY-MM-DD')}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <button
-                  onClick={() => handleEditUser(user)}
-                  className="text-blue-600 hover:text-blue-800 mr-4 transition"
-                  title="Editar usuario"
-                >
-                  <FaEdit />
-                </button>
-                <button
-                  onClick={() => handleDeleteUser(user.id)}
-                  className="text-red-600 hover:text-red-800 transition"
-                  title="Eliminar usuario"
-                >
-                  <FaTrash />
-                </button>
+          {currentUsers.length === 0 ? (
+            <tr>
+              <td colSpan="6" className="px-6 py-4 text-center text-sm text-gray-500">
+                No se encontraron usuarios.
               </td>
             </tr>
-          ))}
+          ) : (
+            currentUsers.map((user) => (
+              <tr
+                key={user.id}
+                className={`transition ${
+                  selectedUser && selectedUser.id === user.id
+                    ? 'bg-blue-100 border-l-4 border-blue-500'
+                    : 'hover:bg-gray-50'
+                }`}
+              >
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{user.first_name}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{user.last_name}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{user.email}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{user.staff_status}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {moment(user.created_at).format('YYYY-MM-DD')}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <button
+                    onClick={() => handleEditUser(user)}
+                    className="text-blue-600 hover:text-blue-800 mr-4 transition"
+                    title="Editar usuario"
+                  >
+                    <FaEdit />
+                  </button>
+                  <button
+                    onClick={() => handleDeleteUser(user.id)}
+                    className="text-red-600 hover:text-red-800 transition"
+                    title="Eliminar usuario"
+                  >
+                    <FaTrash />
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
+      <style jsx>{`
+        .modal-open {
+          filter: blur(2px);
+          transform: scale(0.98);
+          opacity: 0.8;
+        }
+      `}</style>
     </div>
   );
 };

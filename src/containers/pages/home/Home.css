@@ -1,0 +1,22 @@
+.home-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.portfolio-swiper {
+  padding-bottom: 40px;
+}
+
+.portfolio-swiper .swiper-pagination-bullet {
+  background-color: #0A2463;
+}
+
+.portfolio-swiper .swiper-pagination-bullet-active {
+  background-color: #D90404;
+}
+
+.portfolio-swiper .swiper-button-next,
+.portfolio-swiper .swiper-button-prev {
+  color: #D90404;
+}

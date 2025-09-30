@@ -4,7 +4,7 @@ import { Navigate, Outlet } from "react-router-dom";
 
 const PrivateRoute = () => {
   const isAuthenticated = useSelector((state) => state.authentication.token);
-
+  
   const currentUser = useMemo(() => {
     try {
       return JSON.parse(localStorage.getItem("currentUser"));
@@ -12,7 +12,6 @@ const PrivateRoute = () => {
       return null;
     }
   }, []);
-
   return isAuthenticated && currentUser ? <Outlet /> : <Navigate to="/" />;
 };
 

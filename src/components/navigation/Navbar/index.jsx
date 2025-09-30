@@ -8,15 +8,15 @@ import DesktopMenu from "./DesktopMenu";
 import MobileMenuToggle from "./MobileMenuToggle";
 import MobileMenu from "./MobileMenu";
 import UserMenu from "./UserMenu";
+import "./Navbar.css";
 
-const solutions = [
-  { name: "Catálogo", description: "Visualiza el Directorio Central de 24 categorias", href: "/catalogo", icon: "Package" },
-  { name: "Comercios_Afiliados", description: "Visualiza el Directorio Central de 24 categorias", href: "/comercios_afiliados", icon: "Package" },
-  { name: "20_Publiembudo", description: "Busca productos en nuestra tienda virtual.", href: "/publiembudo", icon: "Monitor" },
-  { name: "16_Avisos_Economicos", description: "Busca productos en avisos economicos", href: "/avisos_economicos", icon: "Bell" },
-  { name: "02_Bolsa_de_Empleo", description: "Publica su empleo o perfil en la bolsa de empleo", href: "/bolsadeempleo", icon: "Bell" },
-  { name: "Cotizador", description: "Crea tu propio paquete de publicidad", href: "/cotizador", icon: "Package" },
-  { name: "Blog", description: "Lee nuestras últimas publicaciones en el blog", href: "/blog", icon: "BookOpen" },
+const navItems = [
+  { name: "Catálogo", description: "Explora nuestra colección de productos deportivos", href: "/catalogo", icon: "Package" },
+  { name: "Promociones", description: "Descubre nuestras ofertas exclusivas", href: "/promociones", icon: "Star" },
+  { name: "Sobre Nosotros", description: "Conoce más sobre J SPORT", href: "/sobre_nosotros", icon: "Info" },
+  { name: "Blog", description: "Accede a nuestro blog", href: "/blog", icon: "ShoppingCart" },
+  { name: "Contacto", description: "Ponte en contacto con nosotros", href: "/contacto", icon: "Mail" },
+ 
 ];
 
 function Navbar({ logout, setIsSidebar }) {
@@ -43,9 +43,9 @@ function Navbar({ logout, setIsSidebar }) {
       const navbar = document.getElementById("navbar");
       if (navbar) {
         if (document.documentElement.scrollTop > 50) {
-          navbar.classList.add("shadow-md", "bg-white");
+          navbar.classList.add("navbar-scrolled");
         } else {
-          navbar.classList.remove("shadow-md", "bg-white");
+          navbar.classList.remove("navbar-scrolled");
         }
       }
     }, 100),
@@ -64,34 +64,26 @@ function Navbar({ logout, setIsSidebar }) {
   };
 
   return (
-    <nav id="navbar" className="fixed inset-x-0 top-0 z-50 h-[15vh] transition-all duration-300">
-  <div className="flex h-full  items-center px-4 sm:px-6 lg:px-8 justify-between">
-    {/* Logo alineado a la izquierda */}
-    <div >
-      <Logo />
-    </div>
-
-    {/* Menús centrados */}
-    <div className="hidden lg:block">
-      <DesktopMenu solutions={solutions} user={user} currentUser={currentUser} handleLogout={handleLogout} />
-    </div>
-
-    {/* Botón de menú móvil a la derecha */}
-    <div >
-      <MobileMenuToggle isMobileMenuOpen={isMobileMenuOpen} setMobileMenuOpen={setMobileMenuOpen} />
-    </div>
-
-    {/* Menú móvil desplegable (oculto por defecto en desktop) */}
-    <MobileMenu
-      isMobileMenuOpen={isMobileMenuOpen}
-      solutions={solutions}
-      user={user}
-      currentUser={currentUser}
-      handleLogout={handleLogout}
-    />
-  </div>
-</nav>
-
+    <nav id="navbar" className="navbar">
+      <div className="navbar-container">
+        <div className="navbar-logo">
+          <Logo />
+        </div>
+        <div className="navbar-menu-desktop">
+          <DesktopMenu navItems={navItems} user={user} currentUser={currentUser} handleLogout={handleLogout} />
+        </div>
+        <div className="navbar-menu-toggle">
+          <MobileMenuToggle isMobileMenuOpen={isMobileMenuOpen} setMobileMenuOpen={setMobileMenuOpen} />
+        </div>
+        <MobileMenu
+          isMobileMenuOpen={isMobileMenuOpen}
+          navItems={navItems}
+          user={user}
+          currentUser={currentUser}
+          handleLogout={handleLogout}
+        />
+      </div>
+    </nav>
   );
 }
 

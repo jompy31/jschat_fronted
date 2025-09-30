@@ -2,20 +2,25 @@ import React, { useState, useEffect } from "react";
 import SideNav, { Toggle, NavItem, NavIcon, NavText } from "@trendmicro/react-sidenav";
 import "@trendmicro/react-sidenav/dist/react-sidenav.css";
 import { useNavigate } from "react-router-dom";
-import { FiUsers, FiUserCheck, FiEdit, FiCalendar, FiBookOpen, FiPhone, FiMail, FiMonitor, FiPackage, FiSettings, FiBell, FiBriefcase } from "react-icons/fi";
+import { 
+  FiUsers, FiUserCheck, FiEdit, FiCalendar, FiBookOpen, 
+  FiPackage, FiDollarSign, FiStar, FiClock, FiSettings, 
+  FiBox, FiList, FiCheckSquare 
+} from "react-icons/fi";
 import { VisibilityOutlined as VisibilityOutlinedIcon, VisibilityOff as VisibilityOffIcon } from "@mui/icons-material";
 import "./sidebar.css";
 
 function Sidebar() {
   const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
-  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
   const [timeoutId, setTimeoutId] = useState(null);
 
   const fetchCurrentUserData = () => {
     const currentUser = localStorage.getItem('currentUser');
-    setCurrentUser(JSON.parse(currentUser));
+    if (currentUser) {
+      setCurrentUser(JSON.parse(currentUser));
+    }
   };
 
   useEffect(() => {
@@ -23,114 +28,87 @@ function Sidebar() {
   }, []);
 
   const resetTimer = () => {
-    // Reinicia el temporizador
     if (timeoutId) {
       clearTimeout(timeoutId);
     }
-
-    // Establece un nuevo temporizador después de reiniciar
     const newTimeoutId = setTimeout(() => {
       setIsSidebarExpanded(false);
     }, 5000);
-
-    // Actualiza el estado del nuevo temporizador
     setTimeoutId(newTimeoutId);
   };
 
   useEffect(() => {
-    if (currentUser && currentUser.staff_status === 'administrator') {
-      setIsSidebarVisible(true);
-      // resetTimer(); // Llama a la función para iniciar el temporizador
-    } else {
-      setIsSidebarVisible(false);
-    }
-
-    // Limpia el temporizador al desmontar el componente
+    resetTimer();
     return () => {
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
     };
-  }, [currentUser, timeoutId]);
-  useEffect(() => {
-    resetTimer();
   }, [isSidebarExpanded]);
-  
-  const solutions = [
-    {
-      name: 'Equipo',
-      description: 'Administrar 3 tipos de usuarios',
-      href: '/user',
-      icon: FiUsers,
-    },
-    {
-      name: 'Clientes',
-      description: 'Informacion de clientes',
-      href: '/customer',
-      icon: FiUserCheck,
-    },
-    {
-      name: 'Archivos',
-      description: 'Editar los archivos compartidos',
-      href: '/files',
-      icon: FiEdit,
-    },
-    {
-      name: 'Calendario',
-      description: 'Editar Calendario',
-      href: '/calendario',
-      icon: FiCalendar,
-    },
-    {
-      name: 'Blog',
-      description: 'Puedes leer las ultimas publicaciones',
-      href: '/blog',
-      icon: FiBookOpen,
-    },
-    {
-      name: 'Empleos',
-      description: 'Administrar empleos',
-      href: '/empleos',
-      icon: FiBriefcase,
-    },
-    // {
-    //   name: 'Hoteles',
-    //   description: 'Administrar hoteles',
-    //   href: '/manage_tourism',
-    //   icon: FiBriefcase,
-    // },
-    {
-      name: 'Modificar archivos',
-      description: 'Modificar archivos multimedia',
-      href: '/files_frontend',
-      icon: FiSettings,
-    },
-  ];
-
-  
 
   const toggleSidebar = () => {
     setIsSidebarExpanded(!isSidebarExpanded);
-     resetTimer();
+    resetTimer();
   };
 
-  if (!isSidebarVisible) {
+  const roleBasedMenus = {
+    administrator: [
+      { name: 'Usuarios', href: '/users', icon: FiUsers, description: 'Gestionar usuarios del sistema' },
+      { name: 'Clientes', href: '/customers', icon: FiUserCheck, description: 'Gestionar clientes y proveedores' },
+      { name: 'Productos', href: '/products', icon: FiBox, description: 'Gestionar productos y tipos' },
+      { name: 'Pedidos', href: '/orders', icon: FiPackage, description: 'Gestionar todos los pedidos' },
+       { name: 'Colas de Producción', href: '/production-queues', icon: FiClock, description: 'Planificar producción' },
+      { name: 'Promociones', href: '/promotions', icon: FiDollarSign, description: 'Crear y editar promociones' },
+      { name: 'Puntos de Clientes', href: '/customer-points', icon: FiStar, description: 'Gestionar puntos de clientes' },
+      { name: 'Archivos', href: '/files', icon: FiEdit, description: 'Editar archivos compartidos' },
+      { name: 'Calendario', href: '/calendar', icon: FiCalendar, description: 'Ver y editar calendario' },
+      { name: 'Blog', href: '/blog', icon: FiBookOpen, description: 'Leer y gestionar publicaciones' },
+      { name: 'Configuración', href: '/settings', icon: FiSettings, description: 'Configuraciones del sistema' },
+    ],
+    sales: [
+      { name: 'Clientes', href: '/customers', icon: FiUserCheck, description: 'Gestionar clientes y proveedores' },
+      
+      { name: 'Productos', href: '/products', icon: FiBox, description: 'Gestionar productos y tipos' },
+      { name: 'Pedidos', href: '/orders', icon: FiPackage, description: 'Gestionar todos los pedidos' },
+      { name: 'Promociones', href: '/promotions', icon: FiDollarSign, description: 'Crear y editar promociones' },
+      { name: 'Puntos de Clientes', href: '/customer-points', icon: FiStar, description: 'Gestionar puntos de clientes' },
+      { name: 'Colas de Producción', href: '/production-queues', icon: FiClock, description: 'Planificar producción' },
+      { name: 'Archivos', href: '/files', icon: FiEdit, description: 'Editar archivos compartidos' },
+      { name: 'Calendario', href: '/calendar', icon: FiCalendar, description: 'Ver y editar calendario' },
+      { name: 'Blog', href: '/blog', icon: FiBookOpen, description: 'Leer publicaciones' },
+    ],
+    design: [
+       { name: 'Productos', href: '/products', icon: FiBox, description: 'Ver productos y tipos' },
+      { name: 'Pedidos de Diseño', href: '/orders', icon: FiPackage, description: 'Gestionar pedidos en diseño' },
+     
+      { name: 'Colas de Producción', href: '/production-queues', icon: FiClock, description: 'Ver colas de producción' },
+      { name: 'Archivos', href: '/files', icon: FiEdit, description: 'Editar archivos de diseño' },
+      { name: 'Calendario', href: '/calendar', icon: FiCalendar, description: 'Ver calendario' },
+      { name: 'Blog', href: '/blog', icon: FiBookOpen, description: 'Leer publicaciones' },
+    ],
+    customer: [
+      { name: 'Mis Pedidos', href: '/orders', icon: FiPackage, description: 'Ver tus pedidos' },
+      { name: 'Mi Perfil', href: '/profile', icon: FiUserCheck, description: 'Editar tu perfil' },
+      { name: 'Puntos', href: '/customer-points', icon: FiStar, description: 'Ver tus puntos' },
+      { name: 'Calendario', href: '/calendar', icon: FiCalendar, description: 'Ver calendario' },
+      { name: 'Blog', href: '/blog', icon: FiBookOpen, description: 'Leer publicaciones' },
+    ],
+  };
+
+  if (!currentUser || !currentUser.userprofile.staff_status) {
     return null;
   }
 
+  const menus = roleBasedMenus[currentUser.userprofile.staff_status] || [];
+
   return (
-    <div className={`sidebar ${isSidebarExpanded ? '' : 'sidebar-collapsed'}`} style={{ background: isSidebarExpanded ? 'white' : 'transparent', color: 'blue', float: 'right' }}>
-      <div style={{ flex: 1 }}></div>
+    <div className={`sidebar ${isSidebarExpanded ? '' : 'sidebar-collapsed'}`}>
       <SideNav
         style={{ background: isSidebarExpanded ? 'white' : 'transparent', color: 'blue' }}
-        expanded={isSidebarExpanded} // Cambio aquí: usar directamente el valor de isSidebarExpanded
-        onToggle={toggleSidebar} // Eliminar esta línea, ya no es necesaria
-        onSelect={selected => {
-          // console.log(selected);
-          navigate(selected);
-        }}
+        expanded={isSidebarExpanded}
+        onSelect={(selected) => navigate(selected)}
       >
-        <Toggle className="sidebar-toggle">
+        <Toggle onClick={toggleSidebar}>
           {isSidebarExpanded ? (
             <VisibilityOutlinedIcon style={{ color: 'blue' }} />
           ) : (
@@ -138,23 +116,17 @@ function Sidebar() {
           )}
         </Toggle>
         {isSidebarExpanded && (
-          <SideNav.Nav defaultSelected='home'>
-            {solutions.map((solution, index) => (
-              <NavItem key={`solution-${index}`} eventKey={solution.href} style={{ marginBottom: '20px' }}> 
+          <SideNav.Nav defaultSelected="/dashboard">
+            {menus.map((menu, index) => (
+              <NavItem key={`menu-${index}`} eventKey={menu.href} style={{ marginBottom: '20px' }}>
                 <NavIcon>
-                  {isSidebarExpanded && (
-                    <solution.icon size={22} style={{ color: 'blue' }} />
-                  )}
+                  <menu.icon size={22} style={{ color: 'blue' }} />
                 </NavIcon>
                 <NavText className={isSidebarExpanded ? "" : "collapsed"} style={{ color: 'black' }}>
-                  {solution.name}
+                  {menu.name}
                 </NavText>
               </NavItem>
             ))}
-            <NavItem>
-              <NavText style={{ borderTop: '1px solid white' }}></NavText>
-            </NavItem>
-          
           </SideNav.Nav>
         )}
       </SideNav>

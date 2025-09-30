@@ -1,0 +1,59 @@
+[
+  {
+    "id": 1,
+    "name": "Descuento Verano 2025",
+    "description": "¡Aprovecha un 20% de descuento en uniformes deportivos al comprar más de $100!",
+    "min_amount": 100.00,
+    "discount": 20.00,
+    "products": [
+      {
+        "id": 1,
+        "name": "Camiseta Deportiva Personalizada",
+        "image": "/assets/product1.jpg",
+        "price": 25.00
+      },
+      {
+        "id": 2,
+        "name": "Pantalones Deportivos",
+        "image": "/assets/product2.jpg",
+        "price": 30.00
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Oferta Empresarial",
+    "description": "Personaliza regalos corporativos con un 15% de descuento en pedidos superiores a $200.",
+    "min_amount": 200.00,
+    "discount": 15.00,
+    "products": [
+      {
+        "id": 3,
+        "name": "Taza Sublimada Corporativa",
+        "image": "/assets/product3.jpg",
+        "price": 10.00
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Paquete Equipo Completo",
+    "description": "¡Equipa a tu equipo con uniformes completos y obtén un 25% de descuento!",
+    "min_amount": 500.00,
+    "discount": 25.00,
+    "products": [
+      {
+        "id": 4,
+        "name": "Uniforme Completo de Fútbol",
+        "image": "/assets/product4.jpg",
+        "price": 50.00
+      },
+      {
+        "id": 5,
+        "name": "Medias Deportivas Personalizadas",
+        "image": "/assets/product5.jpg",
+        "price": 15.00
+      }
+    ]
+  }
+]

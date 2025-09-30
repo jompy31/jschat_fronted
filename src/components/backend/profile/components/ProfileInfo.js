@@ -38,9 +38,9 @@ const ProfileInfo = ({ currentUser, toggleModal }) => {
     <div style={columnStyle}>
       {currentUser ? (
         <>
-          {currentUser.profile_picture && (
+          {currentUser.userprofile?.profile_picture && (
             <img
-              src={currentUser.profile_picture}
+              src={currentUser.userprofile.profile_picture}
               alt="Perfil"
               style={profileImageStyle}
             />
@@ -70,51 +70,21 @@ const ProfileInfo = ({ currentUser, toggleModal }) => {
               </tr>
               <tr>
                 <td className="font-semibold" style={{ paddingRight: "20px" }}>
-                  Tipo de Usuario:
+                  Tipo de usuario:
                 </td>
-                <td>{currentUser.staff_status}</td>
+                <td>{currentUser.userprofile?.staff_status}</td>
               </tr>
               <tr>
                 <td className="font-semibold" style={{ paddingRight: "20px" }}>
-                  Buscando trabajo:
+                  Teléfono:
                 </td>
-                <td>{currentUser.openwork ? "Sí" : "No"}</td>
-              </tr>
-              <tr>
-                <td className="font-semibold" style={{ paddingRight: "20px" }}>
-                  Resumen de Usuario:
-                </td>
-                <td>{currentUser.bio}</td>
-              </tr>
-              <tr>
-                <td className="font-semibold" style={{ paddingRight: "20px" }}>
-                  Fecha de nacimiento:
-                </td>
-                <td>{currentUser.date_of_birth}</td>
+                <td>{currentUser.userprofile?.phone_number}</td>
               </tr>
               <tr>
                 <td className="font-semibold" style={{ paddingRight: "20px" }}>
                   Dirección:
                 </td>
-                <td>{currentUser.address}</td>
-              </tr>
-              <tr>
-                <td className="font-semibold" style={{ paddingRight: "20px" }}>
-                  País:
-                </td>
-                <td>{currentUser.country}</td>
-              </tr>
-              <tr>
-                <td className="font-semibold" style={{ paddingRight: "20px" }}>
-                  Número de teléfono:
-                </td>
-                <td>{currentUser.phone_number}</td>
-              </tr>
-              <tr>
-                <td className="font-semibold" style={{ paddingRight: "20px" }}>
-                  Empresa:
-                </td>
-                <td>{currentUser.company}</td>
+                <td>{currentUser.userprofile?.address}</td>
               </tr>
             </tbody>
           </table>

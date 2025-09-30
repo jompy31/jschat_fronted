@@ -1,0 +1,47 @@
+/* Tailwind CSS is included via CDN in index.html */
+body {
+  background: linear-gradient(135deg, #1a202c, #2d3748);
+  color: white;
+  font-family: 'Inter', sans-serif;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 1rem;
+  text-align: left;
+}
+
+tr {
+  transition: background-color 0.3s;
+}
+
+tr:hover {
+  background-color: rgba(66, 153, 225, 0.2);
+}
+
+.modal-content {
+  background: #2d3748;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  max-width: 32rem;
+  margin: auto;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
+}
+
+input, select, textarea {
+  background: #4a5568;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  width: 100%;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  ring: 2px solid #63b3ed;
+}

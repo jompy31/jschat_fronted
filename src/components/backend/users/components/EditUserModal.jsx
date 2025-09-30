@@ -1,104 +1,117 @@
 import React from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { FaUserEdit } from 'react-icons/fa';
 
 const EditUserModal = ({ showModal, setShowModal, updatedUser, setUpdatedUser, handleSaveUser }) => {
+  if (!showModal) return null;
+
   return (
-    <Modal
-      show={showModal}
-      onHide={() => setShowModal(false)}
-      centered
-      dialogClassName="custom-modal-zindex"
-    >
-      <Modal.Header closeButton className="bg-gradient-to-r from-blue-600 to-blue-500 text-white">
-        <Modal.Title>Editar Usuario</Modal.Title>
-      </Modal.Header>
-      <Modal.Body className="bg-white">
-        <form className="space-y-4">
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40 backdrop-blur-sm">
+      <div className="relative bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md transform transition-all duration-300 scale-100 hover:scale-105">
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-4">
+          <FaUserEdit className="text-blue-500 text-2xl" />
+          <h2 className="text-xl font-bold text-gray-800">Editar Usuario</h2>
+        </div>
+
+        {/* Body */}
+        <div className="mb-6 space-y-4">
           <div>
-            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-              Nombre
-            </label>
+            <label className="text-gray-600 text-sm font-medium">Nombre</label>
             <input
               type="text"
-              id="firstName"
               value={updatedUser.first_name}
               onChange={(e) => setUpdatedUser({ ...updatedUser, first_name: e.target.value })}
-              className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+              className="w-full mt-1 p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Ingrese el nombre"
             />
           </div>
           <div>
-            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-              Apellido
-            </label>
+            <label className="text-gray-600 text-sm font-medium">Apellido</label>
             <input
               type="text"
-              id="lastName"
               value={updatedUser.last_name}
               onChange={(e) => setUpdatedUser({ ...updatedUser, last_name: e.target.value })}
-              className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+              className="w-full mt-1 p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Ingrese el apellido"
             />
           </div>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-              Correo Electrónico
-            </label>
+            <label className="text-gray-600 text-sm font-medium">Correo</label>
             <input
               type="email"
-              id="email"
               value={updatedUser.email}
               onChange={(e) => setUpdatedUser({ ...updatedUser, email: e.target.value })}
-              className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+              className="w-full mt-1 p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Ingrese el correo"
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              Contraseña
-            </label>
-            <input
-              type="password"
-              id="password"
-              value={updatedUser.password}
-              onChange={(e) => setUpdatedUser({ ...updatedUser, password: e.target.value })}
-              placeholder="Dejar vacío si no desea cambiarla"
-              className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-            />
-          </div>
-          <div>
-            <label htmlFor="userType" className="block text-sm font-medium text-gray-700">
-              Tipo de usuario
-            </label>
+            <label className="text-gray-600 text-sm font-medium">Rol</label>
             <select
-              id="userType"
-              value={updatedUser.staff_status}
-              onChange={(e) => setUpdatedUser({ ...updatedUser, staff_status: e.target.value })}
-              className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+              value={updatedUser.userprofile.staff_status}
+              onChange={(e) =>
+                setUpdatedUser({
+                  ...updatedUser,
+                  userprofile: { ...updatedUser.userprofile, staff_status: e.target.value }
+                })
+              }
+              className="w-full mt-1 p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="customer">Cliente</option>
-              <option value="user">Usuario</option>
-              <option value="sales">Vendedor</option>
-              <option value="design">Diseñador</option>
-              <option value="administrator">Administrador</option>
+              <option value="customer">Customer</option>
+              <option value="administrator">Administrator</option>
+              <option value="sales">Sales</option>
+              <option value="design">Design</option>
             </select>
           </div>
-        </form>
-      </Modal.Body>
-      <Modal.Footer className="bg-gray-50">
-        <Button
-          variant="secondary"
-          onClick={() => setShowModal(false)}
-          className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition"
-        >
-          Cerrar
-        </Button>
-        <Button
-          variant="primary"
-          onClick={handleSaveUser}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-        >
-          Guardar cambios
-        </Button>
-      </Modal.Footer>
-    </Modal>
+          <div>
+            <label className="text-gray-600 text-sm font-medium">Teléfono</label>
+            <input
+              type="text"
+              value={updatedUser.userprofile.phone_number}
+              onChange={(e) =>
+                setUpdatedUser({
+                  ...updatedUser,
+                  userprofile: { ...updatedUser.userprofile, phone_number: e.target.value }
+                })
+              }
+              className="w-full mt-1 p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Ingrese el teléfono"
+            />
+          </div>
+          <div>
+            <label className="text-gray-600 text-sm font-medium">Dirección</label>
+            <input
+              type="text"
+              value={updatedUser.userprofile.address}
+              onChange={(e) =>
+                setUpdatedUser({
+                  ...updatedUser,
+                  userprofile: { ...updatedUser.userprofile, address: e.target.value }
+                })
+              }
+              className="w-full mt-1 p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Ingrese la dirección"
+            />
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex justify-end gap-3">
+          <button
+            onClick={() => setShowModal(false)}
+            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition duration-200"
+          >
+            Cancelar
+          </button>
+          <button
+            onClick={handleSaveUser}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+          >
+            Guardar
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 

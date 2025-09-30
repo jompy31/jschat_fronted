@@ -1,0 +1,22 @@
+.promociones-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.promo-swiper {
+  padding-bottom: 40px;
+}
+
+.promo-swiper .swiper-pagination-bullet {
+  background-color: #0A2463;
+}
+
+.promo-swiper .swiper-pagination-bullet-active {
+  background-color: #D90404;
+}
+
+.promo-swiper .swiper-button-next,
+.promo-swiper .swiper-button-prev {
+  color: #D90404;
+}

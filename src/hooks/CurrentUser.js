@@ -86,7 +86,7 @@ const UserList1 = (props) => {
         <img src={require('../assets/imagenes/abcupon.jpeg')} height="50" alt="Logo" />
         
         <div style={containerStyle}>
-          <h1 style={titleStyle}>Bienvenido a ABCupon.com</h1>
+          <h1 style={titleStyle}>Bienvenido a Dirlux.com</h1>
           {currentUser && currentUser.profile_picture && (
             <img 
               src={currentUser.profile_picture} 

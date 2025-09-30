@@ -13,32 +13,40 @@ import PrivateRoute from "./Rutas_privadas.jsx";
 import AdminRoute from "./Rutas_privadas_admin.jsx";
 import "../App.css";
 
+// Public Pages
 const Error404 = lazy(() => import("../containers/errors/Error404"));
 const Directorio = lazy(() => import("../containers/pages/home"));
-const Faq = lazy(() => import("../containers/pages/home/abcupon/Faq.jsx"));
+const Promociones = lazy(() => import("../containers/pages/Promociones"));
+const Sobre_nosotros = lazy(() => import("../containers/pages/sobre_nosotros"));
 const Catalogo = lazy(() => import("../containers/pages/Catalogo"));
-const ComerciosAfiliados = lazy(() => import("../containers/pages/ComerciosAfiliados"));
-const Publiembudo = lazy(() => import("../containers/pages/Publiembudo"));
-const SubproductDetails = lazy(() => import("../containers/pages/home/details/subproductdetails"));
-const AvisosClasificados = lazy(() => import("../containers/pages/avisos_economicos/Avisos_clasificados.jsx"));
-const Bolsaempleo = lazy(() => import("../containers/pages/bolsa_empleo/bolsaempleo.jsx"));
 const Cotizador = lazy(() => import("../containers/pages/cotizador/Cotizador.jsx"));
 const Blog = lazy(() => import("../containers/pages/blog/manage_blog.js"));
-const Contactenos = lazy(() => import("../containers/pages/Contactenos"))
+const Contactenos = lazy(() => import("../containers/pages/Contactenos"));
 const Login = lazy(() => import("../components/login/login"));
 const Signup = lazy(() => import("../components/login/signup"));
-const UserList1 = lazy(() => import("../components/login/CurrentUser"));
+const CurrentUser = lazy(() => import("../components/login/CurrentUser"));
+
+// Authenticated Pages
 const Profile = lazy(() => import("../components/backend/profile"));
 const Files = lazy(() => import("../components/backend/files"));
+const Calendar = lazy(() => import("../components/backend/calendar"));
+
+// Admin/Sales/Design Pages
 const UserList = lazy(() => import("../components/backend/users"));
 const Register = lazy(() => import("../components/backend/users/register.js"));
-const Calendar = lazy(() => import("../components/backend/calendar"));
-const Contacts = lazy(() => import("../components/backend/contacts_info"));
-const Managejob = lazy(() => import("../components/backend/manage_job"));
-const Files_frontend = lazy(() => import("../components/backend/files_frontend"));
-const Files_products = lazy(() => import("../components/backend/files_products"));
-const Directory = lazy(() => import("../components/backend/directory"));
-const Files_news = lazy(() => import("../components/backend/clasificados"));
+const Customers = lazy(() => import("../components/backend/customers"));
+const CustomerDetail = lazy(() => import("../components/backend/customers/detail"));
+const Orders = lazy(() => import("../components/backend/orders"));
+const OrderDetail = lazy(() => import("../components/backend/orders/detail"));
+const OrderCreate = lazy(() => import("../components/backend/orders/create"));
+const OrderAddEvent = lazy(() => import("../components/backend/orders/add_event"));
+const Products = lazy(() => import("../components/backend/products"));
+const ProductDetail = lazy(() => import("../components/backend/products/detail"));
+const Promotions = lazy(() => import("../components/backend/promotions"));
+const PromotionDetail = lazy(() => import("../components/backend/promotions/detail"));
+const CustomerPoints = lazy(() => import("../components/backend/customer_points"));
+const ProductionQueues = lazy(() => import("../components/backend/production_queues"));
+const Settings = lazy(() => import("../components/backend/settings"));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -74,25 +82,21 @@ function App() {
         let allSubproducts = [];
         let page = 1;
         let hasNextPage = true;
-  
-        // Obtener productos, clasificados y servicios
+
         const [productsRes, clasificadosRes, servicesRes] = await Promise.all([
           ProductDataService.getAll(token),
           FileDataService.getAllPost(token),
           ProductDataService.getAllServices(token),
         ]);
-  
-        // Obtener todas las páginas de subproductos
+
         while (hasNextPage) {
           const subproductsRes = await ProductDataService.getAllSubProduct(token, page, 100);
           const subproductsData = subproductsRes.data.results || [];
           allSubproducts = [...allSubproducts, ...subproductsData];
-          
-          // Verificar si hay más páginas (basado en la respuesta de la API)
-          hasNextPage = subproductsRes.data.next !== null; // Asume que la API devuelve un campo 'next'
+          hasNextPage = subproductsRes.data.next !== null;
           page += 1;
         }
-  
+
         setProducts(Array.isArray(productsRes.data) ? productsRes.data : []);
         setClasificados(Array.isArray(clasificadosRes.data) ? clasificadosRes.data : []);
         setServices(Array.isArray(servicesRes.data) ? servicesRes.data : []);
@@ -120,9 +124,10 @@ function App() {
         setUser(user.username);
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("user", user.username);
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
+        localStorage.setItem("currentUser", JSON.stringify({ 
+          email: user.username, 
+          userprofile: { staff_status: response.data.staff_status } 
+        }));
       })
       .catch((e) => {
         console.log("login", e);
@@ -142,6 +147,10 @@ function App() {
         login(user);
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("user", user.username);
+        localStorage.setItem("currentUser", JSON.stringify({ 
+          email: user.username, 
+          userprofile: { staff_status: response.data.staff_status } 
+        }));
       })
       .catch((e) => {
         console.log(e);
@@ -157,6 +166,7 @@ function App() {
           <Navbar user={user} token={token} logout={logout} setIsSidebar={setIsSidebar} />
           <Suspense fallback={<div>Loading...</div>}>
             <Routes>
+              {/* Public Routes */}
               <Route path="*" element={<Error404 />} />
               <Route
                 path="/"
@@ -169,35 +179,44 @@ function App() {
                   />
                 }
               />
-              <Route path="/faq" element={<Faq />} />
               <Route path="/catalogo" element={<Catalogo />} />
-              <Route path="/comercios_afiliados" element={<ComerciosAfiliados subproducts={subproducts} />} />
-              <Route path="/publiembudo" element={<Publiembudo />} />
-              <Route path="/servicios/:subproductId" element={<SubproductDetails />} />
-              <Route path="/avisos_economicos" element={<AvisosClasificados />} />
-              <Route path="/avisos_economicos/:id" element={<AvisosClasificados />} />
-              <Route path="/bolsadeempleo" element={<Bolsaempleo />} />
-              <Route path="/bolsadeempleo/:id" element={<Bolsaempleo />} />
+              <Route path="/promociones" element={<Promociones />} />
+              <Route path="/sobre_nosotros" element={<Sobre_nosotros />} />
               <Route path="/cotizador" element={<Cotizador />} />
               <Route path="/blog" element={<Blog />} />
-              <Route path="/contacto" element={<> {" "} <Contactenos />{" "} </>} />
+              <Route path="/contacto" element={<Contactenos />} />
               <Route path="/login" element={<Login login={login} />} />
               <Route path="/signup" element={<Signup signup={signup} />} />
-              <Route path="/register" element={<Register signup={signup} />} />
-              <Route path="/current_user" element={<UserList1 token={token} user={user} />} />
-              <Route path="/profile" element={<Profile />} />
+              <Route path="/current_user" element={<CurrentUser token={token} user={user} />} />
+
+              {/* Private Routes (Authenticated Users) */}
               <Route element={<PrivateRoute />}>
-                <Route path="/customer" element={<Contacts token={token} user={user} />} />
+                <Route path="/profile" element={<Profile />} />
                 <Route path="/files" element={<Files />} />
-                <Route path="/calendario" element={<Calendar />} />
+                <Route path="/calendar" element={<Calendar />} />
+                <Route path="/customers" element={<Customers token={token} user={user}/>}>
+                  <Route path=":id" element={<CustomerDetail />} />
+                </Route>
+                <Route path="/orders" element={<Orders />}>
+                  <Route path="new" element={<OrderCreate />} />
+                  <Route path=":id" element={<OrderDetail />} />
+                  <Route path=":id/add_event" element={<OrderAddEvent />} />
+                </Route>
+                <Route path="/customer-points" element={<CustomerPoints />} />
               </Route>
+
+              {/* Admin/Sales/Design Routes */}
               <Route element={<AdminRoute />}>
-                <Route path="/user" element={<UserList />} />
-                <Route path="/empleos" element={<Managejob />} />
-                <Route path="/files_frontend" element={<Files_frontend />} />
-                <Route path="/files_products" element={<Files_products />} />
-                <Route path="/directory" element={<Directory />} />
-                <Route path="/files_news" element={<Files_news />} />
+                <Route path="/users" element={<UserList />} />
+                <Route path="/register" element={<Register signup={signup} />} />
+                <Route path="/products" element={<Products />}>
+                  <Route path=":id" element={<ProductDetail />} />
+                </Route>
+                <Route path="/promotions" element={<Promotions />}>
+                  <Route path=":id" element={<PromotionDetail />} />
+                </Route>
+                <Route path="/production-queues" element={<ProductionQueues />} />
+                <Route path="/settings" element={<Settings />} />
               </Route>
             </Routes>
           </Suspense>

@@ -1,28 +1,19 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import ProfileInfo from "./components/ProfileInfo";
-import WorkExperience from "./components/WorkExperience";
-import Skills from "./components/Skills";
 import EditProfileModal from "./components/EditProfileModal";
-import CreateSkillModal from "./components/CreateSkillModal";
-import CreateExperienceModal from "./components/CreateExperienceModal";
-import { fetchUser, fetchWorkExperience, fetchSkills, updateUser, createSkill, createWorkExperience, deleteSkill, deleteWorkExperience } from "./utils/apiService";
+import { fetchUser, updateUser } from "./utils/apiService";
 import { downloadPDF } from "./utils/pdfUtils";
+import { formatUserData } from "./utils/formatUtils";
 import "./profile.css";
 
 const Profile = () => {
   const [currentUser, setCurrentUser] = useState(null);
-  const [workExperience, setWorkExperience] = useState([]);
-  const [skills, setSkills] = useState([]);
-  const [selectedSkills, setSelectedSkills] = useState([]);
-  const [selectedExperience, setSelectedExperience] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isModalOpen1, setIsModalOpen1] = useState(false);
-  const [isExperienceModalOpen, setIsExperienceModalOpen] = useState(false);
-  const [editedUser, setEditedUser] = useState({});
+  const [editedUser, setEditedUser] = useState({ userprofile: {} });
   const [profile_picture, setProfile_picture] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  const [userList, setUserList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const token = useSelector((state) => state.authentication.token);
   const componentRef = useRef();
 
@@ -32,61 +23,80 @@ const Profile = () => {
       const user = JSON.parse(storedUser);
       setCurrentUser(user);
       setEditedUser({
-        ...user,
-        user_summary: user.user_summary || "",
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        userprofile: {
+          staff_status: user.userprofile?.staff_status || "customer",
+          phone_number: user.userprofile?.phone_number || "",
+          address: user.userprofile?.address || "",
+        },
       });
-      fetchWorkExperience(user.id, token).then(setWorkExperience);
-      fetchSkills(user.id, token).then(setSkills);
     }
   }, []);
 
   const handleFetchUser = (userId) => {
-    fetchUser(userId, token).then((updatedUser) => {
-      setCurrentUser(updatedUser);
-      setUserList(updatedUser);
-      localStorage.setItem("currentUser", JSON.stringify(updatedUser));
-    });
+    fetchUser(userId, token)
+      .then((updatedUser) => {
+        setCurrentUser(updatedUser);
+        setEditedUser({
+          first_name: updatedUser.first_name,
+          last_name: updatedUser.last_name,
+          email: updatedUser.email,
+          userprofile: {
+            staff_status: updatedUser.userprofile?.staff_status || "customer",
+            phone_number: updatedUser.userprofile?.phone_number || "",
+            address: updatedUser.userprofile?.address || "",
+          },
+        });
+        localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+      })
+      .catch((error) => {
+        console.error("Error fetching user:", error);
+        alert("Error al cargar los datos del usuario. Intenta de nuevo.");
+      });
   };
 
-  const handleEditUser = (formData) => {
-    updateUser(currentUser.id, formData, token).then(() => {
-      const newUser = { ...currentUser, ...formData };
-      localStorage.setItem("currentUser", JSON.stringify(newUser));
-      setCurrentUser(newUser);
-      setIsModalOpen(false);
-      setImagePreview(null);
-      handleFetchUser(currentUser.id);
-    });
-  };
-
-  const handleCreateSkill = (skillData) => {
-    createSkill(skillData, token).then(() => {
-      fetchSkills(currentUser.id, token).then(setSkills);
-      setIsModalOpen1(false);
-    });
-  };
-
-  const handleCreateExperience = (experienceData) => {
-    createWorkExperience(experienceData, token).then(() => {
-      fetchWorkExperience(currentUser.id, token).then(setWorkExperience);
-      setIsExperienceModalOpen(false);
-    });
-  };
-
-  const handleDeleteSkill = (id) => {
-    if (window.confirm("¿Estás seguro de que deseas eliminar esta habilidad?")) {
-      deleteSkill(id, token).then(() => {
-        setSkills(skills.filter((skill) => skill.id !== id));
+  const handleEditUserChange = (e) => {
+    const { name, value } = e.target;
+    if (name.startsWith("userprofile.")) {
+      const field = name.split(".")[1];
+      setEditedUser({
+        ...editedUser,
+        userprofile: {
+          ...editedUser.userprofile,
+          [field]: value,
+        },
+      });
+    } else {
+      setEditedUser({
+        ...editedUser,
+        [name]: value,
       });
     }
   };
 
-  const handleDeleteExperience = (id) => {
-    if (window.confirm("¿Estás seguro de que deseas eliminar esta experiencia laboral?")) {
-      deleteWorkExperience(id, token).then(() => {
-        setWorkExperience(workExperience.filter((experience) => experience.id !== id));
+  const handleEditUser = (formData, profile_picture) => {
+    setIsLoading(true);
+    const formattedData = formatUserData(formData, profile_picture);
+    updateUser(currentUser.id, formattedData, token)
+      .then((updatedUser) => {
+        handleFetchUser(currentUser.id); // Recarga los datos desde el servidor
+        setIsModalOpen(false); // Cierra el modal solo si la actualización es exitosa
+        setImagePreview(null);
+        setProfile_picture(null);
+        alert("Perfil actualizado correctamente.");
+      })
+      .catch((error) => {
+        console.error("Error updating user:", error);
+        const errorMessage = error?.email
+          ? "El correo electrónico ya está registrado."
+          : error?.detail || "Error al actualizar el perfil. Verifica los datos e intenta de nuevo.";
+        alert(errorMessage);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
-    }
   };
 
   const containerStyle = {
@@ -122,45 +132,11 @@ const Profile = () => {
             currentUser={currentUser}
             toggleModal={() => setIsModalOpen(!isModalOpen)}
           />
-          <div style={{ width: "50%", padding: "10px" }}>
-            <WorkExperience
-              workExperience={workExperience}
-              selectedExperience={selectedExperience}
-              handleExperienceChange={(e) => {
-                const experienceId = e.target.value;
-                if (e.target.checked) {
-                  setSelectedExperience([...selectedExperience, experienceId]);
-                } else {
-                  setSelectedExperience(selectedExperience.filter((id) => id !== experienceId));
-                }
-              }}
-              handleDeleteExperience={handleDeleteExperience}
-              toggleExperienceModal={() => setIsExperienceModalOpen(!isExperienceModalOpen)}
-            />
-            <Skills
-              skills={skills}
-              selectedSkills={selectedSkills}
-              handleSkillChange={(e) => {
-                const skillId = e.target.value;
-                if (e.target.checked) {
-                  setSelectedSkills([...selectedSkills, skillId]);
-                } else {
-                  setSelectedSkills(selectedSkills.filter((id) => id !== skillId));
-                }
-              }}
-              handleDeleteSkill={handleDeleteSkill}
-              toggleSkillModal={() => setIsModalOpen1(!isModalOpen1)}
-            />
-          </div>
         </div>
         {isModalOpen && (
           <EditProfileModal
             editedUser={editedUser}
-            handleEditUserChange={(e) => {
-              const { name, value } = e.target;
-              const formattedValue = name === "openwork" ? value === "yes" : value;
-              setEditedUser({ ...editedUser, [name]: formattedValue });
-            }}
+            handleEditUserChange={handleEditUserChange}
             handleImageChange={(e) => {
               const file = e.target.files[0];
               setProfile_picture(file);
@@ -170,20 +146,7 @@ const Profile = () => {
             toggleModal={() => setIsModalOpen(!isModalOpen)}
             imagePreview={imagePreview}
             profile_picture={profile_picture}
-          />
-        )}
-        {isModalOpen1 && (
-          <CreateSkillModal
-            currentUser={currentUser}
-            handleCreateSkill={handleCreateSkill}
-            toggleSkillModal={() => setIsModalOpen1(!isModalOpen1)}
-          />
-        )}
-        {isExperienceModalOpen && (
-          <CreateExperienceModal
-            currentUser={currentUser}
-            handleCreateExperience={handleCreateExperience}
-            toggleExperienceModal={() => setIsExperienceModalOpen(!isExperienceModalOpen)}
+            isLoading={isLoading}
           />
         )}
       </div>
