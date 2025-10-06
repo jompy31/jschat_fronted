@@ -1,11 +1,11 @@
 import React, { useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import Contraportada from '../../../assets/catalogo/requisitos_propiedades.pdf';
-import Valeautos from '../../../assets/catalogo/requisitos_valeautos.pdf';
-import Sucesorios from '../../../assets/catalogo/requisitos_sucesorios.pdf';
-import Contraportadaimg from '../../../assets/catalogo/requisitos_propiedades.jpg';
-import Valeautosimg from '../../../assets/catalogo/requisitos_valeautos.jpg';
-import Sucesoriosimg from '../../../assets/catalogo/requisitos_sucesorios.jpg';
+// import Contraportada from '../../../assets/catalogo/requisitos_propiedades.pdf';
+// import Valeautos from '../../../assets/catalogo/requisitos_valeautos.pdf';
+// import Sucesorios from '../../../assets/catalogo/requisitos_sucesorios.pdf';
+// import Contraportadaimg from '../../../assets/catalogo/requisitos_propiedades.jpg';
+// import Valeautosimg from '../../../assets/catalogo/requisitos_valeautos.jpg';
+// import Sucesoriosimg from '../../../assets/catalogo/requisitos_sucesorios.jpg';
 import { useMediaQuery } from 'react-responsive';
 
 const Catalogo = () => {
@@ -17,9 +17,9 @@ const Catalogo = () => {
   const isMini = useMediaQuery({ query: '(max-width: 340px)' });
 
   const pdfs = [
-    { src: Contraportada, img: Contraportadaimg, alt: 'Contraportada' },
-    { src: Valeautos, img: Valeautosimg, alt: 'Valeautos' },
-    { src: Sucesorios, img: Sucesoriosimg, alt: 'Sucesorios' },
+    // // { src: Contraportada, img: Contraportadaimg, alt: 'Contraportada' },
+    // { src: Valeautos, img: Valeautosimg, alt: 'Valeautos' },
+    // { src: Sucesorios, img: Sucesoriosimg, alt: 'Sucesorios' },
   ];
 
   const scrollToCatalogo = () => {

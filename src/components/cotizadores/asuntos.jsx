@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Data from '../datos_cotizador/asuntos.json';
+// import Data from '../datos_cotizador/asuntos.json';
 import numeral from 'numeral';
 import './Cotizador.css';
 import { useMediaQuery } from "react-responsive";

@@ -1,11 +1,14 @@
 import React from "react";
 import { Image } from "react-bootstrap";
-import publicidad1 from "../../../../assets/catalogo/webp/publicidad1.webp";
-import publicidad2 from "../../../../assets/publicidad 2.png";
-import publicidad3 from "../../../../assets/catalogo/webp/publicidad3.webp";
+// import publicidad1 from "../../../../assets/catalogo/webp/publicidad1.webp";
+// import publicidad2 from "../../../../assets/publicidad 2.png";
+// import publicidad3 from "../../../../assets/catalogo/webp/publicidad3.webp";
+import Logo from "../../../../assets/LOGO_cuadrado.png";
+import Logo2 from "../../../../assets/textura.jpg";
+import Logo3 from "../../../../assets/LOGO_rectangular.png";
 
 const ImageCarousel = ({ index, scrollPosition }) => {
-  const images = [publicidad1, publicidad2, publicidad3];
+  const images = [Logo, Logo2, Logo3];
 
   return (
     <div

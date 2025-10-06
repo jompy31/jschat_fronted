@@ -1,16 +1,47 @@
-/* Navbar container */
+/* Variables CSS para temas - Basadas en logo: azul #0A2463, rojo #D90404 */
+:root {
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F8F9FA;
+  --text-primary: #0A2463;
+  --text-secondary: #4B5EAA;
+  --accent-primary: #D90404;
+  --accent-hover: linear-gradient(135deg, #D90404, #0A2463);
+  --border-primary: #0A2463;
+  --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --glow-neon: 0 0 10px rgba(217, 4, 4, 0.3);
+}
+
+.dark {
+  --bg-primary: #0A1230; /* Azul profundo futurista */
+  --bg-secondary: #1A2A4A;
+  --text-primary: #FFFFFF;
+  --text-secondary: #A8B2D1;
+  --accent-primary: #FF4D4D; /* Rojo neón para dark */
+  --accent-hover: linear-gradient(135deg, #FF4D4D, #0A2463);
+  --border-primary: #FFFFFF;
+  --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.3);
+  --glow-neon: 0 0 15px rgba(255, 77, 77, 0.5);
+}
+
+/* Transiciones globales para innovación */
+* {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Easing futurista suave */
+}
+
+/* Navbar container - Futurista: sticky con blur */
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 50;
-  background-color: #FFFFFF;
-  transition: all 0.3s ease;
+  background: var(--bg-primary);
+  backdrop-filter: blur(10px); /* Blur glassmorphism */
+  border-bottom: 1px solid var(--border-primary);
 }
 
 .navbar-scrolled {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-light), var(--glow-neon);
 }
 
 .navbar-container {
@@ -23,7 +54,7 @@
   height: 80px;
 }
 
-/* Logo */
+/* Logo - Responsivo y vibrante */
 .logo-container {
   flex-shrink: 0;
   margin-top: 40px;
@@ -33,21 +64,24 @@
   display: flex;
   align-items: center;
   flex-direction: column;
+  text-decoration: none;
 }
 
 .logo-image {
   height: 60px;
   width: auto;
+  filter: drop-shadow(0 2px 4px rgba(10, 36, 99, 0.3)); /* Sombra azul sutil */
 }
 
 .logo-text {
-  color: #0A2463;
+  color: var(--text-primary);
   font-size: 0.875rem;
   font-weight: 600;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+  text-shadow: 1px 1px 1px rgba(217, 4, 4, 0.1); /* Toque rojo */
+  margin-top: 0.25rem;
 }
 
-/* Desktop Menu */
+/* Desktop Menu - Innovador: Flex con gap dinámico */
 .desktop-menu {
   display: none;
   align-items: center;
@@ -61,39 +95,123 @@
 }
 
 .desktop-menu-item {
-  color: #0A2463;
+  color: var(--text-primary);
   font-size: 1rem;
   font-weight: 500;
   padding: 0.5rem 1rem;
   border-bottom: 2px solid transparent;
-  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.desktop-menu-item::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: var(--accent-hover);
+  transition: left 0.3s ease;
+}
+
+.desktop-menu-item:hover::before,
+.desktop-menu-item-active::before {
+  left: 0;
 }
 
 .desktop-menu-item:hover {
-  color: #D90404;
-  border-bottom: 2px solid #D90404;
+  color: var(--accent-primary);
+  transform: translateY(-1px); /* Lift sutil */
 }
 
 .desktop-menu-item-active {
-  color: #D90404;
-  border-bottom: 2px solid #D90404;
+  color: var(--accent-primary);
   font-weight: 600;
 }
 
 .desktop-menu-login {
-  background-color: #D90404;
+  background: var(--accent-hover);
   color: #FFFFFF;
-  border: 2px solid #0A2463;
+  border: 2px solid var(--border-primary);
   padding: 0.5rem 1rem;
   border-radius: 0.375rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.desktop-menu-login::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.desktop-menu-login:hover::before {
+  left: 100%;
 }
 
 .desktop-menu-login:hover {
-  background-color: #0A2463;
-  border-color: #D90404;
+  background: var(--border-primary);
+  border-color: var(--accent-primary);
+  box-shadow: var(--glow-neon);
 }
 
-/* Mobile Menu Toggle */
+/* Theme Toggle - Futurista: Switch con animación rotatoria */
+.theme-toggle {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 50px;
+  padding: 0.5rem;
+  cursor: pointer;
+  position: relative;
+  min-width: 2.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.25rem;
+}
+
+.theme-toggle-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: var(--text-primary);
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+.dark-mode .theme-toggle-inner {
+  background: var(--accent-primary);
+  animation: rotateGlow 0.6s ease-in-out;
+}
+
+@keyframes rotateGlow {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.1); box-shadow: var(--glow-neon); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+.theme-icon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--bg-primary);
+  transition: opacity 0.3s ease;
+}
+
+.theme-toggle:hover .theme-icon {
+  opacity: 0.7;
+}
+
+/* Mobile Menu Toggle - Responsivo */
 .mobile-toggle-container {
   display: flex;
   align-items: center;
@@ -107,9 +225,15 @@
 
 .mobile-toggle-button {
   padding: 0.5rem;
-  color: #0A2463;
+  color: var(--text-primary);
   background: none;
   border: none;
+  border-radius: 0.25rem;
+}
+
+.mobile-toggle-button:hover {
+  background: var(--bg-secondary);
+  box-shadow: var(--glow-neon);
 }
 
 .mobile-toggle-icon {
@@ -117,16 +241,17 @@
   height: 1.5rem;
 }
 
-/* Mobile Menu */
+/* Mobile Menu - Sidebar futurista con overlay */
 .mobile-menu {
   position: fixed;
   top: 80px;
   left: 0;
   bottom: 0;
   width: 250px;
-  background-color: #FFFFFF;
-  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(180deg, var(--bg-primary), var(--bg-secondary)); /* Gradiente innovador */
+  box-shadow: 2px 0 20px rgba(10, 36, 99, 0.2), var(--glow-neon);
   z-index: 40;
+  overflow-y: auto;
 }
 
 .mobile-menu-content {
@@ -139,14 +264,17 @@
 .mobile-menu-item {
   display: block;
   padding: 0.75rem 1rem;
-  color: #0A2463;
+  color: var(--text-primary);
   border-radius: 0.375rem;
-  transition: all 0.3s ease;
+  position: relative;
+  border-left: 3px solid transparent;
 }
 
 .mobile-menu-item:hover {
-  background-color: #D90404;
+  background: var(--accent-primary);
   color: #FFFFFF;
+  border-left-color: var(--border-primary);
+  transform: translateX(5px); /* Slide in */
 }
 
 .mobile-menu-item-title {
@@ -156,7 +284,7 @@
 
 .mobile-menu-item-description {
   font-size: 0.75rem;
-  color: #4B5EAA;
+  color: var(--text-secondary);
 }
 
 .mobile-menu-user {
@@ -164,36 +292,38 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  border-top: 1px solid var(--border-primary);
+  padding-top: 1rem;
 }
 
 .mobile-menu-button {
   display: flex;
   align-items: center;
   padding: 0.75rem 1rem;
-  color: #0A2463;
-  background-color: #FFFFFF;
-  border: 1px solid #0A2463;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-primary);
   border-radius: 0.375rem;
   font-size: 0.875rem;
   font-weight: 500;
-  transition: all 0.3s ease;
 }
 
 .mobile-menu-button:hover {
-  background-color: #D90404;
+  background: var(--accent-primary);
   color: #FFFFFF;
-  border-color: #D90404;
+  border-color: var(--accent-primary);
+  box-shadow: var(--glow-neon);
 }
 
 .mobile-menu-login {
-  background-color: #D90404;
+  background: var(--accent-hover);
   color: #FFFFFF;
-  border: 1px solid #0A2463;
+  border: 1px solid var(--border-primary);
 }
 
 .mobile-menu-login:hover {
-  background-color: #0A2463;
-  border-color: #D90404;
+  background: var(--border-primary);
+  border-color: var(--accent-primary);
 }
 
 .mobile-menu-icon {
@@ -203,10 +333,16 @@
 }
 
 .mobile-menu-logout {
-  color: #D90404;
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
 }
 
-/* User Menu */
+.mobile-menu-logout:hover {
+  background: var(--accent-primary);
+  color: #FFFFFF;
+}
+
+/* User Menu - Popover con glass effect */
 .user-menu {
   position: relative;
 }
@@ -215,22 +351,23 @@
   display: flex;
   align-items: center;
   padding: 0.5rem 1rem;
-  color: #0A2463;
+  color: var(--text-primary);
   font-size: 1rem;
   font-weight: 500;
   border: 2px solid transparent;
-  background: none;
-  transition: all 0.3s ease;
+  background: var(--bg-secondary);
+  border-radius: 0.25rem;
 }
 
 .user-menu-button:hover {
-  color: #D90404;
-  border-bottom: 2px solid #D90404;
+  color: var(--accent-primary);
+  border-bottom-color: var(--accent-primary);
+  box-shadow: var(--glow-neon);
 }
 
 .user-menu-button-active {
-  color: #D90404;
-  border-bottom: 2px solid #D90404;
+  color: var(--accent-primary);
+  border-bottom-color: var(--accent-primary);
 }
 
 .user-menu-icon {
@@ -243,10 +380,11 @@
   position: absolute;
   top: 100%;
   right: 0;
-  background-color: #FFFFFF;
-  border: 1px solid #0A2463;
+  background: var(--bg-primary);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-primary);
   border-radius: 0.375rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-light), var(--glow-neon);
   min-width: 150px;
 }
 
@@ -260,14 +398,13 @@
   display: flex;
   align-items: center;
   padding: 0.5rem 1rem;
-  color: #0A2463;
+  color: var(--text-primary);
   font-size: 0.875rem;
   border-radius: 0.25rem;
-  transition: all 0.3s ease;
 }
 
 .user-menu-item:hover {
-  background-color: #D90404;
+  background: var(--accent-primary);
   color: #FFFFFF;
 }
 
@@ -278,20 +415,50 @@
 }
 
 .user-menu-logout {
-  color: #D90404;
+  color: var(--accent-primary);
 }
 
-/* Responsive adjustments */
+.user-menu-logout:hover {
+  background: var(--accent-primary);
+  color: #FFFFFF;
+}
+
+/* Responsive - Mejoras para tablet y mobile */
+@media (max-width: 1023px) and (min-width: 641px) { /* Tablet */
+  .desktop-menu {
+    gap: 1rem; /* Gap más chico */
+  }
+  
+  .navbar-container {
+    padding: 0 0.75rem;
+  }
+  
+  .logo-image {
+    height: 50px;
+  }
+}
+
 @media (max-width: 640px) {
   .navbar-container {
     height: 60px;
   }
 
+  .logo-container {
+    margin-top: 20px;
+  }
+  
   .logo-image {
     height: 40px;
   }
 
   .mobile-menu {
     top: 60px;
+    width: 80%; /* Full-width en mobile chico */
+    max-width: 300px;
+  }
+  
+  .theme-toggle { /* Ocultar en mobile si es muy chico, o hazlo más pequeño */
+    min-width: 2rem;
+    height: 1.25rem;
   }
 }

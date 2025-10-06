@@ -1,7 +1,7 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import html2canvas from "html2canvas";
-import logoABCupon from "../../../../assets/categorias/25.webp";
+// import logoABCupon from "../../../../assets/categorias/25.webp";
 
 export const downloadPDF = (modalLead) => {
   const input = document.getElementById("modal-content");
@@ -95,7 +95,7 @@ export const downloadCustomerPDF = (lead) => {
   const logoHeight = 20;
   const logoX = 160;
   const logoY = 10;
-  doc.addImage(logoABCupon, "JPEG", logoX, logoY, logoWidth, logoHeight);
+  doc.addImage("JPEG", logoX, logoY, logoWidth, logoHeight);
 
   doc.setFontSize(18);
   doc.text("Información de Cliente ABCupon", 15, 20);

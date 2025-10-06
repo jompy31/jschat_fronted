@@ -8,6 +8,7 @@ import DesktopMenu from "./DesktopMenu";
 import MobileMenuToggle from "./MobileMenuToggle";
 import MobileMenu from "./MobileMenu";
 import UserMenu from "./UserMenu";
+import ThemeToggle from "./ThemeToggle"; // 🆕 Nuevo componente para modo oscuro/claro
 import "./Navbar.css";
 
 const navItems = [
@@ -16,7 +17,6 @@ const navItems = [
   { name: "Sobre Nosotros", description: "Conoce más sobre J SPORT", href: "/sobre_nosotros", icon: "Info" },
   { name: "Blog", description: "Accede a nuestro blog", href: "/blog", icon: "ShoppingCart" },
   { name: "Contacto", description: "Ponte en contacto con nosotros", href: "/contacto", icon: "Mail" },
- 
 ];
 
 function Navbar({ logout, setIsSidebar }) {
@@ -69,12 +69,25 @@ function Navbar({ logout, setIsSidebar }) {
         <div className="navbar-logo">
           <Logo />
         </div>
-        <div className="navbar-menu-desktop">
-          <DesktopMenu navItems={navItems} user={user} currentUser={currentUser} handleLogout={handleLogout} />
+
+        {/* 🧭 Menú Desktop + Toggle Futurista */}
+        <div className="navbar-menu-desktop" style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          <DesktopMenu
+            navItems={navItems}
+            user={user}
+            currentUser={currentUser}
+            handleLogout={handleLogout}
+          />
+          <ThemeToggle /> {/* 🌗 Toggle de tema claro/oscuro */}
         </div>
+
         <div className="navbar-menu-toggle">
-          <MobileMenuToggle isMobileMenuOpen={isMobileMenuOpen} setMobileMenuOpen={setMobileMenuOpen} />
+          <MobileMenuToggle
+            isMobileMenuOpen={isMobileMenuOpen}
+            setMobileMenuOpen={setMobileMenuOpen}
+          />
         </div>
+
         <MobileMenu
           isMobileMenuOpen={isMobileMenuOpen}
           navItems={navItems}
