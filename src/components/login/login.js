@@ -122,7 +122,8 @@ function Login() {
               Iniciar Sesión
             </Button>
             <div className="links-container">
-              <Link to="/reset_password" className="auth-link">
+              {/* Modificado: enlace actualizado a request_reset_password */}
+              <Link to="/request_reset_password" className="auth-link">
                 ¿Olvidó su contraseña?
               </Link>
               <Link to="/signup" className="auth-link signup-link">

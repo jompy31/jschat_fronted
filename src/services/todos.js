@@ -71,13 +71,14 @@ class TodoDataService {
 
   deleteUser(id, token) {
     this.setAuthHeader(token);
-    return axios.delete(`${config.API_URL}/users/${id}/`)
+    return axios
+      .delete(`${config.API_URL}/users/${id}/`)
       .then((response) => {
-        console.log('Usuario eliminado:', response.data);
+        console.log("Usuario eliminado:", response.data);
         return response;
       })
       .catch((error) => {
-        console.error('Error al eliminar el usuario:', error);
+        console.error("Error al eliminar el usuario:", error);
         throw error;
       });
   }
@@ -89,6 +90,15 @@ class TodoDataService {
 
   signup(data) {
     return axios.post(`${config.API_URL}/signup/`, data);
+  }
+
+  // 🔹 Password Reset
+  requestPasswordReset(data) {
+    return axios.post(`${config.API_URL}/request_reset_password/`, data);
+  }
+
+  resetPassword(data) {
+    return axios.post(`${config.API_URL}/reset_password/`, data);
   }
 
   // Email
