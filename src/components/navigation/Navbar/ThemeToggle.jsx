@@ -1,26 +1,48 @@
-// src/components/Navbar/ThemeToggle.jsx
 import React, { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 
 function ThemeToggle() {
   const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem("theme") === "dark";
+    // Validación inicial robusta: revisa localStorage o el sistema
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      return savedTheme === "dark";
+    }
+    // Si no hay tema guardado, detecta el del sistema
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
 
+  // Sincroniza la clase global y el localStorage
   useEffect(() => {
+    const root = document.documentElement;
+
     if (darkMode) {
-      document.documentElement.classList.add("dark");
+      root.classList.add("dark");
+      root.classList.remove("light");
       localStorage.setItem("theme", "dark");
     } else {
-      document.documentElement.classList.remove("dark");
+      root.classList.remove("dark");
+      root.classList.add("light");
       localStorage.setItem("theme", "light");
     }
   }, [darkMode]);
 
+  // Escucha cambios del sistema en tiempo real (opcional, no interfiere)
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = (e) => {
+      if (!localStorage.getItem("theme")) {
+        setDarkMode(e.matches);
+      }
+    };
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
   return (
     <button
       className="theme-toggle"
-      onClick={() => setDarkMode(!darkMode)}
+      onClick={() => setDarkMode((prev) => !prev)}
       aria-label="Toggle theme"
     >
       <div className="theme-toggle-inner">
