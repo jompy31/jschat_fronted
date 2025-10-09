@@ -1,6 +1,6 @@
 import TodoDataService from '../../../../services/todos';
 import moment from 'moment';
-
+// se encarga del CRUD de eventos (crear, editar, eliminar, obtener).
 export const fetchEvents = (token, setEventos) => {
   TodoDataService.getAll(token)
     .then((response) => {
