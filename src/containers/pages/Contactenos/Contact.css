@@ -2,4 +2,123 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.jsport-red {
+  color: #D90404;
+}
+
+.jsport-blue {
+  color: #1e3a8a;
+}
+
+.bg-jsport-red {
+  background-color: #D90404;
+}
+
+#contact-form {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+#contact-form::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(217, 4, 4, 0.1) 0%, transparent 70%);
+  animation: pulse 5s infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+}
+
+label {
+  font-weight: 600;
+  color: #4b5563;
+  transition: all 0.3s ease;
+}
+
+input, textarea {
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+  background: #fafafa;
+}
+
+input:focus, textarea:focus {
+  border-color: #D90404;
+  box-shadow: 0 0 0 3px rgba(217, 4, 4, 0.2);
+  transform: translateY(-2px);
+}
+
+button {
+  opacity: 1 !important;
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+}
+
+button[type="button"] {
+  background: linear-gradient(90deg, #D90404 0%, #ef4444 100%);
+  color: white;
+}
+
+button[type="button"]:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(217, 4, 4, 0.3);
+}
+
+button[type="submit"] {
+  background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
+  color: white;
+}
+
+button[type="submit"]:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(30, 58, 138, 0.3);
+}
+
+button[type="submit"]:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed;
+}
+
+img[alt="Captcha"] {
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+img[alt="Captcha"]:hover {
+  transform: rotate(5deg);
+}
+
+iframe {
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border: 2px solid #1e3a8a !important;
 }

@@ -1,8 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import axios from 'axios';
-import { ChevronRight } from 'lucide-react';
 import './Contact.css';
 
 function Contact() {
@@ -17,25 +15,20 @@ function Contact() {
   const [captcha, setCaptcha] = useState('');
   const contactFormRef = useRef(null);
 
-  const generateRandomCaptcha = () => {
+  const generateCaptcha = useCallback(() => {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let captcha = '';
+    let newCaptcha = '';
     for (let i = 0; i < 6; i++) {
       const randomIndex = Math.floor(Math.random() * characters.length);
-      captcha += characters.charAt(randomIndex);
+      newCaptcha += characters.charAt(randomIndex);
     }
-    return captcha;
-  };
-
-  const generateCaptcha = () => {
-    const randomCaptcha = generateRandomCaptcha();
-    setCaptcha(randomCaptcha);
+    setCaptcha(newCaptcha);
     setValidCaptcha(false);
-  };
+  }, []);
 
   useEffect(() => {
     generateCaptcha();
-  }, []);
+  }, [generateCaptcha]);
 
   const handleCaptchaChange = (e) => {
     const inputCaptcha = e.target.value;
