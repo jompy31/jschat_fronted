@@ -1,263 +1,263 @@
-{
-  "api": {
-    "User": {
-      "endpoint": "/api/users/",
-      "description": "Represents a user in the system with their profile information.",
-      "fields": {
-        "id": {
-          "type": "integer",
-          "description": "Unique identifier for the user."
-        },
-        "username": {
-          "type": "string",
-          "description": "User's username (read-only, typically the email).",
-          "read_only": true
-        },
-        "first_name": {
-          "type": "string",
-          "description": "User's first name."
-        },
-        "last_name": {
-          "type": "string",
-          "description": "User's last name."
-        },
-        "email": {
-          "type": "string",
-          "format": "email",
-          "description": "User's email address."
-        },
-        "userprofile": {
-          "type": "object",
-          "description": "User's profile details.",
-          "fields": {
-            "staff_status": {
-              "type": "string",
-              "enum": ["customer", "administrator", "sales", "design"],
-              "description": "Role of the user.",
-              "default": "customer"
-            },
-            "phone_number": {
-              "type": "string",
-              "description": "User's phone number.",
-              "nullable": true
-            },
-            "address": {
-              "type": "string",
-              "description": "User's address.",
-              "nullable": true
-            },
-            "profile_picture": {
-              "type": "string",
-              "format": "uri",
-              "description": "URL to the user's profile picture.",
-              "nullable": true
+  {
+    "api": {
+      "User": {
+        "endpoint": "/api/users/",
+        "description": "Represents a user in the system with their profile information.",
+        "fields": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier for the user."
+          },
+          "username": {
+            "type": "string",
+            "description": "User's username (read-only, typically the email).",
+            "read_only": true
+          },
+          "first_name": {
+            "type": "string",
+            "description": "User's first name."
+          },
+          "last_name": {
+            "type": "string",
+            "description": "User's last name."
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "User's email address."
+          },
+          "userprofile": {
+            "type": "object",
+            "description": "User's profile details.",
+            "fields": {
+              "staff_status": {
+                "type": "string",
+                "enum": ["customer", "administrator", "sales", "design"],
+                "description": "Role of the user.",
+                "default": "customer"
+              },
+              "phone_number": {
+                "type": "string",
+                "description": "User's phone number.",
+                "nullable": true
+              },
+              "address": {
+                "type": "string",
+                "description": "User's address.",
+                "nullable": true
+              },
+              "profile_picture": {
+                "type": "string",
+                "format": "uri",
+                "description": "URL to the user's profile picture.",
+                "nullable": true
+              }
             }
           }
+        },
+        "permissions": {
+          "list": ["authenticated"],
+          "retrieve": ["authenticated"],
+          "create": ["admin"],
+          "update": ["admin", "self"],
+          "delete": ["admin"]
         }
       },
-      "permissions": {
-        "list": ["authenticated"],
-        "retrieve": ["authenticated"],
-        "create": ["admin"],
-        "update": ["admin", "self"],
-        "delete": ["admin"]
-      }
-    },
-    "Customer": {
-      "endpoint": "/api/customers/",
-      "description": "Represents a customer or supplier in the system.",
-      "fields": {
-        "id": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Unique identifier for the customer."
-        },
-        "name": {
-          "type": "string",
-          "description": "Customer's full name."
-        },
-        "id_type": {
-          "type": "string",
-          "description": "Type of identification (e.g., Cédula).",
-          "nullable": true
-        },
-        "id_number": {
-          "type": "string",
-          "description": "Unique identification number.",
-          "unique": true
-        },
-        "email": {
-          "type": "string",
-          "format": "email",
-          "description": "Customer's email address.",
-          "nullable": true
-        },
-        "phone_number": {
-          "type": "string",
-          "description": "Customer's phone number.",
-          "nullable": true
-        },
-        "address": {
-          "type": "string",
-          "description": "Customer's address.",
-          "nullable": true
-        },
-        "company": {
-          "type": "string",
-          "description": "Customer's company name.",
-          "nullable": true
-        },
-        "tipo_contacto": {
-          "type": "string",
-          "enum": ["Cliente", "Proveedor"],
-          "description": "Type of contact.",
-          "default": "Cliente"
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Creation timestamp.",
-          "read_only": true
-        },
-        "updated_at": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Last update timestamp.",
-          "read_only": true
-        },
-        "user": {
-          "type": "object",
-          "description": "Associated user account.",
-          "fields": {
-            "$ref": "#/api/User"
+      "Customer": {
+        "endpoint": "/api/customers/",
+        "description": "Represents a customer or supplier in the system.",
+        "fields": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier for the customer."
           },
-          "nullable": true
-        }
-      },
-      "permissions": {
-        "list": ["admin", "sales", "self"],
-        "retrieve": ["admin", "sales", "self"],
-        "create": ["admin", "sales"],
-        "update": ["admin", "sales", "self"],
-        "delete": ["admin"]
-      }
-    },
-    "Order": {
-      "endpoint": "/api/orders/",
-      "description": "Represents an order placed by a customer.",
-      "fields": {
-        "id": {
-          "type": "integer",
-          "description": "Unique identifier for the order."
-        },
-        "order_number": {
-          "type": "string",
-          "description": "Unique order number (e.g., O00000001).",
-          "read_only": true
-        },
-        "pedido_number": {
-          "type": "string",
-          "description": "Unique pedido number assigned when in progress (e.g., P00000001 or PU00000001 for urgent).",
-          "read_only": true,
-          "nullable": true
-        },
-        "customer": {
-          "type": "object",
-          "description": "Customer who placed the order.",
-          "fields": {
-            "$ref": "#/api/Customer"
+          "name": {
+            "type": "string",
+            "description": "Customer's full name."
           },
-          "read_only": true
-        },
-        "customer_id": {
-          "type": "string",
-          "format": "uuid",
-          "description": "ID of the customer (write-only).",
-          "write_only": true
-        },
-        "created_by": {
-          "type": "string",
-          "description": "Username of the user who created the order.",
-          "read_only": true
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Creation timestamp.",
-          "read_only": true
-        },
-        "updated_at": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Last update timestamp.",
-          "read_only": true
-        },
-        "order_date": {
-          "type": "string",
-          "format": "date",
-          "description": "Date the order was placed.",
-          "nullable": true
-        },
-        "payment_50_date": {
-          "type": "string",
-          "format": "date",
-          "description": "Date of 50% payment confirmation.",
-          "nullable": true
-        },
-        "design_confirmation_date": {
-          "type": "string",
-          "format": "date",
-          "description": "Date the design was confirmed.",
-          "nullable": true
-        },
-        "delivery_date": {
-          "type": "string",
-          "format": "date",
-          "description": "Scheduled delivery date.",
-          "nullable": true
-        },
-        "status": {
-          "type": "string",
-          "enum": ["pending", "in_progress", "design_pending", "design_confirmed", "completed"],
-          "description": "Current status of the order.",
-          "default": "pending"
-        },
-        "order_type": {
-          "type": "string",
-          "enum": ["normal", "urgent"],
-          "description": "Type of order.",
-          "default": "normal"
-        },
-        "items": {
-          "type": "array",
-          "description": "List of items in the order.",
-          "items": {
-            "$ref": "#/api/OrderItem"
+          "id_type": {
+            "type": "string",
+            "description": "Type of identification (e.g., Cédula).",
+            "nullable": true
+          },
+          "id_number": {
+            "type": "string",
+            "description": "Unique identification number.",
+            "unique": true
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Customer's email address.",
+            "nullable": true
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "Customer's phone number.",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "description": "Customer's address.",
+            "nullable": true
+          },
+          "company": {
+            "type": "string",
+            "description": "Customer's company name.",
+            "nullable": true
+          },
+          "tipo_contacto": {
+            "type": "string",
+            "enum": ["Cliente", "Proveedor"],
+            "description": "Type of contact.",
+            "default": "Cliente"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation timestamp.",
+            "read_only": true
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last update timestamp.",
+            "read_only": true
+          },
+          "user": {
+            "type": "object",
+            "description": "Associated user account.",
+            "fields": {
+              "$ref": "#/api/User"
+            },
+            "nullable": true
           }
         },
-        "uniform_detail": {
-          "type": "object",
-          "description": "Details for uniform orders.",
-          "fields": {
-            "$ref": "#/api/UniformDetail"
-          },
-          "nullable": true
-        },
-        "events": {
-          "type": "array",
-          "description": "List of events associated with the order.",
-          "items": {
-            "$ref": "#/api/OrderEvent"
-          },
-          "read_only": true
-        },
-        "use_points": {
-          "type": "boolean",
-          "description": "Whether to use customer points for discount.",
-          "write_only": true,
-          "default": false
+        "permissions": {
+          "list": ["admin", "sales", "self"],
+          "retrieve": ["admin", "sales", "self"],
+          "create": ["admin", "sales"],
+          "update": ["admin", "sales", "self"],
+          "delete": ["admin"]
         }
       },
+      "Order": {
+        "endpoint": "/api/orders/",
+        "description": "Represents an order placed by a customer.",
+        "fields": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier for the order."
+          },
+          "order_number": {
+            "type": "string",
+            "description": "Unique order number (e.g., O00000001).",
+            "read_only": true
+          },
+          "pedido_number": {
+            "type": "string",
+            "description": "Unique pedido number assigned when in progress (e.g., P00000001 or PU00000001 for urgent).",
+            "read_only": true,
+            "nullable": true
+          },
+          "customer": {
+            "type": "object",
+            "description": "Customer who placed the order.",
+            "fields": {
+              "$ref": "#/api/Customer"
+            },
+            "read_only": true
+          },
+          "customer_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID of the customer (write-only).",
+            "write_only": true
+          },
+          "created_by": {
+            "type": "string",
+            "description": "Username of the user who created the order.",
+            "read_only": true
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation timestamp.",
+            "read_only": true
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last update timestamp.",
+            "read_only": true
+          },
+          "order_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Date the order was placed.",
+            "nullable": true
+          },
+          "payment_50_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Date of 50% payment confirmation.",
+            "nullable": true
+          },
+          "design_confirmation_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Date the design was confirmed.",
+            "nullable": true
+          },
+          "delivery_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Scheduled delivery date.",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "in_progress", "design_pending", "design_confirmed", "completed"],
+            "description": "Current status of the order.",
+            "default": "pending"
+          },
+          "order_type": {
+            "type": "string",
+            "enum": ["normal", "urgent"],
+            "description": "Type of order.",
+            "default": "normal"
+          },
+          "items": {
+            "type": "array",
+            "description": "List of items in the order.",
+            "items": {
+              "$ref": "#/api/OrderItem"
+            }
+          },
+          "uniform_detail": {
+            "type": "object",
+            "description": "Details for uniform orders.",
+            "fields": {
+              "$ref": "#/api/UniformDetail"
+            },
+            "nullable": true
+          },
+          "events": {
+            "type": "array",
+            "description": "List of events associated with the order.",
+            "items": {
+              "$ref": "#/api/OrderEvent"
+            },
+            "read_only": true
+          },
+          "use_points": {
+            "type": "boolean",
+            "description": "Whether to use customer points for discount.",
+            "write_only": true,
+            "default": false
+          }
+        },
       "permissions": {
         "list": ["admin", "sales", "design (design_pending/design_confirmed)", "customer (own orders)"],
         "retrieve": ["admin", "sales", "design (design_pending/design_confirmed)", "customer (own orders)"],

@@ -10,12 +10,10 @@ class TodoDataService {
     }
   }
 
-  // Customers
+  // ==================== CUSTOMERS ====================
   getAllCustomers(token, page = 1, page_size = 10, search = "") {
     this.setAuthHeader(token);
-    return axios.get(`${config.API_URL}/customers/`, {
-      params: { page, page_size, search },
-    });
+    return axios.get(`${config.API_URL}/customers/`, { params: { page, page_size, search } });
   }
 
   getCustomerDetails(id, token) {
@@ -40,21 +38,29 @@ class TodoDataService {
 
   getCustomerOrders(customerId, token) {
     this.setAuthHeader(token);
-    return axios.get(`${config.API_URL}/orders/`, {
-      params: { customer: customerId },
-    });
+    return axios.get(`${config.API_URL}/orders/`, { params: { customer: customerId } });
   }
 
   getCustomerInvoices(customerId, token) {
     this.setAuthHeader(token);
-    return axios.get(`${config.API_URL}/invoices/`, {
-      params: { order__customer: customerId },
-    });
+    return axios.get(`${config.API_URL}/invoices/`, { params: { order__customer: customerId } });
   }
 
-  // Users
+  // ✅ Nueva función para validar cédula existente
+  async getCustomerByIdNumber(id_number) {
+    try {
+      const response = await axios.get(`${config.API_URL}/customers/`, { params: { id_number } });
+      return response.data; // Devuelve un array de clientes con ese número
+    } catch (error) {
+      console.error("Error validando cédula:", error);
+      return [];
+    }
+  }
+
+  //  USERS 
   getUserList(token) {
     this.setAuthHeader(token);
+      // console.log("🔑 Header actual:", axios.defaults.headers.common["Authorization"]);// depurando el token
     return axios.get(`${config.API_URL}/users/`);
   }
 
@@ -65,24 +71,15 @@ class TodoDataService {
 
   updateUser(id, data, token) {
     this.setAuthHeader(token);
-    console.log(`Data sent to backend:`, data);
     return axios.put(`${config.API_URL}/users/${id}/`, data);
   }
 
   deleteUser(id, token) {
     this.setAuthHeader(token);
-    return axios.delete(`${config.API_URL}/users/${id}/`)
-      .then((response) => {
-        console.log('Usuario eliminado:', response.data);
-        return response;
-      })
-      .catch((error) => {
-        console.error('Error al eliminar el usuario:', error);
-        throw error;
-      });
+    return axios.delete(`${config.API_URL}/users/${id}/`);
   }
 
-  // Authentication
+  // ==================== AUTHENTICATION ====================
   login(data) {
     return axios.post(`${config.API_URL}/login/`, data);
   }
@@ -91,7 +88,7 @@ class TodoDataService {
     return axios.post(`${config.API_URL}/signup/`, data);
   }
 
-  // Email
+  // ==================== EMAIL ====================
   sendEmail(data) {
     return axios.post(`${config.API_URL}/send-email/`, data);
   }
@@ -100,7 +97,7 @@ class TodoDataService {
     return axios.post(`${config.API_URL}/send-email-preview/`, data);
   }
 
-  // Blog Posts
+  // ==================== BLOG ====================
   getAllBlogPosts() {
     return axios.get(`${config.API_URL}/blog/posts/`);
   }
@@ -127,10 +124,7 @@ class TodoDataService {
 
   createComment(data, token) {
     this.setAuthHeader(token);
-    return axios.post(
-      `${config.API_URL}/blog/posts/${data.blog_post}/comments/`,
-      data
-    );
+    return axios.post(`${config.API_URL}/blog/posts/${data.blog_post}/comments/`, data);
   }
 
   updateComment(id, data, token) {
@@ -140,22 +134,16 @@ class TodoDataService {
 
   deleteComment(blogPostId, commentId, token) {
     this.setAuthHeader(token);
-    return axios.delete(
-      `${config.API_URL}/blog/posts/${blogPostId}/comments/${commentId}/`
-    );
+    return axios.delete(`${config.API_URL}/blog/posts/${blogPostId}/comments/${commentId}/`);
   }
 
   createLike(blogPostId, userId, token) {
-    const data = {
-      blog_post: blogPostId,
-      user: userId,
-    };
+    const data = { blog_post: blogPostId, user: userId };
     this.setAuthHeader(token);
-    return axios.post(
-      `${config.API_URL}/blog/posts/${blogPostId}/likes/`,
-      data
-    );
+    return axios.post(`${config.API_URL}/blog/posts/${blogPostId}/likes/`, data);
   }
 }
 
-export default new TodoDataService();
+// Asignamos a variable antes de exportar para evitar warning de ESLint
+const todoDataService = new TodoDataService();
+export default todoDataService;

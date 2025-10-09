@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import TodoDataService from '../../services/todos';
 import { useDispatch } from 'react-redux';
 import { setAuthentication } from '../../redux/actions/authActions';
-import { useMediaQuery } from 'react-responsive';
+// import { useMediaQuery } from 'react-responsive';
 import './login.css';
 
 function Login() {
@@ -16,8 +16,8 @@ function Login() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
-  const isMini = useMediaQuery({ query: '(max-width: 340px)' });
+  // const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
+  // const isMini = useMediaQuery({ query: '(max-width: 340px)' });
 
   function togglePasswordVisibility() {
     setIsPasswordVisible(!isPasswordVisible);
@@ -53,12 +53,6 @@ function Login() {
       });
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      login();
-    }
-  };
-
   return (
     <div className="login-container">
       <Card className="auth-card">
@@ -70,7 +64,7 @@ function Login() {
           <Card.Text className="card-subtitle">
             Inicie sesión para explorar las nuevas funciones de nuestra plataforma.
           </Card.Text>
-          <Form onKeyPress={handleKeyPress}>
+          <Form onSubmit={(e) => { e.preventDefault(); login(); }}>
             <Row>
               <Col xs={12}>
                 <Form.Group controlId="username" className="mb-3">
@@ -115,14 +109,13 @@ function Login() {
             {error && <div className="error-message">{error}</div>}
             <Button
               variant="primary"
-              type="button"
-              onClick={login}
+              type="submit"
               className="login-button"
             >
               Iniciar Sesión
             </Button>
             <div className="links-container">
-              <Link to="/reset_password" className="auth-link">
+              <Link to="/request_reset_password" className="auth-link">
                 ¿Olvidó su contraseña?
               </Link>
               <Link to="/signup" className="auth-link signup-link">

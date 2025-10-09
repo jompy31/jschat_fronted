@@ -1,89 +1,53 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import logo from '../../assets/imagenes/logo_abcupon.jpg';
+import { useParams, useNavigate } from 'react-router-dom';
+import logo from '../../assets/LOGO_rectangular.png';
 
 const ResetPasswordUser = () => {
   const { reset_token } = useParams();
+  const navigate = useNavigate();
+
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
   const [staffStatus, setStaffStatus] = useState('');
   const [newPassword, setNewPassword] = useState('');
-  const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   useEffect(() => {
     fetchUserData();
   }, []);
 
-  const fetchUserData = async () => {
-    try {
-      const response = await axios.get(`http://localhost:8000/api/reset_password_user/${reset_token}/`);
-
-      if (response.status === 200) {
-        // console.log(response.data); // Agregar esta línea para ver la estructura de los datos recibidos
-
-        const data = response.data;
-        setFirstName(data.first_name);
-        setLastName(data.last_name);
-        setEmail(data.email);
-        setCompany(data.company);
-        setStaffStatus(data.staff_status);
-        setNewPassword('');
-      } else {
-        console.log('Error fetching user data');
+  // 🔹 Simulación JSON para fetchUserData
+  const fetchUserData = () => {
+    if (!reset_token) {
+      console.warn("No se encontró el token de reseteo");
+      return;
+    }
+    console.warn("Simulando fetch user data");
+    return Promise.resolve({
+      data: {
+        first_name: "Juan",
+        last_name: "Perez",
+        email: "juan@example.com",
+        company: "MiEmpresa",
+        staff_status: "active"
       }
-    } catch (error) {
-      console.log('Error fetching user data', error);
-    }
+    }).then((res) => {
+      const data = res.data;
+      setFirstName(data.first_name);
+      setLastName(data.last_name);
+      setEmail(data.email);
+      setCompany(data.company);
+      setStaffStatus(data.staff_status);
+      setNewPassword('');
+    });
   };
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-
-    // Actualizamos los estados de los campos individuales
-    switch (name) {
-      case 'firstName':
-        setFirstName(value);
-        break;
-      case 'lastName':
-        setLastName(value);
-        break;
-      case 'email':
-        setEmail(value);
-        break;
-      case 'company':
-        setCompany(value);
-        break;
-      case 'staffStatus':
-        setStaffStatus(value);
-        break;
-      case 'newPassword':
-        setNewPassword(value);
-        break;
-      default:
-        break;
-    }
-  };
-
-  const handleConfirmPasswordChange = (event) => {
-    setConfirmPassword(event.target.value);
-  };
-
-  const toggleShowPassword = () => {
-    setShowPassword((prevShowPassword) => !prevShowPassword);
-  };
-
-  const toggleShowConfirmPassword = () => {
-    setShowConfirmPassword((prevShowConfirmPassword) => !prevShowConfirmPassword);
-  };
-
-  const handleSubmit = async (event) => {
+  // 🔹 Simulación JSON para handleSubmit
+  const handleSubmit = (event) => {
     event.preventDefault();
 
     if (newPassword !== confirmPassword) {
@@ -91,46 +55,27 @@ const ResetPasswordUser = () => {
       return;
     }
 
-    try {
-      const response = await axios.put(`http://localhost:8000/api/reset_password_user/${reset_token}/`, {
-        first_name: firstName,
-        last_name: lastName,
-        email: email,
-        company: company,
-        staff_status: staffStatus,
-        password: newPassword,
-      });
-
-      if (response.status === 200) {
-        console.log('Los datos del usuario cambiaron exitosamente.');
-        // Puedes redirigir al usuario a una página de éxito aquí
-      } else {
-        console.log('Error al cambiar los datos del usuario.');
-      }
+    console.warn("Simulando cambio de contraseña");
+    return Promise.resolve({
+      data: { message: "Tu contraseña ha sido restablecida exitosamente." }
+    }).then(() => {
+      console.log('Contraseña restablecida exitosamente.');
       navigate('/login');
-    } catch (error) {
-      console.log('Error changing user data', error);
-    }
+    });
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100" style={{ marginTop: "4%" }}>
       <div className="w-full max-w-md bg-white shadow-lg rounded-lg p-6">
         <div className="flex justify-center mb-4">
-          <img
-            src={logo}
-            alt="Logo ABCupon"
-            className="w-32 h-auto"
-          />
+          <img src={logo} alt="Logo ABCupon" className="w-32 h-auto" />
         </div>
         <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">
           Restablecer Contraseña
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-medium mb-2">
-              Nombre
-            </label>
+            <label className="block text-gray-700 text-sm font-medium mb-2">Nombre</label>
             <input
               type="text"
               value={firstName}
@@ -140,9 +85,7 @@ const ResetPasswordUser = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-medium mb-2">
-              Apellido
-            </label>
+            <label className="block text-gray-700 text-sm font-medium mb-2">Apellido</label>
             <input
               type="text"
               value={lastName}
@@ -152,9 +95,7 @@ const ResetPasswordUser = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-medium mb-2">
-              Correo Electrónico
-            </label>
+            <label className="block text-gray-700 text-sm font-medium mb-2">Correo Electrónico</label>
             <input
               type="email"
               value={email}
@@ -164,9 +105,7 @@ const ResetPasswordUser = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-medium mb-2">
-              Empresa
-            </label>
+            <label className="block text-gray-700 text-sm font-medium mb-2">Empresa</label>
             <input
               type="text"
               value={company}
@@ -176,9 +115,7 @@ const ResetPasswordUser = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-medium mb-2">
-              Nueva Contraseña
-            </label>
+            <label className="block text-gray-700 text-sm font-medium mb-2">Nueva Contraseña</label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
@@ -197,9 +134,7 @@ const ResetPasswordUser = () => {
             </div>
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-medium mb-2">
-              Confirmar Contraseña
-            </label>
+            <label className="block text-gray-700 text-sm font-medium mb-2">Confirmar Contraseña</label>
             <div className="relative">
               <input
                 type={showConfirmPassword ? "text" : "password"}

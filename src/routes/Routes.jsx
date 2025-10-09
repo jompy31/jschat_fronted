@@ -26,6 +26,10 @@ const Login = lazy(() => import("../components/login/login"));
 const Signup = lazy(() => import("../components/login/signup"));
 const CurrentUser = lazy(() => import("../components/login/CurrentUser"));
 
+// NEW: Reset Password Pages
+const RequestPasswordReset = lazy(() => import("../components/login/RequestPasswordReset"));
+const ResetPasswordUser = lazy(() => import("../components/login/resetpassworduser"));
+
 // Authenticated Pages
 const Profile = lazy(() => import("../components/backend/profile"));
 const Files = lazy(() => import("../components/backend/files"));
@@ -167,6 +171,8 @@ function App() {
           <Suspense fallback={<div>Loading...</div>}>
             <Routes>
               {/* Public Routes */}
+              <Route path="/request_reset_password" element={<RequestPasswordReset />} />
+              <Route path="/reset_password_user/:reset_token" element={<ResetPasswordUser />} />
               <Route path="*" element={<Error404 />} />
               <Route
                 path="/"
