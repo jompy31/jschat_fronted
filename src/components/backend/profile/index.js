@@ -63,16 +63,10 @@ const Profile = () => {
       const field = name.split(".")[1];
       setEditedUser({
         ...editedUser,
-        userprofile: {
-          ...editedUser.userprofile,
-          [field]: value,
-        },
+        userprofile: { ...editedUser.userprofile, [field]: value },
       });
     } else {
-      setEditedUser({
-        ...editedUser,
-        [name]: value,
-      });
+      setEditedUser({ ...editedUser, [name]: value });
     }
   };
 
@@ -80,9 +74,9 @@ const Profile = () => {
     setIsLoading(true);
     const formattedData = formatUserData(formData, profile_picture);
     updateUser(currentUser.id, formattedData, token)
-      .then((updatedUser) => {
-        handleFetchUser(currentUser.id); // Recarga los datos desde el servidor
-        setIsModalOpen(false); // Cierra el modal solo si la actualización es exitosa
+      .then(() => {
+        handleFetchUser(currentUser.id);
+        setIsModalOpen(false);
         setImagePreview(null);
         setProfile_picture(null);
         alert("Perfil actualizado correctamente.");
@@ -94,62 +88,45 @@ const Profile = () => {
           : error?.detail || "Error al actualizar el perfil. Verifica los datos e intenta de nuevo.";
         alert(errorMessage);
       })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
-
-  const containerStyle = {
-    display: "flex",
-    justifyContent: "space-between",
-    width: "100%",
+      .finally(() => setIsLoading(false));
   };
 
   return (
-    <div style={{ marginTop: "7%" }}>
-      <div ref={componentRef} style={{ padding: "20px", backgroundColor: "#f5f5f5" }}>
+    <div className="profile-page">
+      <div className="profile-container glass" ref={componentRef}>
         {currentUser && (
-          <h2>
+          <h2 className="profile-title">
             Bienvenido, {currentUser.first_name} {currentUser.last_name}
           </h2>
         )}
         <button
-          style={{
-            marginTop: "10px",
-            padding: "10px 15px",
-            backgroundColor: "#007BFF",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
+          className="action-btn"
           onClick={() => downloadPDF(componentRef)}
         >
-          Descargar componente como PDF
+          Descargar perfil como PDF
         </button>
-        <div style={containerStyle}>
-          <ProfileInfo
-            currentUser={currentUser}
-            toggleModal={() => setIsModalOpen(!isModalOpen)}
-          />
-        </div>
-        {isModalOpen && (
-          <EditProfileModal
-            editedUser={editedUser}
-            handleEditUserChange={handleEditUserChange}
-            handleImageChange={(e) => {
-              const file = e.target.files[0];
-              setProfile_picture(file);
-              setImagePreview(URL.createObjectURL(file));
-            }}
-            handleEditUser={handleEditUser}
-            toggleModal={() => setIsModalOpen(!isModalOpen)}
-            imagePreview={imagePreview}
-            profile_picture={profile_picture}
-            isLoading={isLoading}
-          />
-        )}
+        <ProfileInfo
+          currentUser={currentUser}
+          toggleModal={() => setIsModalOpen(!isModalOpen)}
+        />
       </div>
+
+      {isModalOpen && (
+        <EditProfileModal
+          editedUser={editedUser}
+          handleEditUserChange={handleEditUserChange}
+          handleImageChange={(e) => {
+            const file = e.target.files[0];
+            setProfile_picture(file);
+            setImagePreview(URL.createObjectURL(file));
+          }}
+          handleEditUser={handleEditUser}
+          toggleModal={() => setIsModalOpen(!isModalOpen)}
+          imagePreview={imagePreview}
+          profile_picture={profile_picture}
+          isLoading={isLoading}
+        />
+      )}
     </div>
   );
 };

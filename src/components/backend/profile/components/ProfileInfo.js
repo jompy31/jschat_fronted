@@ -1,89 +1,45 @@
 import React from "react";
+import  "../../profile/components/profileinfo.css"
 
 const ProfileInfo = ({ currentUser, toggleModal }) => {
-  const profileImageStyle = {
-    width: "30%",
-    height: "auto",
-    borderRadius: "15px",
-    border: "3px solid red",
-    boxShadow: "0 0 10px black",
-    marginBottom: "5px",
-    marginLeft: "8%",
-  };
-
-  const columnStyle = {
-    width: "50%",
-    padding: "10px",
-  };
-
-  const tableStyle = {
-    width: "100%",
-    border: "1px solid #ccc",
-    color: "black",
-    borderCollapse: "collapse",
-    marginTop: "10px",
-  };
-
-  const buttonStyle = {
-    marginTop: "10px",
-    padding: "10px 15px",
-    backgroundColor: "#007BFF",
-    color: "white",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-  };
-
   return (
-    <div style={columnStyle}>
+    <div className="profile-info">
       {currentUser ? (
         <>
           {currentUser.userprofile?.profile_picture && (
             <img
               src={currentUser.userprofile.profile_picture}
               alt="Perfil"
-              style={profileImageStyle}
+              className="profile-image"
             />
           )}
-          <button style={buttonStyle} onClick={toggleModal}>
+          <button className="action-btn" onClick={toggleModal}>
             Editar datos del perfil
           </button>
-          <table style={tableStyle}>
+          <table className="profile-table">
             <tbody>
               <tr>
-                <td className="font-semibold" style={{ paddingRight: "20px" }}>
-                  Nombre:
-                </td>
+                <td className="font-semibold">Nombre:</td>
                 <td>{currentUser.first_name}</td>
               </tr>
               <tr>
-                <td className="font-semibold" style={{ paddingRight: "20px" }}>
-                  Apellido:
-                </td>
+                <td className="font-semibold">Apellido:</td>
                 <td>{currentUser.last_name}</td>
               </tr>
               <tr>
-                <td className="font-semibold" style={{ paddingRight: "20px" }}>
-                  Correo electrónico:
-                </td>
+                <td className="font-semibold">Correo electrónico:</td>
                 <td>{currentUser.email}</td>
               </tr>
               <tr>
-                <td className="font-semibold" style={{ paddingRight: "20px" }}>
-                  Tipo de usuario:
-                </td>
+                <td className="font-semibold">Tipo de usuario:</td>
                 <td>{currentUser.userprofile?.staff_status}</td>
               </tr>
               <tr>
-                <td className="font-semibold" style={{ paddingRight: "20px" }}>
-                  Teléfono:
-                </td>
+                <td className="font-semibold">Teléfono:</td>
                 <td>{currentUser.userprofile?.phone_number}</td>
               </tr>
               <tr>
-                <td className="font-semibold" style={{ paddingRight: "20px" }}>
-                  Dirección:
-                </td>
+                <td className="font-semibold">Dirección:</td>
                 <td>{currentUser.userprofile?.address}</td>
               </tr>
             </tbody>

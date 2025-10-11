@@ -46,21 +46,27 @@ class TodoDataService {
     return axios.get(`${config.API_URL}/invoices/`, { params: { order__customer: customerId } });
   }
 
-  // ✅ Nueva función para validar cédula existente
-  async getCustomerByIdNumber(id_number) {
+  // Función mejorada para validar cédula con manejo de errores
+  async getCustomerByIdNumber(id_number, token = null) {
     try {
+      if (token) this.setAuthHeader(token);
       const response = await axios.get(`${config.API_URL}/customers/`, { params: { id_number } });
-      return response.data; // Devuelve un array de clientes con ese número
+      return response.data;
     } catch (error) {
+      if (error.response && error.response.status === 401) {
+        console.warn("Endpoint requiere autenticación para validar cédula");
+        return [];
+      }
       console.error("Error validando cédula:", error);
       return [];
+    } finally {
+      if (token) this.setAuthHeader(null);
     }
   }
 
   //  USERS 
   getUserList(token) {
     this.setAuthHeader(token);
-      // console.log("🔑 Header actual:", axios.defaults.headers.common["Authorization"]);// depurando el token
     return axios.get(`${config.API_URL}/users/`);
   }
 
@@ -144,6 +150,5 @@ class TodoDataService {
   }
 }
 
-// Asignamos a variable antes de exportar para evitar warning de ESLint
 const todoDataService = new TodoDataService();
 export default todoDataService;

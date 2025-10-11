@@ -1,3 +1,4 @@
+/* Reutiliza los estilos del login para consistencia */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 * {
@@ -80,6 +81,15 @@
   outline: none;
 }
 
+.form-control-modern.is-invalid {
+  border-color: #dc2626;
+}
+
+.form-control-modern.is-invalid:focus {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
 .password-input-wrapper {
   position: relative;
   width: 100%;
@@ -114,7 +124,7 @@
   margin-bottom: 1.5rem;
 }
 
-.login-button:hover {
+.login-button:hover:not(:disabled) {
   background: #1d4ed8;
   transform: translateY(-2px);
 }
@@ -124,7 +134,7 @@
 }
 
 .login-button:disabled {
-  background: #cccccc;
+  background: #9ca3af;
   cursor: not-allowed;
   transform: none;
 }
@@ -148,6 +158,14 @@
   text-decoration: underline;
 }
 
+.signup-link {
+  color: #10b981;
+}
+
+.signup-link:hover {
+  color: #059669;
+}
+
 .error-message {
   color: #dc2626;
   font-size: 0.875rem;
@@ -158,21 +176,21 @@
   border-radius: 6px;
 }
 
-.valid-feedback {
-  color: #10b981;
+/* Toastify overrides para que coincidan con el estilo de error */
+.Toastify__toast {
+  border-radius: 6px;
   font-size: 0.875rem;
-  text-align: left;
-  margin-top: 0.25rem;
+  padding: 12px;
 }
 
-.progress-modern {
-  height: 8px;
-  border-radius: 4px;
-  background-color: #f3f4f6;
+.Toastify__toast--error {
+  background: #fef2f2;
+  color: #dc2626;
 }
 
-.progress-bar {
-  transition: width 0.3s ease;
+.Toastify__toast--success {
+  background: #f0fdf4;
+  color: #059669;
 }
 
 @media (max-width: 768px) {
@@ -212,21 +230,4 @@
     padding: 10px;
     font-size: 0.9rem;
   }
-}
-
-/* Toastify overrides to match error style */
-.Toastify__toast {
-  border-radius: 6px;
-  font-size: 0.875rem;
-  padding: 12px;
-}
-
-.Toastify__toast--error {
-  background: #fef2f2;
-  color: #dc2626;
-}
-
-.Toastify__toast--success {
-  background: #f0fdf4;
-  color: #059669;
 }
