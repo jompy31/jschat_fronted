@@ -1,13 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './styles/index.css';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom'; // 👈 Agrega BrowserRouter aquí para contexto global
+import store from './redux/store';
 import App from './App';
-
+import './styles/index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <BrowserRouter> {/* 👈 Envuelve App en BrowserRouter – proporciona contexto a Navbar y Routes */}
+        <App />
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );
-

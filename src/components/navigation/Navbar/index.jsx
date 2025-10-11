@@ -19,7 +19,7 @@ const navItems = [
   { name: "Contacto", description: "Ponte en contacto con nosotros", href: "/contacto", icon: "Mail" },
 ];
 
-function Navbar({ logout, setIsSidebar }) {
+function Navbar({ logout, setIsSidebar, isDark, setIsDark }) {  // 👈 Recibe props del tema
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const token = useSelector((state) => state.authentication.token);
@@ -78,7 +78,7 @@ function Navbar({ logout, setIsSidebar }) {
             currentUser={currentUser}
             handleLogout={handleLogout}
           />
-          <ThemeToggle /> {/* 🌗 Toggle de tema claro/oscuro */}
+          <ThemeToggle isDark={isDark} setIsDark={setIsDark} /> {/* 🌗 Toggle con props */}
         </div>
 
         <div className="navbar-menu-toggle">

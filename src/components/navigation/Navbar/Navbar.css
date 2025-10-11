@@ -1,16 +1,18 @@
 /* Variables CSS para temas - Basadas en logo: azul #0A2463, rojo #D90404 */
+/* Modo claro: Rojo pastel suave para bg, azul para texto */
 :root {
-  --bg-primary: #FFFFFF;
-  --bg-secondary: #F8F9FA;
-  --text-primary: #0A2463;
-  --text-secondary: #4B5EAA;
-  --accent-primary: #D90404;
+  --bg-primary: #FFF5F5; /* Rojo pastel suave principal */
+  --bg-secondary: #FFE6E6; /* Rojo pastel más claro */
+  --text-primary: #0A2463; /* Azul del logo */
+  --text-secondary: #4B5EAA; /* Azul secundario */
+  --accent-primary: #D90404; /* Rojo del logo */
   --accent-hover: linear-gradient(135deg, #D90404, #0A2463);
   --border-primary: #0A2463;
-  --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
-  --glow-neon: 0 0 10px rgba(217, 4, 4, 0.3);
+  --shadow-light: 0 2px 4px rgba(10, 36, 99, 0.1); /* Sombra azul sutil */
+  --glow-neon: 0 0 10px rgba(217, 4, 4, 0.3); /* Glow rojo */
 }
 
+/* Modo oscuro: Azul oscuro */
 .dark {
   --bg-primary: #0A1230; /* Azul profundo futurista */
   --bg-secondary: #1A2A4A;
@@ -38,6 +40,7 @@
   background: var(--bg-primary);
   backdrop-filter: blur(10px); /* Blur glassmorphism */
   border-bottom: 1px solid var(--border-primary);
+  color: var(--text-primary); /* Texto consistente */
 }
 
 .navbar-scrolled {
@@ -162,6 +165,7 @@
 }
 
 /* Theme Toggle - Futurista: Switch con animación rotatoria */
+/* 👈 Fix: Cambié .dark-mode a .dark para consistencia */
 .theme-toggle {
   background: var(--bg-secondary);
   border: 1px solid var(--border-primary);
@@ -189,7 +193,7 @@
   transform-origin: center;
 }
 
-.dark-mode .theme-toggle-inner {
+.dark .theme-toggle-inner {  /* 👈 Fix: .dark en lugar de .dark-mode */
   background: var(--accent-primary);
   animation: rotateGlow 0.6s ease-in-out;
 }
@@ -203,7 +207,7 @@
 .theme-icon {
   width: 1rem;
   height: 1rem;
-  color: var(--bg-primary);
+  color: var(--bg-primary);  /* Icono contrasta con bg del toggle */
   transition: opacity 0.3s ease;
 }
 

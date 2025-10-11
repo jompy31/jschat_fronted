@@ -1,7 +1,8 @@
 import React, { lazy, Suspense, useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom"; // 👈 Removido BrowserRouter as Router – ya está en index.js
 import { Provider } from "react-redux";
 import { AuthProvider } from "../hooks/AuthContext";
+import useLocalStorage from "use-local-storage"; // 👈 Import para persistir tema
 import TodoDataService from "../services/todos";
 import ProductDataService from "../services/products";
 import FileDataService from "../services/files";
@@ -69,6 +70,36 @@ function App() {
   const [clasificados, setClasificados] = useState([]);
   const [subproducts, setSubproducts] = useState([]);
   const [services, setServices] = useState([]);
+
+  // 👈 Tema: Estado global con localStorage y preferencia del sistema
+  const preference = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const [isDark, setIsDark] = useLocalStorage("isDark", preference);
+
+  // 👈 Aplica tema global a <html> para CSS vars en toda la página
+  useEffect(() => {
+    const root = document.documentElement;
+    if (isDark) {
+      root.classList.add("dark");
+      root.classList.remove("light");
+      localStorage.setItem("theme", "dark");
+    } else {
+      root.classList.remove("dark");
+      root.classList.add("light");
+      localStorage.setItem("theme", "light");
+    }
+  }, [isDark]);
+
+  // 👈 Escucha cambios del sistema (solo si no hay preferencia guardada)
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = (e) => {
+      if (!localStorage.getItem("theme")) {
+        setIsDark(e.matches);
+      }
+    };
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, [setIsDark]);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -164,70 +195,76 @@ function App() {
   return (
     <Provider store={store}>
       <AuthProvider value={{ token, login, logout }}>
-        <Router>
-          <ScrollToTop />
-          <Sidebar isSidebar={isSidebar} />
-          <Navbar user={user} token={token} logout={logout} setIsSidebar={setIsSidebar} />
-          <Suspense fallback={<div>Loading...</div>}>
-            <Routes>
-              {/* Public Routes */}
-              <Route path="/request_reset_password" element={<RequestPasswordReset />} />
-              <Route path="/reset_password_user/:reset_token" element={<ResetPasswordUser />} />
-              <Route path="*" element={<Error404 />} />
-              <Route
-                path="/"
-                element={
-                  <Directorio
-                    products={products}
-                    clasificados={clasificados}
-                    subproducts={subproducts}
-                    services={services}
-                  />
-                }
-              />
-              <Route path="/catalogo" element={<Catalogo />} />
-              <Route path="/promociones" element={<Promociones />} />
-              <Route path="/sobre_nosotros" element={<Sobre_nosotros />} />
-              <Route path="/cotizador" element={<Cotizador />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/contacto" element={<Contactenos />} />
-              <Route path="/login" element={<Login login={login} />} />
-              <Route path="/signup" element={<Signup signup={signup} />} />
-              <Route path="/current_user" element={<CurrentUser token={token} user={user} />} />
+        {/* 👈 Removido <Router> aquí – ya está en index.js */}
+        <ScrollToTop />
+        <Sidebar isSidebar={isSidebar} />
+        <Navbar 
+          user={user} 
+          token={token} 
+          logout={logout} 
+          setIsSidebar={setIsSidebar}
+          isDark={isDark} 
+          setIsDark={setIsDark} // 👈 Pasa props del tema a Navbar
+        />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Routes> {/* 👈 Routes sin Router wrapper */}
+            {/* Public Routes */}
+            <Route path="/request_reset_password" element={<RequestPasswordReset />} />
+            <Route path="/reset_password_user/:reset_token" element={<ResetPasswordUser />} />
+            <Route path="*" element={<Error404 />} />
+            <Route
+              path="/"
+              element={
+                <Directorio
+                  products={products}
+                  clasificados={clasificados}
+                  subproducts={subproducts}
+                  services={services}
+                />
+              }
+            />
+            <Route path="/catalogo" element={<Catalogo />} />
+            <Route path="/promociones" element={<Promociones />} />
+            <Route path="/sobre_nosotros" element={<Sobre_nosotros />} />
+            <Route path="/cotizador" element={<Cotizador />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/contacto" element={<Contactenos />} />
+            <Route path="/login" element={<Login login={login} />} />
+            <Route path="/signup" element={<Signup signup={signup} />} />
+            <Route path="/current_user" element={<CurrentUser token={token} user={user} />} />
 
-              {/* Private Routes (Authenticated Users) */}
-              <Route element={<PrivateRoute />}>
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/files" element={<Files />} />
-                <Route path="/calendar" element={<Calendar />} />
-                <Route path="/customers" element={<Customers token={token} user={user}/>}>
-                  <Route path=":id" element={<CustomerDetail />} />
-                </Route>
-                <Route path="/orders" element={<Orders />}>
-                  <Route path="new" element={<OrderCreate />} />
-                  <Route path=":id" element={<OrderDetail />} />
-                  <Route path=":id/add_event" element={<OrderAddEvent />} />
-                </Route>
-                <Route path="/customer-points" element={<CustomerPoints />} />
+            {/* Private Routes (Authenticated Users) */}
+            <Route element={<PrivateRoute />}>
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/files" element={<Files />} />
+              <Route path="/calendar" element={<Calendar />} />
+              <Route path="/customers" element={<Customers token={token} user={user}/>}>
+                <Route path=":id" element={<CustomerDetail />} />
               </Route>
+              <Route path="/orders" element={<Orders />}>
+                <Route path="new" element={<OrderCreate />} />
+                <Route path=":id" element={<OrderDetail />} />
+                <Route path=":id/add_event" element={<OrderAddEvent />} />
+              </Route>
+              <Route path="/customer-points" element={<CustomerPoints />} />
+            </Route>
 
-              {/* Admin/Sales/Design Routes */}
-              <Route element={<AdminRoute />}>
-                <Route path="/users" element={<UserList />} />
-                <Route path="/register" element={<Register signup={signup} />} />
-                <Route path="/products" element={<Products />}>
-                  <Route path=":id" element={<ProductDetail />} />
-                </Route>
-                <Route path="/promotions" element={<Promotions />}>
-                  <Route path=":id" element={<PromotionDetail />} />
-                </Route>
-                <Route path="/production-queues" element={<ProductionQueues />} />
-                <Route path="/settings" element={<Settings />} />
+            {/* Admin/Sales/Design Routes */}
+            <Route element={<AdminRoute />}>
+              <Route path="/users" element={<UserList />} />
+              <Route path="/register" element={<Register signup={signup} />} />
+              <Route path="/products" element={<Products />}>
+                <Route path=":id" element={<ProductDetail />} />
               </Route>
-            </Routes>
-          </Suspense>
-          <Footer />
-        </Router>
+              <Route path="/promotions" element={<Promotions />}>
+                <Route path=":id" element={<PromotionDetail />} />
+              </Route>
+              <Route path="/production-queues" element={<ProductionQueues />} />
+              <Route path="/settings" element={<Settings />} />
+            </Route>
+          </Routes>
+        </Suspense>
+        <Footer />
       </AuthProvider>
     </Provider>
   );

@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  /* Removí clases de tema aquí, ya que se maneja global en <html> */
 }
 
 .App-logo {
