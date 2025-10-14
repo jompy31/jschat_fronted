@@ -35,7 +35,7 @@ const ContactsInfo = () => {
   const [customerOrders, setCustomerOrders] = useState([]);
   const [customerInvoices, setCustomerInvoices] = useState([]);
   const [viewMode, setViewMode] = useState("table");
-  const [darkMode, setDarkMode] = useState(false);
+  // const [darkMode, setDarkMode] = useState(false);
   const token = useSelector((state) => state.authentication.token);
 
   useEffect(() => {
@@ -175,16 +175,16 @@ const ContactsInfo = () => {
   };
 
   return (
-    <Box className={`container ${darkMode ? "dark" : "light"}`} sx={{ p: 4 }}>
+     <Box className="container light" sx={{ p: 4 }}> 
       <ToastContainer />
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
         <Typography variant="h4">Gestión de Clientes</Typography>
         <Box display="flex" gap={2} alignItems="center">
-          <Switch
+          {/* <Switch
             checked={darkMode}
             onChange={() => setDarkMode(!darkMode)}
             label="Modo Oscuro"
-          />
+          /> */}
           <Button
             variant="outlined"
             onClick={() => setViewMode(viewMode === "table" ? "pipeline" : "table")}
