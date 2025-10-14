@@ -1,4 +1,4 @@
-.form-control[multiple] {
+/* .form-control[multiple] {
   max-height: 150px;
   overflow-y: auto;
   white-space: nowrap;
@@ -10,4 +10,4 @@
   outline: none;
   border-color: #3b82f1; /* Tailwind's focus:border-blue-500 */
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* Tailwind's focus:ring-blue-500 */
-}
+} */

@@ -1,7 +1,7 @@
 .table-container {
   max-width: 100%;
   overflow-x: auto;
-  z-index: 1; /* Bajo z-index para evitar conflictos con el modal */
+  z-index: 1; 
 }
 
 .design-table th,

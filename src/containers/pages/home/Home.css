@@ -1,22 +1,208 @@
+/* Home.css – Optimizado: Secciones más compactas, responsivo total, anims futuristas extra */
+
+/* Global container – Compacto y fluido */
 .home-container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
 }
 
+/* Hero – Compacto 80vh mobile, particles responsivos */
+.home-container section:first-child {
+  position: relative;
+}
+
+.home-container section:first-child::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, var(--accent-hover), transparent);
+  opacity: 0.3;
+  z-index: 1;
+  animation: shimmer 4s infinite linear;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Services & Testimonials – Gap reducido, tilt 3D */
+.home-container [class*="grid"] {
+  gap: 1rem; /* Compacto base */
+}
+
+.home-container [class*="grid"] > div {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-primary);
+  box-shadow: var(--shadow-light);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.home-container [class*="grid"] > div:hover {
+  border-color: var(--accent-primary);
+  box-shadow: var(--glow-neon), 0 15px 30px rgba(0, 0, 0, 0.1);
+  transform: translateY(-6px) rotateX(3deg); /* Tilt sutil mobile */
+}
+
+@media (min-width: 768px) {
+  .home-container [class*="grid"] > div:hover {
+    transform: translateY(-8px) rotateX(5deg);
+  }
+}
+
+/* Portfolio – h-48 base, smoother en mobile */
 .portfolio-swiper {
   padding-bottom: 40px;
+  position: relative;
+}
+
+.portfolio-swiper .swiper-slide img {
+  transition: all 0.5s ease;
+  filter: brightness(0.9) contrast(1.1);
+}
+
+.portfolio-swiper .swiper-slide img:hover {
+  filter: brightness(1.1) contrast(1.2) sepia(0.1);
+  transform: scale(1.05);
 }
 
 .portfolio-swiper .swiper-pagination-bullet {
-  background-color: #0A2463;
+  background: var(--border-primary);
+  opacity: 0.5;
+  width: 10px;
+  height: 10px;
+  margin: 0 3px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
 }
 
 .portfolio-swiper .swiper-pagination-bullet-active {
-  background-color: #D90404;
+  background: var(--accent-primary);
+  opacity: 1;
+  transform: scale(1.2);
+  box-shadow: var(--glow-neon);
 }
 
 .portfolio-swiper .swiper-button-next,
 .portfolio-swiper .swiper-button-prev {
-  color: #D90404;
+  color: var(--accent-primary) !important;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  transition: all 0.3s ease;
+}
+
+.portfolio-swiper .swiper-button-next:hover,
+.portfolio-swiper .swiper-button-prev:hover {
+  background: var(--accent-primary);
+  box-shadow: var(--glow-neon);
+  transform: scale(1.1);
+}
+
+@media (max-width: 640px) {
+  .portfolio-swiper .swiper-button-next,
+  .portfolio-swiper .swiper-button-prev {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+/* Tipografía – Escalable responsiva */
+.home-container h1 { 
+  font-size: clamp(2.5rem, 5vw, 4rem); /* Clamp para cualquier device */
+}
+.home-container h2 { 
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+.home-container h3 { 
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+.home-container p { 
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  line-height: 1.6;
+}
+
+/* Botones – Ripple responsivo */
+.home-container a[href] {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.home-container a[href]::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+  z-index: -1;
+}
+
+.home-container a[href]:hover::before {
+  width: 200px; /* Más compacto mobile */
+  height: 200px;
+}
+
+@media (min-width: 768px) {
+  .home-container a[href]:hover::before {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+/* Responsive global – Fluido para cualquier device */
+@media (max-width: 480px) {
+  .home-container section {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .home-container [class*="grid"] {
+    gap: 0.75rem;
+  }
+  
+  .portfolio-swiper {
+    padding-bottom: 30px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-container [class*="grid"] {
+    gap: 1.5rem;
+  }
+}
+
+/* Dark mode – Contraste extra para audacia */
+.dark .home-container section {
+  background: var(--bg-primary);
+}
+
+.dark .home-container [class*="grid"] > div {
+  background: var(--bg-secondary);
+}
+
+/* Extra: Glitch effect en títulos para futurismo */
+@keyframes glitch {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+}
+
+.home-container h1, .home-container h2:hover {
+  animation: glitch 0.3s infinite;
 }
