@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Box, Button, Typography, Switch, Modal, Card, CardContent, Tabs, Tab } from "@mui/material";
+import { Box, Button, Typography, Modal, Card, CardContent, Tabs, Tab } from "@mui/material";
 import { Add, Download } from "@mui/icons-material";
 import { DragDropContext } from "react-beautiful-dnd";
 import { ToastContainer } from "react-toastify";
@@ -35,7 +35,7 @@ const ContactsInfo = () => {
   const [customerOrders, setCustomerOrders] = useState([]);
   const [customerInvoices, setCustomerInvoices] = useState([]);
   const [viewMode, setViewMode] = useState("table");
-  // const [darkMode, setDarkMode] = useState(false);
+  // const [darkMode, setDarkMode] = useState(false);// se comenta por queno se necesita.
   const token = useSelector((state) => state.authentication.token);
 
   useEffect(() => {

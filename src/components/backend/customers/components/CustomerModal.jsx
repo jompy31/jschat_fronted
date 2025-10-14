@@ -26,19 +26,21 @@ const CustomerModal = ({
           transform: "translate(-50%, -50%)",
           width: "80%",
           maxWidth: 600,
-          backgroundColor: "#ffffff",
-          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
+          background: "linear-gradient(180deg, var(--bg-primary), var(--bg-secondary))",
+          boxShadow: "var(--shadow-light), var(--glow-neon)",
           padding: 24,
           borderRadius: 12,
           maxHeight: "100vh",
           overflowY: "auto",
+          border: "1px solid var(--border-primary)",
+          backdropFilter: "blur(10px)",
         }}
       >
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-          <Typography variant="h5" sx={{ color: "#1a202c" }}>
+          <Typography variant="h5" sx={{ color: "var(--text-primary)" }}>
             {isEditMode ? "Editar Cliente" : "Crear Nuevo Cliente"}
           </Typography>
-          <IconButton onClick={onHide} sx={{ color: "#718096" }}>
+          <IconButton onClick={onHide} sx={{ color: "var(--text-secondary)" }}>
             <Close />
           </IconButton>
         </Box>
@@ -52,8 +54,16 @@ const CustomerModal = ({
             margin="normal"
             variant="outlined"
             required
-            InputLabelProps={{ style: { color: "#4a5568" } }}
-            sx={{ bgcolor: "#f7fafc" }}
+            InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+            sx={{
+              bgcolor: "var(--bg-secondary)",
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: "var(--border-primary)" },
+                "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+              },
+              color: "var(--text-primary)",
+            }}
           />
           <Select
             label="Tipo de Identificación"
@@ -64,8 +74,16 @@ const CustomerModal = ({
             margin="normal"
             variant="outlined"
             displayEmpty
-            InputLabelProps={{ style: { color: "#4a5568" } }}
-            sx={{ bgcolor: "#f7fafc" }}
+            InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+            sx={{
+              bgcolor: "var(--bg-secondary)",
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: "var(--border-primary)" },
+                "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+              },
+              color: "var(--text-primary)",
+            }}
           >
             <MenuItem value="">Seleccionar Tipo</MenuItem>
             <MenuItem value="Cédula Física">Cédula Física</MenuItem>
@@ -81,8 +99,16 @@ const CustomerModal = ({
             margin="normal"
             variant="outlined"
             required
-            InputLabelProps={{ style: { color: "#4a5568" } }}
-            sx={{ bgcolor: "#f7fafc" }}
+            InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+            sx={{
+              bgcolor: "var(--bg-secondary)",
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: "var(--border-primary)" },
+                "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+              },
+              color: "var(--text-primary)",
+            }}
           />
           <TextField
             label="Correo Electrónico"
@@ -93,8 +119,16 @@ const CustomerModal = ({
             fullWidth
             margin="normal"
             variant="outlined"
-            InputLabelProps={{ style: { color: "#4a5568" } }}
-            sx={{ bgcolor: "#f7fafc" }}
+            InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+            sx={{
+              bgcolor: "var(--bg-secondary)",
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: "var(--border-primary)" },
+                "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+              },
+              color: "var(--text-primary)",
+            }}
           />
           <TextField
             label="Teléfono"
@@ -104,8 +138,16 @@ const CustomerModal = ({
             fullWidth
             margin="normal"
             variant="outlined"
-            InputLabelProps={{ style: { color: "#4a5568" } }}
-            sx={{ bgcolor: "#f7fafc" }}
+            InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+            sx={{
+              bgcolor: "var(--bg-secondary)",
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: "var(--border-primary)" },
+                "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+              },
+              color: "var(--text-primary)",
+            }}
           />
           <TextField
             label="Dirección"
@@ -115,8 +157,16 @@ const CustomerModal = ({
             fullWidth
             margin="normal"
             variant="outlined"
-            InputLabelProps={{ style: { color: "#4a5568" } }}
-            sx={{ bgcolor: "#f7fafc" }}
+            InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+            sx={{
+              bgcolor: "var(--bg-secondary)",
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: "var(--border-primary)" },
+                "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+              },
+              color: "var(--text-primary)",
+            }}
           />
           <TextField
             label="Empresa"
@@ -126,8 +176,16 @@ const CustomerModal = ({
             fullWidth
             margin="normal"
             variant="outlined"
-            InputLabelProps={{ style: { color: "#4a5568" } }}
-            sx={{ bgcolor: "#f7fafc" }}
+            InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+            sx={{
+              bgcolor: "var(--bg-secondary)",
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: "var(--border-primary)" },
+                "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+              },
+              color: "var(--text-primary)",
+            }}
           />
           <Select
             label="Tipo de Contacto"
@@ -138,8 +196,16 @@ const CustomerModal = ({
             margin="normal"
             variant="outlined"
             displayEmpty
-            InputLabelProps={{ style: { color: "#4a5568" } }}
-            sx={{ bgcolor: "#f7fafc" }}
+            InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+            sx={{
+              bgcolor: "var(--bg-secondary)",
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: "var(--border-primary)" },
+                "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+              },
+              color: "var(--text-primary)",
+            }}
           >
             <MenuItem value="Cliente">Cliente</MenuItem>
             <MenuItem value="Proveedor">Proveedor</MenuItem>
@@ -149,14 +215,34 @@ const CustomerModal = ({
           <Button
             variant="outlined"
             onClick={onHide}
-            sx={{ color: "#718096", borderColor: "#e2e8f0" }}
+            sx={{
+              color: "var(--text-secondary)",
+              borderColor: "var(--border-primary)",
+              "&:hover": {
+                background: "var(--accent-primary)",
+                color: "#FFFFFF",
+                borderColor: "var(--accent-primary)",
+                boxShadow: "var(--glow-neon)",
+              },
+            }}
           >
             Cancelar
           </Button>
           <Button
             variant="contained"
             onClick={handleSave}
-            sx={{ bgcolor: "#3182ce", "&:hover": { bgcolor: "#2b6cb0" } }}
+            sx={{
+              background: "var(--accent-hover)",
+              color: "#FFFFFF",
+              border: "2px solid var(--border-primary)",
+              position: "relative",
+              overflow: "hidden",
+              "&:hover": {
+                background: "var(--border-primary)",
+                borderColor: "var(--accent-primary)",
+                boxShadow: "var(--glow-neon)",
+              },
+            }}
           >
             {isEditMode ? "Guardar" : "Crear"}
           </Button>
