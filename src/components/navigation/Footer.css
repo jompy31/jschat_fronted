@@ -1,130 +1,415 @@
-/* Footer container */
-.footer {
-  background-color: #0A2463; /* J SPORT Blue */
-  color: #FFFFFF;
-  padding: 3rem 1rem;
+/* =========================================================================
+   FOOTER - FUTURISTA / LIMPIO CON REFLEJO DE VIDRIO Y DEGRADADO
+   Standalone: incluye TODAS las variables (modo claro + modo dark profundo)
+   Compatible con el JSX que enviaste (no modifica HTML/JSX)
+   ========================================================================= */
+
+/* --------------------------
+   VARIABLES GLOBALES (standalone)
+   -------------------------- */
+:root {
+  /* Palette - Light theme */
+  --bg-primary: #FFF8F8;        /* fondo principal claro (suave) */
+  --bg-secondary: #FFF2F4;      /* second light */
+  --glass-overlay: rgba(255,255,255,0.55);
+  --text-primary: #0A2463;      /* azul logo (texto principal) */
+  --text-secondary: #3b4b8a;    /* azul secundario */
+  --muted: #6b7280;             /* gris tenue para links secundarios */
+  --accent-primary: #D90404;    /* rojo logo / acento */
+  --accent-contrast: #0A2463;   /* azul oscuro complementario */
+  --accent-hover: linear-gradient(135deg, #D90404, #0A2463);
+  --border-primary: rgba(10,36,99,0.12);
+  --shadow-light: 0 6px 18px rgba(10,36,99,0.08);
+  --glow-neon: rgba(217,4,4,0.20);
+  --glass-border: rgba(255,255,255,0.6);
+  --duration-slow: 0.9s;
+  --duration-med: 0.45s;
+  --duration-fast: 0.18s;
+  --easing: cubic-bezier(0.22, 0.9, 0.32, 1);
 }
 
-/* Main container */
-.footer-container {
+/* Dark theme variables: azul profundo, contraste electric */
+.dark {
+  --bg-primary: #081226;        /* deep midnight blue base */
+  --bg-secondary: #061426;      /* second deep tone */
+  --glass-overlay: rgba(10,18,38,0.35);
+  --text-primary: #EAF6FF;      /* near white with blue tint */
+  --text-secondary: #A8C6E8;    /* soft blue text */
+  --muted: #6F8AA7;
+  --accent-primary: #FF5E5E;    /* neon red/pink accent for dark */
+  --accent-contrast: #00A7FF;   /* electric blue accent */
+  --accent-hover: linear-gradient(135deg, #FF5E5E, #00A7FF);
+  --border-primary: rgba(255,255,255,0.06);
+  --shadow-light: 0 10px 40px rgba(0,0,0,0.45);
+  --glow-neon: rgba(0,167,255,0.20);
+  --glass-border: rgba(255,255,255,0.04);
+  --duration-slow: 1s;
+  --duration-med: 0.5s;
+  --duration-fast: 0.2s;
+  --easing: cubic-bezier(0.22, 0.9, 0.32, 1);
+}
+
+/* Global small resets/useful */
+.footer, .footer * {
+  box-sizing: border-box;
+  transition: all var(--duration-med) var(--easing);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =========================================================================
+   LAYOUT — Footer container + glass + gradient (limpio con reflejo)
+   ========================================================================= */
+.footer {
+  width: 100%;
+  position: relative;
+  overflow: visible;
+  color: var(--text-primary);
+  /* glass + gradient */
+  background: linear-gradient(180deg, rgba(255,255,255,0.45), rgba(255,255,255,0.10));
+  background-blend-mode: overlay;
+  border-top: 1px solid var(--border-primary);
+  /* subtle blur glass effect */
+  backdrop-filter: blur(6px) saturate(110%);
+  -webkit-backdrop-filter: blur(6px) saturate(110%);
+  box-shadow: var(--shadow-light);
+  padding: 1.75rem 1rem; /* balanced vertical rhythm */
+  /* ensure gradient flow uses CSS variables (dark overrides via .dark) */
+}
+
+/* For dark mode, swap to deeper gradient but keep clean glass look */
+.dark .footer {
+  background: linear-gradient(180deg, rgba(6,20,38,0.75), rgba(8,18,38,0.9));
+  border-top: 1px solid var(--border-primary);
+}
+
+/* subtle animated sheen (glass reflection) moving across on loop */
+.footer::after {
+  content: "";
+  position: absolute;
+  top: -40%;
+  left: -30%;
+  width: 160%;
+  height: 220%;
+  pointer-events: none;
+  background: linear-gradient(120deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 45%, rgba(255,255,255,0.06) 100%);
+  transform: rotate(-18deg) translateX(-5%);
+  opacity: 1;
+  mix-blend-mode: overlay;
+  filter: blur(18px);
+  animation: sheenMove 8s linear infinite;
+}
+
+@keyframes sheenMove {
+  0% { transform: rotate(-18deg) translateX(-45%); opacity: 0.85; }
+  50% { transform: rotate(-18deg) translateX(10%); opacity: 0.6; }
+  100% { transform: rotate(-18deg) translateX(80%); opacity: 0.85; }
+}
+
+/* =========================================================================
+   INTERNAL GRID & SPACING — keep sections airy, not cramped
+   ========================================================================= */
+.footer > div {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 1.25rem;
 }
 
-/* Content layout */
-.footer-content {
+/* Top grid: left logo (1) / right nav (2) — increased gaps */
+.footer > div > div:first-child {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2.75rem; /* roomy */
+  align-items: start;
+  margin-bottom: 1.75rem;
+}
+
+/* small screens stack */
+@media (max-width: 900px) {
+  .footer > div > div:first-child {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    text-align: center;
+  }
+}
+
+/* =========================================================================
+   LOGO — constrained, centered, subtle floating animation
+   ========================================================================= */
+.space-y-6 {
   display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  justify-content: space-between;
-  margin-bottom: 2rem;
+  flex-direction: column;
+  gap: 1.25rem;
+  align-items: center;
 }
 
-/* Logo section */
-.footer-logo-section {
-  flex: 1;
-  min-width: 200px;
-}
-
+/* Use the class your JSX uses: .footer-logo */
 .footer-logo {
-  height: 60px;
-  width: auto;
-  margin-bottom: 1rem;
+  width: 160px !important;    /* controlled size: professional and not overpowering */
+  height: auto !important;
+  max-width: 40vw;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+  transform-origin: center;
+  filter: drop-shadow(0 10px 30px rgba(0,0,0,0.08));
+  transition: transform var(--duration-slow) var(--easing), filter var(--duration-med);
+  will-change: transform, filter;
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.02));
+  padding: 6px;
 }
 
-.footer-social {
+/* very subtle float / breathe animation */
+.footer-logo {
+  animation: floatLogo 6.5s ease-in-out infinite;
+}
+
+@keyframes floatLogo {
+  0% { transform: translateY(0) rotate(0deg) scale(1); }
+  50% { transform: translateY(-6px) rotate(-1deg) scale(1.02); }
+  100% { transform: translateY(0) rotate(0deg) scale(1); }
+}
+
+/* hover: more pronounced but tasteful (no insane rotation) */
+.footer-logo:hover {
+  transform: translateY(-4px) scale(1.06);
+  filter: drop-shadow(0 18px 36px rgba(10,36,99,0.12));
+}
+
+/* dark tweaks for logo */
+.dark .footer-logo {
+  filter: drop-shadow(0 10px 32px var(--glow-neon));
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+}
+
+/* ensure very small screens don't overflow */
+@media (max-width: 380px) {
+  .footer-logo { width: 140px !important; max-width: 60vw; }
+}
+
+/* =========================================================================
+   SOCIAL ICONS — balanced size, glass circles, subtle neon on hover
+   ========================================================================= */
+.flex.space-x-6 {
   display: flex;
-  gap: 1rem;
+  gap: 1.25rem;
+  justify-content: center;
+  align-items: center;
 }
 
 .footer-social-link {
-  color: #FFFFFF;
-  transition: color 0.3s ease;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: transform var(--duration-med) var(--easing), box-shadow var(--duration-med), background var(--duration-med);
+  overflow: hidden;
+  backdrop-filter: blur(4px);
 }
 
+.footer-social-link .footer-social-icon,
+.footer-social-link img {
+  width: 22px !important;
+  height: 22px !important;
+  object-fit: contain;
+  display: block;
+  filter: none;
+  transition: filter var(--duration-fast), transform var(--duration-fast);
+}
+
+/* hover: neon glow and slight lift */
 .footer-social-link:hover {
-  color: #D90404; /* J SPORT Red */
+  transform: translateY(-6px) scale(1.06);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12), 0 0 18px var(--glow-neon);
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+}
+.footer-social-link:hover .footer-social-icon,
+.footer-social-link:hover img {
+  filter: drop-shadow(0 0 10px var(--glow-neon));
 }
 
-.footer-social-icon {
-  width: 1.5rem;
-  height: 1.5rem;
+/* responsive: shrink icons on small */
+@media (max-width: 420px) {
+  .footer-social-link { width: 40px; height: 40px; }
+  .footer-social-link .footer-social-icon,
+  .footer-social-link img { width: 18px !important; height: 18px !important; }
 }
 
-/* Navigation section */
-.footer-nav-section {
-  flex: 1;
-  min-width: 200px;
+/* =========================================================================
+   NAV SECTIONS — spacing, readability, and hover interactions
+   ========================================================================= */
+/* container that holds the 2-column block */
+.mt-8.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.25rem !important; /* larger gaps for separation */
+  margin-top: 1.25rem !important;
 }
 
-.footer-nav-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: #FFFFFF;
+/* on larger screens keep spacious */
+@media (min-width: 1200px) {
+  .mt-8.grid { gap: 2.75rem !important; }
 }
 
-.footer-nav-list {
+/* stack on small */
+@media (max-width: 900px) {
+  .mt-8.grid { grid-template-columns: 1fr; gap: 1.5rem !important; }
+}
+
+/* md:flex wrapper: separate the two columns inside each column */
+.md\:flex {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1.75rem; /* space between internal columns vertically on mobile */
+  margin-bottom: 0.75rem;
 }
 
+/* on medium+ screens it becomes row with generous gap */
+@media (min-width: 768px) {
+  .md\:flex {
+    flex-direction: row;
+    gap: 2.25rem; /* horizontal separation between blocks */
+  }
+}
+
+/* width helper (md:w-1/2) mapped to full flex child */
+.md\:w-1\/2 { flex: 1; }
+
+/* title style */
+.footer-nav-title {
+  font-size: 1.02rem;
+  font-weight: 700;
+  margin: 0 0 0.85rem 0;
+  color: var(--text-primary);
+  letter-spacing: 0.6px;
+  position: relative;
+}
+
+/* underline accent on hover, gentle glow */
+.footer-nav-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  height: 3px;
+  width: 40%;
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-contrast));
+  opacity: 0.9;
+  border-radius: 2px;
+  transform-origin: left center;
+  transition: width var(--duration-med) var(--easing), opacity var(--duration-med);
+}
+.footer-nav-title:hover::after { width: 100%; opacity: 1; }
+
+/* list container */
+.mt-2.space-y-2 {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+/* link baseline */
 .footer-nav-link {
-  color: #FFFFFF;
-  font-size: 1rem;
-  transition: color 0.3s ease;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.45;
+  text-decoration: none;
+  display: inline-block;
+  padding-left: 0.6rem;  /* visual offset for accent bar */
+  position: relative;
+  transition: color var(--duration-med) var(--easing), transform var(--duration-med) var(--easing), text-shadow var(--duration-med);
 }
 
+/* accent bar that grows on hover */
+.footer-nav-link::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 0%;
+  width: 4px;
+  background: linear-gradient(180deg, var(--accent-primary), var(--accent-contrast));
+  border-radius: 2px;
+  transition: height var(--duration-med) var(--easing);
+}
+
+/* hover: shift and glow */
 .footer-nav-link:hover {
-  color: #D90404; /* J SPORT Red */
+  color: var(--accent-primary);
+  transform: translateX(10px);
+  text-shadow: 0 0 14px var(--glow-neon);
+}
+.footer-nav-link:hover::before { height: 70%; }
+
+/* make sure items are not cramped on mobile */
+@media (max-width: 480px) {
+  .footer-nav-link { font-size: 0.92rem; padding-left: 0.45rem; }
+  .footer-nav-title { font-size: 0.98rem; }
 }
 
-/* Copyright */
-.footer-copyright {
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  padding-top: 1.5rem;
+/* =========================================================================
+   BOTTOM / COPYRIGHT — centered, subtle, balanced
+   ========================================================================= */
+.mt-8.border-t {
+  border-top: 1px solid var(--border-primary) !important;
+  margin-top: 2rem !important;
+  padding-top: 1rem !important;
   text-align: center;
 }
 
-.footer-copyright p {
-  font-size: 0.875rem;
-  color: #FFFFFF;
-  opacity: 0.8;
+.footer-copyright-text {
+  font-size: 0.92rem;
+  color: var(--muted);
+  margin: 0;
+  transition: color var(--duration-med), transform var(--duration-med);
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .footer-content {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
+/* hover highlight */
+.footer-copyright-text:hover {
+  color: var(--accent-primary);
+  transform: translateY(-2px);
+  text-shadow: 0 0 12px var(--glow-neon);
+}
 
-  .footer-logo-section,
-  .footer-nav-section {
-    width: 100%;
-  }
+/* =========================================================================
+   ACCESSIBILITY / SMALL UTILS
+   ========================================================================= */
+/* high-contrast focus states for keyboard users */
+.footer a:focus, .footer button:focus {
+  outline: 3px solid rgba(0,167,255,0.18);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
 
-  .footer-social {
-    justify-content: center;
-  }
-
-  .footer-nav-list {
-    align-items: center;
+/* reduce motion opt-out */
+@media (prefers-reduced-motion: reduce) {
+  .footer-logo, .footer::after, .footer::before, .footer-social-link, .footer-nav-link {
+    animation: none !important;
+    transition: none !important;
   }
 }
 
-@media (max-width: 340px) {
-  .footer-logo {
-    height: 40px;
-  }
+/* =========================================================================
+   FINAL DARK MODE ADJUSTMENTS (extra contrast & glow)
+   ========================================================================= */
+.dark .footer-nav-title { color: var(--text-primary); }
+.dark .footer-nav-link { color: var(--text-secondary); }
+.dark .footer-nav-link:hover { text-shadow: 0 0 18px var(--glow-neon); color: var(--accent-primary); }
 
-  .footer-nav-title {
-    font-size: 1rem;
-  }
+/* Slightly stronger glow for social and logo in dark */
+.dark .footer-social-link:hover { box-shadow: 0 14px 40px rgba(0,167,255,0.12), 0 0 30px var(--glow-neon); }
+.dark .footer-logo:hover { filter: drop-shadow(0 0 28px var(--glow-neon)); transform: translateY(-6px) scale(1.07); }
 
-  .footer-nav-link {
-    font-size: 0.875rem;
-  }
-}
+/* ensure footer border and sheen look good in dark */
+.dark .footer::after { opacity: 0.12; filter: blur(20px) saturate(120%); }
+
+/* =========================================================================
+   END OF CSS
+   ========================================================================= */

@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion'; // 👈 Para animaciones futuristas innovadoras
 import { connect } from 'react-redux';
 import logo from '../../assets/LOGO_cuadrado.png';
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import publicidadData from '../json/publicidad.json';
+import "../../components/navigation/Footer.css";
 
 const navigation = {
   solutions: [{ name: 'Preguntas frecuentes', href: '/faq' }],
   support: [{ name: 'Contactenos', href: '/contacto' }],
   company: [
-{ name: "Catálogo", description: "Explora nuestra colección de productos deportivos", href: "/catalogo", icon: "Package" },
-  { name: "Promociones", description: "Descubre nuestras ofertas exclusivas", href: "/promociones", icon: "Star" },
-  { name: "Sobre Nosotros", description: "Conoce más sobre J SPORT", href: "/sobre-nosotros", icon: "Info" },
-  { name: "Contacto", description: "Ponte en contacto con nosotros", href: "/contacto", icon: "Mail" },
-  { name: "Tienda", description: "Accede a nuestra tienda en línea", href: "/login", icon: "ShoppingCart" },
+    { name: "Catálogo", description: "Explora nuestra colección de productos deportivos", href: "/catalogo", icon: "Package" },
+    { name: "Promociones", description: "Descubre nuestras ofertas exclusivas", href: "/promociones", icon: "Star" },
+    { name: "Sobre Nosotros", description: "Conoce más sobre J SPORT", href: "/sobre-nosotros", icon: "Info" },
+    { name: "Contacto", description: "Ponte en contacto con nosotros", href: "/contacto", icon: "Mail" },
+    { name: "Tienda", description: "Accede a nuestra tienda en línea", href: "/login", icon: "ShoppingCart" },
   ],
   social: [
     {
@@ -89,95 +91,113 @@ function Footer() {
     return numA - numB;
   });
 
+  // Anim variants – Stagger futurista innovador
+  const containerVariants = {
+    hidden: { opacity: 0, y: 15 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { staggerChildren: 0.2, delayChildren: 0.3 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, x: -15, scale: 0.95 },
+    visible: { opacity: 1, x: 0, scale: 1, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] } }, // Ease futurista
+  };
+
   return (
-    <footer
+    <motion.footer
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      variants={containerVariants}
       aria-labelledby="footer-heading"
-      style={{ zoom: isMini ? '20%' : isMobile ? '50%' : '100%', backgroundColor: '#0A2463' }}
+      className="footer" // 👈 Clase para CSS vars globales
     >
       <h2 id="footer-heading" className="sr-only">
         Pie de página
       </h2>
-      <div className="mx-auto max-w-full py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
-        <div className="xl:grid xl:grid-cols-3 xl:gap-8">
-          <div className="space-y-8 xl:col-span-1">
-            <img src={logo} width={250} height={250} className="" alt="Logo" />
-            <div className="flex space-x-6">
-              {navigation.social.map((item) => (
-                <a key={item.name} href={item.href} className="text-white hover:text-[#0BFC28]">
-                  <item.icon className="w-6 h-6" />
-                </a>
+      <div className="mx-auto max-w-full py-8 px-4 sm:px-6 lg:py-10 lg:px-8"> {/* Padding pro */}
+        <div className="xl:grid xl:grid-cols-3 xl:gap-8"> {/* Gap pro */}
+          <motion.div variants={itemVariants} className="space-y-6 xl:col-span-1"> {/* Space pro */}
+            <img src={logo} width={250} height={250} className="footer-logo" alt="Logo" /> {/* Tamaño/pos fijo */}
+            <motion.div variants={itemVariants} className="flex space-x-6 justify-center"> {/* Space pro */}
+              {navigation.social.map((item, index) => (
+                <motion.a 
+                  key={item.name} 
+                  href={item.href} 
+                  className="footer-social-link group"
+                  variants={itemVariants}
+                  whileHover={{ scale: 1.15, rotate: [0, 360, 0] }} // Rotate futurista innovador
+                  transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  style={{ animationDelay: `${index * 0.2}s` }}
+                >
+                  <item.icon className="footer-social-icon" />
+                  <motion.div 
+                    className="absolute inset-0 rounded-full bg-[var(--accent-primary)] opacity-0 group-hover:opacity-40"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 2.5 }}
+                    transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  />
+                </motion.a>
               ))}
-            </div>
-          </div>
-          <div className="mt-12 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
-            <div className="md:flex">
-              <div className="md:w-1/2 text-justify">
-                <h3 className="text-lg font-bold text-white text-justify">Contacto</h3>
-                <ul role="list" className="mt-2 space-y-2">
+            </motion.div>
+          </motion.div>
+          <motion.div variants={itemVariants} className="mt-8 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0 xl:gap-10"> {/* Mt/gap pro para separación */}
+            <motion.div variants={itemVariants} className="md:flex gap-8 mb-4"> {/* Gap pro para acomodo, mb para separación */}
+              <div className="md:w-1/2 space-y-3"> {/* Space pro */}
+                <h3 className="footer-nav-title">Contacto</h3>
+                <ul role="list" className="space-y-2"> {/* Space pro para no pegado */}
                   {navigation.support.map((item) => (
-                    <li key={item.name}>
-                      <Link
-                        to={item.href}
-                        className="text-base text-white hover:text-[#0BFC28] text-justify"
-                      >
+                    <motion.li key={item.name} whileHover={{ x: 8, scale: 1.05 }} transition={{ duration: 0.3 }}>
+                      <Link to={item.href} className="footer-nav-link">
                         {item.name}
                       </Link>
-                    </li>
+                    </motion.li>
                   ))}
                 </ul>
               </div>
-              <br />
-              <br />
-              <br />
-              <br />
-              <br />
-              <br />
-              <br />
-              <br />
-              <div className="md:w-1/2 text-justify">
-                <h3 className="text-lg font-bold text-white">Consultas</h3>
-                <ul role="list" className="mt-2 space-y-2">
+              <div className="md:w-1/2 space-y-3">
+                <h3 className="footer-nav-title">Consultas</h3>
+                <ul role="list" className="space-y-2">
                   {navigation.solutions.map((item) => (
-                    <li key={item.name} className="text-justify">
-                      <Link
-                        to={item.href}
-                        className="text-base text-white hover:text-[#0BFC28]"
-                      >
+                    <motion.li key={item.name} whileHover={{ x: 8, scale: 1.05 }} transition={{ duration: 0.3 }}>
+                      <Link to={item.href} className="footer-nav-link">
                         {item.name}
                       </Link>
-                    </li>
+                    </motion.li>
                   ))}
                 </ul>
               </div>
-            </div>
-            <div className="md:flex">
-              <br />
-              <div className="md:w-1/2">
-                <h3 className="text-lg font-bold text-white text-justify">Empresa</h3>
-                <ul role="list" className="mt-2 space-y-2 text-justify">
+            </motion.div>
+            <motion.div variants={itemVariants} className="md:flex gap-8 mb-4"> {/* Gap pro, mb para separación */}
+              <div className="md:w-full space-y-3"> {/* Full con space pro */}
+                <h3 className="footer-nav-title">Empresa</h3>
+                <ul role="list" className="space-y-2">
                   {navigation.company.map((item) => (
-                    <li key={item.name}>
-                      <Link
-                        to={item.href}
-                        className="text-base text-white hover:text-[#0BFC28]"
-                      >
+                    <motion.li key={item.name} whileHover={{ x: 8, scale: 1.05 }} transition={{ duration: 0.3 }}>
+                      <Link to={item.href} className="footer-nav-link">
                         {item.name}
                       </Link>
-                    </li>
+                    </motion.li>
                   ))}
                 </ul>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
 
-        <div className="mt-12 border-t border-gray-200 pt-8">
-          <p className="text-base text-gray-400 xl:text-center">
+        <motion.div 
+          variants={itemVariants} 
+          className="mt-8 border-t border-[var(--border-primary)] pt-4" // Mt/pt pro
+        >
+          <p className="footer-copyright-text xl:text-center">
             © 2025 JSPORT. Derechos de Autor reservados.
           </p>
-        </div>
+        </motion.div>
       </div>
-    </footer>
+    </motion.footer>
   );
 }
 
