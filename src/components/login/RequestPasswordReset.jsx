@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/LOGO_rectangular.png';
+import './RequestPasswordReset.css'; // 👈 Importa los estilos
 
 const RequestPasswordReset = () => {
   const [email, setEmail] = useState('');
@@ -15,51 +16,39 @@ const RequestPasswordReset = () => {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:8000/api/request_reset_password/', {
-        email,
-      });
-
+      const response = await axios.post('http://localhost:8000/api/request_reset_password/', { email });
       if (response.status === 200) {
         setMessage('Se ha enviado un enlace de recuperación a tu correo.');
         setEmail('');
-        // redirigir después de unos segundos
         setTimeout(() => navigate('/login'), 3000);
       }
     } catch (err) {
       setError('No se pudo enviar el enlace. Verifica tu correo.');
-      console.log('Error requesting password reset:', err);
+      console.error('Error requesting password reset:', err);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100" style={{ marginTop: '4%' }}>
-      <div className="w-full max-w-md bg-white shadow-lg rounded-lg p-6">
-        <div className="flex justify-center mb-4">
-          <img src={logo} alt="Logo ABCupon" className="w-32 h-auto" />
-        </div>
-        <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">
-          Recuperar Contraseña
-        </h2>
+    <div className="request-reset-container">
+      <div className="request-reset-card">
+        <img src={logo} alt="Logo" className="request-reset-logo" />
+        <h2 className="request-reset-title">Recuperar Contraseña</h2>
+
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-medium mb-2">
-              Correo Electrónico
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
-              placeholder="Ingresa tu correo"
-              required
-            />
-          </div>
-          {message && <p className="text-green-600 mb-4">{message}</p>}
-          {error && <p className="text-red-600 mb-4">{error}</p>}
-          <button
-            type="submit"
-            className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-300"
-          >
+          <label className="request-reset-label">Correo Electrónico</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="request-reset-input"
+            placeholder="Ingresa tu correo"
+            required
+          />
+
+          {message && <p className="request-reset-message">{message}</p>}
+          {error && <p className="request-reset-error">{error}</p>}
+
+          <button type="submit" className="request-reset-button">
             Enviar enlace
           </button>
         </form>
