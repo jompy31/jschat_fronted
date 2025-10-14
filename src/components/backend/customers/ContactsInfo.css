@@ -2,38 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Apply global transitions from guide */
+* {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .container {
   @apply min-h-screen p-6 transition-colors duration-300;
 }
 
 .container.light {
-  @apply bg-gray-100 text-gray-900;
+  @apply bg-[#FFF5F5] text-[#0A2463];
 }
 
 .container.dark {
-  @apply bg-gray-900 text-white;
+  @apply bg-[#0A1230] text-white;
 }
 
 .btn {
-  @apply px-4 py-2 rounded-lg transition-all duration-200;
+  @apply px-4 py-2 rounded-lg transition-all duration-200 relative overflow-hidden;
 }
 
 .btn-primary {
-  @apply bg-blue-600 text-white hover:bg-blue-700;
+  @apply bg-gradient-to-br from-[#D90404] to-[#0A2463] text-white hover:bg-[#0A2463] hover:border-[#D90404] hover:shadow-[0_0_10px_rgba(217,4,4,0.3)];
+  border: 2px solid var(--border-primary);
 }
 
 .btn-secondary {
-  @apply bg-gray-300 text-gray-800 hover:bg-gray-400;
+  @apply bg-[#FFE6E6] text-[#4B5EAA] hover:bg-[#FFF5F5] hover:text-[#0A2463] hover:shadow-[0_0_10px_rgba(217,4,4,0.3)];
+  border: 2px solid var(--border-primary);
 }
 
 .btn-danger {
-  @apply bg-red-600 text-white hover:bg-red-700;
+  @apply bg-[#D90404] text-white hover:bg-[#FF4D4D] hover:shadow-[0_0_10px_rgba(217,4,4,0.3)];
+  border: 2px solid var(--border-primary);
 }
 
 .modal {
-  @apply rounded-lg shadow-lg p-6 bg-white dark:bg-gray-800;
-  background-color: #ffffff !important;
-  color: #1a202c !important;
+  @apply rounded-lg shadow-[0_2px_4px_rgba(10,36,99,0.1)] p-6 bg-[#FFF5F5] dark:bg-[#1A2A4A];
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-primary);
+  color: var(--text-primary);
 }
 
 .modal * {
@@ -52,8 +61,10 @@
   max-width: 800px !important;
   padding: 24px !important;
   border-radius: 12px !important;
-  background-color: #ffffff !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
+  background: linear-gradient(180deg, var(--bg-primary), var(--bg-secondary)) !important;
+  box-shadow: 0 4px 20px rgba(10,36,99,0.2), var(--glow-neon) !important;
+  border: 1px solid var(--border-primary) !important;
+  color: var(--text-primary) !important;
 }
 
 .lead-modal::-webkit-scrollbar,
@@ -63,39 +74,40 @@
 
 .lead-modal::-webkit-scrollbar-track,
 .modal::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--bg-secondary);
 }
 
 .lead-modal::-webkit-scrollbar-thumb,
 .modal::-webkit-scrollbar-thumb {
-  background: #888;
+  background: var(--accent-primary);
   border-radius: 4px;
 }
 
 .lead-modal::-webkit-scrollbar-thumb:hover,
 .modal::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: var(--text-secondary);
 }
 
 .card {
-  @apply rounded-lg shadow-md p-4 bg-white dark:bg-gray-700;
+  @apply rounded-lg shadow-[0_2px_4px_rgba(10,36,99,0.1)] p-4 bg-[#FFF5F5] dark:bg-[#1A2A4A];
+  border: 1px solid var(--border-primary);
 }
 
 .table-header {
-  @apply bg-blue-600 text-white font-semibold;
+  @apply bg-[#0A2463] text-white font-semibold;
 }
 
 .table-row:hover {
-  @apply bg-blue-50 dark:bg-gray-600;
+  @apply bg-[#FFE6E6] dark:bg-[#1A2A4A];
 }
 
 input, select, textarea {
-  @apply border-gray-300 dark:border-gray-600 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white;
+  @apply border-[var(--border-primary)] rounded-lg p-2 focus:ring-2 focus:ring-[#D90404] bg-[var(--bg-secondary)] text-[var(--text-primary)] dark:bg-[#1A2A4A] dark:text-white;
 }
 
 #modal-content {
-  @apply p-4 bg-white;
-  color: #1a202c !important;
+  @apply p-4 bg-[var(--bg-primary)];
+  color: var(--text-primary) !important;
 }
 
 #modal-content p, #modal-content h6 {
