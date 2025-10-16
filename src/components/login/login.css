@@ -308,3 +308,82 @@
     font-size: 0.95rem;
   }
 }
+/* === 💫 Efecto Futurista Neón para el Login === */
+
+.auth-card {
+  background: rgba(10, 10, 25, 0.6);
+  border: 2px solid rgba(0, 255, 255, 0.3);
+  box-shadow:
+    0 0 15px rgba(0, 255, 255, 0.2),
+    0 0 30px rgba(0, 255, 255, 0.1),
+    inset 0 0 20px rgba(0, 255, 255, 0.1);
+  backdrop-filter: blur(14px);
+  position: relative;
+}
+
+/* Borde animado tipo “flujo de energía” */
+.auth-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 255, 255, 0.8),
+    rgba(0, 128, 255, 0.8),
+    rgba(255, 0, 255, 0.8),
+    rgba(0, 255, 255, 0.8)
+  );
+  background-size: 400% 400%;
+  z-index: -1;
+  border-radius: 18px;
+  animation: borderFlow 6s linear infinite;
+  filter: blur(6px);
+  opacity: 0.7;
+}
+
+@keyframes borderFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Inputs con efecto neón */
+.form-control-modern {
+  background: rgba(5, 5, 15, 0.6);
+  border: 2px solid rgba(0, 255, 255, 0.3);
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.15);
+  color: #eafcff;
+}
+
+.form-control-modern:focus {
+  border-color: #00ffff;
+  box-shadow:
+    0 0 10px #00ffff,
+    0 0 20px #00ffff,
+    inset 0 0 10px rgba(0, 255, 255, 0.4);
+  outline: none;
+  background: rgba(0, 15, 25, 0.7);
+}
+
+/* Placeholder más futurista */
+.form-control-modern::placeholder {
+  color: rgba(180, 255, 255, 0.6);
+}
+
+/* Botón con glow */
+.login-button {
+  background: linear-gradient(135deg, #00ffff, #0077ff);
+  border: none;
+  box-shadow: 0 0 15px #00ffff, 0 0 40px rgba(0, 255, 255, 0.3);
+}
+
+.login-button:hover {
+  background: linear-gradient(135deg, #00ccff, #0066ff);
+  box-shadow:
+    0 0 20px #00ffff,
+    0 0 50px rgba(0, 255, 255, 0.4);
+  transform: scale(1.02);
+}

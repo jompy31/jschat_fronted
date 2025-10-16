@@ -428,3 +428,105 @@ footer::before {
   box-shadow: 0 0 35px rgba(0, 255, 255, 0.4);
   transition: all 0.5s ease;
 }
+/* ======== FORMULARIOS FUTURISTAS ======== */
+.form-container {
+  max-width: 450px;
+  margin: 3rem auto;
+  padding: 2.5rem;
+  background: rgba(15, 20, 35, 0.7);
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 25px rgba(0, 150, 255, 0.25);
+  border: 2px solid rgba(0, 150, 255, 0.3);
+  transition: all 0.3s ease-in-out;
+}
+
+.form-container:hover {
+  box-shadow: 0 0 40px rgba(0, 150, 255, 0.6);
+  border-color: rgba(0, 150, 255, 0.5);
+}
+
+/* ======== TÍTULOS ======== */
+.form-container h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(0, 150, 255, 0.7);
+  font-weight: 600;
+}
+
+/* ======== INPUTS ======== */
+.form-container input,
+.form-container select,
+.form-container textarea {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  margin-bottom: 1.2rem;
+  border-radius: 12px;
+  border: 2px solid rgba(0, 150, 255, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  outline: none;
+  transition: all 0.25s ease-in-out;
+  font-size: 1rem;
+}
+
+.form-container input::placeholder,
+.form-container textarea::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.form-container input:focus,
+.form-container select:focus,
+.form-container textarea:focus {
+  border-color: rgba(0, 255, 255, 0.8);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* ======== BOTÓN ======== */
+.form-container button {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(90deg, #0077ff, #00ccff);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.6);
+}
+
+.form-container button:hover {
+  box-shadow: 0 0 20px rgba(0, 200, 255, 0.7);
+  transform: translateY(-2px);
+}
+
+/* ======== MODO CLARO ======== */
+.light-mode .form-container {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(0, 150, 255, 0.3);
+  box-shadow: 0 0 25px rgba(0, 150, 255, 0.1);
+}
+
+.light-mode .form-container input,
+.light-mode .form-container textarea,
+.light-mode .form-container select {
+  color: #222;
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(0, 150, 255, 0.3);
+}
+
+.light-mode .form-container input:focus,
+.light-mode .form-container textarea:focus,
+.light-mode .form-container select:focus {
+  border-color: rgba(0, 120, 255, 0.8);
+  box-shadow: 0 0 12px rgba(0, 120, 255, 0.4);
+}
+
+.light-mode .form-container button {
+  background: linear-gradient(90deg, #0077ff, #00ccff);
+  color: #fff;
+}

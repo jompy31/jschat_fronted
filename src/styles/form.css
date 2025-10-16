@@ -1,0 +1,191 @@
+/* ======================================================
+   ⚡ FORMULARIOS FUTURISTAS NEÓN – VERSIÓN COMPATIBLE ⚡
+   ====================================================== */
+
+.login-container,
+.signup-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  background: transparent;
+}
+
+/* ====== CARD PRINCIPAL CON BORDE NEÓN REAL ====== */
+.auth-card {
+  position: relative;
+  background: rgba(15, 20, 40, 0.6);
+  border-radius: 20px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  overflow: hidden;
+  padding: 2rem;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 0 25px rgba(0, 200, 255, 0.25);
+  transition: all 0.4s ease-in-out;
+}
+
+/* ANILLO NEÓN ALREDEDOR – siempre visible */
+.auth-card::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    #00ffff,
+    #007bff,
+    #00e6ff,
+    #00ccff,
+    #00ffff
+  );
+  background-size: 300% 300%;
+  animation: neonFlow 6s linear infinite;
+  z-index: -1;
+}
+
+/* Animación de flujo suave del borde */
+@keyframes neonFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Glow al pasar el mouse */
+.auth-card:hover {
+  box-shadow: 0 0 40px rgba(0, 255, 255, 0.6);
+  transform: translateY(-2px);
+}
+
+/* ====== CONTENIDO ====== */
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.logo {
+  width: 150px;
+  filter: drop-shadow(0 0 12px rgba(0, 200, 255, 0.6));
+}
+
+.card-title {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(0, 150, 255, 0.6);
+}
+
+.card-subtitle {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 1.5rem;
+}
+
+/* ====== INPUTS ====== */
+.form-control-modern {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(0, 200, 255, 0.3);
+  color: #fff;
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  transition: all 0.3s ease-in-out;
+  font-size: 1rem;
+}
+
+.form-control-modern:focus {
+  border-color: #00ffff;
+  box-shadow: 0 0 18px rgba(0, 255, 255, 0.7);
+  background: rgba(0, 0, 0, 0.4);
+  outline: none;
+  animation: inputGlow 2s infinite ease-in-out;
+}
+
+@keyframes inputGlow {
+  0% {
+    box-shadow: 0 0 8px rgba(0, 255, 255, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.9);
+  }
+  100% {
+    box-shadow: 0 0 8px rgba(0, 255, 255, 0.4);
+  }
+}
+
+/* ====== BOTÓN ====== */
+.login-button {
+  width: 100%;
+  padding: 0.9rem;
+  background: linear-gradient(90deg, #007bff, #00e6ff);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease-in-out;
+}
+
+.login-button:hover {
+  box-shadow: 0 0 25px rgba(0, 200, 255, 0.8);
+  transform: translateY(-2px);
+}
+
+/* ====== LINKS ====== */
+.links-container {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.auth-link {
+  display: block;
+  color: rgba(0, 200, 255, 0.8);
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.auth-link:hover {
+  color: #00ffff;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+}
+
+/* ====== ERRORES ====== */
+.error-message {
+  color: #ff4d4d;
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+}
+
+/* ====== MODO CLARO ====== */
+.light-mode .auth-card {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 20px rgba(0, 100, 255, 0.25);
+}
+
+.light-mode .auth-card::before {
+  background: linear-gradient(135deg, #0099ff, #00ccff, #007bff);
+}
+
+.light-mode .form-control-modern {
+  background: rgba(255, 255, 255, 0.95);
+  color: #111;
+  border-color: rgba(0, 120, 255, 0.3);
+}
+
+.light-mode .form-control-modern:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 12px rgba(0, 120, 255, 0.5);
+}
