@@ -34,47 +34,70 @@ function Signup() {
     setIsPasswordVisible(!isPasswordVisible);
   }
 
-  const onChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    // Limpiar error del campo cuando el usuario empiece a escribir
-    if (errors[e.target.name]) {
-      setErrors({ ...errors, [e.target.name]: '' });
+  const validateField = (name, value, formData) => {
+    let error = '';
+    switch (name) {
+      case 'first_name':
+        if (!value) error = 'El nombre es requerido';
+        break;
+      case 'last_name':
+        if (!value) error = 'Los apellidos son requeridos';
+        break;
+      case 'email':
+        if (!value) error = 'El correo electrónico es requerido';
+        else if (!validateEmail(value)) error = 'Por favor ingresa un correo válido';
+        break;
+      case 'phone_number':
+        if (!value) error = 'El número de teléfono es requerido';
+        else if (!/^\d{8}$/.test(value.replace(/\s/g, ''))) error = 'El número de teléfono debe tener 8 dígitos';
+        break;
+      case 'id_type':
+        if (!value) error = 'El tipo de identificación es requerido';
+        break;
+      case 'id_number':
+        if (!value) error = 'El número de identificación es requerido';
+        else if (formData.id_type === 'Cédula' && !/^\d{6,10}$/.test(value)) error = 'La cédula debe tener entre 6 y 10 dígitos';
+        else if (formData.id_type === 'Pasaporte' && !/^[A-Za-z0-9]{4,20}$/.test(value)) error = 'El pasaporte debe ser alfanumérico de 4 a 20 caracteres';
+        break;
+      case 'address':
+        if (!value) error = 'La dirección es requerida';
+        break;
+      case 'company':
+        if (!value) error = 'La empresa es requerida';
+        break;
+      case 'password':
+        if (!value) error = 'La contraseña es requerida';
+        else if (value.length < 6) error = 'La contraseña debe tener al menos 6 caracteres';
+        break;
+      case 're_password':
+        if (!value) error = 'Confirma tu contraseña';
+        else if (value !== formData.password) error = 'Las contraseñas no coinciden';
+        break;
+      default:
+        break;
     }
+    return error;
+  };
+
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    const error = validateField(name, value, { ...formData, [name]: value });
+    setErrors(prev => ({ ...prev, [name]: error }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
 
-    const {
-      first_name,
-      last_name,
-      email,
-      password,
-      re_password,
-      company,
-      id_number,
-      id_type,
-      phone_number,
-      address,
-    } = formData;
-
-    // Validaciones del lado cliente
-    let validationErrors = {};
-
-    if (!first_name) validationErrors.first_name = 'El nombre es requerido';
-    if (!last_name) validationErrors.last_name = 'Los apellidos son requeridos';
-    if (!email) validationErrors.email = 'El correo electrónico es requerido';
-    if (!validateEmail(email)) validationErrors.email = 'Por favor ingresa un correo válido';
-    if (!password) validationErrors.password = 'La contraseña es requerida';
-    if (password.length < 6) validationErrors.password = 'La contraseña debe tener al menos 6 caracteres';
-    if (!re_password) validationErrors.re_password = 'Confirma tu contraseña';
-    if (password !== re_password) validationErrors.re_password = 'Las contraseñas no coinciden';
-    if (!company) validationErrors.company = 'La empresa es requerida';
-    if (!id_number) validationErrors.id_number = 'El número de identificación es requerido';
-    if (!id_type) validationErrors.id_type = 'El tipo de identificación es requerido';
-    if (!phone_number) validationErrors.phone_number = 'El número de teléfono es requerido';
-    if (!address) validationErrors.address = 'La dirección es requerida';
+    // Validar todos los campos en submit
+    const validationErrors = {};
+    Object.keys(formData).forEach(key => {
+      if (key !== 'staff_status') {
+        const error = validateField(key, formData[key], formData);
+        if (error) validationErrors[key] = error;
+      }
+    });
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -88,14 +111,14 @@ function Signup() {
     try {
       // Payload para signup
       const signupPayload = {
-        username: email,
-        email,
-        password,
-        first_name,
-        last_name,
+        username: formData.email,
+        email: formData.email,
+        password: formData.password,
+        first_name: formData.first_name,
+        last_name: formData.last_name,
         staff_status: 'customer',
-        phone_number,
-        address,
+        phone_number: formData.phone_number,
+        address: formData.address,
       };
 
       console.debug('Intentando registro con payload:', signupPayload);
@@ -116,13 +139,13 @@ function Signup() {
       // 2) Crear perfil de customer
       try {
         await TodoDataService.createCustomer({
-          name: `${first_name} ${last_name}`,
-          id_type,
-          id_number: id_number.trim(),
-          email,
-          phone_number,
-          address,
-          company,
+          name: `${formData.first_name} ${formData.last_name}`,
+          id_type: formData.id_type,
+          id_number: formData.id_number.trim(),
+          email: formData.email,
+          phone_number: formData.phone_number,
+          address: formData.address,
+          company: formData.company,
           tipo_contacto: 'Cliente',
           user: userId,
         }, token);
@@ -141,6 +164,7 @@ function Signup() {
           address: '',
           staff_status: 'customer',
         });
+        setErrors({});
 
         toast.success('¡Registro exitoso! Redirigiendo al inicio de sesión...');
         setTimeout(() => navigate('/login'), 2000);
@@ -161,8 +185,10 @@ function Signup() {
         // Mostrar errores específicos
         if (custErrData.id_number) {
           toast.error('El número de identificación ya está registrado. Por favor usa otro número.');
+          setErrors(prev => ({ ...prev, id_number: 'El número de identificación ya está registrado' }));
         } else if (custErrData.email) {
           toast.error('El correo electrónico ya está registrado. Por favor usa otro correo.');
+          setErrors(prev => ({ ...prev, email: 'El correo electrónico ya está registrado' }));
         } else {
           toast.error('Error al crear el perfil de cliente. Por favor intenta nuevamente.');
         }
@@ -178,11 +204,13 @@ function Signup() {
           toast.error(errData.error);
         } else if (errData.email) {
           toast.error('El correo electrónico ya está registrado');
+          setErrors(prev => ({ ...prev, email: 'El correo electrónico ya está registrado' }));
         } else if (typeof errData === 'object') {
           // Mostrar errores por campo
           Object.entries(errData).forEach(([field, msgs]) => {
             const message = Array.isArray(msgs) ? msgs.join(' ') : String(msgs);
             toast.error(`${field}: ${message}`);
+            setErrors(prev => ({ ...prev, [field]: message }));
           });
         } else {
           toast.error('Error en el registro. Verifica los datos e intenta nuevamente.');
@@ -277,7 +305,7 @@ function Signup() {
                       name="phone_number"
                       value={formData.phone_number}
                       onChange={onChange}
-                      placeholder="Ej: 3001234567"
+                      placeholder="Ej: 87654321"
                       className={`form-control-modern ${errors.phone_number ? 'is-invalid' : ''}`}
                       required
                     />
