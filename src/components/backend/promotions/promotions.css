@@ -1,0 +1,85 @@
+.promociones-admin-container {
+  padding: 2rem;
+  color: #fff;
+  background: linear-gradient(135deg, #040b1a 0%, #0b1321 100%);
+  min-height: 100vh;
+}
+
+.new-promo-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.new-promo-form input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(0, 183, 255, 0.2);
+  padding: 0.7rem;
+  border-radius: 8px;
+  color: white;
+  width: 220px;
+}
+
+.btn-add {
+  background: linear-gradient(135deg, #00b7ff, #ff2b4a);
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-add:hover {
+  transform: scale(1.05);
+}
+
+.promos-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.promo-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 183, 255, 0.2);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: 0.3s;
+}
+
+.promo-card:hover {
+  box-shadow: 0 0 20px rgba(0, 183, 255, 0.3);
+  transform: translateY(-4px);
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.btn-edit, .btn-delete, .btn-save, .btn-cancel {
+  display: flex;
+  align-items: center;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 0.8rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.btn-edit { background: #00b7ff; color: white; }
+.btn-edit:hover { background: #0095d9; }
+
+.btn-delete { background: #ff2b4a; color: white; }
+.btn-delete:hover { background: #d90429; }
+
+.btn-save { background: #4ade80; color: white; }
+.btn-save:hover { background: #22c55e; }
+
+.btn-cancel { background: #facc15; color: #222; }
+.btn-cancel:hover { background: #eab308; }
