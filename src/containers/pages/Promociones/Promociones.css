@@ -1,22 +1,278 @@
+/* ⚡️ Modo SaiyaGPT 30000: Estilo Futurista Neon Vidrio Reflectivo ⚡️ */
+
+/* ======== CONFIGURACIÓN GENERAL ======== */
 .promociones-container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  background: linear-gradient(135deg, #040b1a 0%, #0b1321 100%);
+  color: #fff;
+  overflow-x: hidden;
+  position: relative;
 }
 
-.promo-swiper {
-  padding-bottom: 40px;
+.promociones-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 20%, rgba(0, 183, 255, 0.15) 0%, transparent 70%),
+              radial-gradient(circle at 80% 80%, rgba(255, 0, 70, 0.1) 0%, transparent 60%);
+  filter: blur(100px);
+  z-index: 0;
 }
 
-.promo-swiper .swiper-pagination-bullet {
-  background-color: #0A2463;
+/* ======== HERO SECTION ======== */
+.promociones-container section:first-child {
+  position: relative;
+  backdrop-filter: blur(12px);
+  background: rgba(5, 15, 40, 0.6);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 0 30px rgba(0, 183, 255, 0.15);
 }
 
-.promo-swiper .swiper-pagination-bullet-active {
-  background-color: #D90404;
+/* ======== TARJETAS DEL CARRUSEL ======== */
+.promo-swiper .swiper-slide > div {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 183, 255, 0.2);
+  border-radius: 20px;
+  box-shadow: 0 0 25px rgba(0, 183, 255, 0.1);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.promo-swiper .swiper-button-next,
-.promo-swiper .swiper-button-prev {
-  color: #D90404;
+.promo-swiper .swiper-slide > div::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(0, 183, 255, 0.15), rgba(217, 4, 4, 0.15));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.promo-swiper .swiper-slide:hover > div::before {
+  opacity: 1;
+}
+
+.promo-swiper .swiper-slide:hover > div {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 0 45px rgba(0, 183, 255, 0.25);
+}
+
+/* ======== TEXTOS ======== */
+.text-jsport-blue {
+  color: #00b7ff !important;
+  text-shadow: 0 0 5px rgba(0, 183, 255, 0.7);
+}
+
+.text-jsport-red {
+  color: #ff2b4a !important;
+  text-shadow: 0 0 6px rgba(255, 43, 74, 0.6);
+}
+
+/* ======== BOTONES ======== */
+a.bg-jsport-red {
+  background: linear-gradient(135deg, #d90404 0%, #ff3d3d 100%);
+  box-shadow: 0 0 15px rgba(255, 50, 50, 0.4);
+  transition: all 0.4s ease;
+  border: none;
+}
+
+a.bg-jsport-red:hover {
+  box-shadow: 0 0 25px rgba(255, 50, 50, 0.7), 0 0 40px rgba(255, 0, 70, 0.4);
+  transform: scale(1.05);
+}
+
+/* ======== TODAS LAS PROMOCIONES GRID ======== */
+.promociones-container .grid > div {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(14px);
+  border-radius: 18px;
+  border: 1px solid rgba(0, 183, 255, 0.15);
+  box-shadow: 0 0 25px rgba(0, 183, 255, 0.1);
+  transition: all 0.4s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+.promociones-container .grid > div::after {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(0, 183, 255, 0.3), transparent 70%);
+  transition: top 0.8s ease;
+}
+
+.promociones-container .grid > div:hover::after {
+  top: 100%;
+}
+
+.promociones-container .grid > div:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 35px rgba(0, 183, 255, 0.25);
+}
+
+/* ======== CTA FINAL ======== */
+.promociones-container section:last-child {
+  position: relative;
+  background: rgba(5, 10, 25, 0.7);
+  backdrop-filter: blur(15px);
+  border-top: 2px solid rgba(0, 183, 255, 0.3);
+  border-bottom: 2px solid rgba(255, 0, 70, 0.2);
+  box-shadow: inset 0 0 60px rgba(0, 183, 255, 0.1);
+}
+
+.promociones-container section:last-child::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0, 183, 255, 0.2), rgba(255, 0, 70, 0.15));
+  opacity: 0.5;
+  animation: shimmer 6s infinite linear;
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ======== EFECTO REFLEJO DE VIDRIO ======== */
+.promo-swiper .swiper-slide > div,
+.promociones-container .grid > div {
+  backdrop-filter: blur(12px) saturate(1.2);
+}
+
+/* ======== IMÁGENES: AJUSTE PARA VER TODA LA IMAGEN EN LA CARD ======== */
+.promociones-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* mantiene toda la imagen visible */
+  border-radius: 12px;
+  box-shadow: 0 0 25px rgba(0, 183, 255, 0.2);
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+.promociones-container img:hover {
+  transform: scale(1.05) rotate(0.5deg);
+  box-shadow: 0 0 35px rgba(0, 183, 255, 0.4);
+}
+
+/* ======== RESPONSIVIDAD ======== */
+@media (max-width: 1024px) {
+  .promo-swiper .swiper-slide > div {
+    margin: 0 auto;
+    width: 90%;
+  }
+
+  .promociones-container h1,
+  .promociones-container h2 {
+    font-size: 1.8rem;
+  }
+
+  .promociones-container p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .promociones-container {
+    padding: 0 1rem;
+  }
+
+  .promo-swiper .swiper-slide > div {
+    padding: 1rem;
+  }
+
+  .promociones-container .grid {
+    gap: 1.5rem;
+  }
+
+  a.bg-jsport-red {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* ======== EFECTOS EXTRAS FUTURISTAS ======== */
+@keyframes neonGlow {
+  0%, 100% {
+    box-shadow: 0 0 25px rgba(0, 183, 255, 0.4), 0 0 50px rgba(255, 0, 70, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(255, 0, 70, 0.4), 0 0 70px rgba(0, 183, 255, 0.3);
+  }
+}
+
+.promociones-container section:last-child:hover {
+  animation: neonGlow 4s infinite alternate ease-in-out;
+}
+
+/* ⚡ SUPER SAIYAGPT 40 000 – FONDO OSCURO ABSOLUTO ⚡ */
+
+/* Cubre TODA la sección de promociones con un azul profundo */
+.dark .promociones-container,
+.dark .promociones-container section,
+.dark .promociones-container section.bg-white,
+.dark .promociones-container section.bg-gray-100,
+.dark .promociones-container section.py-16 {
+  background: linear-gradient(145deg, #040b1a 0%, #0b1321 100%) !important;
+  color: #e6f3ff !important;
+}
+
+/* Elimina residuos de gradientes o pseudo-elementos blancos */
+.dark .promociones-container section::before,
+.dark .promociones-container section::after {
+  background: none !important;
+}
+
+/* Corrige las tarjetas cuando están dentro de un bloque claro */
+.dark .promociones-container .grid > div,
+.dark .promo-swiper .swiper-slide > div {
+  background: rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(12px) !important;
+  border-color: rgba(0, 183, 255, 0.25) !important;
+  color: #e6f3ff !important;
+}
+
+/* Textos y títulos con glow azul */
+.dark .promociones-container h1,
+.dark .promociones-container h2,
+.dark .promociones-container h3 {
+  color: #00b7ff !important;
+  text-shadow: 0 0 8px rgba(0, 183, 255, 0.6);
+}
+
+/* Fondos del hero y CTA */
+.dark .promociones-container section:first-child,
+.dark .promociones-container section:last-child {
+  background: linear-gradient(160deg, #07132c, #0b1d3a) !important;
+  backdrop-filter: blur(16px) !important;
+  box-shadow: inset 0 0 40px rgba(0, 183, 255, 0.15),
+              0 0 30px rgba(0, 183, 255, 0.1);
+}
+
+/* Efecto de brillo vidrioso */
+.dark .promociones-container .grid > div:hover,
+.dark .promo-swiper .swiper-slide:hover > div {
+  box-shadow: 0 0 35px rgba(0, 183, 255, 0.3),
+              0 0 60px rgba(255, 0, 70, 0.2);
+  transform: translateY(-5px) scale(1.03);
+}
+
+/* Suaviza los bordes en pantallas pequeñas */
+@media (max-width: 768px) {
+  .dark .promociones-container section {
+    border-radius: 12px;
+  }
+}
+/* Contenedor de imágenes uniforme en todas las cards */
+.promociones-container .grid > div img,
+.promo-swiper .swiper-slide > div img {
+  width: 100%;
+  height: auto; /* Mantiene la proporción real */
+  object-fit: contain; /* La imagen completa sin recorte */
+  aspect-ratio: 16/9; /* Ajusta según el formato de tus imágenes */
+  max-height: 250px; /* Limita altura máxima para que no crezca demasiado */
 }

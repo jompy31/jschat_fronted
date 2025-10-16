@@ -40,6 +40,8 @@ body, .App {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   min-height: 100vh;
   line-height: 1.5;
+  background: inherit !important;
+  color: inherit !important;
 }
 
 /* Contenedores comunes (páginas lazy como Sobre_nosotros, Catalogo, etc.) */
@@ -141,4 +143,288 @@ button:hover, a:hover, .btn:hover {
     max-width: 1200px;
     margin: 0 auto;
   }
+}
+/* ===========================================
+🔥 FIX GLOBAL FINAL – MODO OSCURO REAL 🔥
+Evita fondos blancos heredados y mantiene un look uniforme
+=========================================== */
+
+/* 1️⃣ Establece fondo global dinámico */
+html,
+body,
+#root,
+.App {
+  background: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+  min-height: 100vh;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* 2️⃣ Elimina fondos forzados en componentes */
+section,
+main,
+div,
+.container,
+.page-wrapper,
+.content,
+.about-section,
+.card,
+.section {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* 3️⃣ En modo oscuro – fondo neón futurista */
+.dark,
+[data-theme="dark"] {
+  background: radial-gradient(circle at 30% 20%, #0b1321, #060b1a 80%) !important;
+  color: #fff !important;
+}
+
+/* 4️⃣ Navbar y footer efecto vidrio */
+.navbar,
+footer {
+  background: rgba(15, 20, 40, 0.85) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 5️⃣ Previene fondos blancos en modo oscuro */
+.dark * {
+  background-color: transparent !important;
+  color: inherit !important;
+}
+
+/* 6️⃣ Corrección para imágenes o tarjetas */
+.dark img,
+.dark .card img {
+  background: transparent !important;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.05));
+}
+/* 🔒 Fuerza coherencia de tema en cada render */
+/* ==========================================
+🔥 THEME SYNC CLEAN – 100% FUNCIONAL 🔥
+Modo oscuro y claro sincronizados globalmente
+========================================== */
+
+/* 1️⃣ Reseteo de herencias globales */
+html, body, #root, .App {
+  background: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+  min-height: 100vh;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* 2️⃣ Contenedores heredan correctamente */
+main, .container, .page-wrapper, .section, .about-section {
+  background: inherit !important;
+  color: inherit !important;
+  border-color: var(--border-primary) !important;
+}
+
+/* 3️⃣ Navbar y Footer */
+.navbar, footer {
+  background: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border-top: 1px solid var(--border-primary);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* 4️⃣ Imágenes y tarjetas */
+img, .card img {
+  background: transparent !important;
+}
+
+/* 5️⃣ Scrollbars coherentes */
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+}
+
+/* 6️⃣ Elimina toda regla que use html.dark, body.dark o .App.dark fuera de variables */
+
+/* =====================================================
+   VARIABLES GLOBALES Y COLORES BASE
+===================================================== */
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f7f7f7;
+  --text-primary: #000000;
+  --text-secondary: #333333;
+  --accent-primary: #00ffff;
+  --accent-hover: #0099ff;
+  --border-primary: rgba(0, 255, 255, 0.3);
+  --glow-neon: 0 0 20px rgba(0, 255, 255, 0.5);
+  --shadow-light: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.dark {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #101018;
+  --text-primary: #ffffff;
+  --text-secondary: #e0e0e0;
+  --accent-primary: #00ffff;
+  --accent-hover: #00b3ff;
+  --border-primary: rgba(0, 255, 255, 0.4);
+  --shadow-light: 0 10px 25px rgba(0, 255, 255, 0.1);
+}
+
+/* =====================================================
+   TEXTO GLOBAL Y HERENCIA DE COLOR
+===================================================== */
+html, body, * {
+  color: var(--text-primary);
+  background: transparent;
+  transition: color 0.3s ease, background 0.3s ease;
+}
+
+/* =====================================================
+   BOTONES Y LINKS – EFECTO FUTURISTA GLOBAL
+===================================================== */
+a,
+button {
+  position: relative;
+  overflow: hidden;
+  color: var(--text-primary);
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+a::before,
+button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+  z-index: -1;
+}
+
+a:hover::before,
+button:hover::before {
+  width: 250px;
+  height: 250px;
+}
+
+a:hover,
+button:hover {
+  color: var(--text-primary);
+  text-shadow: 0 0 10px var(--accent-primary);
+}
+
+/* =====================================================
+   EFECTO GLASS-NEON GLOBAL PARA NAVBAR Y FOOTER
+===================================================== */
+.navbar, footer {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--glow-neon);
+  transition: all 0.4s ease;
+}
+
+.dark .navbar, .dark footer {
+  background: rgba(10, 20, 40, 0.98);
+  border-color: rgba(0, 255, 255, 0.3);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
+}
+
+/* Efecto de reflejo animado diagonal */
+.navbar::before,
+footer::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.2) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%) rotate(15deg);
+  animation: glass-shine 5s infinite linear;
+  pointer-events: none;
+}
+
+@keyframes glass-shine {
+  0% {
+    transform: translateX(-100%) rotate(15deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(15deg);
+  }
+}
+
+/* =====================================================
+   GRADIENTE GLOBAL PARA BLOQUES PRINCIPALES (CTA)
+===================================================== */
+.cta-gradient {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
+  color: #fff;
+  isolation: isolate;
+  box-shadow: 0 0 40px rgba(0, 255, 255, 0.2);
+}
+
+.cta-gradient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.05)
+  );
+  mix-blend-mode: overlay;
+  animation: cta-shine 6s infinite linear;
+  z-index: 0;
+}
+
+@keyframes cta-shine {
+  0% { transform: translateX(-100%) rotate(10deg); }
+  100% { transform: translateX(100%) rotate(10deg); }
+}
+
+/* === MODO OSCURO PARA EL CTA === */
+.dark .cta-gradient {
+  background: linear-gradient(135deg, rgba(10, 20, 40, 0.98), rgba(5, 10, 20, 0.98));
+  color: var(--text-primary);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.25);
+}
+
+.dark .cta-gradient::before {
+  background: linear-gradient(
+    120deg,
+    rgba(0, 255, 255, 0.08),
+    rgba(255, 255, 255, 0.05),
+    rgba(0, 255, 255, 0.08)
+  );
+  mix-blend-mode: lighten;
+  opacity: 0.6;
+}
+
+/* =====================================================
+   HOVERS Y TRANSICIONES FUTURISTAS
+===================================================== */
+.navbar:hover, footer:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 35px rgba(0, 255, 255, 0.4);
+  transition: all 0.5s ease;
 }

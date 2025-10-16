@@ -1,12 +1,54 @@
 /* Home.css – Optimizado: Secciones más compactas, responsivo total, anims futuristas extra */
 
-/* Global container – Compacto y fluido */
+/* Definiciones de variables CSS para colores de texto – Global para Home */
+/* Variables globales para colores de texto – Aplica a toda la app */
+:root {
+  --text-primary: #000000; /* Negro en modo claro por defecto */
+  --text-secondary: #333333; /* Gris oscuro para secundarios en claro */
+}
+
+.dark {
+  --text-primary: #ffffff; /* Blanco en modo oscuro */
+  --text-secondary: #e0e0e0; /* Gris claro para secundarios en oscuro */
+}
+
+/* Fuerza herencia global para textos – !important para overrides de Tailwind */
+body,
+html,
+* {
+  color: var(--text-primary);
+}
+
+h1, h2, h3, h4, h5, h6,
+p, span, div,
+a, button {
+  color: var(--text-primary) !important; /* Asegura que todos los textos hereden */
+}
+
+/* Para cards o grids comunes en componentes */
+[class*="grid"] > div,
+.card,
+.section {
+  color: var(--text-primary) !important;
+}
+
+/* Enlaces y botones globales */
+a,
+button {
+  color: var(--text-primary) !important;
+}
+
+a:hover,
+button:hover {
+  color: var(--text-primary);
+}
+/* Global container – Compacto y fluido, hereda las vars */
 .home-container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   background: var(--bg-primary);
-  color: var(--text-primary);
+  color: var(--text-primary); /* Usa la var para texto principal */
   overflow-x: hidden;
 }
 
@@ -42,6 +84,7 @@
   background: var(--bg-primary);
   border: 1px solid var(--border-primary);
   box-shadow: var(--shadow-light);
+  color: var(--text-primary); /* Asegura herencia en cards */
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -115,7 +158,16 @@
   }
 }
 
-/* Tipografía – Escalable responsiva */
+/* Tipografía – Escalable responsiva, fuerza herencia de color */
+.home-container h1, 
+.home-container h2, 
+.home-container h3, 
+.home-container p {
+  color: var(--text-primary) !important; /* !important para overrides de Tailwind si aplica */
+  font-size: clamp(0.9rem, 2.5vw, 4rem); /* Clamp ajustado por elemento si necesitas, pero genérico aquí */
+  line-height: 1.6;
+}
+
 .home-container h1 { 
   font-size: clamp(2.5rem, 5vw, 4rem); /* Clamp para cualquier device */
 }
@@ -127,7 +179,6 @@
 }
 .home-container p { 
   font-size: clamp(0.9rem, 2.5vw, 1rem);
-  line-height: 1.6;
 }
 
 /* Botones – Ripple responsivo */
@@ -135,6 +186,7 @@
   position: relative;
   overflow: hidden;
   z-index: 1;
+  color: var(--text-primary); /* Asegura color en enlaces */
 }
 
 .home-container a[href]::before {
@@ -185,7 +237,6 @@
   }
 }
 
-/* Dark mode – Contraste extra para audacia */
 .dark .home-container section {
   background: var(--bg-primary);
 }
@@ -205,4 +256,244 @@
 
 .home-container h1, .home-container h2:hover {
   animation: glitch 0.3s infinite;
+}
+/* Ajuste visual del carrusel del portafolio */
+.portfolio-swiper .swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+}
+
+.portfolio-swiper .swiper-slide img {
+  max-width: 100%;
+  height: auto;
+  transition: all 0.4s ease;
+}
+
+.portfolio-swiper .swiper-slide img:hover {
+  transform: scale(1.03);
+  filter: brightness(1.1) contrast(1.1);
+}
+
+/* Fix extra para textos en portfolio y testimonials */
+.portfolio-swiper .swiper-slide p,
+.home-container [class*="grid"] p {
+  color: var(--text-primary) !important;
+}
+/* === Efecto futurista: vidrio brillante + reflejo + neón === */
+.glass-neon {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2),
+              inset 0 0 10px rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+/* Reflejo animado diagonal */
+.glass-neon::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.25) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%) rotate(15deg);
+  animation: glass-shine 5s infinite linear;
+}
+
+@keyframes glass-shine {
+  0% {
+    transform: translateX(-100%) rotate(15deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(15deg);
+  }
+}
+
+/* Hover: resalta con neón más fuerte */
+.glass-neon:hover {
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.4),
+              inset 0 0 12px rgba(255, 255, 255, 0.2);
+  transform: translateY(-4px) scale(1.02);
+}
+.glass-neon {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+  transition: all 0.4s ease;
+}
+
+.glass-neon:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
+  transform: translateY(-4px);
+}
+/* === Efecto futurista glass-neon para las imágenes del portafolio === */
+.portfolio-swiper .swiper-slide img {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+  border-radius: 1rem;
+  transition: all 0.4s ease, transform 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.portfolio-swiper .swiper-slide img::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.25) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%) rotate(15deg);
+  animation: glass-shine 5s infinite linear;
+}
+
+@keyframes glass-shine {
+  0% {
+    transform: translateX(-100%) rotate(15deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(15deg);
+  }
+}
+
+.portfolio-swiper .swiper-slide img:hover {
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.4),
+              inset 0 0 12px rgba(255, 255, 255, 0.2);
+  transform: scale(1.05) translateY(-4px);
+  border-color: var(--accent-primary);
+}
+/* === Fix modo oscuro para el bloque "¿Listo para empezar?" === */
+.dark .home-container section:last-child {
+  background: var(--bg-primary) !important; /* Uniforme con el resto */
+}
+
+.dark .home-container section:last-child::before {
+  background: none !important; /* Elimina cualquier degradado blanco */
+}
+
+.dark .home-container section:last-child::after {
+  background: none !important; /* Previene efectos residuales */
+}
+/* === FIX Futurista para el Call To Action "¿Listo para Empezar?" === */
+
+/* Estilo base mejorado para fondo animado */
+.home-container section:last-child {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    var(--accent-primary) 0%,
+    var(--accent-hover) 100%
+  );
+  color: #fff;
+  isolation: isolate;
+}
+
+.home-container section:last-child::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.05)
+  );
+  mix-blend-mode: overlay;
+  animation: cta-shine 6s infinite linear;
+  z-index: 0;
+}
+
+@keyframes cta-shine {
+  0% {
+    transform: translateX(-100%) rotate(10deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(10deg);
+  }
+}
+
+/* === MODO OSCURO: Gradiente futurista oscuro === */
+.dark .home-container section:last-child {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 20, 40, 0.95) 0%,
+    rgba(0, 10, 25, 0.95) 100%
+  );
+  color: var(--text-primary);
+  box-shadow: 0 0 40px rgba(0, 255, 255, 0.2);
+}
+
+.dark .home-container section:last-child::before {
+  background: linear-gradient(
+    120deg,
+    rgba(0, 255, 255, 0.08),
+    rgba(255, 255, 255, 0.05),
+    rgba(0, 255, 255, 0.08)
+  );
+  mix-blend-mode: lighten;
+  opacity: 0.6;
+}
+
+/* Sutil glow en hover para CTA futurista */
+.home-container section:last-child:hover {
+  box-shadow: 0 0 45px rgba(0, 255, 255, 0.35),
+              inset 0 0 10px rgba(255, 255, 255, 0.15);
+  transition: box-shadow 0.5s ease;
+}
+/* === FIX DEFINITIVO: fondo del Call To Action en modo oscuro === */
+
+/* Neutraliza las capas internas blancas */
+.dark .home-container section:last-child > .absolute {
+  background: transparent !important;
+  opacity: 0 !important;
+  animation: none !important;
+}
+
+/* Elimina gradientes residuales en modo oscuro */
+.dark .home-container section:last-child::before,
+.dark .home-container section:last-child::after {
+  background: none !important;
+}
+
+/* Asegura fondo oscuro uniforme */
+.dark .home-container section:last-child {
+  background: linear-gradient(
+    135deg,
+    rgba(10, 20, 40, 0.98),
+    rgba(5, 10, 20, 0.98)
+  ) !important;
+  color: var(--text-primary) !important;
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.2);
+  position: relative;
+  z-index: 1;
+}
+
+/* Efecto de brillo elegante en hover */
+.dark .home-container section:last-child:hover {
+  box-shadow: 0 0 35px rgba(0, 255, 255, 0.3),
+              inset 0 0 10px rgba(255, 255, 255, 0.05);
+  transition: all 0.5s ease;
 }

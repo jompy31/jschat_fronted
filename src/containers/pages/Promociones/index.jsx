@@ -8,6 +8,9 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import './Promociones.css';
+import Foto1 from "../../../../src/assets/img/Des-verano.jpg";
+import Foto2 from "../../../../src/assets/img/equipo-completo.jpg";
+import Foto3 from "../../../../src/assets/img/oferta-empre.jpg";
 
 const Promociones = () => {
   const heroVariants = {
@@ -22,6 +25,13 @@ const Promociones = () => {
       scale: 1,
       transition: { duration: 0.5, delay: i * 0.2 },
     }),
+  };
+
+  const getPromoImage = (promoId) => {
+    if (promoId === 1) return Foto1;
+    if (promoId === 2) return Foto2;
+    if (promoId === 3) return Foto3;
+    return '/assets/placeholder.jpg';
   };
 
   return (
@@ -70,7 +80,7 @@ const Promociones = () => {
               <SwiperSlide key={promo.id}>
                 <div className="bg-gray-100 p-6 rounded-lg shadow-md">
                   <img
-                    src={promo.products[0]?.image || '/assets/placeholder.jpg'}
+                    src={getPromoImage(promo.id)}
                     alt={promo.name}
                     className="w-full h-48 object-cover rounded-lg mb-4"
                   />
@@ -110,7 +120,7 @@ const Promociones = () => {
                 className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
               >
                 <img
-                  src={promo.products[0]?.image || '/assets/placeholder.jpg'}
+                  src={getPromoImage(promo.id)}
                   alt={promo.name}
                   className="w-full h-48 object-cover rounded-lg mb-4"
                 />
