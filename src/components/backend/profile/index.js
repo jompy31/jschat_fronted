@@ -93,7 +93,7 @@ const Profile = () => {
 
   return (
     <div className="profile-page">
-      <div className="profile-container glass" ref={componentRef}>
+      <div className="profile-container" ref={componentRef}>
         {currentUser && (
           <h2 className="profile-title">
             Bienvenido, {currentUser.first_name} {currentUser.last_name}

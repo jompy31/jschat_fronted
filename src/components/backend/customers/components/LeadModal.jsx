@@ -30,32 +30,43 @@ const LeadModal = ({
           transform: "translate(-50%, -50%)",
           width: "80%",
           maxWidth: 800,
-          backgroundColor: "#ffffff",
-          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
+          background: "linear-gradient(180deg, var(--bg-primary), var(--bg-secondary))",
+          boxShadow: "var(--shadow-light), var(--glow-neon)",
           padding: 24,
           borderRadius: 12,
           maxHeight: "100vh",
           overflowY: "auto",
           display: "flex",
           flexDirection: "column",
+          border: "1px solid var(--border-primary)",
+          backdropFilter: "blur(10px)",
         }}
       >
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-          <Typography variant="h5" sx={{ color: "#1a202c" }}>
+          <Typography variant="h5" sx={{ color: "var(--text-primary)" }}>
             {isEditMode ? "Editar Cliente" : "Crear Nuevo Cliente"}
           </Typography>
-          <IconButton onClick={onHide} sx={{ color: "#718096" }}>
+          <IconButton onClick={onHide} sx={{ color: "var(--text-secondary)" }}>
             <Close />
           </IconButton>
         </Box>
         <Tabs
           value={activeTab}
           onChange={(e, newValue) => setActiveTab(newValue)}
-          sx={{ mb: 2, borderBottom: "1px solid #e2e8f0" }}
+          sx={{ 
+            mb: 2, 
+            borderBottom: "1px solid var(--border-primary)",
+            "& .MuiTab-root": {
+              color: "var(--text-primary)",
+              "&.Mui-selected": {
+                color: "var(--accent-primary)",
+              },
+            },
+          }}
         >
-          <Tab label="Cliente" value="client" sx={{ color: "#1a202c" }} />
-          <Tab label="Vendedor" value="vendor" sx={{ color: "#1a202c" }} />
-          <Tab label="Marketing" value="marketing_designer" sx={{ color: "#1a202c" }} />
+          <Tab label="Cliente" value="client" />
+          <Tab label="Vendedor" value="vendor" />
+          <Tab label="Marketing" value="marketing_designer" />
         </Tabs>
         {activeTab === "client" && (
           <Box>
@@ -67,17 +78,26 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <Box mt={2}>
-              <Typography variant="body2" sx={{ color: "#4a5568" }}>Logo de la Empresa</Typography>
+              <Typography variant="body2" sx={{ color: "var(--text-secondary)" }}>Logo de la Empresa</Typography>
               <input
                 type="file"
                 name="company_logo"
                 accept="image/*"
                 onChange={handleInputChange}
                 className="mt-2"
+                style={{ color: "var(--text-primary)" }}
               />
               {imagePreview && (
                 <img
@@ -89,7 +109,8 @@ const LeadModal = ({
                     objectFit: "cover",
                     marginTop: 8,
                     borderRadius: 8,
-                    border: "1px solid #e2e8f0",
+                    border: "1px solid var(--border-primary)",
+                    filter: "drop-shadow(0 2px 4px rgba(10, 36, 99, 0.3))",
                   }}
                 />
               )}
@@ -102,8 +123,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Correo Electrónico"
@@ -114,8 +143,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Sitio Web o Redes Sociales"
@@ -125,8 +162,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Actividad Comercial"
@@ -136,8 +181,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Tipo de Negocio"
@@ -147,8 +200,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Años de Experiencia"
@@ -158,8 +219,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Descripción"
@@ -171,8 +240,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Número de Contacto"
@@ -182,8 +259,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <Select
               label="Prioridad"
@@ -195,8 +280,16 @@ const LeadModal = ({
               variant="outlined"
               displayEmpty
               inputProps={{ 'aria-label': 'Prioridad' }}
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             >
               <MenuItem value="">Seleccionar Prioridad</MenuItem>
               <MenuItem value="bajo">Baja</MenuItem>
@@ -214,8 +307,16 @@ const LeadModal = ({
                 variant="outlined"
                 displayEmpty
                 inputProps={{ 'aria-label': 'Estado' }}
-                InputLabelProps={{ style: { color: "#4a5568" } }}
-                sx={{ bgcolor: "#f7fafc" }}
+                InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+                sx={{
+                  bgcolor: "var(--bg-secondary)",
+                  color: "var(--text-primary)",
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": { borderColor: "var(--border-primary)" },
+                    "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                    "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                  },
+                }}
               >
                 <MenuItem value="">Seleccionar Estado</MenuItem>
                 <MenuItem value="nuevo">Nuevo</MenuItem>
@@ -233,8 +334,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Detalles Comerciales"
@@ -246,8 +355,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Horarios y Ubicación"
@@ -257,8 +374,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
           </Box>
         )}
@@ -272,8 +397,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Teléfono del Contacto"
@@ -283,8 +416,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Puesto del Contacto"
@@ -294,8 +435,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Motivo de Contacto"
@@ -307,8 +456,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Información de Pago"
@@ -320,8 +477,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Método de Pago"
@@ -331,8 +496,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
           </Box>
         )}
@@ -348,8 +521,16 @@ const LeadModal = ({
               variant="outlined"
               displayEmpty
               inputProps={{ 'aria-label': 'Categoría de Marca' }}
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             >
               <MenuItem value="">Seleccionar Categoría de Marca</MenuItem>
               {Categories.categorias.map((cat) => (
@@ -368,8 +549,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Diferenciación de Marca"
@@ -381,8 +570,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Necesidad de la Marca"
@@ -394,8 +591,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Palabras Clave de Percepción"
@@ -405,8 +610,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Personalidad de la Marca"
@@ -416,8 +629,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Eslogan o Lema"
@@ -427,8 +648,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Preferencia de Estilo Visual"
@@ -438,8 +667,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Valores de la Marca"
@@ -451,8 +688,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Virtudes de la Marca"
@@ -464,8 +709,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Colores de la Marca"
@@ -475,8 +728,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Metas del Negocio"
@@ -488,8 +749,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Competidores Principales"
@@ -501,8 +770,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Rango de Edad Objetivo"
@@ -512,8 +789,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Género Objetivo"
@@ -523,8 +808,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Intereses del Público Objetivo"
@@ -536,8 +829,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Etapa del Ciclo de Vida"
@@ -547,8 +848,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
             <TextField
               label="Nivel Socioeconómico Objetivo"
@@ -558,8 +867,16 @@ const LeadModal = ({
               fullWidth
               margin="normal"
               variant="outlined"
-              InputLabelProps={{ style: { color: "#4a5568" } }}
-              sx={{ bgcolor: "#f7fafc" }}
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={{
+                bgcolor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "var(--border-primary)" },
+                  "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+                  "&.Mui-focused fieldset": { borderColor: "var(--accent-primary)", boxShadow: "var(--glow-neon)" },
+                },
+              }}
             />
           </Box>
         )}
@@ -567,14 +884,34 @@ const LeadModal = ({
           <Button
             variant="outlined"
             onClick={onHide}
-            sx={{ color: "#718096", borderColor: "#e2e8f0" }}
+            sx={{
+              color: "var(--text-secondary)",
+              borderColor: "var(--border-primary)",
+              "&:hover": {
+                background: "var(--accent-primary)",
+                color: "#FFFFFF",
+                borderColor: "var(--accent-primary)",
+                boxShadow: "var(--glow-neon)",
+              },
+            }}
           >
             Cancelar
           </Button>
           <Button
             variant="contained"
             onClick={handleSave}
-            sx={{ bgcolor: "#3182ce", "&:hover": { bgcolor: "#2b6cb0" } }}
+            sx={{
+              background: "var(--accent-hover)",
+              color: "#FFFFFF",
+              border: "2px solid var(--border-primary)",
+              position: "relative",
+              overflow: "hidden",
+              "&:hover": {
+                background: "var(--border-primary)",
+                borderColor: "var(--accent-primary)",
+                boxShadow: "var(--glow-neon)",
+              },
+            }}
           >
             {isEditMode ? "Guardar" : "Crear"}
           </Button>
