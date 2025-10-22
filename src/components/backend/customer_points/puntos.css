@@ -278,3 +278,65 @@ button:focus, input:focus { box-shadow: 0 0 0 3px rgba(0,240,255,0.06); }
   mask-composite: exclude;
   pointer-events: none;
 }
+/* =========================================================================
+   ⚡ SUPER SAIYA FIX 150000 ⚡
+   Mejora de contraste para modales y formularios sin alterar estilos previos
+   ========================================================================= */
+
+/* Base del modal panel: mejor visibilidad en ambos modos */
+.pm-modal-panel {
+  background: linear-gradient(180deg, rgba(12,18,28,0.98), rgba(8,12,20,0.98)) !important;
+  border: 1px solid rgba(0,240,255,0.15) !important;
+  box-shadow: 0 25px 80px rgba(0,0,0,0.7), 0 0 40px rgba(0,240,255,0.08) !important;
+}
+
+/* Inputs con fondo sólido pero elegante (visibles en ambos temas) */
+.pm-form input[type="text"],
+.pm-form input[type="email"],
+.pm-form input[type="number"] {
+  background: rgba(255,255,255,0.12) !important;
+  border: 1px solid rgba(0,240,255,0.25) !important;
+  color: #e8f7ff !important;
+  backdrop-filter: blur(6px) saturate(120%);
+  transition: all 0.25s ease;
+}
+
+.pm-form input::placeholder {
+  color: rgba(230,246,255,0.75) !important;
+}
+
+.pm-form input:focus {
+  background: rgba(255,255,255,0.18) !important;
+  border-color: rgba(0,240,255,0.5) !important;
+  box-shadow: 0 0 14px rgba(0,240,255,0.25) !important;
+  transform: translateY(-2px);
+}
+
+/* Modo claro: mejora contraste de texto y fondo */
+body:not(.dark) .pm-modal-panel {
+  background: linear-gradient(180deg, rgba(245,247,250,0.98), rgba(220,225,240,0.96)) !important;
+  border: 1px solid rgba(0,0,0,0.1) !important;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15) !important;
+}
+
+body:not(.dark) .pm-form input[type="text"],
+body:not(.dark) .pm-form input[type="email"],
+body:not(.dark) .pm-form input[type="number"] {
+  background: rgba(255,255,255,0.9) !important;
+  border: 1px solid rgba(0,0,0,0.2) !important;
+  color: #0a1b2f !important;
+}
+
+body:not(.dark) .pm-form input:focus {
+  border-color: #00bfff !important;
+  box-shadow: 0 0 14px rgba(0,191,255,0.25) !important;
+}
+
+/* Etiquetas con mayor contraste */
+.pm-form label {
+  color: var(--pm-text) !important;
+}
+
+body:not(.dark) .pm-form label {
+  color: #0a1b2f !important;
+}
