@@ -1,5 +1,180 @@
+/* ======= 🔥 ESTILO FUTURISTA MARCIANO 🔥 ======= */
 .sobre-nosotros-container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  background: radial-gradient(circle at 20% 20%, #0a0a1a, #030314 80%);
+  color: #121212;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Efecto de fondo con líneas animadas estilo sci-fi */
+.sobre-nosotros-container::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: repeating-linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.03) 0,
+    rgba(255, 255, 255, 0.03) 1px,
+    transparent 2px,
+    transparent 4px
+  );
+  animation: moveGrid 25s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+@keyframes moveGrid {
+  from { background-position: 0 0; }
+  to { background-position: 200px 400px; }
+}
+
+/* Hero Section */
+section {
+  position: relative;
+  z-index: 2;
+}
+
+.bg-jsport-blue {
+  background: linear-gradient(135deg, #001a4d, #0d47a1);
+}
+
+.bg-jsport-red {
+  background: linear-gradient(135deg, #ff0000, #d90404);
+}
+
+/* TITULOS */
+h1, h2, h3 {
+  text-shadow: 0 0 15px rgba(0, 217, 255, 0.6);
+}
+
+/* ======= 💠 CARD FUTURISTA ======= */
+.card-futurista {
+  background: rgba(15, 20, 40, 0.6);
+  border-radius: 16px;
+  border: 1px solid rgba(0, 217, 255, 0.4);
+  box-shadow: 0 0 25px rgba(0, 217, 255, 0.15);
+  backdrop-filter: blur(12px);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-futurista::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,255,255,0.05), rgba(0,217,255,0.1));
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.card-futurista:hover::before {
+  opacity: 1;
+}
+
+.card-futurista:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 0 45px rgba(0, 217, 255, 0.4);
+}
+
+/* ======= 💫 Animaciones hover para imágenes del equipo ======= */
+img {
+  transition: all 0.6s ease;
+}
+
+img:hover {
+  transform: scale(1.1) rotate(2deg);
+  filter: drop-shadow(0 0 20px rgba(0, 217, 255, 0.6));
+}
+
+/* ======= ✨ Botones de acción ======= */
+button, .btn-futurista, .bg-jsport-red {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+button::after, .btn-futurista::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0,217,255,0.2), rgba(255,255,255,0.05), rgba(0,217,255,0.2));
+  transform: translateX(-100%);
+  transition: all 0.5s ease;
+}
+
+button:hover::after, .btn-futurista:hover::after {
+  transform: translateX(100%);
+}
+
+button:hover, .btn-futurista:hover {
+  box-shadow: 0 0 25px rgba(0, 217, 255, 0.4);
+  transform: scale(1.05);
+}
+
+/* ======= 🌌 Animación de entrada general ======= */
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(40px) scale(0.98); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.motion-visible {
+  animation: fadeUp 1s ease forwards;
+}
+
+/* ======= 🪐 Secciones alternadas ======= */
+.bg-white, .bg-gray-100 {
+  background: transparent !important;
+}
+/* ======== 🎨 Ajustes de color para MODO CLARO ======== */
+:root {
+  --text-dark: #0a0a0a;
+  --text-light: #e5e7eb;
+}
+
+/* Detecta si el usuario está en modo claro */
+@media (prefers-color-scheme: light) {
+  .sobre-nosotros-container {
+    background: radial-gradient(circle at 30% 30%, #f0f4ff, #e2e8f0 80%);
+    color: var(--text-dark);
+  }
+
+  .card-futurista {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 123, 255, 0.3);
+    box-shadow: 0 0 25px rgba(0, 123, 255, 0.1);
+    color: var(--text-dark);
+  }
+
+  .card-futurista h3,
+  .card-futurista p,
+  h1, h2, h3 {
+    color: var(--text-dark) !important;
+    text-shadow: none;
+  }
+
+  .btn-futurista {
+    background: linear-gradient(90deg, #007bff, #00bfff);
+    color: white;
+  }
+
+  .btn-futurista:hover {
+    box-shadow: 0 0 20px rgba(0, 191, 255, 0.5);
+  }
+
+  .text-gray-200,
+  .text-gray-300,
+  .text-gray-700 {
+    color: var(--text-dark) !important;
+  }
+
+  .bg-jsport-blue {
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
+  }
+
+  .bg-jsport-red {
+    background: linear-gradient(135deg, #dc2626, #ef4444);
+  }
 }

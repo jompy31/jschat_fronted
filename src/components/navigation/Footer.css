@@ -413,3 +413,154 @@
 /* =========================================================================
    END OF CSS
    ========================================================================= */
+/* =========================================================================
+   FIX: Mantener footer como pie real de la página
+   ========================================================================= */
+
+/* Asegura que html y body no generen espacio extra */
+/* =========================================================================
+   🧠 SUPER SAIYA FIX - Footer al fondo sin espacio sobrante
+   ========================================================================= */
+
+/* Aseguramos que toda la app use layout en columna */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* El contenedor principal debe ocupar todo el alto menos el footer */
+main, .main-content, .app-container, .page-container {
+  flex: 1 0 auto;
+  min-height: calc(100vh - 180px); /* deja espacio exacto para el footer */
+  display: flex;
+  flex-direction: column;
+}
+
+/* El footer queda pegado al fondo */
+.footer {
+  flex-shrink: 0;
+  margin-top: auto;
+  position: relative;
+  z-index: 50;
+}
+
+/* 🔥 Fondo global para eliminar el "fondo fantasma" */
+body {
+  background: var(--bg-primary);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* 🔦 Ajuste en modo claro */
+body:not(.dark) {
+  background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%) !important;
+}
+
+/* 🌑 Ajuste en modo oscuro */
+.dark body {
+  background: linear-gradient(180deg, #040b1a 0%, #0a162b 100%) !important;
+}
+
+/* 🔮 Evitar que elementos hijos del footer generen scroll extra */
+.footer::after,
+.footer::before {
+  bottom: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* 🔧 En caso de overflow accidental en contenedores */
+html, body {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+/* =========================================================================
+   🧩 AJUSTE FINAL - Footer 100% al borde inferior sin fondo sobrante
+   ========================================================================= */
+
+/* Corrige padding/margin de los últimos elementos del contenido */
+main > *:last-child,
+.page-container > *:last-child,
+.main-content > *:last-child {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Asegura que el footer se una perfectamente con el fondo global */
+.footer {
+  position: relative;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  margin-top: auto !important;
+  border-top: 1px solid var(--border-primary);
+}
+
+/* Corrige posibles “fugas” de color detrás del footer */
+html,
+body {
+  min-height: 100vh;
+  background-color: transparent;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* 💡 Evita que el gradiente se extienda más allá del viewport */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: inherit;
+}
+
+/* 🔦 Ajuste ultra fino según modo */
+body:not(.dark)::after {
+  background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+}
+.dark body::after {
+  background: linear-gradient(180deg, #040b1a 0%, #0a162b 100%);
+}
+html, body, #root {
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
+}
+
+/* Hace que el contenido principal ocupe todo el espacio
+   y el footer se pegue al fondo aunque haya poco contenido */
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* En caso de tener un contenedor principal, asegúrate que se expanda */
+main, .page-content, .app-container, .content-wrapper {
+  flex: 1 0 auto !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Footer siempre abajo del todo */
+footer.footer {
+  flex-shrink: 0;
+  margin-top: auto !important;
+  bottom: 0;
+  width: 100%;
+}
+
+/* Corrige color de fondo sobrante detrás del footer */
+body:not(.dark) {
+  background-color: #f5f7fa !important; /* claro suave */
+}
+body.dark {
+  background-color: #040b1a !important; /* oscuro profundo */
+}
