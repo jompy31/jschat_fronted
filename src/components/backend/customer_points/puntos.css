@@ -1,0 +1,280 @@
+/* PointsManager.css - Super Saiya Futurista UI */
+
+/* Variables principales (se adaptan si usas :root / .dark en tu app global) */
+:root {
+  --pm-bg: linear-gradient(180deg, #071728 0%, #02101b 100%);
+  --pm-surface: rgba(12,20,30,0.6);
+  --pm-accent: #00f0ff;
+  --pm-accent-2: #8a2be2;
+  --pm-glow: 0 8px 40px rgba(0,240,255,0.08);
+  --pm-radius: 16px;
+  --pm-text: #e6f6ff;
+  --pm-muted: rgba(230,246,255,0.6);
+}
+
+/* Container general */
+.pm-wrapper {
+  padding: 2.5rem;
+  min-height: 60vh;
+  color: var(--pm-text);
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  position: relative;
+  background: radial-gradient(1200px 400px at 10% 10%, rgba(0,240,255,0.04), transparent),
+              radial-gradient(800px 300px at 95% 90%, rgba(138,43,226,0.03), transparent);
+  border-radius: 14px;
+}
+
+/* Header */
+.pm-header {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.pm-title h2 {
+  margin: 0;
+  font-size: 1.45rem;
+  letter-spacing: 0.02em;
+  color: var(--pm-accent);
+  text-shadow: 0 0 18px rgba(0,240,255,0.18);
+  font-weight: 700;
+}
+
+.pm-sub {
+  margin: 0.25rem 0 0 0;
+  color: var(--pm-muted);
+  font-size: 0.92rem;
+}
+
+/* Actions */
+.pm-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.pm-search input {
+  width: 320px;
+  max-width: 38vw;
+  min-width: 180px;
+  padding: 0.6rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+  color: var(--pm-text);
+  box-shadow: inset 0 -6px 18px rgba(0,0,0,0.4);
+  outline: none;
+  transition: all 0.25s ease;
+}
+.pm-search input::placeholder { color: rgba(230,246,255,0.45); }
+.pm-search input:focus {
+  box-shadow: 0 6px 30px rgba(0,240,255,0.06), 0 0 18px rgba(0,240,255,0.06);
+  border-color: rgba(0,240,255,0.25);
+  transform: translateY(-2px);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  gap: 0.6rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 0.95rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  color: #041017;
+}
+
+.btn:active { transform: translateY(0.5px); }
+
+/* Add button (neon) */
+.btn-add {
+  background: linear-gradient(90deg, var(--pm-accent), #6dd5ff);
+  color: #02101a;
+  box-shadow: 0 6px 30px rgba(0,240,255,0.12), 0 0 30px rgba(138,43,226,0.06);
+  border-radius: 12px;
+  padding: 0.6rem 1rem;
+}
+
+/* Ghost button */
+.btn-ghost {
+  background: transparent;
+  color: var(--pm-muted);
+  border: 1px solid rgba(255,255,255,0.04);
+  padding: 0.5rem 0.85rem;
+}
+
+/* Primary */
+.btn-primary {
+  background: linear-gradient(90deg, #00e6ff, #6b8cff);
+  color: #021018;
+  padding: 0.56rem 0.9rem;
+  border-radius: 10px;
+  box-shadow: 0 8px 40px rgba(0,230,255,0.12);
+}
+
+/* Danger */
+.btn-danger {
+  background: linear-gradient(90deg, #ff5b6e, #ff8fa8);
+  color: #141414;
+  padding: 0.5rem 0.85rem;
+  border-radius: 10px;
+}
+
+/* Outline small buttons */
+.small { padding: 0.36rem 0.6rem; font-size: 0.9rem; }
+.btn-outline {
+  background: transparent;
+  color: var(--pm-accent);
+  border: 1px solid rgba(0,240,255,0.14);
+  box-shadow: inset 0 -2px 10px rgba(0,0,0,0.35);
+}
+
+/* Grid of cards */
+.pm-main { margin-top: 1rem; }
+.pm-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+@media (max-width: 1100px) { .pm-grid { grid-template-columns: repeat(2, 1fr);} }
+@media (max-width: 700px) { .pm-grid { grid-template-columns: 1fr;} }
+
+/* Card */
+.pm-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: var(--pm-radius);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  min-height: 160px;
+  position: relative;
+  border: 1px solid rgba(0,240,255,0.06);
+  box-shadow: 0 10px 30px rgba(2,8,12,0.6), 0 2px 8px rgba(0,240,255,0.02) ;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.pm-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 50px rgba(0,240,255,0.08);
+}
+
+/* Top */
+.pm-card-top { display:flex; gap: 0.9rem; align-items: center; }
+.avatar {
+  width:56px; height:56px; border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  background: linear-gradient(135deg, rgba(0,240,255,0.14), rgba(138,43,226,0.12));
+  color: var(--pm-accent);
+  font-weight: 700;
+  box-shadow: 0 6px 20px rgba(0,240,255,0.05);
+  font-size: 1.05rem;
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+.client-meta h3 { margin:0; font-size:1.05rem; color: #c7f9ff; font-weight:700; }
+.client-email { color: var(--pm-muted); font-size:0.92rem; text-decoration: none; display:block; }
+
+/* Body area */
+.pm-card-body { display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+.points-box { display:flex; flex-direction:column; align-items:flex-start; gap:0.1rem; }
+.points-number {
+  font-size: 2.0rem;
+  font-weight: 800;
+  color: var(--pm-accent);
+  text-shadow: 0 0 26px rgba(0,240,255,0.16);
+}
+.points-label { font-size: 0.85rem; color: var(--pm-muted); }
+
+/* Quick actions in card */
+.quick-actions { display:flex; gap:0.5rem; }
+
+/* Footer area */
+.pm-card-footer { margin-top: auto; display:flex; justify-content:flex-end; }
+.btn-row { display:flex; gap:0.5rem; }
+
+/* Empty state */
+.pm-empty { text-align:center; padding:2.5rem; grid-column:1/-1; border-radius:12px; background:rgba(255,255,255,0.02); border:1px dashed rgba(255,255,255,0.03); color:var(--pm-muted); }
+
+/* Modal backdrop / panel */
+.pm-modal { position: fixed; inset: 0; z-index: 9999; display:flex; align-items:center; justify-content:center; }
+.pm-modal-backdrop {
+  position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.7));
+  backdrop-filter: blur(4px);
+}
+.pm-modal-panel {
+  position: relative;
+  z-index: 99999;
+  width: 520px;
+  max-width: calc(100% - 40px);
+  background: linear-gradient(180deg, rgba(2,6,10,0.98), rgba(6,10,18,0.98));
+  border-radius: 12px;
+  padding: 1.25rem 1.25rem 1.5rem 1.25rem;
+  border: 1px solid rgba(0,240,255,0.08);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 8px 30px rgba(0,240,255,0.06);
+  outline: none;
+  transform-origin: center;
+  animation: popIn 220ms cubic-bezier(.2,.9,.3,1);
+}
+
+@keyframes popIn { from { transform: translateY(8px) scale(.995); opacity:0; } to { transform:none; opacity:1; } }
+
+.pm-modal-panel h3 { margin:0 0 0.8rem 0; color:var(--pm-accent); font-weight:700; text-shadow: 0 0 16px rgba(0,240,255,0.12); }
+.modal-close {
+  position:absolute; right:10px; top:10px; background:transparent; color:var(--pm-muted); border:none; font-size:1.05rem; cursor:pointer;
+}
+
+/* Form inside modal */
+.pm-form { display:flex; flex-direction:column; gap:0.8rem; margin-top: 0.5rem; }
+.pm-form label { display:flex; flex-direction:column; gap:0.45rem; color:var(--pm-muted); font-size:0.95rem; }
+.pm-form input[type="text"], .pm-form input[type="email"], .pm-form input[type="number"] {
+  padding: 0.7rem 0.9rem;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.04);
+  color: var(--pm-text);
+  outline: none;
+  transition: all 0.18s ease;
+}
+.pm-form input:focus {
+  border-color: rgba(0,240,255,0.24);
+  box-shadow: 0 8px 30px rgba(0,240,255,0.06), inset 0 0 8px rgba(0,240,255,0.03);
+  transform: translateY(-2px);
+}
+
+/* Confirm panel smaller style */
+.pm-panel-confirm { width: 460px; max-width: calc(100% - 40px); text-align:center; }
+
+/* Modal actions */
+.modal-actions { display:flex; gap:0.75rem; justify-content:flex-end; margin-top:0.6rem; }
+
+/* Accessibility helpers */
+button:focus, input:focus { box-shadow: 0 0 0 3px rgba(0,240,255,0.06); }
+
+/* small screens tweaks */
+@media (max-width: 520px) {
+  .pm-search input { max-width: 220px; }
+  .pm-header { gap: 0.6rem; }
+  .pm-title h2 { font-size: 1.25rem; }
+  .pm-grid { gap: 1rem; }
+  .pm-modal-panel { padding: 1rem; }
+}
+
+/* subtle gradient border for entire container (decor) */
+.pm-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  padding: 2px;
+  background: linear-gradient(90deg, rgba(0,240,255,0.06), rgba(138,43,226,0.03));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}

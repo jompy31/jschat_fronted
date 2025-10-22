@@ -3,6 +3,7 @@ import "./App.css";
 import useLocalStorage from "use-local-storage";
 import AppRoutes from "./routes/Routes";
 import Navbar from "../src/components/navigation/Navbar/index"; // 👈 Asegúrate de esta ruta
+import "../src/styles/form.css"
 
 function App() {
   const preference = window.matchMedia("(prefers-color-scheme: dark)").matches;
