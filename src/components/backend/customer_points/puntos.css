@@ -340,3 +340,443 @@ body:not(.dark) .pm-form input:focus {
 body:not(.dark) .pm-form label {
   color: #0a1b2f !important;
 }
+/* =========================================================================
+   ⚡ SUPER SAIYA 150000 - FORMULARIO ULTRA FUTURISTA PROFESIONAL
+   ========================================================================= */
+
+/* Panel con reflejos dinámicos y textura de vidrio */
+.pm-modal-panel {
+  background: linear-gradient(145deg, rgba(8,12,22,0.95) 0%, rgba(12,20,30,0.98) 100%) !important;
+  border: 1px solid rgba(0,240,255,0.25) !important;
+  box-shadow: 0 0 40px rgba(0,240,255,0.1), inset 0 0 12px rgba(0,240,255,0.05);
+  backdrop-filter: blur(12px) saturate(130%);
+  animation: panelPulse 10s infinite alternate ease-in-out;
+}
+
+@keyframes panelPulse {
+  0% { box-shadow: 0 0 40px rgba(0,240,255,0.12), inset 0 0 12px rgba(0,240,255,0.06); }
+  100% { box-shadow: 0 0 60px rgba(138,43,226,0.18), inset 0 0 16px rgba(0,240,255,0.08); }
+}
+
+/* Inputs con animación de energía al enfocar */
+.pm-form input[type="text"],
+.pm-form input[type="email"],
+.pm-form input[type="number"] {
+  position: relative;
+  z-index: 1;
+  background: rgba(255,255,255,0.08) !important;
+  border: 1px solid rgba(0,240,255,0.25) !important;
+  color: #eafcff !important;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 0 6px rgba(0,240,255,0.1);
+}
+
+.pm-form input:focus {
+  background: rgba(255,255,255,0.15) !important;
+  border-color: rgba(0,240,255,0.6) !important;
+  box-shadow: 0 0 25px rgba(0,240,255,0.3), inset 0 0 10px rgba(0,240,255,0.2);
+  transform: translateY(-2px);
+}
+
+/* Glow animado alrededor de inputs en focus */
+.pm-form input:focus::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #00f0ff, #8a2be2, #00f0ff);
+  filter: blur(6px);
+  opacity: 0.35;
+  animation: neonFlow 3s linear infinite;
+  z-index: -1;
+}
+
+@keyframes neonFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Etiquetas y títulos con energía elegante */
+.pm-form label {
+  color: #a8dfff !important;
+  font-weight: 600;
+  text-shadow: 0 0 8px rgba(0,240,255,0.2);
+}
+
+/* Botones dentro del modal */
+.modal-actions .btn-primary {
+  background: linear-gradient(90deg, #00f0ff, #8a2be2);
+  color: #020c12;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  box-shadow: 0 0 25px rgba(0,240,255,0.3);
+  transition: all 0.3s ease-in-out;
+}
+
+.modal-actions .btn-primary:hover {
+  transform: scale(1.06);
+  box-shadow: 0 0 35px rgba(0,240,255,0.5), 0 0 45px rgba(138,43,226,0.3);
+}
+
+/* Cancelar con estilo */
+.modal-actions .btn-ghost {
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(230,246,255,0.8);
+  background: rgba(255,255,255,0.03);
+  transition: all 0.25s ease;
+}
+
+.modal-actions .btn-ghost:hover {
+  color: #00f0ff;
+  border-color: rgba(0,240,255,0.4);
+  box-shadow: 0 0 15px rgba(0,240,255,0.2);
+}
+
+/* Adaptación modo claro */
+body:not(.dark) .pm-modal-panel {
+  background: linear-gradient(145deg, rgba(250,252,255,0.96), rgba(230,240,255,0.98)) !important;
+  box-shadow: 0 0 40px rgba(0,0,0,0.15);
+}
+
+body:not(.dark) .pm-form input {
+  background: rgba(255,255,255,0.95) !important;
+  border: 1px solid rgba(0,0,0,0.1) !important;
+  color: #0a1b2f !important;
+}
+
+body:not(.dark) .pm-form input:focus {
+  box-shadow: 0 0 15px rgba(0,191,255,0.25) !important;
+  border-color: rgba(0,191,255,0.4) !important;
+}
+
+body:not(.dark) .pm-form label {
+  color: #0a1b2f !important;
+}
+/* =========================================================================
+   ⚡ SUPER SAIYA 150000 — VISUAL ORGASM EDITION ⚡
+   ========================================================================= */
+
+/* Arregla el encabezado tapado por el navbar */
+.pm-wrapper {
+  margin-top: 6rem !important; /* ajusta si tu navbar es más alto */
+  position: relative;
+  background: radial-gradient(circle at 20% 10%, rgba(0,240,255,0.04), transparent 70%),
+              radial-gradient(circle at 90% 80%, rgba(138,43,226,0.05), transparent 70%),
+              linear-gradient(180deg, rgba(8,18,28,0.95) 0%, rgba(4,10,18,0.98) 100%);
+  border: 1px solid rgba(0,240,255,0.06);
+  box-shadow: inset 0 0 60px rgba(0,240,255,0.03);
+  animation: bgShift 30s infinite alternate ease-in-out;
+}
+
+@keyframes bgShift {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 100% 100%; }
+}
+
+/* Encabezado con brillo de energía */
+.pm-title h2 {
+  font-size: 2rem;
+  background: linear-gradient(90deg, #00f0ff, #8a2be2, #00f0ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 18px rgba(0,240,255,0.2);
+  animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+  0% { text-shadow: 0 0 10px rgba(0,240,255,0.2); }
+  100% { text-shadow: 0 0 22px rgba(138,43,226,0.4); }
+}
+
+/* Cartas con efecto glass dinámico */
+.pm-card {
+  background: linear-gradient(145deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+  backdrop-filter: blur(12px) saturate(130%);
+  border: 1px solid rgba(0,240,255,0.1);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6), inset 0 0 12px rgba(0,240,255,0.08);
+  transition: all 0.4s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.pm-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 16px;
+  background: linear-gradient(90deg, #00f0ff, #8a2be2, #00f0ff);
+  opacity: 0;
+  filter: blur(12px);
+  transition: opacity 0.4s ease;
+  z-index: 0;
+}
+
+.pm-card:hover::before {
+  opacity: 0.35;
+}
+
+.pm-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 60px rgba(0,240,255,0.12), inset 0 0 20px rgba(0,240,255,0.08);
+}
+
+/* Avatar circular con halo animado */
+.avatar {
+  position: relative;
+  background: linear-gradient(135deg, rgba(0,240,255,0.2), rgba(138,43,226,0.15));
+  box-shadow: 0 0 15px rgba(0,240,255,0.3);
+}
+
+.avatar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  border: 2px solid rgba(0,240,255,0.25);
+  animation: pulseAvatar 2s infinite ease-in-out;
+}
+
+@keyframes pulseAvatar {
+  0% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.15); opacity: 0.2; }
+  100% { transform: scale(1); opacity: 0.6; }
+}
+
+/* Emails con fondo holográfico */
+.client-email {
+  display: inline-block;
+  background: linear-gradient(90deg, #ff0040, #8a2be2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: all 0.3s ease;
+}
+.client-email:hover {
+  text-shadow: 0 0 10px rgba(255,0,80,0.4);
+}
+
+/* Botones edit/eliminar con glow elegante */
+.btn-edit {
+  background: linear-gradient(90deg, #00f0ff, #3b82f6) !important;
+  color: #010b15 !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  box-shadow: 0 0 20px rgba(0,240,255,0.2);
+  transition: all 0.3s ease;
+}
+.btn-edit:hover {
+  box-shadow: 0 0 40px rgba(0,240,255,0.4);
+  transform: scale(1.05);
+}
+
+.btn-danger {
+  background: linear-gradient(90deg, #ff0040, #8a2be2) !important;
+  color: #fff !important;
+  text-transform: uppercase;
+  font-weight: 700;
+  box-shadow: 0 0 20px rgba(255,0,80,0.3);
+  transition: all 0.3s ease;
+}
+.btn-danger:hover {
+  box-shadow: 0 0 40px rgba(255,0,80,0.5);
+  transform: scale(1.05);
+}
+
+/* Animación sutil en los puntos */
+.points-number {
+  position: relative;
+  animation: pointsGlow 3s infinite ease-in-out alternate;
+}
+
+@keyframes pointsGlow {
+  0% { text-shadow: 0 0 8px rgba(0,240,255,0.15); }
+  100% { text-shadow: 0 0 20px rgba(0,240,255,0.4); }
+}
+
+/* Responsivo más fluido */
+@media (max-width: 600px) {
+  .pm-wrapper { margin-top: 5rem !important; padding: 1.5rem; }
+  .pm-title h2 { font-size: 1.5rem; }
+  .pm-card { transform: none; }
+}
+/* =========================================================================
+   ⚡ FIX VISIBILIDAD CORREO - Neon Readable Hover
+   ========================================================================= */
+
+.client-email {
+  position: relative;
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+  background: rgba(0, 240, 255, 0.06);
+  transition: all 0.3s ease;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(90deg, #ff005e, #8a2be2);
+}
+
+.client-email:hover {
+  background-image: linear-gradient(90deg, #00f0ff, #8a2be2);
+  -webkit-text-fill-color: #eafaff; /* mantiene el texto visible */
+  background-clip: border-box;
+  box-shadow: 0 0 18px rgba(0,240,255,0.25);
+  transform: scale(1.03);
+}
+
+/* Modo claro */
+body:not(.dark) .client-email {
+  background: rgba(0,0,0,0.05);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(90deg, #d90404, #1e3a8a);
+}
+
+body:not(.dark) .client-email:hover {
+  background-image: linear-gradient(90deg, #00bfff, #8a2be2);
+  -webkit-text-fill-color: #000; /* negro visible en claro */
+  box-shadow: 0 0 12px rgba(0,191,255,0.25);
+}
+/* =========================================================================
+   ⚡ SUPER SAIYA 200000 - TITULOS Y FORMULARIOS INTERFAZ GALÁCTICA ⚡
+   ========================================================================= */
+
+/* === TÍTULO SECUNDARIO (Control de puntos) === */
+.pm-sub {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #00f0ff;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  margin: 0.75rem auto 1.25rem auto;
+  width: fit-content;
+  border-radius: 10px;
+  background: linear-gradient(90deg, rgba(0,240,255,0.08), rgba(138,43,226,0.08));
+  box-shadow: 0 0 20px rgba(0,240,255,0.1);
+  border: 1px solid rgba(0,240,255,0.15);
+  animation: subPulse 3s ease-in-out infinite alternate;
+}
+@keyframes subPulse {
+  0% { box-shadow: 0 0 12px rgba(0,240,255,0.15); transform: scale(1); }
+  100% { box-shadow: 0 0 24px rgba(138,43,226,0.25); transform: scale(1.03); }
+}
+
+/* === FORMULARIOS EN MODALES === */
+.pm-modal-panel {
+  background: linear-gradient(145deg, rgba(5,10,18,0.96) 0%, rgba(10,20,30,0.98) 100%) !important;
+  border: 1px solid rgba(0,240,255,0.3) !important;
+  box-shadow: 0 0 50px rgba(0,240,255,0.1), inset 0 0 12px rgba(0,240,255,0.05);
+  backdrop-filter: blur(12px) saturate(140%);
+  border-radius: 18px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* efecto de energía lateral */
+.pm-modal-panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(120deg, rgba(0,240,255,0.08), rgba(138,43,226,0.08), transparent);
+  animation: holoSlide 6s linear infinite;
+}
+@keyframes holoSlide {
+  0% { transform: translateX(0); opacity: 0.5; }
+  100% { transform: translateX(50%); opacity: 0.2; }
+}
+
+/* === CAMPOS DEL FORMULARIO === */
+.pm-form input[type="text"],
+.pm-form input[type="email"],
+.pm-form input[type="number"] {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(0,240,255,0.3);
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  color: #eafcff;
+  font-weight: 500;
+  transition: all 0.3s ease-in-out;
+  box-shadow: inset 0 0 10px rgba(0,240,255,0.08);
+}
+.pm-form input:focus {
+  border-color: #00f0ff;
+  background: rgba(0,240,255,0.08);
+  box-shadow: 0 0 25px rgba(0,240,255,0.3), inset 0 0 12px rgba(0,240,255,0.2);
+  transform: scale(1.02);
+}
+
+/* etiquetas */
+.pm-form label {
+  color: #aeeeff !important;
+  text-shadow: 0 0 8px rgba(0,240,255,0.2);
+  font-weight: 600;
+}
+
+/* botones dentro del modal */
+.modal-actions .btn-primary {
+  background: linear-gradient(90deg, #00f0ff, #8a2be2, #00f0ff);
+  color: #010b15 !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 12px;
+  padding: 0.7rem 1.2rem;
+  box-shadow: 0 0 25px rgba(0,240,255,0.25);
+  transition: all 0.3s ease;
+}
+.modal-actions .btn-primary:hover {
+  transform: scale(1.07);
+  box-shadow: 0 0 45px rgba(0,240,255,0.4), 0 0 60px rgba(138,43,226,0.25);
+}
+
+.modal-actions .btn-ghost {
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #eafcff !important;
+  background: rgba(255,255,255,0.03);
+  border-radius: 12px;
+  padding: 0.7rem 1.2rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+.modal-actions .btn-ghost:hover {
+  color: #00f0ff !important;
+  border-color: rgba(0,240,255,0.4);
+  box-shadow: 0 0 20px rgba(0,240,255,0.25);
+}
+
+/* animación de aparición modal */
+@keyframes holoPop {
+  from { transform: scale(0.96) translateY(12px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
+}
+.pm-modal-panel {
+  animation: holoPop 0.35s cubic-bezier(0.2,0.9,0.3,1);
+}
+
+/* modo claro */
+body:not(.dark) .pm-modal-panel {
+  background: linear-gradient(145deg, rgba(250,252,255,0.98), rgba(230,240,255,0.98)) !important;
+  border: 1px solid rgba(0,0,0,0.1) !important;
+  box-shadow: 0 0 25px rgba(0,0,0,0.1);
+}
+body:not(.dark) .pm-form input {
+  background: rgba(255,255,255,0.95);
+  color: #0a1b2f;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+body:not(.dark) .pm-form label {
+  color: #0a1b2f !important;
+}
+body:not(.dark) .modal-actions .btn-primary {
+  background: linear-gradient(90deg, #00bfff, #1e3a8a);
+  color: #fff !important;
+}

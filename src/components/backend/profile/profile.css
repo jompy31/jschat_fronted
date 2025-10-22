@@ -270,3 +270,450 @@ th {
   border-color: var(--accent-primary);
   box-shadow: var(--glow-neon);
 }
+/* ===============================================================
+   ⚡ SAIYAGPT 250000 — PERFIL GALÁCTICO Y FORMULARIOS VISIBLES ⚡
+   =============================================================== */
+
+/* === Ajuste de posición del título debajo del navbar === */
+.profile-title {
+  margin-top: 5rem !important; /* Ajusta según el alto del navbar */
+  text-align: center;
+  font-weight: 800;
+  letter-spacing: 1px;
+  background: linear-gradient(90deg, #00f0ff, #8a2be2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 16px rgba(0, 240, 255, 0.2);
+  animation: titleEnergy 3s ease-in-out infinite alternate;
+}
+
+@keyframes titleEnergy {
+  0% { text-shadow: 0 0 12px rgba(0,240,255,0.2); }
+  100% { text-shadow: 0 0 24px rgba(138,43,226,0.4); }
+}
+
+/* === Botones de acción al final del perfil === */
+.profile-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.action-btn {
+  order: 10; /* Envía el botón al final del contenedor */
+  align-self: center;
+  margin-top: 2rem !important;
+  background: linear-gradient(90deg, #00f0ff, #8a2be2);
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  color: #010b15;
+  box-shadow: 0 0 25px rgba(0,240,255,0.25);
+  transition: all 0.3s ease;
+}
+.action-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 45px rgba(0,240,255,0.4);
+}
+
+/* === Modal (formulario de edición / agregar) === */
+.modal-content {
+  background: linear-gradient(145deg, rgba(5,10,18,0.96) 0%, rgba(10,20,30,0.98) 100%) !important;
+  border: 1px solid rgba(0,240,255,0.3);
+  box-shadow: 0 0 40px rgba(0,240,255,0.15), inset 0 0 12px rgba(0,240,255,0.1);
+  backdrop-filter: blur(12px) saturate(140%);
+  color: #eafcff !important;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* efecto de energía lateral */
+.modal-content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(120deg, rgba(0,240,255,0.08), rgba(138,43,226,0.08), transparent);
+  animation: holoSlide 6s linear infinite;
+}
+@keyframes holoSlide {
+  0% { transform: translateX(0); opacity: 0.4; }
+  100% { transform: translateX(50%); opacity: 0.2; }
+}
+
+/* === Inputs y formularios === */
+.form-group label {
+  color: #aeeeff;
+  font-weight: 600;
+  text-shadow: 0 0 8px rgba(0,240,255,0.2);
+}
+
+.form-input,
+.form-textarea,
+.file-input {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(0,240,255,0.25);
+  border-radius: 10px;
+  color: #eafcff;
+  padding: 0.8rem 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 0 10px rgba(0,240,255,0.1);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  border-color: #00f0ff;
+  background: rgba(0,240,255,0.08);
+  box-shadow: 0 0 25px rgba(0,240,255,0.3), inset 0 0 10px rgba(0,240,255,0.2);
+  transform: scale(1.02);
+}
+
+/* === Imagen de perfil === */
+.image-preview {
+  border: 2px solid rgba(0,240,255,0.3);
+  box-shadow: 0 0 20px rgba(0,240,255,0.15);
+}
+
+/* === Botón guardar (submit) === */
+.submit-button {
+  background: linear-gradient(90deg, #00f0ff, #8a2be2);
+  border: none;
+  color: #010b15;
+  font-weight: 700;
+  border-radius: 10px;
+  box-shadow: 0 0 25px rgba(0,240,255,0.2);
+  transition: all 0.3s ease;
+}
+.submit-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 40px rgba(0,240,255,0.4);
+}
+
+/* === Modo claro === */
+body:not(.dark) .modal-content {
+  background: linear-gradient(145deg, rgba(250,252,255,0.98), rgba(230,240,255,0.98)) !important;
+  color: #0a1b2f !important;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+body:not(.dark) .form-input,
+body:not(.dark) .form-textarea {
+  background: rgba(255,255,255,0.95);
+  color: #0a1b2f;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+body:not(.dark) .form-input:focus {
+  border-color: #00bfff;
+  box-shadow: 0 0 20px rgba(0,191,255,0.3);
+}
+body:not(.dark) .form-group label {
+  color: #0a1b2f;
+}
+/* ===========================================================
+   ⚡ SUPER SAIYA GPT 300000 - PERFIL ULTRA INSTINTO FUTURISTA
+   =========================================================== */
+
+/* === Fondo general === */
+.profile-page {
+  background: radial-gradient(circle at 10% 20%, rgba(0,240,255,0.04), transparent 60%),
+              radial-gradient(circle at 80% 80%, rgba(138,43,226,0.05), transparent 70%),
+              var(--bg-primary);
+  animation: bgShift 15s ease-in-out infinite alternate;
+}
+@keyframes bgShift {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 100% 100%; }
+}
+
+/* === Contenedor principal === */
+.profile-container {
+  background: linear-gradient(135deg, rgba(5,10,18,0.9) 0%, rgba(15,25,35,0.95) 100%);
+  border: 1px solid rgba(0,240,255,0.15);
+  box-shadow: 0 0 60px rgba(0,240,255,0.08), inset 0 0 18px rgba(0,240,255,0.05);
+  backdrop-filter: blur(20px) saturate(160%);
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.profile-container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  border: 1px solid rgba(0,240,255,0.1);
+  background: linear-gradient(120deg, rgba(0,240,255,0.05), rgba(138,43,226,0.05), transparent);
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  animation: holoFlow 6s linear infinite;
+}
+@keyframes holoFlow {
+  0% { opacity: 0.5; transform: translateX(-20%); }
+  100% { opacity: 0.8; transform: translateX(20%); }
+}
+
+/* === Título Bienvenido === */
+.profile-title {
+  font-size: 2.2rem !important;
+  margin-top: 5.5rem !important;
+  background: linear-gradient(90deg, #00f0ff, #8a2be2, #00bfff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+  letter-spacing: 1.5px;
+  font-weight: 900;
+  text-shadow: 0 0 30px rgba(0,240,255,0.25);
+  animation: glowPulse 4s ease-in-out infinite alternate;
+}
+@keyframes glowPulse {
+  0% { text-shadow: 0 0 12px rgba(0,240,255,0.2); }
+  100% { text-shadow: 0 0 30px rgba(138,43,226,0.4); }
+}
+
+/* === Botones de acción (descargar, etc.) === */
+.action-btn {
+  background: linear-gradient(90deg, #00f0ff, #8a2be2);
+  border-radius: 12px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: #010b15;
+  padding: 0.8rem 1.5rem;
+  transition: all 0.35s ease;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+.action-btn::before {
+  content: "";
+  position: absolute;
+  top: 0; left: -75%;
+  width: 50%; height: 100%;
+  background: linear-gradient(120deg, rgba(255,255,255,0.25), transparent);
+  transform: skewX(-20deg);
+  transition: all 0.5s ease;
+  z-index: 0;
+}
+.action-btn:hover::before { left: 125%; }
+.action-btn:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 0 40px rgba(0,240,255,0.3), 0 0 80px rgba(138,43,226,0.25);
+}
+
+/* === Formulario del modal === */
+.modal-content {
+  background: linear-gradient(145deg, rgba(5,10,18,0.96), rgba(15,25,35,0.98));
+  border: 1px solid rgba(0,240,255,0.25);
+  border-radius: 18px;
+  box-shadow: 0 0 50px rgba(0,240,255,0.1), inset 0 0 12px rgba(0,240,255,0.05);
+  overflow: hidden;
+  animation: popInFuturistic 0.5s ease;
+}
+@keyframes popInFuturistic {
+  0% { opacity: 0; transform: scale(0.96) translateY(20px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* === Inputs holográficos === */
+.form-input,
+.form-textarea,
+.file-input {
+  background: rgba(0,240,255,0.06);
+  border: 1px solid rgba(0,240,255,0.25);
+  color: #eafcff;
+  border-radius: 10px;
+  padding: 0.9rem 1.1rem;
+  box-shadow: inset 0 0 10px rgba(0,240,255,0.1);
+  transition: all 0.3s ease;
+}
+.form-input:focus,
+.form-textarea:focus {
+  border-color: #00f0ff;
+  box-shadow: 0 0 20px rgba(0,240,255,0.3);
+  transform: scale(1.02);
+}
+
+/* === Etiquetas === */
+.form-group label {
+  color: #aeeeff;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 8px rgba(0,240,255,0.3);
+}
+
+/* === Botón submit (guardar) === */
+.submit-button {
+  background: linear-gradient(90deg, #00f0ff, #8a2be2);
+  border: none;
+  border-radius: 12px;
+  color: #010b15;
+  font-weight: 800;
+  font-size: 1rem;
+  text-transform: uppercase;
+  box-shadow: 0 0 30px rgba(0,240,255,0.25);
+  transition: all 0.35s ease;
+}
+.submit-button:hover {
+  transform: scale(1.07);
+  box-shadow: 0 0 50px rgba(0,240,255,0.35);
+}
+
+/* === Modo claro (respetando la legibilidad) === */
+body:not(.dark) .modal-content {
+  background: linear-gradient(145deg, rgba(250,252,255,0.98), rgba(235,240,255,0.98)) !important;
+  border: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0 0 25px rgba(0,0,0,0.15);
+}
+body:not(.dark) .form-input,
+body:not(.dark) .form-textarea {
+  background: rgba(255,255,255,0.95);
+  color: #0a1b2f;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+body:not(.dark) .form-input:focus {
+  border-color: #00bfff;
+  box-shadow: 0 0 25px rgba(0,191,255,0.3);
+}
+body:not(.dark) .form-group label {
+  color: #0a1b2f;
+}
+/* ================================================================
+   ⚡ SAIYAGPT 400000 — MODO CLARO DIVINE LIGHT INTERFACE ⚡
+   ================================================================ */
+
+body:not(.dark) .profile-page {
+  background: radial-gradient(circle at 15% 20%, rgba(0,191,255,0.06), transparent 70%),
+              radial-gradient(circle at 85% 80%, rgba(138,43,226,0.05), transparent 60%),
+              #f8faff;
+  background-attachment: fixed;
+}
+
+/* === Contenedor principal === */
+body:not(.dark) .profile-container {
+  background: linear-gradient(145deg, rgba(255,255,255,0.96), rgba(240,245,255,0.98));
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.08), 0 0 60px rgba(0,191,255,0.05);
+  backdrop-filter: blur(14px) saturate(160%);
+  position: relative;
+  border-radius: 22px;
+}
+body:not(.dark) .profile-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgba(0,191,255,0.06), rgba(138,43,226,0.05), transparent);
+  pointer-events: none;
+  animation: lightShift 12s linear infinite alternate;
+}
+@keyframes lightShift {
+  0% { opacity: 0.4; transform: translateX(-5%) scale(1); }
+  100% { opacity: 0.8; transform: translateX(5%) scale(1.02); }
+}
+
+/* === Título Bienvenido === */
+body:not(.dark) .profile-title {
+  color: #0a1b2f;
+  text-align: center;
+  font-weight: 900;
+  margin-top: 5.5rem !important;
+  font-size: 2.2rem;
+  background: linear-gradient(90deg, #007bff, #8a2be2, #00bfff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(0,191,255,0.25);
+  animation: titlePulse 3.5s ease-in-out infinite alternate;
+}
+@keyframes titlePulse {
+  0% { text-shadow: 0 0 10px rgba(0,191,255,0.2); }
+  100% { text-shadow: 0 0 30px rgba(138,43,226,0.3); }
+}
+
+/* === Formularios del modal === */
+body:not(.dark) .modal-content {
+  background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(240,245,255,0.98));
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 0 40px rgba(0,0,0,0.08), 0 0 60px rgba(0,191,255,0.08);
+  border-radius: 18px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* efecto energético suave */
+body:not(.dark) .modal-content::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(0,191,255,0.08), rgba(138,43,226,0.05), transparent);
+  animation: energyFlow 8s linear infinite;
+}
+@keyframes energyFlow {
+  0% { transform: translateX(-10%); opacity: 0.4; }
+  100% { transform: translateX(10%); opacity: 0.6; }
+}
+
+/* === Inputs y textareas === */
+body:not(.dark) .form-input,
+body:not(.dark) .form-textarea,
+body:not(.dark) .file-input {
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 12px;
+  color: #0a1b2f;
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.04);
+  transition: all 0.3s ease;
+}
+body:not(.dark) .form-input:focus,
+body:not(.dark) .form-textarea:focus {
+  border-color: #00bfff;
+  background: rgba(255,255,255,0.98);
+  box-shadow: 0 0 25px rgba(0,191,255,0.25);
+  transform: scale(1.02);
+}
+
+/* === Etiquetas === */
+body:not(.dark) .form-group label {
+  color: #0a1b2f;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-shadow: 0 0 10px rgba(0,191,255,0.15);
+}
+
+/* === Botón principal (submit / guardar cambios) === */
+body:not(.dark) .submit-button {
+  background: linear-gradient(90deg, #007bff, #00bfff, #8a2be2);
+  color: #ffffff;
+  border: none;
+  font-weight: 700;
+  border-radius: 12px;
+  box-shadow: 0 0 30px rgba(0,191,255,0.2);
+  text-transform: uppercase;
+  transition: all 0.35s ease;
+}
+body:not(.dark) .submit-button:hover {
+  transform: scale(1.07);
+  box-shadow: 0 0 60px rgba(0,191,255,0.3), 0 0 80px rgba(138,43,226,0.2);
+}
+
+/* === Imagen de perfil === */
+body:not(.dark) .image-preview {
+  border: 2px solid rgba(0,191,255,0.4);
+  box-shadow: 0 0 25px rgba(0,191,255,0.25);
+}
+
+/* === Botones de acción === */
+body:not(.dark) .action-btn {
+  background: linear-gradient(90deg, #007bff, #00bfff);
+  border-radius: 12px;
+  color: #ffffff;
+  font-weight: 700;
+  border: none;
+  box-shadow: 0 0 30px rgba(0,191,255,0.25);
+  transition: all 0.35s ease;
+}
+body:not(.dark) .action-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 0 60px rgba(0,191,255,0.4);
+}
