@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { createCharacteristic, updateCharacteristic, deleteCharacteristic } from '../utils/api';
+import "../../../backend/products/components/products.css"
 
 const CreateCharacteristicForm = ({ onClose, token, setCharacteristics, editingCharacteristic }) => {
   const [formData, setFormData] = useState({

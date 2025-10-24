@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { deleteProduct } from '../utils/api';
 import { exportProductsToCSV } from '../utils/csvExport';
+import "../../../backend/products/components/products.css"
 
 const ProductTable = ({ products, setProducts, token, isAuthorized, onSelect, onEdit }) => {
   const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'asc' });

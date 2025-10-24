@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { createProduct, updateProduct } from '../utils/api';
+import "../../../backend/products/components/products.css"
 
 const CreateProductForm = ({ onClose, token, setProducts, productTypes, characteristics, editingProduct }) => {
   const [formData, setFormData] = useState({

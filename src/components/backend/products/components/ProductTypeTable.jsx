@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { deleteProductType } from '../utils/api';
+import "../../../backend/products/components/products.css";
 
 const ProductTypeTable = ({ productTypes, setProductTypes, token, isAuthorized, onEdit }) => {
   const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'asc' });

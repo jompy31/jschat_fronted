@@ -4,6 +4,9 @@ import useLocalStorage from "use-local-storage";
 import AppRoutes from "./routes/Routes";
 import Navbar from "../src/components/navigation/Navbar/index"; // 👈 Asegúrate de esta ruta
 import "../src/styles/form.css"
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 function App() {
   const preference = window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -48,8 +51,21 @@ function App() {
 
   return (
     <div className={`App ${isDark ? "dark" : "light"}`} style={{ lineHeight: "1.5" }}>
-      <Navbar isDark={isDark} setIsDark={setIsDark} />
-      <AppRoutes />
+     <Navbar isDark={isDark} setIsDark={setIsDark} />
+<AppRoutes />
+
+{/* 🔥 Aquí va el contenedor global de Toastify */}
+<ToastContainer
+  position="top-right"
+  autoClose={4000}
+  hideProgressBar={false}
+  newestOnTop
+  closeOnClick
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover
+  theme={isDark ? "dark" : "light"}
+/>
     </div>
   );
 }

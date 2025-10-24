@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import { updateProduct, deleteProduct } from '../utils/api';
+import "../../../backend/products/components/products.css"
+import { toast} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const ProductModal = ({ product, onClose, token, setProducts, characteristics, productTypes, isAuthorized }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -49,16 +53,68 @@ const ProductModal = ({ product, onClose, token, setProducts, characteristics, p
     }
   };
 
-  const handleDelete = async () => {
-    if (!window.confirm('¿Confirmar eliminación del producto?')) return;
-    try {
-      await deleteProduct(product.id, token);
-      setProducts(prev => prev.filter(p => p.id !== product.id));
-      onClose();
-    } catch (err) {
-      alert('Error al eliminar: ' + err.message);
+ const handleDelete = async (id) => {
+  toast.info(
+    ({ closeToast }) => (
+      <div style={{ textAlign: "center" }}>
+        <p>¿Eliminar este producto?</p>
+        <div style={{ marginTop: "10px", display: "flex", justifyContent: "center", gap: "10px" }}>
+          <button
+            style={{
+              background: "linear-gradient(90deg, #00bfff, #b026ff)",
+              color: "white",
+              border: "none",
+              borderRadius: "6px",
+              padding: "5px 10px",
+              cursor: "pointer",
+            }}
+            onClick={async () => {
+              try {
+                await deleteProduct(id, token);
+                setProducts(prev => prev.filter(p => p.id !== id));
+                toast.dismiss();
+                toast.success("✅ Producto eliminado correctamente");
+              } catch (error) {
+                toast.dismiss();
+                toast.error("❌ Error al eliminar el producto");
+              }
+            }}
+          >
+            Confirmar
+          </button>
+          <button
+            style={{
+              background: "#555",
+              color: "white",
+              border: "none",
+              borderRadius: "6px",
+              padding: "5px 10px",
+              cursor: "pointer",
+            }}
+            onClick={() => closeToast()}
+          >
+            Cancelar
+          </button>
+        </div>
+      </div>
+    ),
+    {
+      position: "top-center",
+      autoClose: false,
+      closeOnClick: false,
+      draggable: false,
+      closeButton: false,
+      theme: "dark",
+      style: {
+        borderRadius: "12px",
+        background: "#0a0f1e",
+        color: "#fff",
+        boxShadow: "0 0 25px rgba(0,191,255,0.3)",
+      },
     }
-  };
+  );
+};
+
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
