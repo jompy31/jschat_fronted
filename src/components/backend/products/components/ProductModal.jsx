@@ -1,18 +1,28 @@
-import React, { useState } from 'react';
-import { updateProduct, deleteProduct } from '../utils/api';
-import "../../../backend/products/components/products.css"
-import { toast} from "react-toastify";
+import React, { useState } from "react";
+import { updateProduct, deleteProduct } from "../utils/api";
+import "../../../backend/products/components/products.css";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import DeleteConfirmationToast from "../../../backend/products/components/DeleteconfirmationToast"; // 👈 Importamos el componente
 
-
-const ProductModal = ({ product, onClose, token, setProducts, characteristics, productTypes, isAuthorized }) => {
+const ProductModal = ({
+  product,
+  onClose,
+  token,
+  setProducts,
+  characteristics,
+  productTypes,
+  isAuthorized,
+}) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [showDeleteToast, setShowDeleteToast] = useState(false);
+  const [deleteMessage, setDeleteMessage] = useState("");
   const [formData, setFormData] = useState({
     name: product.name,
-    description: product.description || '',
+    description: product.description || "",
     additional_price: product.additional_price,
     product_type_id: product.product_type?.id,
-    characteristics: product.characteristics.map(c => c.id),
+    characteristics: product.characteristics.map((c) => c.id),
     design_file: null,
   });
 
@@ -26,100 +36,62 @@ const ProductModal = ({ product, onClose, token, setProducts, characteristics, p
   };
 
   const handleCharacteristicChange = (charId) => {
-    const updatedCharacteristics = formData.characteristics.includes(charId)
-      ? formData.characteristics.filter(id => id !== charId)
+    const updated = formData.characteristics.includes(charId)
+      ? formData.characteristics.filter((id) => id !== charId)
       : [...formData.characteristics, charId];
-    setFormData({ ...formData, characteristics: updatedCharacteristics });
+    setFormData({ ...formData, characteristics: updated });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData();
-    data.append('name', formData.name);
-    data.append('description', formData.description);
-    data.append('additional_price', formData.additional_price);
-    data.append('product_type_id', formData.product_type_id);
-    data.append('created_by_id', JSON.parse(localStorage.getItem('currentUser') || '{}').id || 1); // Use current user ID
-    formData.characteristics.forEach(id => data.append('characteristic_ids', id));
-    if (formData.design_file) data.append('design_file', formData.design_file);
+    data.append("name", formData.name);
+    data.append("description", formData.description);
+    data.append("additional_price", formData.additional_price);
+    data.append("product_type_id", formData.product_type_id);
+    data.append(
+      "created_by_id",
+      JSON.parse(localStorage.getItem("currentUser") || "{}").id || 1
+    );
+    formData.characteristics.forEach((id) => data.append("characteristic_ids", id));
+    if (formData.design_file) data.append("design_file", formData.design_file);
 
     try {
       const response = await updateProduct(product.id, data, token);
-      setProducts(prev => prev.map(p => (p.id === product.id ? response.data : p)));
+      setProducts((prev) => prev.map((p) => (p.id === product.id ? response.data : p)));
+      toast.success("✅ Producto actualizado correctamente");
       setIsEditing(false);
       onClose();
     } catch (err) {
-      alert('Error al actualizar: ' + err.message);
+      toast.error("❌ Error al actualizar el producto");
     }
   };
 
- const handleDelete = async (id) => {
-  toast.info(
-    ({ closeToast }) => (
-      <div style={{ textAlign: "center" }}>
-        <p>¿Eliminar este producto?</p>
-        <div style={{ marginTop: "10px", display: "flex", justifyContent: "center", gap: "10px" }}>
-          <button
-            style={{
-              background: "linear-gradient(90deg, #00bfff, #b026ff)",
-              color: "white",
-              border: "none",
-              borderRadius: "6px",
-              padding: "5px 10px",
-              cursor: "pointer",
-            }}
-            onClick={async () => {
-              try {
-                await deleteProduct(id, token);
-                setProducts(prev => prev.filter(p => p.id !== id));
-                toast.dismiss();
-                toast.success("✅ Producto eliminado correctamente");
-              } catch (error) {
-                toast.dismiss();
-                toast.error("❌ Error al eliminar el producto");
-              }
-            }}
-          >
-            Confirmar
-          </button>
-          <button
-            style={{
-              background: "#555",
-              color: "white",
-              border: "none",
-              borderRadius: "6px",
-              padding: "5px 10px",
-              cursor: "pointer",
-            }}
-            onClick={() => closeToast()}
-          >
-            Cancelar
-          </button>
-        </div>
-      </div>
-    ),
-    {
-      position: "top-center",
-      autoClose: false,
-      closeOnClick: false,
-      draggable: false,
-      closeButton: false,
-      theme: "dark",
-      style: {
-        borderRadius: "12px",
-        background: "#0a0f1e",
-        color: "#fff",
-        boxShadow: "0 0 25px rgba(0,191,255,0.3)",
-      },
+  const confirmDelete = async () => {
+    try {
+      await deleteProduct(product.id, token);
+      setProducts((prev) => prev.filter((p) => p.id !== product.id));
+      toast.dismiss();
+      toast.success("✅ Producto eliminado correctamente");
+      setShowDeleteToast(false);
+      onClose();
+    } catch (error) {
+      toast.error("❌ Error al eliminar el producto");
     }
-  );
-};
+  };
 
+  const handleDelete = () => {
+    setDeleteMessage(`¿Eliminar el producto "${product.name}"?`);
+    setShowDeleteToast(true);
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
-      <div className="bg-gray-900 bg-opacity-90 backdrop-blur-md rounded-lg p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto">
-        <h2 className="text-2xl font-bold mb-4 text-blue-400">{isEditing ? 'Editar Producto' : 'Detalles del Producto'}</h2>
+      <div className="bg-gray-900 bg-opacity-90 backdrop-blur-md rounded-lg p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto relative">
+        <h2 className="text-2xl font-bold mb-4 text-blue-400">
+          {isEditing ? "Editar Producto" : "Detalles del Producto"}
+        </h2>
+
         {isEditing ? (
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
@@ -152,8 +124,10 @@ const ProductModal = ({ product, onClose, token, setProducts, characteristics, p
                 required
               >
                 <option value="">Seleccionar tipo</option>
-                {productTypes.map(type => (
-                  <option key={type.id} value={type.id}>{type.name}</option>
+                {productTypes.map((type) => (
+                  <option key={type.id} value={type.id}>
+                    {type.name}
+                  </option>
                 ))}
               </select>
             </div>
@@ -180,13 +154,13 @@ const ProductModal = ({ product, onClose, token, setProducts, characteristics, p
               />
               {product.design_file && !formData.design_file && (
                 <p className="text-gray-400 text-sm mt-1">
-                  Archivo actual: {product.design_file.split('/').pop()}
+                  Archivo actual: {product.design_file.split("/").pop()}
                 </p>
               )}
             </div>
             <div className="mb-4">
               <label className="block text-white mb-1">Características</label>
-              {characteristics.map(char => (
+              {characteristics.map((char) => (
                 <div key={char.id} className="flex items-center">
                   <input
                     type="checkbox"
@@ -217,15 +191,23 @@ const ProductModal = ({ product, onClose, token, setProducts, characteristics, p
         ) : (
           <div>
             <p><strong>Nombre:</strong> {product.name}</p>
-            <p><strong>Tipo:</strong> {product.product_type?.name || 'N/A'}</p>
-            <p><strong>Descripción:</strong> {product.description || 'N/A'}</p>
+            <p><strong>Tipo:</strong> {product.product_type?.name || "N/A"}</p>
+            <p><strong>Descripción:</strong> {product.description || "N/A"}</p>
             <p><strong>Precio Adicional:</strong> ₡{product.additional_price}</p>
-            <p><strong>Características:</strong> {product.characteristics.map(c => c.name).join(', ') || 'N/A'}</p>
+            <p>
+              <strong>Características:</strong>{" "}
+              {product.characteristics.map((c) => c.name).join(", ") || "N/A"}
+            </p>
             {product.design_file && (
               <div className="mt-4">
                 <p><strong>Diseño:</strong></p>
-                {product.design_file.endsWith('.pdf') ? (
-                  <a href={product.design_file} target="_blank" rel="noopener noreferrer" className="text-blue-400">
+                {product.design_file.endsWith(".pdf") ? (
+                  <a
+                    href={product.design_file}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-400"
+                  >
                     Ver PDF
                   </a>
                 ) : (
@@ -233,7 +215,7 @@ const ProductModal = ({ product, onClose, token, setProducts, characteristics, p
                     src={product.design_file}
                     alt={`Diseño de ${product.name}`}
                     className="max-w-full h-auto rounded mt-2"
-                    style={{ maxHeight: '300px' }}
+                    style={{ maxHeight: "300px" }}
                   />
                 )}
               </div>
@@ -263,6 +245,14 @@ const ProductModal = ({ product, onClose, token, setProducts, characteristics, p
           ✕
         </button>
       </div>
+
+      {/* 🔥 Confirmación con toast */}
+      <DeleteConfirmationToast
+        show={showDeleteToast}
+        onClose={() => setShowDeleteToast(false)}
+        message={deleteMessage}
+        onConfirm={confirmDelete}
+      />
     </div>
   );
 };

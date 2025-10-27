@@ -1,60 +1,101 @@
-import React, { useState, useEffect } from 'react';
-import ProductModal from '../components/ProductModal';
-import { fetchProducts } from '../utils/api';
+import React, { useState, useEffect } from "react";
+import ProductTable from "../components/ProductTable";
+import ProductModal from "../components/ProductModal";
+import DeleteConfirmationToast from "../../../backend/products/components/DeleteconfirmationToast";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { fetchProducts, deleteProduct } from "../utils/api";
 
-const ProductDetail = ({ productId }) => {
-  const [product, setProduct] = useState(null);
-  const [error, setError] = useState('');
-  const [user, setUser] = useState(null);
+const ProductsPage = () => {
+  const [products, setProducts] = useState([]);
   const [token, setToken] = useState(null);
+  const [user, setUser] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [showDeleteToast, setShowDeleteToast] = useState(false);
+  const [deleteMessage, setDeleteMessage] = useState("");
 
-  // Check if user is authorized based on staff_status
-  const isAuthorized = user?.userprofile?.staff_status && ['administrator', 'sales', 'design'].includes(user.userprofile.staff_status);
+  const isAuthorized =
+    user?.userprofile?.staff_status &&
+    ["administrator", "sales", "design"].includes(user.userprofile.staff_status);
 
   useEffect(() => {
-    // Retrieve user and token from localStorage
-    const storedUser = localStorage.getItem('currentUser');
-    const storedToken = localStorage.getItem('token');
+    const storedUser = localStorage.getItem("currentUser");
+    const storedToken = localStorage.getItem("token");
     if (storedUser && storedToken) {
-      try {
-        setUser(JSON.parse(storedUser));
-        setToken(storedToken);
-      } catch (err) {
-        setError('Error al cargar datos del usuario desde localStorage');
-      }
+      setUser(JSON.parse(storedUser));
+      setToken(storedToken);
     } else {
-      setError('No se encontró usuario autenticado. Por favor, inicia sesión.');
+      toast.error("⚠️ No se encontró usuario autenticado");
     }
   }, []);
 
   useEffect(() => {
-    const loadProduct = async () => {
-      if (!token || !productId) return;
-      try {
-        const response = await fetchProducts(token);
-        const foundProduct = response.data.find(p => p.id === parseInt(productId));
-        if (foundProduct) setProduct(foundProduct);
-        else setError('Producto no encontrado');
-      } catch (err) {
-        setError('Error al cargar el producto: ' + err.message);
-      }
-    };
-    if (token && productId) loadProduct();
-  }, [token, productId]);
+    if (token) {
+      fetchProducts(token)
+        .then((response) => setProducts(response.data))
+        .catch(() => toast.error("Error al cargar productos"));
+    }
+  }, [token]);
 
-  if (error) return <p className="text-red-500 text-center">{error}</p>;
-  if (!product) return <p className="text-white text-center">Cargando...</p>;
+  const handleSelect = (product) => {
+    setSelectedProduct(product);
+    setShowModal(true);
+  };
+
+  const handleEdit = (product) => {
+    setSelectedProduct(product);
+    setShowModal(true);
+  };
+
+  const handleDeleteConfirmation = (product) => {
+    setSelectedProduct(product);
+    setDeleteMessage(`¿Eliminar el producto "${product.name}"?`);
+    setShowDeleteToast(true);
+  };
+
+  const handleDelete = async () => {
+    try {
+      await deleteProduct(selectedProduct.id, token);
+      setProducts((prev) => prev.filter((p) => p.id !== selectedProduct.id));
+      setShowDeleteToast(false);
+      toast.success("✅ Producto eliminado correctamente");
+    } catch {
+      toast.error("❌ Error al eliminar el producto");
+    }
+  };
 
   return (
-    <ProductModal
-      product={product}
-      onClose={() => window.history.back()}
-      token={token}
-      setProducts={() => {}} // Not needed in detail view
-      characteristics={[]}
-      isAuthorized={isAuthorized}
-    />
+    <div className="p-6">
+      <ToastContainer />
+      <ProductTable
+        products={products}
+        setProducts={setProducts}
+        token={token}
+        isAuthorized={isAuthorized}
+        onSelect={handleSelect}
+        onEdit={handleEdit}
+        onDelete={handleDeleteConfirmation}
+      />
+      {showModal && selectedProduct && (
+        <ProductModal
+          product={selectedProduct}
+          onClose={() => setShowModal(false)}
+          token={token}
+          setProducts={setProducts}
+          characteristics={[]}
+          productTypes={[]}
+          isAuthorized={isAuthorized}
+        />
+      )}
+      <DeleteConfirmationToast
+        show={showDeleteToast}
+        onClose={() => setShowDeleteToast(false)}
+        message={deleteMessage}
+        onConfirm={handleDelete}
+      />
+    </div>
   );
 };
 
-export default ProductDetail;
+export default ProductsPage;
