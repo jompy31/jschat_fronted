@@ -53,15 +53,15 @@ const UserList1 = (props) => {
       if (retryCount.current === 0) {
         retryCount.current += 1;
         setTimeout(() => {
-          console.log('Reintentando recarga después de 2s...');
+          console.log('Reintentando recarga después de 4s...');
           window.location.reload();
-        }, 2000);
+        }, 4000);
       } else if (retryCount.current === 1) {
         retryCount.current += 1;
         setTimeout(() => {
-          console.log('Segundo intento después de 4s...');
+          console.log('Segundo intento después de 6s...');
           window.location.reload();
-        }, 4000);
+        }, 6000);
       } else {
         console.log('Token no disponible después de múltiples intentos.');
       }
@@ -87,10 +87,10 @@ const UserList1 = (props) => {
   useEffect(() => {
     if (currentUser) {
       console.log('Usuario actual cargado. Navegando a /');
-      // const timeout = setTimeout(() => {
-      //   navigate('/');
-      // }, 4000); // Short delay to show user data before navigating
-      // return () => clearTimeout(timeout);
+      const timeout = setTimeout(() => {
+        navigate('/');
+      }, 4000); // Short delay to show user data before navigating
+      return () => clearTimeout(timeout);
     }
   }, [currentUser, navigate]);
 
