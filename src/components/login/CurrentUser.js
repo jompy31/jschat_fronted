@@ -87,10 +87,10 @@ const UserList1 = (props) => {
   useEffect(() => {
     if (currentUser) {
       console.log('Usuario actual cargado. Navegando a /');
-      const timeout = setTimeout(() => {
-        navigate('/');
-      }, 4000); // Short delay to show user data before navigating
-      return () => clearTimeout(timeout);
+      // const timeout = setTimeout(() => {
+      //   navigate('/');
+      // }, 4000); // Short delay to show user data before navigating
+      // return () => clearTimeout(timeout);
     }
   }, [currentUser, navigate]);
 
