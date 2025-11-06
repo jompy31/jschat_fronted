@@ -89,7 +89,7 @@ const UserList1 = (props) => {
       console.log('Usuario actual cargado. Navegando a /');
       const timeout = setTimeout(() => {
         navigate('/');
-      }, 1000); // Short delay to show user data before navigating
+      }, 4000); // Short delay to show user data before navigating
       return () => clearTimeout(timeout);
     }
   }, [currentUser, navigate]);
