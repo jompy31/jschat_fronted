@@ -16,7 +16,7 @@ const RequestPasswordReset = () => {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:8000/api/request_reset_password/', { email });
+      const response = await axios.post('https://dirlux.com/programas/backendjsapp/api/request_reset_password/', { email });
       if (response.status === 200) {
         setMessage('Se ha enviado un enlace de recuperación a tu correo.');
         setEmail('');
