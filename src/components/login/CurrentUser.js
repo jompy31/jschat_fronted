@@ -37,10 +37,10 @@ const UserList1 = (props) => {
       }
     }
     // If all attempts fail
-    if (!userList.length) {
-      console.log('Máximo de intentos alcanzado. Forzando recarga.');
-      window.location.reload();
-    }
+    // if (!userList.length) {
+    //   console.log('Máximo de intentos alcanzado. Forzando recarga.');
+    //   window.location.reload();
+    // }
   };
 
  useEffect(() => {
@@ -50,21 +50,21 @@ const UserList1 = (props) => {
       console.log('Token no disponible aún. Esperando...');
       setErrorMessage(''); // Evitar error prematuro
 
-      if (retryCount.current === 0) {
-        retryCount.current += 1;
-        setTimeout(() => {
-          console.log('Reintentando recarga después de 4s...');
-          window.location.reload();
-        }, 4000);
-      } else if (retryCount.current === 1) {
-        retryCount.current += 1;
-        setTimeout(() => {
-          console.log('Segundo intento después de 6s...');
-          window.location.reload();
-        }, 6000);
-      } else {
-        console.log('Token no disponible después de múltiples intentos.');
-      }
+      // if (retryCount.current === 0) {
+      //   retryCount.current += 1;
+      //   setTimeout(() => {
+      //     console.log('Reintentando recarga después de 4s...');
+      //     window.location.reload();
+      //   }, 4000);
+      // } else if (retryCount.current === 1) {
+      //   retryCount.current += 1;
+      //   setTimeout(() => {
+      //     console.log('Segundo intento después de 6s...');
+      //     window.location.reload();
+      //   }, 6000);
+      // } else {
+      //   console.log('Token no disponible después de múltiples intentos.');
+      // }
     }
   }, [props.token]);
 
