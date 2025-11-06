@@ -1,11 +1,70 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaPlus, FaDownload, FaTable, FaColumns, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaPlus, FaDownload, FaTable, FaColumns, FaTrash } from 'react-icons/fa';
+import { DndContext, closestCenter, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { SortableContext, rectSortingStrategy, useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import OrderDetailModal from './detail';
 import CreateOrder from './create';
-import EventModal from './add_event'; // Updated import
 import ApiService from '../../../services/products';
-import axios from 'axios';
+import './orders.css';
+
+// Sortable Order Card Component
+const SortableOrderCard = ({ order, onClick, onDownloadPDF, onDeleteOrder, userRole }) => {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ 
+    id: order.id 
+  });
+
+  const style = {
+    transform: CSS.Transform.toString(transform ? { ...transform, scaleX: 1.05, scaleY: 1.05 } : null),
+    transition: transition || 'transform 0.2s ease',
+    opacity: isDragging ? 0.7 : 1,
+    transformOrigin: 'top left',
+    boxShadow: isDragging ? '0 8px 24px var(--shadow), 0 0 10px var(--accent-blue)' : 'none',
+    border: isDragging ? '2px solid var(--accent-blue)' : '1px solid var(--border)',
+    cursor: isDragging ? 'grabbing' : 'grab',
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className="pipeline-card"
+      onClick={onClick}
+    >
+      <p className="font-semibold">{order.order_number}</p>
+      <p>{order.customer?.name || 'N/A'}</p>
+      <p>{order.order_type}</p>
+      <p>{order.delivery_date || 'N/A'}</p>
+      <div className="pipeline-card-actions">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onDownloadPDF(order.id);
+          }}
+          className="btn-icon btn-info"
+          title="Descargar PDF"
+        >
+          <FaDownload />
+        </button>
+        {userRole === 'administrator' && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onDeleteOrder(order.id);
+            }}
+            className="btn-icon btn-danger"
+            title="Eliminar"
+          >
+            <FaTrash />
+          </button>
+        )}
+      </div>
+    </div>
+  );
+};
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -15,13 +74,17 @@ const Orders = () => {
   const [viewMode, setViewMode] = useState('table');
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [showEventModal, setShowEventModal] = useState(false);
-  const [editingEvent, setEditingEvent] = useState(null);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
-  const userRole1 = JSON.parse(localStorage.getItem('currentUser')); 
-  const userRole = userRole1.userprofile.staff_status;
+  const userRole1 = JSON.parse(localStorage.getItem('currentUser') || '{}');
+  const userRole = userRole1?.userprofile?.staff_status;
+
+  // Drag-and-drop sensors
+  const sensors = useSensors(
+    useSensor(MouseSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } })
+  );
 
   useEffect(() => {
     if (!token) {
@@ -35,6 +98,7 @@ const Orders = () => {
     try {
       const response = await ApiService.getAllOrders(token);
       const data = Array.isArray(response.data) ? response.data : [];
+      console.log('Fetched orders:', data);
       setOrders(data);
       setFilteredOrders(data);
       setError(null);
@@ -54,11 +118,11 @@ const Orders = () => {
       const aValue = a[field] || '';
       const bValue = b[field] || '';
       if (field === 'customer') {
-        return isAsc
-          ? b.customer?.name?.localeCompare(a.customer?.name || '') || 0
-          : a.customer?.name?.localeCompare(b.customer?.name || '') || 0;
+        const nameA = a.customer?.name || '';
+        const nameB = b.customer?.name || '';
+        return isAsc ? nameB.localeCompare(nameA) : nameA.localeCompare(nameB);
       }
-      return isAsc ? bValue.localeCompare(aValue) : aValue.localeCompare(bValue);
+      return isAsc ? bValue.localeCompare(aValue) : aValue.localeCompare(aValue);
     });
     setFilteredOrders(sortedOrders);
   };
@@ -80,172 +144,285 @@ const Orders = () => {
   };
 
   const handleDeleteOrder = async (orderId) => {
-    if (window.confirm('¿Estás seguro de eliminar este pedido?')) {
-      try {
-        const order = orders.find(o => o.id === orderId);
-        if (userRole === 'design' && !['design_pending', 'design_confirmed'].includes(order.status)) {
-          setError('Usuarios con rol de diseño solo pueden eliminar pedidos en estado "design_pending" o "design_confirmed".');
-          return;
-        }
-        if (userRole === 'customer' && order.customer_id !== JSON.parse(localStorage.getItem('currentUser'))?.id) {
-          setError('Los clientes solo pueden eliminar sus propios pedidos.');
-          return;
-        }
-        await ApiService.deleteOrder(orderId, token);
-        fetchOrders();
-        setError(null);
-      } catch (error) {
-        console.error('Error deleting order:', error);
-        const errorDetail = error.response?.data?.detail || 'Error al eliminar el pedido.';
-        setError(errorDetail);
+    if (!window.confirm('¿Estás seguro de eliminar este pedido?')) return;
+    try {
+      const order = orders.find((o) => o.id === orderId);
+      if (userRole === 'design' && !['design_pending', 'design_confirmed'].includes(order.status)) {
+        setError('Usuarios con rol de diseño solo pueden eliminar pedidos en estado "design_pending" o "design_confirmed".');
+        return;
       }
+      if (userRole === 'customer' && order.customer_id !== userRole1?.id) {
+        setError('Los clientes solo pueden eliminar sus propios pedidos.');
+        return;
+      }
+      await ApiService.deleteOrder(orderId, token);
+      fetchOrders();
+      setError(null);
+    } catch (error) {
+      console.error('Error deleting order:', error);
+      const errorDetail = error.response?.data?.detail || 'Error al eliminar el pedido.';
+      setError(errorDetail);
     }
   };
 
   const handleDeleteEvent = async (orderId, eventId) => {
-    if (window.confirm('¿Estás seguro de eliminar este evento?')) {
-      try {
-        await axios.delete(`http://localhost:8000/api/orders/${orderId}/events/${eventId}/`, {
-          headers: { Authorization: `Token ${token}` },
-        });
-        fetchOrders();
-        setError(null);
-      } catch (error) {
-        console.error('Error deleting event:', error);
-        const errorDetail = error.response?.data?.detail || 'Error al eliminar el evento.';
-        setError(errorDetail);
-      }
+    if (!window.confirm('¿Estás seguro de eliminar este evento?')) return;
+    try {
+      await ApiService.deleteOrderEvent(orderId, eventId, token);
+      fetchOrders();
+      setError(null);
+    } catch (error) {
+      console.error('Error deleting event:', error);
+      const errorDetail = error.response?.data?.error || error.response?.data?.detail || 'Error al eliminar el evento.';
+      setError(errorDetail);
     }
   };
 
-  const pipelineStatuses = [
+  const handleDeletePayment = async (paymentId) => {
+    if (!window.confirm('¿Estás seguro de eliminar este pago?')) return;
+    try {
+      await ApiService.deletePayment(paymentId, token);
+      fetchOrders();
+      setError(null);
+    } catch (error) {
+      console.error('Error deleting payment:', error);
+      const errorDetail = error.response?.data?.error || error.response?.data?.detail || 'Error al eliminar el pago.';
+      setError(errorDetail);
+    }
+  };
+
+  // === handleDragEnd CORREGIDO AL 100% ===
+const handleDragEnd = async (event) => {
+  const { active, over } = event;
+
+  console.log('Drag event:', { active, over });
+
+  if (!over) {
+    console.warn('Dropped outside any column');
+    return;
+  }
+
+  const orderId = active.id; // ID del pedido que se mueve
+
+  // CLAVE: Usar containerId de la columna destino
+  const targetStatus = over.data?.current?.sortable?.containerId;
+
+  if (!targetStatus) {
+    console.error('No se pudo determinar el estado destino (containerId no encontrado)');
+    setError('Error: No se pudo detectar la columna destino.');
+    return;
+  }
+
+  console.log('Drag ended:', {
+    orderId,
+    targetStatus,
+    activeId: active.id,
+    overId: over.id,
+    containerId: targetStatus,
+  });
+
+  // Validar estado
+  const validStatuses = [
     'pending',
-    'in_progress',
     'design_pending',
     'design_confirmed',
+    'in_progress',
+    'completed',
+  ];
+
+  if (!validStatuses.includes(targetStatus)) {
+    console.error('Invalid target status:', targetStatus);
+    setError(`Estado inválido: ${targetStatus}`);
+    return;
+  }
+
+  const order = orders.find((o) => o.id === orderId);
+  if (!order) {
+    console.error('Order not found:', orderId);
+    setError('Pedido no encontrado.');
+    return;
+  }
+
+  if (order.status === targetStatus) {
+    console.log('No change in status');
+    return;
+  }
+
+  try {
+    const formData = new FormData();
+    formData.append('status', targetStatus);
+
+    console.log('Enviando actualización:', { orderId, status: targetStatus });
+    for (const [k, v] of formData.entries()) {
+      console.log(`FormData → ${k}: ${v}`);
+    }
+
+    await ApiService.updateOrder(orderId, formData, token);
+    console.log('Estado actualizado en el servidor');
+
+    // Refrescar lista
+    await fetchOrders();
+    setError(null);
+  } catch (error) {
+    console.error('Error al actualizar estado:', error.response?.data || error);
+    const msg = error.response?.data?.detail || 'Error al guardar el estado.';
+    setError(msg);
+  }
+};
+
+  // === ESTADOS VÁLIDOS PARA COLUMNAS ===
+  const pipelineStatuses = [
+    'pending',
+    'design_pending',
+    'design_confirmed',
+    'in_progress',
     'completed',
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white p-40">
-      <div className="max-w-7xl mx-auto">
+    <div className="orders-container">
+      <div className="orders-content">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-bold text-blue-400 animate-pulse">Gestión de Pedidos</h2>
+          <h2 className="page-title">Gestión de Pedidos</h2>
           <div className="flex space-x-4">
             <button
               onClick={() => setShowCreateModal(true)}
-              className="flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-all duration-300 transform hover:scale-105"
+              className="btn btn-primary"
             >
-              <FaPlus className="mr-2" /> Crear Pedido
+              <FaPlus /> Crear Pedido
             </button>
             <button
               onClick={() => setViewMode(viewMode === 'table' ? 'pipeline' : 'table')}
-              className="flex items-center px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-all duration-300 transform hover:scale-105"
+              className="btn btn-secondary"
             >
-              {viewMode === 'table' ? <FaColumns className="mr-2" /> : <FaTable className="mr-2" />}
+              {viewMode === 'table' ? <FaColumns /> : <FaTable />}
               {viewMode === 'table' ? 'Vista Pipeline' : 'Vista Tabla'}
             </button>
           </div>
         </div>
 
         {error && (
-          <div className="bg-red-600 text-white p-4 rounded-lg mb-4 animate-shake">
+          <div className="alert alert-error">
             {error}
           </div>
         )}
 
         {viewMode === 'table' ? (
-          <div className="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-            <table className="w-full">
-              <thead className="bg-gradient-to-r from-blue-600 to-purple-600">
-                <tr>
-                  {['order_number', 'customer', 'status', 'order_type', 'delivery_date', 'Acciones'].map((header) => (
-                    <th
-                      key={header}
-                      className="px-4 py-3 text-left cursor-pointer hover:bg-gray-600 transition-all duration-200"
-                      onClick={() => header !== 'Acciones' && handleSort(header === 'customer' ? 'customer' : header)}
-                    >
-                      {header === 'customer' ? 'Cliente' : header === 'order_number' ? 'Nº Orden' : header === 'status' ? 'Estado' : header === 'order_type' ? 'Tipo' : header === 'delivery_date' ? 'Fecha Entrega' : header}
-                      {sortField === (header === 'customer' ? 'customer' : header) && (
-                        <span>{sortOrder === 'asc' ? ' ↑' : ' ↓'}</span>
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {Array.isArray(filteredOrders) && filteredOrders.length > 0 ? (
-                  filteredOrders.map((order) => (
-                    <tr
-                      key={order.id}
-                      className="border-b border-gray-700 hover:bg-gray-600 transition-all duration-200 cursor-pointer"
-                      onClick={() => setSelectedOrder(order)}
-                    >
-                      <td className="px-4 py-3">{order.order_number}</td>
-                      <td className="px-4 py-3">{order.customer?.name || 'N/A'}</td>
-                      <td className="px-4 py-3">{order.status}</td>
-                      <td className="px-4 py-3">{order.order_type}</td>
-                      <td className="px-4 py-3">{order.delivery_date || 'N/A'}</td>
-                      <td className="px-4 py-3 flex space-x-2">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDownloadPDF(order.id);
-                          }}
-                          className="text-blue-400 hover:text-blue-300"
-                        >
-                          <FaDownload />
-                        </button>
-                        {userRole === 'administrator' && (
+          <div className="card">
+            <div className="table-container">
+              <table className="table">
+                <thead>
+                  <tr>
+                    {['order_number', 'customer', 'status', 'order_type', 'delivery_date', 'Acciones'].map((header) => (
+                      <th
+                        key={header}
+                        onClick={() => header !== 'Acciones' && handleSort(header === 'customer' ? 'customer' : header)}
+                        style={{ cursor: header !== 'Acciones' ? 'pointer' : 'default' }}
+                      >
+                        {header === 'customer' ? 'Cliente' :
+                         header === 'order_number' ? 'Nº Orden' :
+                         header === 'status' ? 'Estado' :
+                         header === 'order_type' ? 'Tipo' :
+                         header === 'delivery_date' ? 'Fecha Entrega' : header}
+                        {sortField === (header === 'customer' ? 'customer' : header) && (
+                          <span className="ml-1">{sortOrder === 'asc' ? 'Up' : 'Down'}</span>
+                        )}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredOrders.length > 0 ? (
+                    filteredOrders.map((order) => (
+                      <tr
+                        key={order.id}
+                        className="table-row"
+                        onClick={() => setSelectedOrder(order)}
+                      >
+                        <td>{order.order_number}</td>
+                        <td>{order.customer?.name || 'N/A'}</td>
+                        <td>{order.status}</td>
+                        <td>{order.order_type}</td>
+                        <td>{order.delivery_date || 'N/A'}</td>
+                        <td className="flex space-x-2">
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleDeleteOrder(order.id);
+                              handleDownloadPDF(order.id);
                             }}
-                            className="text-red-400 hover:text-red-300"
+                            className="btn-icon btn-info"
+                            title="Descargar PDF"
                           >
-                            Eliminar
+                            <FaDownload />
                           </button>
-                        )}
+                          {userRole === 'administrator' && (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteOrder(order.id);
+                              }}
+                              className="btn-icon btn-danger"
+                              title="Eliminar"
+                            >
+                              <FaTrash />
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="6" className="text-center py-4" style={{ color: 'var(--text-muted)' }}>
+                        No hay pedidos disponibles.
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="6" className="px-4 py-3 text-center">
-                      No hay pedidos disponibles.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-            {pipelineStatuses.map((status) => (
-              <div key={status} className="bg-gray-800 rounded-lg p-4 shadow-lg">
-                <h2 className="text-xl font-semibold mb-4 capitalize text-blue-400">{status.replace('_', ' ')}</h2>
-                {Array.isArray(filteredOrders) && filteredOrders.filter((order) => order.status === status).length > 0 ? (
-                  filteredOrders
-                    .filter((order) => order.status === status)
-                    .map((order) => (
-                      <div
-                        key={order.id}
-                        className="bg-gray-700 p-3 mb-2 rounded-lg cursor-pointer hover:bg-gray-600 transition-all duration-200 shadow-md"
-                        onClick={() => setSelectedOrder(order)}
-                      >
-                        <p className="font-semibold">{order.order_number}</p>
-                        <p>{order.customer?.name || 'N/A'}</p>
-                        <p>{order.order_type}</p>
-                        <p>{order.delivery_date || 'N/A'}</p>
-                      </div>
-                    ))
-                ) : (
-                  <p className="text-gray-400">No hay pedidos en este estado.</p>
-                )}
-              </div>
-            ))}
-          </div>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+              {pipelineStatuses.map((status) => (
+                <div
+                  key={status}
+                  id={status} // ID de la columna = estado
+                  className="pipeline-column card"
+                >
+                  <h3 className="text-lg font-semibold mb-3 capitalize" style={{ color: 'var(--accent-blue)' }}>
+                    {status.replace('_', ' ')}
+                  </h3>
+                  <SortableContext
+                    id={status}
+                    items={filteredOrders.filter((o) => o.status === status).map((o) => o.id)}
+                    strategy={rectSortingStrategy}
+                  >
+                    {filteredOrders.filter((o) => o.status === status).length > 0 ? (
+                      filteredOrders
+                        .filter((o) => o.status === status)
+                        .map((order) => (
+                          <SortableOrderCard
+                            key={order.id}
+                            order={order}
+                            onClick={() => setSelectedOrder(order)}
+                            onDownloadPDF={handleDownloadPDF}
+                            onDeleteOrder={handleDeleteOrder}
+                            userRole={userRole}
+                          />
+                        ))
+                    ) : (
+                      <p style={{ color: 'var(--text-muted)' }}>No hay pedidos en este estado.</p>
+                    )}
+                  </SortableContext>
+                </div>
+              ))}
+            </div>
+          </DndContext>
         )}
 
         {selectedOrder && (
@@ -253,29 +430,14 @@ const Orders = () => {
             order={selectedOrder}
             onClose={() => setSelectedOrder(null)}
             onUpdate={fetchOrders}
-            onEditEvent={(event) => {
-              setEditingEvent(event);
-              setShowEventModal(true);
-            }}
             onDeleteEvent={(eventId) => handleDeleteEvent(selectedOrder.id, eventId)}
+            onDeletePayment={(paymentId) => handleDeletePayment(paymentId)}
           />
         )}
         {showCreateModal && (
           <CreateOrder
             onClose={() => setShowCreateModal(false)}
             onCreate={fetchOrders}
-          />
-        )}
-        {showEventModal && (
-          <EventModal
-            orderId={selectedOrder?.id}
-            event={editingEvent}
-            isEdit={!!editingEvent}
-            onClose={() => {
-              setShowEventModal(false);
-              setEditingEvent(null);
-            }}
-            onEventAdded={fetchOrders}
           />
         )}
       </div>

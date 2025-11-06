@@ -4,6 +4,7 @@ import EventList from './components/EventList';
 import EventCalendar from './components/EventCalendar';
 import AddEventModal from './components/AddEventModal';
 import { fetchEvents } from './utils/eventUtils';
+import "./Calendar.css";
 
 const Eventos = () => {
   const [eventos, setEventos] = useState([]);
@@ -27,19 +28,18 @@ const Eventos = () => {
       try {
         const parsedData = JSON.parse(currentUserData);
         setCurrentUser(parsedData);
+        setIsLoggedIn(true);
       } catch (error) {
         console.error('Error parsing currentUser data:', error);
       }
     }
   }, []);
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      setIsLoggedIn(true);
-      fetchEvents(token, setEventos);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (token && isLoggedIn) {
+  //     fetchEvents(token, setEventos);
+  //   }
+  // }, [token, isLoggedIn]);
 
   const handleCloseModal = () => {
     setSelectedEvent(null);
@@ -54,27 +54,34 @@ const Eventos = () => {
   };
 
   return (
-    <div className="relative flex flex-col md:flex-row w-full min-h-screen bg-gray-100 p-6" style={{ marginTop: '6%' }}>
-      <EventList
-        eventos={eventos}
-        isLoggedIn={isLoggedIn}
-        currentUser={currentUser}
-        hoveredEvent={hoveredEvent}
-        setHoveredEvent={setHoveredEvent}
-        setSelectedEvent={setSelectedEvent}
-        setShowAddModal={setShowAddModal}
-        setNewEvent={setNewEvent}
-        setIsEditMode={setIsEditMode}
-        setEventos={setEventos}
-        token={token}
-      />
-      <EventCalendar
-        eventos={eventos}
-        setSelectedEvent={setSelectedEvent}
-        setShowAddModal={setShowAddModal}
-        setIsEditMode={setIsEditMode}
-        setNewEvent={setNewEvent}
-      />
+    <div className="calendar-container">
+      <div className="calendar-layout">
+        <div className="calendar-list">
+          <EventList
+            eventos={eventos}
+            isLoggedIn={isLoggedIn}
+            currentUser={currentUser}
+            hoveredEvent={hoveredEvent}
+            setHoveredEvent={setHoveredEvent}
+            setSelectedEvent={setSelectedEvent}
+            setShowAddModal={setShowAddModal}
+            setNewEvent={setNewEvent}
+            setIsEditMode={setIsEditMode}
+            setEventos={setEventos}
+            token={token}
+          />
+        </div>
+        <div className="calendar-view">
+          <EventCalendar
+            eventos={eventos}
+            setSelectedEvent={setSelectedEvent}
+            setShowAddModal={setShowAddModal}
+            setIsEditMode={setIsEditMode}
+            setNewEvent={setNewEvent}
+          />
+        </div>
+      </div>
+
       <AddEventModal
         show={showAddModal}
         handleClose={handleCloseModal}

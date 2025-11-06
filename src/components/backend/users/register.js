@@ -25,17 +25,6 @@ function Signup() {
   });
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const navigate = useNavigate();
-  const [screenSize, setScreenSize] = useState('medium');
-
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      setScreenSize(width <= 767 ? 'small' : width <= 1023 ? 'medium' : 'large');
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -84,16 +73,8 @@ function Signup() {
       }, token);
 
       setFormData({
-        email: '',
-        first_name: '',
-        last_name: '',
-        password: '',
-        re_password: '',
-        company: '',
-        id_number: '',
-        id_type: '',
-        phone_number: '',
-        address: '',
+        email: '', first_name: '', last_name: '', password: '', re_password: '',
+        company: '', id_number: '', id_type: '', phone_number: '', address: '',
         staff_status: 'customer',
       });
 
@@ -107,110 +88,123 @@ function Signup() {
       } else if (errorMsg.includes('El número de identificación ya está registrado')) {
         toast.error('El número de identificación ya está registrado. Contacta a soporte@jsport.com.');
       } else {
-        toast.error(
-          <div>
-            Registro fallido. {' '}
-            <a href="/users"></a>.
-          </div>
-        );
+        toast.error('Registro fallido. Inténtalo de nuevo.');
       }
     }
   };
 
   return (
-    <div className="signup-page flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="auth-wrapper p-4 w-full max-w-3xl">
-        <div className="bg-white rounded-xl shadow-2xl overflow-hidden">
-          <div className="p-6">
-            <div className="text-center mb-6">
-              <img src={logo} alt="J SPORT logo" className="signup-logo mx-auto w-32" />
-              <h1 className="signup-title text-2xl font-bold text-blue-900 mt-4">¡Regístrate en J SPORT!</h1>
-              <p className="signup-subtitle text-sm text-blue-900">Crea tu cuenta para personalizar tus productos deportivos.</p>
-            </div>
-            <form onSubmit={handleSubmit} className="w-full">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="font-medium text-blue-900 text-sm py-2">Nombre</div>
-                <div className="py-2">
-                  <input
-                    type="text"
-                    name="first_name"
-                    value={formData.first_name}
-                    onChange={onChange}
-                    required
-                    className="form-control-jsport w-full px-3 py-2 border border-blue-900 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600"
-                  />
-                </div>
-                <div className="font-medium text-blue-900 text-sm py-2">Apellidos</div>
-                <div className="py-2">
-                  <input
-                    type="text"
-                    name="last_name"
-                    value={formData.last_name}
-                    onChange={onChange}
-                    required
-                    className="form-control-jsport w-full px-3 py-2 border border-blue-900 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600"
-                  />
-                </div>
-                <div className="font-medium text-blue-900 text-sm py-2">Número de Identificación</div>
-                <div className="py-2">
-                  <input
-                    type="text"
-                    name="id_number"
-                    value={formData.id_number}
-                    onChange={onChange}
-                    required
-                    className="form-control-jsport w-full px-3 py-2 border border-blue-900 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600"
-                  />
-                </div>
-                <div className="font-medium text-blue-900 text-sm py-2">Tipo de Identificación</div>
-                <div className="py-2">
-                  <select
-                    name="id_type"
-                    value={formData.id_type}
-                    onChange={onChange}
-                    required
-                    className="form-control-jsport w-full px-3 py-2 border border-blue-900 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600"
-                  >
-                    <option value="">Seleccionar</option>
-                    <option value="Cédula">Cédula</option>
-                    <option value="Pasaporte">Pasaporte</option>
-                  </select>
-                </div>
-                <div className="font-medium text-blue-900 text-sm py-2">Correo Electrónico</div>
-                <div className="py-2">
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={onChange}
-                    required
-                    className="form-control-jsport w-full px-3 py-2 border border-blue-900 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600"
-                  />
-                </div>
-                <div className="font-medium text-blue-900 text-sm py-2">Número de Teléfono</div>
-                <div className="py-2">
-                  <input
-                    type="tel"
-                    name="phone_number"
-                    value={formData.phone_number}
-                    onChange={onChange}
-                    required
-                    className="form-control-jsport w-full px-3 py-2 border border-blue-900 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600"
-                  />
-                </div>
-                <div className="font-medium text-blue-900 text-sm py-2">Dirección</div>
-                <div className="py-2">
-                  <input
-                    type="text"
-                    name="address"
-                    value={formData.address}
-                    onChange={onChange}
-                    required
-                    className="form-control-jsport w-full px-3 py-2 border border-blue-900 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600"
-                  />
-                </div>
-                <div className="font-medium text-blue-900 text-sm py-2">Contraseña</div>
-                <div className="py-2 relative">
+    <div className="signup-page">
+      <div className="auth-wrapper">
+        <div className="signup-card">
+          <img src={logo} alt="J SPORT logo" className="signup-logo" />
+          <h1 className="signup-title">¡Regístrate en J SPORT!</h1>
+          <p className="signup-subtitle">Crea tu cuenta para personalizar tus productos deportivos.</p>
+
+          <form onSubmit={handleSubmit}>
+            <div className="form-grid">
+              <div>
+                <label className="form-label">Nombre</label>
+                <input
+                  type="text"
+                  name="first_name"
+                  value={formData.first_name}
+                  onChange={onChange}
+                  required
+                  className="form-input"
+                />
+              </div>
+
+              <div>
+                <label className="form-label">Apellidos</label>
+                <input
+                  type="text"
+                  name="last_name"
+                  value={formData.last_name}
+                  onChange={onChange}
+                  required
+                  className="form-input"
+                />
+              </div>
+
+              <div>
+                <label className="form-label">Número de Identificación</label>
+                <input
+                  type="text"
+                  name="id_number"
+                  value={formData.id_number}
+                  onChange={onChange}
+                  required
+                  className="form-input"
+                />
+              </div>
+
+              <div>
+                <label className="form-label">Tipo de Identificación</label>
+                <select
+                  name="id_type"
+                  value={formData.id_type}
+                  onChange={onChange}
+                  required
+                  className="form-select"
+                >
+                  <option value="">Seleccionar</option>
+                  <option value="Cédula">Cédula</option>
+                  <option value="Pasaporte">Pasaporte</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="form-label">Correo Electrónico</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={onChange}
+                  required
+                  className="form-input"
+                />
+              </div>
+
+              <div>
+                <label className="form-label">Número de Teléfono</label>
+                <input
+                  type="tel"
+                  name="phone_number"
+                  value={formData.phone_number}
+                  onChange={onChange}
+                  required
+                  className="form-input"
+                />
+              </div>
+
+              <div>
+                <label className="form-label">Dirección</label>
+                <input
+                  type="text"
+                  name="address"
+                  value={formData.address}
+                  onChange={onChange}
+                  required
+                  className="form-input"
+                />
+              </div>
+
+              <div>
+                <label className="form-label">Empresa</label>
+                <input
+                  type="text"
+                  name="company"
+                  value={formData.company}
+                  onChange={onChange}
+                  required
+                  className="form-input"
+                />
+              </div>
+
+              <div>
+                <label className="form-label">Contraseña</label>
+                <div className="password-group">
                   <input
                     type={isPasswordVisible ? 'text' : 'password'}
                     name="password"
@@ -218,53 +212,42 @@ function Signup() {
                     onChange={onChange}
                     minLength="6"
                     required
-                    className="form-control-jsport w-full px-3 py-2 border border-blue-900 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600"
+                    className="form-input"
                   />
                   <button
                     type="button"
-                    className="btn-toggle-password absolute right-2 top-1/2 transform -translate-y-1/2 text-blue-900 hover:text-red-600"
+                    className="password-toggle"
                     onClick={() => setIsPasswordVisible(!isPasswordVisible)}
                     aria-label={isPasswordVisible ? "Ocultar contraseña" : "Mostrar contraseña"}
                   >
-                    {isPasswordVisible ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+                    {isPasswordVisible ? <FiEyeOff size={18} /> : <FiEye size={18} />}
                   </button>
-                  <div className="form-text text-xs text-blue-700 mt-1">Mínimo 6 caracteres</div>
                 </div>
-                <div className="font-medium text-blue-900 text-sm py-2">Confirmar Contraseña</div>
-                <div className="py-2">
-                  <input
-                    type={isPasswordVisible ? 'text' : 'password'}
-                    name="re_password"
-                    value={formData.re_password}
-                    onChange={onChange}
-                    minLength="6"
-                    required
-                    className="form-control-jsport w-full px-3 py-2 border border-blue-900 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600"
-                  />
-                </div>
-                <div className="font-medium text-blue-900 text-sm py-2">Empresa</div>
-                <div className="py-2">
-                  <input
-                    type="text"
-                    name="company"
-                    value={formData.company}
-                    onChange={onChange}
-                    required
-                    className="form-control-jsport w-full px-3 py-2 border border-blue-900 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600"
-                  />
-                </div>
+                <div className="form-text">Mínimo 6 caracteres</div>
               </div>
-              <div className="text-center mt-6">
-                <button
-                  type="submit"
-                  className="btn-jsport bg-red-600 text-white border-2 border-red-600 rounded-md px-6 py-2 font-medium hover:bg-red-700 hover:border-red-700 disabled:bg-gray-400 disabled:border-gray-400 transition-colors"
-                  disabled={!(formData.email && formData.first_name && formData.last_name && formData.password && formData.re_password && formData.company && formData.id_number && formData.id_type && formData.phone_number && formData.address)}
-                >
-                  Registrarse
-                </button>
+
+              <div>
+                <label className="form-label">Confirmar Contraseña</label>
+                <input
+                  type={isPasswordVisible ? 'text' : 'password'}
+                  name="re_password"
+                  value={formData.re_password}
+                  onChange={onChange}
+                  minLength="6"
+                  required
+                  className="form-input"
+                />
               </div>
-            </form>
-          </div>
+            </div>
+
+            <button
+              type="submit"
+              className="btn-submit"
+              disabled={!(formData.email && formData.first_name && formData.last_name && formData.password && formData.re_password && formData.company && formData.id_number && formData.id_type && formData.phone_number && formData.address)}
+            >
+              Registrarse
+            </button>
+          </form>
         </div>
       </div>
       <ToastContainer position="top-right" />

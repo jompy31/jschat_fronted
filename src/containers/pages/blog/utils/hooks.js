@@ -240,13 +240,15 @@ export const useBlogManagement = () => {
     }
   };
 
-  const toggleLike = async (blogPostId) => {
-    if (!token) {
-      alert("Necesitas autenticarte para interactuar en nuestros blogs.");
-      return;
-    }
+ const toggleLike = async (blogPostId) => {
+  if (!token) {
+    alert("Necesitas autenticarte para interactuar en nuestros blogs.");
+    return;
+  }
 
-    const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("userId");
+
+  try {
     const likedBlogPost = blogPosts.find((blogPost) => blogPost.id === blogPostId);
 
     if (likedBlogPost.likes.some((like) => like.user === userId)) {
@@ -254,9 +256,22 @@ export const useBlogManagement = () => {
     } else {
       await createLike(blogPostId, userId, token);
     }
-    const posts = await fetchBlogPosts();
-    setBlogPosts(posts);
-  };
+
+    // Refrescar los posts
+    const updatedPosts = await fetchBlogPosts();
+
+    // LOG CLARO: Mostrar cuántos likes tiene CADA post
+    updatedPosts.forEach(post => {
+      console.log(`Publicación ID: ${post.id} | Título: "${post.title}" | Likes: ${post.likes.length}`);
+    });
+
+    // Forzar nueva referencia para que React detecte el cambio
+    setBlogPosts([...updatedPosts]);
+  } catch (error) {
+    console.error("Error al actualizar like:", error);
+    toast.error("Error al dar like. Intenta de nuevo.");
+  }
+};
 
   const toggleFullScreen = () => {
     setIsFullScreen(!isFullScreen);

@@ -11,7 +11,7 @@ const EventCalendar = ({ eventos, setSelectedEvent, setShowAddModal, setIsEditMo
     setIsEditMode(true);
     setShowAddModal(true);
     setNewEvent({
-      id: event.id, // Añadir el id
+      id: event.id,
       title: event.title,
       memo: event.memo || '',
       created: moment(event.start).toDate(),
@@ -19,8 +19,20 @@ const EventCalendar = ({ eventos, setSelectedEvent, setShowAddModal, setIsEditMo
     });
   };
 
+  const handleSelectSlot = () => {
+    setSelectedEvent(null);
+    setShowAddModal(true);
+    setIsEditMode(false);
+    setNewEvent({
+      title: '',
+      memo: '',
+      created: new Date(),
+      complete: false,
+    });
+  };
+
   return (
-    <div style={{ width: '100%', overflowX: 'auto' }}>
+    <div className="rbc-calendar">
       <BigCalendar
         localizer={localizer}
         events={eventos.map((evento) => ({
@@ -33,20 +45,11 @@ const EventCalendar = ({ eventos, setSelectedEvent, setShowAddModal, setIsEditMo
         }))}
         startAccessor="start"
         endAccessor="end"
-        style={{ height: 500 }}
+        style={{ height: 600 }}
         onSelectEvent={handleEventClick}
-        onSelectSlot={() => {
-          setSelectedEvent(null);
-          setShowAddModal(true); // Open modal for adding new event
-          setIsEditMode(false); // Ensure it's not in edit mode
-          setNewEvent({
-            title: '',
-            memo: '',
-            created: new Date(),
-            complete: false,
-          });
-        }}
-        popup={true}
+        onSelectSlot={handleSelectSlot}
+        selectable
+        popup
         tooltipAccessor="memo"
       />
     </div>

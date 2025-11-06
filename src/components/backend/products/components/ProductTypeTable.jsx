@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { deleteProductType } from '../utils/api';
-import "../../../backend/products/components/products.css";
 
 const ProductTypeTable = ({ productTypes, setProductTypes, token, isAuthorized, onEdit }) => {
   const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'asc' });
@@ -28,47 +27,43 @@ const ProductTypeTable = ({ productTypes, setProductTypes, token, isAuthorized, 
   };
 
   return (
-    <div className="bg-gray-800 bg-opacity-80 backdrop-blur-md rounded-lg shadow-lg p-6">
+    <div className="table-container">
       {!Array.isArray(productTypes) || productTypes.length === 0 ? (
-        <p className="text-white text-center">No hay tipos de productos disponibles.</p>
+        <p className="text-center" style={{ color: 'var(--text-secondary)' }}>
+          No hay tipos de productos disponibles.
+        </p>
       ) : (
-        <table className="w-full text-left">
+        <table className="table">
           <thead>
-            <tr className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-              <th className="p-3 cursor-pointer" onClick={() => sortData('name')}>
+            <tr>
+              <th onClick={() => sortData('name')} style={{ cursor: 'pointer' }}>
                 Nombre {sortConfig.key === 'name' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
               </th>
-              <th className="p-3 cursor-pointer" onClick={() => sortData('base_price')}>
+              <th onClick={() => sortData('base_price')} style={{ cursor: 'pointer' }}>
                 Precio Base {sortConfig.key === 'base_price' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
               </th>
-              <th className="p-3 cursor-pointer" onClick={() => sortData('delivery_time_days')}>
+              <th onClick={() => sortData('delivery_time_days')} style={{ cursor: 'pointer' }}>
                 Tiempo de Entrega {sortConfig.key === 'delivery_time_days' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
               </th>
-              <th className="p-3 cursor-pointer" onClick={() => sortData('daily_production_capacity')}>
+              <th onClick={() => sortData('daily_production_capacity')} style={{ cursor: 'pointer' }}>
                 Capacidad Diaria {sortConfig.key === 'daily_production_capacity' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
               </th>
-              {isAuthorized && <th className="p-3">Acciones</th>}
+              {isAuthorized && <th>Acciones</th>}
             </tr>
           </thead>
           <tbody>
             {productTypes.map(type => (
-              <tr key={type.id} className="border-b border-gray-700 hover:bg-gray-700 transition-all">
-                <td className="p-3">{type.name}</td>
-                <td className="p-3">₡{type.base_price}</td>
-                <td className="p-3">{type.delivery_time_days} días</td>
-                <td className="p-3">{type.daily_production_capacity}</td>
+              <tr key={type.id}>
+                <td>{type.name}</td>
+                <td>₡{type.base_price}</td>
+                <td>{type.delivery_time_days} días</td>
+                <td>{type.daily_production_capacity}</td>
                 {isAuthorized && (
-                  <td className="p-3">
-                    <button
-                      onClick={() => onEdit(type)}
-                      className="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded mr-2"
-                    >
+                  <td>
+                    <button onClick={() => onEdit(type)} className="btn btn-warning">
                       Editar
                     </button>
-                    <button
-                      onClick={() => handleDelete(type.id)}
-                      className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded"
-                    >
+                    <button onClick={() => handleDelete(type.id)} className="btn btn-danger">
                       Eliminar
                     </button>
                   </td>

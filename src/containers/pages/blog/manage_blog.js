@@ -1,25 +1,25 @@
 import React from "react";
 import { Button, Row, Tooltip } from "react-bootstrap";
 import { AiOutlinePlus } from "react-icons/ai";
-import BlogPostCard from "./components/BlogPostCard.js";
+import BlogPostCard from "./components/BlogPostCard";
 import BlogPostModal from "./components/BlogPostModal";
 import CreateEditModal from "./components/CreateEditModal";
 import ImageCarousel from "./components/ImageCarousel";
 import { useBlogManagement } from "./utils/hooks";
 import "./manage_blog.css";
+import { useMediaQuery } from "react-responsive";
 
 const ManageBlog = () => {
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+  const isMini = useMediaQuery({ query: "(max-width: 340px)" });
+
   const {
     blogPosts,
-    title,
-    setTitle,
-    content,
-    setContent,
-    image,
-    setImage,
+    title, setTitle,
+    content, setContent,
+    image, setImage,
     selectedBlogId,
-    isModalOpen,
-    setIsModalOpen,
+    isModalOpen, setIsModalOpen,
     selectedImage,
     isImageModalOpen,
     showComments,
@@ -38,86 +38,50 @@ const ManageBlog = () => {
     toggleComments,
     handleCommentChange,
     handleCreateComment,
-    handleDeleteComment, // Added to destructure from hook
+    handleDeleteComment,
     toggleLike,
     toggleFullScreen,
     renderLikesTooltip,
   } = useBlogManagement();
 
   return (
-    <div
-      style={{
-        width: "100%",
-        minHeight: "100vh",
-        overflow: "auto",
-        padding: "20px",
-      }}
-    >
-      <br />
-      <br />
-      <br />
-      {user !== null && (
-        <div
-          className="create-blog-button"
-          style={{
-            position: "fixed",
-            top: "110px", // Adjusted to be below the title
-            left: "20px", // Positioned in the top-left corner
-            zIndex: 1000, // Ensure it stays above other elements
-          }}
-        >
-          <Tooltip title="Crear nueva publicación">
+    <div className="manage-blog-container">
+      {/* Botón Crear */}
+      {user && (
+        <div className="flex justify-center mb-8 sm:mb-10 px-3 xs:px-4 sm:px-6 md:px-8">
+          <Tooltip title="Crear una nueva publicación">
             <Button
-              aria-label="Crear una nueva publicación de blog"
-              style={{
-                background: "linear-gradient(135deg, #ff416c, #ff4b2b)", // Vibrant gradient
-                border: "none",
-                borderRadius: "50%",
-                width: "56px", // Larger for better touch target
-                height: "56px",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                cursor: "pointer",
-                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
-                transition: "transform 0.2s, box-shadow 0.2s",
-              }}
-              onClick={() => {
-                console.log("Button clicked! Opening create post modal...");
-                setIsModalOpen(true);
-              }}
               className="create-blog-btn"
+              onClick={() => setIsModalOpen(true)}
             >
-              <AiOutlinePlus
-                size={28}
-                color="white"
-                style={{ pointerEvents: "none" }}
-              />
+              <AiOutlinePlus size={22} />
+              <span className="hidden xs:inline">CREAR NUEVA PUBLICACIÓN</span>
+              <span className="xs:hidden">CREAR</span>
             </Button>
           </Tooltip>
         </div>
       )}
-      <div style={{ display: "flex" }}>
-        <div style={{ width: "100%", marginTop: "5%" }}>
-          <br />
-          <h2
+
+      <div className="flex flex-col md:flex-row gap-6 sm:gap-8 max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 md:px-8">
+        {/* Lista de Posts */}
+        <div className="w-full md:w-3/5">
+          {/* TÍTULO RESPONSIVO */}
+          <h2 
             className="blog-title"
             style={{
-              fontFamily: "'Poppins', sans-serif", // Modern, clean font
-              fontSize: "2.0rem", // Larger for prominence
-              fontWeight: 700, // Bold for emphasis
-              background: "linear-gradient(90deg, #ff416c, #ff4b2b)", // Vibrant gradient
-              WebkitBackgroundClip: "text", // Gradient text effect
-              WebkitTextFillColor: "transparent", // Required for gradient text
-              textShadow: "1px 1px 3px rgba(0, 0, 0, 0.2)", // Subtle shadow
-              marginBottom: "20px", // Space below title
-              textTransform: "uppercase", // Matches social media aesthetic
-              letterSpacing: "0.5px", // Slight spacing for readability
+              fontSize: 'clamp(1.8rem, 6.5vw, 3.5rem)',
+              lineHeight: '1.15',
+              wordBreak: 'break-word',
+              overflowWrap: 'break-word',
+              hyphens: 'auto',
+              padding: '0 0.5rem',
+              maxWidth: '100%'
             }}
           >
-            Publicaciones del Blog JSport
+            Publicaciones del Blog JSPORT
           </h2>
-          <Row>
+
+          <Row className="grid grid-cols-1 gap-5 sm:gap-6">
             {blogPosts.map((blogPost) => (
               <BlogPostCard
                 key={blogPost.id}
@@ -133,26 +97,32 @@ const ManageBlog = () => {
                 openEditModal={openEditModal}
                 openImageModal={openImageModal}
                 renderLikesTooltip={renderLikesTooltip}
-                handleDeleteComment={handleDeleteComment} // Pass the new prop
+                handleDeleteComment={handleDeleteComment}
               />
             ))}
           </Row>
         </div>
-        <ImageCarousel index={index} scrollPosition={scrollPosition} />
+
+        {/* Carrusel - Solo escritorio */}
+        {!isMobile && (
+          <div className="w-full md:w-2/5">
+            <ImageCarousel index={index} scrollPosition={scrollPosition} />
+          </div>
+        )}
       </div>
+
+      {/* Modales */}
       <CreateEditModal
         isModalOpen={isModalOpen}
         closeEditModal={closeEditModal}
         selectedBlogId={selectedBlogId}
-        title={title}
-        setTitle={setTitle}
-        content={content}
-        setContent={setContent}
-        image={image}
-        setImage={setImage}
+        title={title} setTitle={setTitle}
+        content={content} setContent={setContent}
+        image={image} setImage={setImage}
         createBlogPost={handleCreateBlogPost}
         updateBlogPost={handleUpdateBlogPost}
       />
+
       <BlogPostModal
         isImageModalOpen={isImageModalOpen}
         closeImageModal={closeImageModal}
@@ -167,6 +137,7 @@ const ManageBlog = () => {
         handleCommentChange={handleCommentChange}
         createComment={handleCreateComment}
         renderLikesTooltip={renderLikesTooltip}
+        handleDeleteComment={handleDeleteComment}
       />
     </div>
   );

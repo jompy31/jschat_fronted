@@ -1,3 +1,4 @@
+// frontend_github\jschat_fronted\src\components\backend\customers\index.jsx
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Box, Button, Typography, Modal, Card, CardContent, Tabs, Tab } from "@mui/material";
@@ -13,7 +14,6 @@ import CustomerPipelineView from "./components/CustomerPipelineView";
 import { validateCustomer, initialCustomerState, convertToCSV } from "./utils/customerUtils";
 import { downloadPDF, downloadCustomerPDF } from "./utils/pdfUtils";
 import { loadCustomers, createCustomer, updateCustomer, deleteCustomer, loadCustomerOrders, loadCustomerInvoices } from "./utils/apiUtils";
-import "./ContactsInfo.css";
 
 const ContactsInfo = () => {
   const [customers, setCustomers] = useState([]);
@@ -35,7 +35,6 @@ const ContactsInfo = () => {
   const [customerOrders, setCustomerOrders] = useState([]);
   const [customerInvoices, setCustomerInvoices] = useState([]);
   const [viewMode, setViewMode] = useState("table");
-  // const [darkMode, setDarkMode] = useState(false);// se comenta por queno se necesita.
   const token = useSelector((state) => state.authentication.token);
 
   useEffect(() => {
@@ -54,7 +53,6 @@ const ContactsInfo = () => {
       const fetchCustomers = async () => {
         try {
           const { customers, totalCount } = await loadCustomers(token, currentPage, searchTerm);
-          // Filtrar clientes válidos
           const validCustomers = customers.filter(customer => customer && customer.id && customer.name);
           setCustomers(validCustomers);
           setTotalCount(totalCount);
@@ -175,19 +173,21 @@ const ContactsInfo = () => {
   };
 
   return (
-     <Box className="container light" sx={{ p: 4 }}> 
+    <Box sx={{ minHeight: '100vh', bgcolor: 'var(--bg-primary)', color: 'var(--text-primary)', p: 4 }}>
       <ToastContainer />
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
-        <Typography variant="h4">Gestión de Clientes</Typography>
-        <Box display="flex" gap={2} alignItems="center">
-          {/* <Switch
-            checked={darkMode}
-            onChange={() => setDarkMode(!darkMode)}
-            label="Modo Oscuro"
-          /> */}
+      <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} justifyContent="space-between" alignItems="center" mb={4} gap={2}>
+        <Typography variant="h4" sx={{ fontWeight: 800, color: 'var(--text-primary)' }}>
+          Gestión de Clientes
+        </Typography>
+        <Box display="flex" flexWrap="wrap" gap={2} alignItems="center">
           <Button
             variant="outlined"
             onClick={() => setViewMode(viewMode === "table" ? "pipeline" : "table")}
+            sx={{
+              borderColor: 'var(--border-primary)',
+              color: 'var(--text-primary)',
+              '&:hover': { background: 'var(--accent-primary)', color: '#fff', borderColor: 'var(--accent-primary)' }
+            }}
           >
             {viewMode === "table" ? "Vista Pipeline" : "Vista Tabla"}
           </Button>
@@ -197,6 +197,11 @@ const ContactsInfo = () => {
               variant="contained"
               startIcon={<Add />}
               onClick={() => setShowCreateModal(true)}
+              sx={{
+                background: 'var(--accent-hover)',
+                color: '#fff',
+                '&:hover': { background: 'var(--accent-primary)', boxShadow: 'var(--glow-neon)' }
+              }}
             >
               Nuevo Cliente
             </Button>
@@ -206,6 +211,11 @@ const ContactsInfo = () => {
               variant="contained"
               startIcon={<Download />}
               onClick={handleDownloadCSV}
+              sx={{
+                background: 'var(--accent-hover)',
+                color: '#fff',
+                '&:hover': { background: 'var(--accent-primary)', boxShadow: 'var(--glow-neon)' }
+              }}
             >
               Descargar CSV
             </Button>
@@ -233,87 +243,75 @@ const ContactsInfo = () => {
         </DragDropContext>
       )}
 
+      {/* === MODAL DETALLES === */}
       {showDetailsModal && modalCustomer && (
         <Modal open={showDetailsModal} onClose={() => setShowDetailsModal(false)}>
           <Box
-            className="modal"
             sx={{
               position: "absolute",
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",
-              width: "80%",
-              maxWidth: 800,
-              bgcolor: "#ffffff",
-              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
+              width: { xs: '95%', sm: '80%', md: '70%' },
+              maxWidth: 900,
+              bgcolor: 'var(--bg-primary)',
+              border: '1px solid var(--border-primary)',
+              boxShadow: 'var(--shadow-light), var(--glow-neon)',
               p: 4,
-              borderRadius: 12,
-              maxHeight: "85vh",
-              overflowY: "auto",
+              borderRadius: 3,
+              maxHeight: '90vh',
+              overflowY: 'auto',
+              backdropFilter: 'blur(12px)',
             }}
           >
-            <Typography variant="h5" gutterBottom sx={{ color: "#1a202c" }}>
+            <Typography variant="h5" gutterBottom sx={{ color: 'var(--text-primary)', fontWeight: 700 }}>
               Detalles del Cliente
             </Typography>
-            <Tabs value={0} sx={{ mb: 2, borderBottom: "1px solid #e2e8f0" }}>
-              <Tab label="Información" sx={{ color: "#1a202c" }} />
+            <Tabs value={0} sx={{ mb: 2, borderBottom: `1px solid var(--border-primary)` }}>
+              <Tab label="Información" sx={{ color: 'var(--text-primary)' }} />
             </Tabs>
-            <Card sx={{ bgcolor: "#f7fafc", mb: 2 }}>
+            <Card sx={{ bgcolor: 'var(--bg-secondary)', mb: 2, border: `1px solid var(--border-primary)` }}>
               <CardContent>
-                <Typography sx={{ color: "#4a5568" }}>
-                  <strong>Nombre:</strong> {modalCustomer.name || "No disponible"}
-                </Typography>
-                <Typography sx={{ color: "#4a5568" }}>
-                  <strong>Tipo de ID:</strong> {modalCustomer.id_type || "No disponible"}
-                </Typography>
-                <Typography sx={{ color: "#4a5568" }}>
-                  <strong>Número de ID:</strong> {modalCustomer.id_number || "No disponible"}
-                </Typography>
-                <Typography sx={{ color: "#4a5568" }}>
-                  <strong>Email:</strong> {modalCustomer.email || "No disponible"}
-                </Typography>
-                <Typography sx={{ color: "#4a5568" }}>
-                  <strong>Teléfono:</strong> {modalCustomer.phone_number || "No disponible"}
-                </Typography>
-                <Typography sx={{ color: "#4a5568" }}>
-                  <strong>Dirección:</strong> {modalCustomer.address || "No disponible"}
-                </Typography>
-                <Typography sx={{ color: "#4a5568" }}>
-                  <strong>Empresa:</strong> {modalCustomer.company || "No disponible"}
-                </Typography>
-                <Typography sx={{ color: "#4a5568" }}>
-                  <strong>Tipo de Contacto:</strong> {modalCustomer.tipo_contacto || "No disponible"}
-                </Typography>
+                {[
+                  { label: 'Nombre', value: modalCustomer.name },
+                  { label: 'Tipo de ID', value: modalCustomer.id_type },
+                  { label: 'Número de ID', value: modalCustomer.id_number },
+                  { label: 'Email', value: modalCustomer.email },
+                  { label: 'Teléfono', value: modalCustomer.phone_number },
+                  { label: 'Dirección', value: modalCustomer.address },
+                  { label: 'Empresa', value: modalCustomer.company },
+                  { label: 'Tipo de Contacto', value: modalCustomer.tipo_contacto },
+                ].map((item) => (
+                  <Typography key={item.label} sx={{ color: 'var(--text-secondary)', mb: 1 }}>
+                    <strong>{item.label}:</strong> {item.value || "No disponible"}
+                  </Typography>
+                ))}
               </CardContent>
             </Card>
-            <Typography variant="h6" sx={{ color: "#1a202c", mb: 2 }}>
-              Pedidos
-            </Typography>
+
+            {/* PEDIDOS */}
+            <Typography variant="h6" sx={{ color: 'var(--text-primary)', mb: 2 }}>Pedidos</Typography>
             {customerOrders.length > 0 ? (
               customerOrders.map((order) => (
-                <Card key={order.id} sx={{ bgcolor: "#f7fafc", mb: 2 }}>
+                <Card key={order.id} sx={{ bgcolor: 'var(--bg-secondary)', mb: 2, border: `1px solid var(--border-primary)` }}>
                   <CardContent>
-                    <Typography sx={{ color: "#4a5568" }}>
-                      <strong>Número de Orden:</strong> {order.order_number || "No disponible"}
-                    </Typography>
-                    <Typography sx={{ color: "#4a5568" }}>
-                      <strong>Número de Pedido:</strong> {order.pedido_number || "No disponible"}
-                    </Typography>
-                    <Typography sx={{ color: "#4a5568" }}>
-                      <strong>Tipo:</strong> {order.order_type || "No disponible"}
-                    </Typography>
-                    <Typography sx={{ color: "#4a5568" }}>
-                      <strong>Estado:</strong> {order.status || "No disponible"}
-                    </Typography>
-                    <Typography sx={{ color: "#4a5568" }}>
-                      <strong>Fecha de Entrega:</strong> {order.delivery_date || "No disponible"}
-                    </Typography>
-                    <Typography sx={{ color: "#4a5568" }}>
+                    {[
+                      { label: 'Número de Orden', value: order.order_number },
+                      { label: 'Número de Pedido', value: order.pedido_number },
+                      { label: 'Tipo', value: order.order_type },
+                      { label: 'Estado', value: order.status },
+                      { label: 'Fecha de Entrega', value: order.delivery_date },
+                    ].map((item) => (
+                      <Typography key={item.label} sx={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                        <strong>{item.label}:</strong> {item.value || "No disponible"}
+                      </Typography>
+                    ))}
+                    <Typography sx={{ color: 'var(--text-secondary)', mt: 1 }}>
                       <strong>Ítems:</strong>
-                      <ul>
+                      <ul className="pl-5">
                         {order.order_items?.map((item) => (
                           <li key={item.id}>
-                            {item.product?.name || item.product_type?.name || "Producto personalizado"} - Cantidad: {item.quantity} - Precio Unitario: {item.unit_price}
+                            {item.product?.name || item.product_type?.name || "Producto"} - Cant: {item.quantity} - Precio: {item.unit_price}
                           </li>
                         ))}
                       </ul>
@@ -322,48 +320,53 @@ const ContactsInfo = () => {
                 </Card>
               ))
             ) : (
-              <Typography sx={{ color: "#4a5568" }}>No hay pedidos disponibles.</Typography>
+              <Typography sx={{ color: 'var(--text-secondary)' }}>No hay pedidos disponibles.</Typography>
             )}
-            <Typography variant="h6" sx={{ color: "#1a202c", mb: 2 }}>
-              Facturas
-            </Typography>
+
+            {/* FACTURAS */}
+            <Typography variant="h6" sx={{ color: 'var(--text-primary)', mb: 2 }}>Facturas</Typography>
             {customerInvoices.length > 0 ? (
               customerInvoices.map((invoice) => (
-                <Card key={invoice.id} sx={{ bgcolor: "#f7fafc", mb: 2 }}>
+                <Card key={invoice.id} sx={{ bgcolor: 'var(--bg-secondary)', mb: 2, border: `1px solid var(--border-primary)` }}>
                   <CardContent>
-                    <Typography sx={{ color: "#4a5568" }}>
-                      <strong>Número de Factura:</strong> {invoice.invoice_number || "No disponible"}
-                    </Typography>
-                    <Typography sx={{ color: "#4a5568" }}>
-                      <strong>Monto Total:</strong> {invoice.total_amount || "No disponible"}
-                    </Typography>
-                    <Typography sx={{ color: "#4a5568" }}>
-                      <strong>Impuestos:</strong> {invoice.tax || "No disponible"}
-                    </Typography>
-                    <Typography sx={{ color: "#4a5568" }}>
-                      <strong>Fecha de Emisión:</strong> {invoice.issued_date || "No disponible"}
-                    </Typography>
-                    <Typography sx={{ color: "#4a5568" }}>
-                      <strong>Urgente:</strong> {invoice.is_urgent ? "Sí" : "No"}
-                    </Typography>
+                    {[
+                      { label: 'Número de Factura', value: invoice.invoice_number },
+                      { label: 'Monto Total', value: invoice.total_amount },
+                      { label: 'Impuestos', value: invoice.tax },
+                      { label: 'Fecha de Emisión', value: invoice.issued_date },
+                      { label: 'Urgente', value: invoice.is_urgent ? "Sí" : "No" },
+                    ].map((item) => (
+                      <Typography key={item.label} sx={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                        <strong>{item.label}:</strong> {item.value || "No disponible"}
+                      </Typography>
+                    ))}
                   </CardContent>
                 </Card>
               ))
             ) : (
-              <Typography sx={{ color: "#4a5568" }}>No hay facturas disponibles.</Typography>
+              <Typography sx={{ color: 'var(--text-secondary)' }}>No hay facturas disponibles.</Typography>
             )}
+
             <Box mt={3} display="flex" justifyContent="flex-end" gap={2}>
               <Button
                 variant="contained"
                 onClick={() => downloadPDF(modalCustomer)}
-                sx={{ bgcolor: "#3182ce", "&:hover": { bgcolor: "#2b6cb0" } }}
+                sx={{
+                  background: 'var(--accent-hover)',
+                  color: '#fff',
+                  '&:hover': { background: 'var(--accent-primary)', boxShadow: 'var(--glow-neon)' }
+                }}
               >
                 Descargar PDF
               </Button>
               <Button
                 variant="outlined"
                 onClick={() => setShowDetailsModal(false)}
-                sx={{ color: "#718096", borderColor: "#e2e8f0" }}
+                sx={{
+                  borderColor: 'var(--border-primary)',
+                  color: 'var(--text-primary)',
+                  '&:hover': { background: 'var(--bg-secondary)', borderColor: 'var(--accent-primary)' }
+                }}
               >
                 Cerrar
               </Button>
@@ -374,10 +377,7 @@ const ContactsInfo = () => {
 
       <CustomerModal
         show={showCreateModal}
-        onHide={() => {
-          setShowCreateModal(false);
-          setNewCustomer(initialCustomerState);
-        }}
+        onHide={() => { setShowCreateModal(false); setNewCustomer(initialCustomerState); }}
         isEditMode={false}
         customerData={newCustomer}
         handleInputChange={(e) => handleInputChange(e, setNewCustomer)}
@@ -386,29 +386,15 @@ const ContactsInfo = () => {
 
       <CustomerModal
         show={showEditModal}
-        onHide={() => {
-          setShowEditModal(false);
-          setEditedCustomer(initialCustomerState);
-          setIsEditMode(false);
-        }}
+        onHide={() => { setShowEditModal(false); setEditedCustomer(initialCustomerState); setIsEditMode(false); }}
         isEditMode={true}
         customerData={editedCustomer}
         handleInputChange={(e) => handleInputChange(e, setEditedCustomer)}
         handleSave={handleSaveEditedCustomer}
       />
 
-      <DeleteConfirmationToast
-        show={showDeleteToast}
-        onClose={() => setShowDeleteToast(false)}
-        message={deleteToastMessage}
-        onConfirm={handleDelete}
-      />
-
-      <ErrorToast
-        show={!!errorToast}
-        onClose={() => setErrorToast(null)}
-        message={errorToast}
-      />
+      <DeleteConfirmationToast show={showDeleteToast} onClose={() => setShowDeleteToast(false)} message={deleteToastMessage} onConfirm={handleDelete} />
+      <ErrorToast show={!!errorToast} onClose={() => setErrorToast(null)} message={errorToast} />
     </Box>
   );
 };

@@ -90,6 +90,7 @@ function Navbar({ logout, setIsSidebar, isDark, setIsDark }) {  // 👈 Recibe p
 
         <MobileMenu
           isMobileMenuOpen={isMobileMenuOpen}
+          setMobileMenuOpen={setMobileMenuOpen}
           navItems={navItems}
           user={user}
           currentUser={currentUser}

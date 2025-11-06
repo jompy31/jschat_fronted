@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { deleteProduct } from '../utils/api';
 import { exportProductsToCSV } from '../utils/csvExport';
-import "../../../backend/products/components/products.css"
 
 const ProductTable = ({ products, setProducts, token, isAuthorized, onSelect, onEdit }) => {
   const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'asc' });
-  const [previewProductId, setPreviewProductId] = useState(null); // Track which product is being previewed
+  const [previewProductId, setPreviewProductId] = useState(null);
 
   const sortData = (key) => {
     const direction = sortConfig.key === key && sortConfig.direction === 'asc' ? 'desc' : 'asc';
@@ -28,86 +27,92 @@ const ProductTable = ({ products, setProducts, token, isAuthorized, onSelect, on
     try {
       await deleteProduct(id, token);
       setProducts(products.filter(product => product.id !== id));
-      alert('Producto eliminado con éxito.');
     } catch (err) {
       alert('Error al eliminar: ' + err.message);
     }
   };
 
   const handleRowClick = (product) => {
-    // Toggle preview if clicking the same product, otherwise show new preview
     setPreviewProductId(previewProductId === product.id ? null : product.id);
-    onSelect(product); // Open modal with full details
+    onSelect(product);
   };
 
   return (
-    <div className="bg-gray-800 bg-opacity-80 backdrop-blur-md rounded-lg shadow-lg p-6">
+    <div className="card">
       {isAuthorized && (
         <button
           onClick={() => exportProductsToCSV(products)}
-          className="mb-4 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105"
+          className="btn btn-export"
         >
           Descargar Lista de Productos (CSV)
         </button>
       )}
-      <table className="w-full text-left">
-        <thead>
-          <tr className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-            <th className="p-3 cursor-pointer" onClick={() => sortData('name')}>
-              Nombre {sortConfig.key === 'name' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
-            </th>
-            <th className="p-3 cursor-pointer" onClick={() => sortData('product_type')}>
-              Tipo {sortConfig.key === 'product_type' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
-            </th>
-            <th className="p-3 cursor-pointer" onClick={() => sortData('additional_price')}>
-              Precio Adicional {sortConfig.key === 'additional_price' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
-            </th>
-            <th className="p-3">Características</th>
-            <th className="p-3">Vista Previa</th>
-            {isAuthorized && <th className="p-3">Acciones</th>}
-          </tr>
-        </thead>
-        <tbody>
-          {products.map(product => (
-            <React.Fragment key={product.id}>
+
+      <div className="table-container">
+        <table className="table">
+          <thead>
+            <tr>
+              <th onClick={() => sortData('name')} style={{ cursor: 'pointer' }}>
+                Nombre {sortConfig.key === 'name' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+              </th>
+              <th onClick={() => sortData('product_type')} style={{ cursor: 'pointer' }}>
+                Tipo {sortConfig.key === 'product_type' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+              </th>
+              <th onClick={() => sortData('additional_price')} style={{ cursor: 'pointer' }}>
+                Precio Adicional {sortConfig.key === 'additional_price' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+              </th>
+              <th>Características</th>
+              <th>Vista Previa</th>
+              {isAuthorized && <th>Acciones</th>}
+            </tr>
+          </thead>
+          <tbody>
+            {products.map(product => (
               <tr
-                className="border-b border-gray-700 hover:bg-gray-700 transition-all cursor-pointer"
+                key={product.id}
                 onClick={() => handleRowClick(product)}
+                style={{ cursor: 'pointer' }}
               >
-                <td className="p-3">{product.name}</td>
-                <td className="p-3">{product.product_type?.name || 'N/A'}</td>
-                <td className="p-3">₡{product.additional_price}</td>
-                <td className="p-3">{product.characteristics.map(c => c.name).join(', ') || 'N/A'}</td>
-                <td className="p-3">
+                <td>{product.name}</td>
+                <td>{product.product_type?.name || 'N/A'}</td>
+                <td>₡{product.additional_price}</td>
+                <td>{product.characteristics.map(c => c.name).join(', ') || 'N/A'}</td>
+                <td>
                   {product.design_file && (
                     <img
                       src={product.design_file}
                       alt={`Vista previa de ${product.name}`}
-                      className="h-12 w-12 object-cover rounded"
+                      style={{
+                        height: '48px',
+                        width: '48px',
+                        objectFit: 'cover',
+                        borderRadius: '6px',
+                        border: '1px solid var(--border)'
+                      }}
                     />
                   )}
                 </td>
                 {isAuthorized && (
-                  <td className="p-3">
+                  <td>
                     <button
                       onClick={(e) => { e.stopPropagation(); onEdit(product); }}
-                      className="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded mr-2"
+                      className="btn btn-warning"
                     >
                       Editar
                     </button>
                     <button
                       onClick={(e) => { e.stopPropagation(); handleDelete(product.id); }}
-                      className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded"
+                      className="btn btn-danger"
                     >
                       Eliminar
                     </button>
                   </td>
                 )}
               </tr>
-            </React.Fragment>
-          ))}
-        </tbody>
-      </table>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

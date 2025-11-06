@@ -1,5 +1,5 @@
+// frontend_github\jschat_fronted\src\components\backend\users\components\HeaderButtons.jsx
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { FaUserPlus, FaDownload } from 'react-icons/fa';
 import { convertToCSV } from '../utils/convertToCSV';
 
@@ -10,20 +10,20 @@ const HeaderButtons = ({ handleAddUser, userList }) => {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'userList.csv';
+    a.download = 'Lista de usuarios JSport.csv';
     a.click();
     window.URL.revokeObjectURL(url);
   };
 
   return (
     <div className="flex space-x-4">
-      <Link
-        to="/register"
+      <button
+        onClick={handleAddUser}
         className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-md"
       >
         <FaUserPlus className="mr-2" />
-        Registrar
-      </Link>
+        Crear Usuario
+      </button>
       <button
         onClick={handleDownloadCSV}
         className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition shadow-md"

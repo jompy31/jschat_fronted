@@ -134,9 +134,14 @@ const CreateProductForm = ({ onClose, token, setProducts, productTypes, characte
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
-      <div className="bg-gray-900 bg-opacity-90 backdrop-blur-md rounded-lg p-6 w-full max-w-lg">
-        <h2 className="text-2xl font-bold mb-4 text-blue-400">
+    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50" 
+       
+    >
+      <div className="bg-gray-900 bg-opacity-90 backdrop-blur-md rounded-lg p-6 w-full max-w-lg" style={{
+        overflowY: "auto",   // ✅ permite scroll vertical
+        maxHeight: "100vh"   // ✅ evita que crezca más allá de la pantalla
+      }}>
+        <h2 className="text-2xl font-bold mb-4 text-blue-400 mt-[12%]">
           {editingProduct ? 'Editar Producto' : 'Crear Producto'}
         </h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}

@@ -1,5 +1,6 @@
 import { saveAs } from 'file-saver';
 import axios from 'axios';
+import config from '../../../../config/enviroments.ts';
 import moment from 'moment';
 
 export const downloadEvent = (selectedEvent) => {
@@ -51,7 +52,7 @@ END:VCALENDAR`;
   formData.append('attachments', icsBlob, 'event.ics');
 
   axios
-    .post('http://localhost:8000/send-email/', formData)
+    .post(`${config.API_URL}/send-email/`, formData)
     .then((response) => {
       console.log('¡Correo electrónico enviado exitosamente!', response.data);
     })

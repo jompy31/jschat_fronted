@@ -10,7 +10,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter> {/* 👈 Envuelve App en BrowserRouter – proporciona contexto a Navbar y Routes */}
+      <BrowserRouter> 
         <App />
       </BrowserRouter>
     </Provider>

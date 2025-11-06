@@ -36,79 +36,147 @@ const Promociones = () => {
 
   return (
     <div className="promociones-container">
-      {/* Hero Section */}
+      {/* === HERO SECTION - RESPONSIVO === */}
       <motion.section
         initial="hidden"
         animate="visible"
         variants={heroVariants}
-        className="relative bg-cover bg-center h-96 flex items-center justify-center text-white"
-        style={{ backgroundImage: 'url(/assets/promo-hero.jpg)' }}
+        className="promo-hero-section"
       >
-        <div className="absolute inset-0 bg-jsport-blue opacity-60"></div>
-        <div className="relative z-10 text-center px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Promociones Exclusivas</h1>
-          <p className="text-lg md:text-xl mb-6">Descubre nuestras ofertas en productos deportivos y empresariales personalizados</p>
-          <a
+        <div className="hero-overlay"></div>
+        <div className="hero-content">
+          <motion.h1 
+            className="hero-title"
+            style={{
+              fontSize: 'clamp(2rem, 7vw, 4.5rem)',
+              lineHeight: '1.1',
+              wordBreak: 'break-word',
+              overflowWrap: 'break-word',
+              hyphens: 'auto'
+            }}
+          >
+            Promociones Exclusivas
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="hero-subtitle"
+            style={{
+              fontSize: 'clamp(0.9rem, 3.5vw, 1.3rem)',
+              lineHeight: '1.5'
+            }}
+          >
+            Descubre nuestras ofertas en productos deportivos y empresariales personalizados
+          </motion.p>
+          <motion.a
             href="/contacto"
-            className="bg-jsport-red hover:bg-red-600 text-white font-bold py-3 px-6 rounded-lg inline-flex items-center"
+            className="hero-cta"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.5 }}
+            whileHover={{ scale: 1.05 }}
           >
             Contáctanos <ChevronRight className="ml-2 h-5 w-5" />
-          </a>
+          </motion.a>
         </div>
       </motion.section>
 
-      {/* Featured Promotions Carousel */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-jsport-blue">
+      {/* === CARRUSEL - RESPONSIVO === */}
+      <section className="promo-featured-section">
+        <div className="container mx-auto px-3 xs:px-4 sm:px-6 md:px-8">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="section-title"
+            style={{
+              fontSize: 'clamp(1.8rem, 5.5vw, 3.2rem)'
+            }}
+          >
             Ofertas Destacadas
-          </h2>
+          </motion.h2>
           <Swiper
             modules={[Navigation, Pagination, Autoplay]}
-            spaceBetween={30}
+            spaceBetween={16}
             slidesPerView={1}
-            navigation
-            pagination={{ clickable: true }}
-            autoplay={{ delay: 4000 }}
-            breakpoints={{
-              640: { slidesPerView: 2 },
-              1024: { slidesPerView: 3 },
+            centeredSlides={true}
+            loop={true}
+            navigation={{
+              prevEl: '.swiper-button-prev',
+              nextEl: '.swiper-button-next',
             }}
-            className="promo-swiper"
+            pagination={{ 
+              clickable: true,
+              dynamicBullets: true,
+              dynamicMainBullets: 3
+            }}
+            autoplay={{ delay: 4000, disableOnInteraction: false }}
+            breakpoints={{
+              320: { slidesPerView: 1, spaceBetween: 12 },
+              480: { slidesPerView: 1.1, spaceBetween: 14 },
+              640: { slidesPerView: 1.3, spaceBetween: 16 },
+              768: { slidesPerView: 2, spaceBetween: 20 },
+              1024: { slidesPerView: 3, spaceBetween: 24 },
+            }}
+            className="promo-swiper pb-10"
           >
             {promotionsData.map((promo) => (
               <SwiperSlide key={promo.id}>
-                <div className="bg-gray-100 p-6 rounded-lg shadow-md">
-                  <img
-                    src={getPromoImage(promo.id)}
-                    alt={promo.name}
-                    className="w-full h-48 object-cover rounded-lg mb-4"
-                  />
-                  <h3 className="text-xl font-bold mb-2 text-jsport-blue">{promo.name}</h3>
-                  <p className="text-gray-600 mb-4">{promo.description}</p>
-                  <p className="text-sm text-gray-500">
-                    Descuento: {promo.discount}% | Compra mínima: ${promo.min_amount}
-                  </p>
-                  <a
-                    href="/login"
-                    className="mt-4 inline-flex items-center text-jsport-red hover:text-red-600 font-semibold"
-                  >
-                    Ver Oferta <ChevronRight className="ml-1 h-4 w-4" />
-                  </a>
-                </div>
+                <motion.div
+                  className="promo-card"
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <div className="promo-image-container">
+                    <img
+                      src={getPromoImage(promo.id)}
+                      alt={promo.name}
+                      className="promo-image"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="promo-content">
+                    <h3 className="promo-title text-sm xs:text-base sm:text-lg md:text-xl">
+                      {promo.name}
+                    </h3>
+                    <p className="promo-description text-xs xs:text-sm sm:text-base opacity-85">
+                      {promo.description}
+                    </p>
+                    <div className="promo-details text-xs xs:text-sm">
+                      <span className="promo-discount">{promo.discount}% OFF</span>
+                      <span className="promo-min">Mín: ${promo.min_amount}</span>
+                    </div>
+                    <a href="/login" className="promo-link text-xs xs:text-sm">
+                      Ver Oferta <ChevronRight className="ml-1 h-3 w-3 xs:h-4 xs:w-4" />
+                    </a>
+                  </div>
+                </motion.div>
               </SwiperSlide>
             ))}
           </Swiper>
+
+          {/* Controles */}
+          <div className="swiper-button-prev !text-white !w-8 !h-8 xs:!w-9 xs:!h-9 sm:!w-10 sm:!h-10 after:!text-xs xs:after:!text-sm !left-1 xs:!left-2" />
+          <div className="swiper-button-next !text-white !w-8 !h-8 xs:!w-9 xs:!h-9 sm:!w-10 sm:!h-10 after:!text-xs xs:after:!text-sm !right-1 xs:!right-2" />
         </div>
       </section>
 
-      {/* All Promotions Grid */}
-      <section className="py-16 bg-gray-100">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-jsport-blue">
+      {/* === GRID - RESPONSIVO === */}
+      <section className="promo-grid-section">
+        <div className="container mx-auto px-3 xs:px-4 sm:px-6 md:px-8">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="section-title"
+            style={{
+              fontSize: 'clamp(1.8rem, 5.5vw, 3.2rem)'
+            }}
+          >
             Todas las Promociones
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          </motion.h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {promotionsData.map((promo, index) => (
               <motion.div
                 key={promo.id}
@@ -117,65 +185,87 @@ const Promociones = () => {
                 whileInView="visible"
                 variants={cardVariants}
                 viewport={{ once: true }}
-                className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                whileHover={{ y: -6, scale: 1.01 }}
+                className="promo-grid-card"
               >
-                <img
-                  src={getPromoImage(promo.id)}
-                  alt={promo.name}
-                  className="w-full h-48 object-cover rounded-lg mb-4"
-                />
-                <h3 className="text-xl font-bold mb-2 text-jsport-blue">{promo.name}</h3>
-                <p className="text-gray-600 mb-4">{promo.description}</p>
-                <p className="text-sm text-gray-500 mb-4">
-                  Descuento: {promo.discount}% | Compra mínima: ${promo.min_amount}
-                </p>
-                <div className="mb-4">
-                  <h4 className="text-sm font-semibold text-jsport-blue">Productos Incluidos:</h4>
-                  <ul className="list-disc list-inside text-gray-600">
-                    {promo.products.map((product) => (
-                      <li key={product.id}>{product.name} - ${product.price}</li>
-                    ))}
-                  </ul>
+                <div className="promo-image-container">
+                  <img
+                    src={getPromoImage(promo.id)}
+                    alt={promo.name}
+                    className="promo-image"
+                    loading="lazy"
+                  />
                 </div>
-                <a
-                  href="/login"
-                  className="inline-flex items-center bg-jsport-red hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg"
-                >
-                  Aprovechar Oferta <ChevronRight className="ml-2 h-4 w-4" />
-                </a>
+                <div className="promo-content p-3 xs:p-4 sm:p-5">
+                  <h3 className="promo-title text-sm xs:text-base sm:text-lg md:text-xl">
+                    {promo.name}
+                  </h3>
+                  <p className="promo-description text-xs xs:text-sm sm:text-base opacity-85">
+                    {promo.description}
+                  </p>
+                  <div className="promo-details text-xs xs:text-sm">
+                    <span className="promo-discount">{promo.discount}% OFF</span>
+                    <span className="promo-min">Mín: ${promo.min_amount}</span>
+                  </div>
+                  <div className="promo-products mt-3">
+                    <h4 className="products-title text-xs xs:text-sm font-semibold">
+                      Productos Incluidos:
+                    </h4>
+                    <ul className="products-list text-xs xs:text-sm">
+                      {promo.products.map((product) => (
+                        <li key={product.id} className="product-item">
+                          {product.name} - ${product.price}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <a href="/login" className="promo-cta text-xs xs:text-sm mt-3">
+                    Aprovechar Oferta <ChevronRight className="ml-1 h-3 w-3 xs:h-4 xs:w-4" />
+                  </a>
+                </div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Call to Action */}
-      <section className="py-16 bg-jsport-blue text-white">
-        <div className="container mx-auto px-4 text-center">
-          <motion.h2
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-3xl md:text-4xl font-bold mb-4"
+      {/* === CTA FINAL - RESPONSIVO === */}
+      <section className="promo-cta-section">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          className="cta-content px-3 xs:px-4 sm:px-6"
+        >
+          <motion.h2 
+            className="cta-title"
+            style={{
+              fontSize: 'clamp(1.8rem, 6vw, 3.5rem)'
+            }}
           >
             ¡No Pierdas Estas Ofertas!
           </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
+          <motion.p 
+            initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-xl mb-8"
+            transition={{ delay: 0.2 }}
+            className="cta-subtitle"
+            style={{
+              fontSize: 'clamp(0.9rem, 3.5vw, 1.2rem)'
+            }}
           >
             Inicia sesión o contáctanos para personalizar tus productos con descuentos exclusivos.
           </motion.p>
-          <a
+          <motion.a
             href="/contacto"
-            className="bg-jsport-red hover:bg-red-600 text-white font-bold py-3 px-6 rounded-lg inline-flex items-center"
+            className="cta-button"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
           >
-            Contáctanos <ChevronRight className="ml-2 h-5 w-5" />
-          </a>
-        </div>
+            Contáctanos Ahora <ChevronRight className="ml-2 h-5 w-5" />
+          </motion.a>
+        </motion.div>
       </section>
     </div>
   );

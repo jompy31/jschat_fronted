@@ -1,180 +1,316 @@
-/* ======= 🔥 ESTILO FUTURISTA MARCIANO 🔥 ======= */
+/* =====================================================
+   SOBRE NOSOTROS – J SPORT ESTÁNDAR LIGHT/DARK
+   ===================================================== */
+
 .sobre-nosotros-container {
-  background: radial-gradient(circle at 20% 20%, #0a0a1a, #030314 80%);
-  color: #121212;
-  overflow: hidden;
+  background: inherit;
+  color: inherit;
   position: relative;
+  overflow-x: hidden;
 }
 
-/* Efecto de fondo con líneas animadas estilo sci-fi */
-.sobre-nosotros-container::before {
-  content: "";
+/* ======== HERO SECTION ======== */
+.hero-section {
+  position: relative;
+  height: 90vh;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+              /* url('/assets/sobre-nosotros-hero.jpg') center/cover; */
+  background-blend-mode: overlay;
+}
+
+.hero-overlay {
   position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: repeating-linear-gradient(
-    120deg,
-    rgba(255, 255, 255, 0.03) 0,
-    rgba(255, 255, 255, 0.03) 1px,
-    transparent 2px,
-    transparent 4px
-  );
-  animation: moveGrid 25s linear infinite;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.4;
+  inset: 0;
+  background: linear-gradient(135deg, 
+    rgba(10, 36, 99, 0.85) 0%, 
+    rgba(217, 4, 4, 0.7) 50%, 
+    rgba(102, 51, 153, 0.75) 100%);
 }
 
-@keyframes moveGrid {
-  from { background-position: 0 0; }
-  to { background-position: 200px 400px; }
-}
-
-/* Hero Section */
-section {
+.hero-content {
   position: relative;
   z-index: 2;
+  text-align: center;
+  max-width: 900px;
+  padding: 2rem;
+  color: white;
 }
 
-.bg-jsport-blue {
-  background: linear-gradient(135deg, #001a4d, #0d47a1);
+.hero-title {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 800;
+  margin-bottom: 1rem;
+  text-shadow: var(--glow-neon);
+  background: linear-gradient(135deg, #fff, #f0f0f0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.bg-jsport-red {
-  background: linear-gradient(135deg, #ff0000, #d90404);
+.hero-subtitle {
+  font-size: 1.3rem;
+  margin-bottom: 2rem;
+  opacity: 0.95;
+  line-height: 1.6;
 }
 
-/* TITULOS */
-h1, h2, h3 {
-  text-shadow: 0 0 15px rgba(0, 217, 255, 0.6);
+/* ======== SECCIONES ======== */
+.section {
+  padding: 6rem 0;
 }
 
-/* ======= 💠 CARD FUTURISTA ======= */
-.card-futurista {
-  background: rgba(15, 20, 40, 0.6);
-  border-radius: 16px;
-  border: 1px solid rgba(0, 217, 255, 0.4);
-  box-shadow: 0 0 25px rgba(0, 217, 255, 0.15);
-  backdrop-filter: blur(12px);
-  transition: all 0.4s ease;
+.historia-section,
+.services-section,
+.testimonials-section {
+  background: var(--bg-primary);
+}
+
+.mission-vision-section,
+.values-section {
+  background: var(--bg-secondary);
+}
+
+.section-title {
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 3.5rem;
+  background: linear-gradient(135deg, var(--text-primary), var(--accent-primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-text {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+/* ======== CARDS ======== */
+.value-card,
+.testimonial-card {
+  background: inherit;
+  border-radius: 20px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: var(--shadow-light);
+  border: 1px solid transparent;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
 }
 
-.card-futurista::before {
-  content: "";
+.value-card::before,
+.testimonial-card::before {
+  content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(0,255,255,0.05), rgba(0,217,255,0.1));
+  background: var(--accent-hover);
   opacity: 0;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.4s ease;
+  z-index: 0;
 }
 
-.card-futurista:hover::before {
-  opacity: 1;
+.value-card:hover::before,
+.testimonial-card:hover::before {
+  opacity: 0.06;
 }
 
-.card-futurista:hover {
+.value-card:hover,
+.testimonial-card:hover {
   transform: translateY(-10px) scale(1.02);
-  box-shadow: 0 0 45px rgba(0, 217, 255, 0.4);
+  border-color: var(--border-primary);
+  box-shadow: var(--glow-neon), 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
-/* ======= 💫 Animaciones hover para imágenes del equipo ======= */
-img {
-  transition: all 0.6s ease;
-}
-
-img:hover {
-  transform: scale(1.1) rotate(2deg);
-  filter: drop-shadow(0 0 20px rgba(0, 217, 255, 0.6));
-}
-
-/* ======= ✨ Botones de acción ======= */
-button, .btn-futurista, .bg-jsport-red {
+.value-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent-primary);
+  margin-bottom: 1rem;
   position: relative;
-  overflow: hidden;
+  z-index: 1;
+}
+
+.value-text {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  position: relative;
+  z-index: 1;
+}
+
+/* ======== TESTIMONIOS ======== */
+.testimonial-quote {
+  font-style: italic;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  line-height: 1.7;
+  position: relative;
+  z-index: 1;
+}
+
+.testimonial-author {
+  font-weight: 700;
+  color: var(--text-primary);
+  position: relative;
+  z-index: 1;
+}
+
+/* ======== BOTONES ======== */
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  background: var(--accent-hover);
+  color: white !important;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-decoration: none;
   transition: all 0.3s ease;
+  border: 1px solid transparent;
+  box-shadow: var(--glow-neon);
 }
 
-button::after, .btn-futurista::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, rgba(0,217,255,0.2), rgba(255,255,255,0.05), rgba(0,217,255,0.2));
-  transform: translateX(-100%);
-  transition: all 0.5s ease;
+.hero-cta:hover {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  box-shadow: 0 0 30px rgba(217, 4, 4, 0.6);
+  transform: translateY(-3px);
 }
 
-button:hover::after, .btn-futurista:hover::after {
-  transform: translateX(100%);
+/* ======== DARK MODE ======== */
+.dark .value-card,
+.dark .testimonial-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(14px);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
-button:hover, .btn-futurista:hover {
-  box-shadow: 0 0 25px rgba(0, 217, 255, 0.4);
-  transform: scale(1.05);
+.dark .value-card:hover,
+.dark .testimonial-card:hover {
+  box-shadow: var(--glow-neon), 0 25px 50px rgba(0, 0, 0, 0.5);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
-/* ======= 🌌 Animación de entrada general ======= */
-@keyframes fadeUp {
-  0% { opacity: 0; transform: translateY(40px) scale(0.98); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
+.dark .value-title {
+  color: var(--accent-primary);
+  text-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
 }
 
-.motion-visible {
-  animation: fadeUp 1s ease forwards;
+.dark .testimonial-author {
+  color: #FFFFFF;
 }
 
-/* ======= 🪐 Secciones alternadas ======= */
-.bg-white, .bg-gray-100 {
-  background: transparent !important;
+/* ======== RESPONSIVE ======== */
+@media (max-width: 1024px) {
+  .section {
+    padding: 5rem 0;
+  }
+  .value-card,
+  .testimonial-card {
+    padding: 1.5rem;
+  }
 }
-/* ======== 🎨 Ajustes de color para MODO CLARO ======== */
-:root {
-  --text-dark: #0a0a0a;
-  --text-light: #e5e7eb;
+
+@media (max-width: 640px) {
+  .section {
+    padding: 4rem 0;
+  }
+  .hero-content {
+    padding: 1.5rem;
+  }
+  .hero-title {
+    font-size: 2.5rem;
+  }
+}
+/* === SOBRE NOSOTROS - RESPONSIVO TOTAL SIN DESBORDES === */
+
+/* Títulos */
+.hero-title,
+.section-title {
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  hyphens: auto !important;
+  max-width: 100% !important;
+  padding: 0 0.5rem !important;
 }
 
-/* Detecta si el usuario está en modo claro */
-@media (prefers-color-scheme: light) {
-  .sobre-nosotros-container {
-    background: radial-gradient(circle at 30% 30%, #f0f4ff, #e2e8f0 80%);
-    color: var(--text-dark);
+/* Cards */
+.value-card,
+.testimonial-card {
+  min-width: 0 !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+/* Textos */
+.value-text,
+.testimonial-quote,
+.testimonial-author,
+.section-text {
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  hyphens: auto !important;
+}
+
+/* Móviles pequeños */
+@media (max-width: 480px) {
+  .section {
+    padding: 3rem 0 !important;
   }
 
-  .card-futurista {
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(0, 123, 255, 0.3);
-    box-shadow: 0 0 25px rgba(0, 123, 255, 0.1);
-    color: var(--text-dark);
+  .value-card,
+  .testimonial-card {
+    padding: 1rem !important;
   }
 
-  .card-futurista h3,
-  .card-futurista p,
-  h1, h2, h3 {
-    color: var(--text-dark) !important;
-    text-shadow: none;
+  .value-title,
+  .testimonial-author {
+    font-size: 1rem !important;
   }
 
-  .btn-futurista {
-    background: linear-gradient(90deg, #007bff, #00bfff);
-    color: white;
+  .value-text,
+  .testimonial-quote {
+    font-size: 0.8rem !important;
+    line-height: 1.5 !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero-title,
+  .section-title {
+    font-size: 1.4rem !important;
   }
 
-  .btn-futurista:hover {
-    box-shadow: 0 0 20px rgba(0, 191, 255, 0.5);
+  .value-card,
+  .testimonial-card {
+    padding: 0.75rem !important;
   }
 
-  .text-gray-200,
-  .text-gray-300,
-  .text-gray-700 {
-    color: var(--text-dark) !important;
+  .value-text,
+  .testimonial-quote {
+    font-size: 0.75rem !important;
   }
+}
 
-  .bg-jsport-blue {
-    background: linear-gradient(135deg, #1e40af, #3b82f6);
-  }
+/* Evitar overflow horizontal */
+.sobre-nosotros-container,
+.hero-section,
+.section {
+  overflow-x: hidden !important;
+}
 
-  .bg-jsport-red {
-    background: linear-gradient(135deg, #dc2626, #ef4444);
-  }
+/* Clamp suave para textos */
+.value-text,
+.testimonial-quote {
+  font-size: clamp(0.75rem, 3vw, 1rem) !important;
+}
+
+.value-title {
+  font-size: clamp(1rem, 4vw, 1.5rem) !important;
 }

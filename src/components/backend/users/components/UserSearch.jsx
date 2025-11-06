@@ -3,16 +3,25 @@ import { FaSearch } from 'react-icons/fa';
 
 const UserSearch = ({ searchTerm, setSearchTerm }) => {
   return (
-    <div className="relative w-full md:w-1/3">
-      <input
-        type="text"
-        placeholder="Buscar por nombre, correo o rol"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-      />
-      <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-    </div>
+    // Ejemplo: UserSearch.jsx
+<div className="relative w-full">
+  <input
+    type="text"
+    placeholder="Buscar usuarios..."
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    style={{
+      background: 'var(--bg-secondary)',
+      color: 'var(--text-primary)',
+      border: '1px solid var(--border-primary)',
+      padding: '0.75rem 1rem 0.75rem 2.5rem',
+      borderRadius: '0.75rem',
+      width: '100%',
+      fontSize: '1rem'
+    }}
+  />
+  <FaSearch style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
+</div>
   );
 };
 

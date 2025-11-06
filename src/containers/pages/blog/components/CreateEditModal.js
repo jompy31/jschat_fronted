@@ -1,4 +1,5 @@
 import React from "react";
+import "./CreateEditModal.css";
 import { Modal, Form, Button, Card, Image } from "react-bootstrap";
 
 const CreateEditModal = ({
@@ -19,201 +20,117 @@ const CreateEditModal = ({
       show={isModalOpen}
       onHide={closeEditModal}
       centered
-      dialogClassName="modal-80w"
       backdrop="static"
-      style={{ zIndex: 1500 }}
-      animation
+      keyboard={false}
+      dialogClassName="create-edit-modal-dialog"
+      contentClassName="create-edit-modal-content"
+      className="create-edit-modal"
+      style={{ zIndex: 2000 }}
     >
-      <Modal.Header
-        closeButton
-        style={{
-          backgroundColor: "#fff", // Ensure white background
-          borderBottom: "1px solid #e0e0e0", // Match footer border
-          padding: "15px 20px",
-        }}
-      >
-        <Modal.Title style={{ fontSize: "1.5rem", color: "#1c2526" }}>
-          {selectedBlogId ? "Editar Publicación" : "Crear Nueva Publicación"}
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body
-        style={{
-          maxHeight: "70vh",
-          overflowY: "auto",
-          padding: "20px",
-          backgroundColor: "#fff",
-          borderRadius: "8px 8px 0 0", // Rounded top corners
-        }}
-      >
-        <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
-          {/* Form Section */}
-          <div style={{ flex: 1 }}>
-            <Form>
-              <Form.Group controlId="formTitle" style={{ marginBottom: "15px" }}>
-                <Form.Label style={{ fontWeight: "500", color: "#1c2526" }}>
-                  Título
-                </Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Ingresa el título"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  style={{
-                    borderRadius: "8px",
-                    padding: "10px",
-                    fontSize: "15px",
-                    border: "1px solid #ced0d4",
-                  }}
-                />
-              </Form.Group>
-              <Form.Group
-                controlId="formContent"
-                style={{ marginBottom: "15px" }}
-              >
-                <Form.Label style={{ fontWeight: "500", color: "#1c2526" }}>
-                  Contenido
-                </Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={5}
-                  placeholder="Ingresa el contenido"
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  style={{
-                    borderRadius: "8px",
-                    padding: "10px",
-                    fontSize: "15px",
-                    border: "1px solid #ced0d4",
-                  }}
-                />
-              </Form.Group>
-              <Form.Group
-                controlId="formImage"
-                style={{ marginBottom: "15px" }}
-              >
-                <Form.Label style={{ fontWeight: "500", color: "#1c2526" }}>
-                  Imagen
-                </Form.Label>
-                <Form.Control
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => setImage(e.target.files[0])}
-                  style={{
-                    borderRadius: "8px",
-                    padding: "10px",
-                    fontSize: "15px",
-                    border: "1px solid #ced0d4",
-                  }}
-                />
-              </Form.Group>
-            </Form>
-          </div>
-          {/* Live Preview Section */}
-          <div style={{ flex: 1, maxWidth: "400px" }}>
-            <h4
-              style={{
-                fontSize: "16px",
-                color: "#1c2526",
-                marginBottom: "15px",
-                fontWeight: "500",
-              }}
-            >
-              Vista Previa
-            </h4>
-            <Card
-              style={{
-                borderRadius: "12px",
-                overflow: "hidden",
-                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-                backgroundColor: "#fff",
-              }}
-            >
-              {image && (
-                <div
-                  style={{
-                    position: "relative",
-                    width: "100%",
-                    height: "150px",
-                    overflow: "hidden",
-                  }}
-                >
-                  <Image
-                    src={URL.createObjectURL(image)}
-                    alt="Preview"
-                    fluid
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
+      {/* Backdrop oscuro con blur */}
+      <div className="modal-backdrop-full" onClick={closeEditModal} />
+
+      <div className="modal-full-container">
+        <Modal.Header className="modal-header-custom border-0 px-6 py-4 flex justify-between items-center">
+          <Modal.Title className="modal-title-custom">
+            {selectedBlogId ? "Editar Publicación" : "Crear Nueva Publicación"}
+          </Modal.Title>
+          <button
+            type="button"
+            className="close-button-custom"
+            onClick={closeEditModal}
+            aria-label="Cerrar"
+          >
+            ×
+          </button>
+        </Modal.Header>
+
+        <Modal.Body className="modal-body-custom p-0 flex-1 overflow-y-auto">
+          <div className="grid md:grid-cols-2 gap-0 h-full">
+            {/* Lado izquierdo: Formulario (oscuro) */}
+            <div className="form-panel-custom p-8">
+              <Form>
+                <Form.Group className="mb-6">
+                  <Form.Label className="form-label-custom text-white">Título</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Ingresa el título"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="form-input-custom bg-white text-gray-900"
                   />
-                </div>
-              )}
-              <Card.Body style={{ padding: "15px" }}>
-                <Card.Title
-                  style={{
-                    fontWeight: "600",
-                    fontSize: "1.2rem",
-                    color: "#1c2526",
-                    marginBottom: "10px",
-                  }}
-                >
-                  {title || "Título de la publicación"}
-                </Card.Title>
-                <div
-                  style={{
-                    fontSize: "14px",
-                    color: "#606770",
-                    whiteSpace: "pre-wrap",
-                    marginBottom: "10px",
-                  }}
-                >
-                  {content || "Contenido de la publicación"}
-                </div>
-              </Card.Body>
-            </Card>
+                </Form.Group>
+
+                <Form.Group className="mb-6">
+                  <Form.Label className="form-label-custom text-white">Contenido</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={8}
+                    placeholder="Escribe el contenido de tu publicación..."
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    className="form-input-custom bg-white text-gray-900 resize-none"
+                  />
+                </Form.Group>
+
+                <Form.Group className="mb-6">
+                  <Form.Label className="form-label-custom text-white">Imagen</Form.Label>
+                  <Form.Control
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setImage(e.target.files[0])}
+                    className="form-file-custom text-white"
+                  />
+                </Form.Group>
+              </Form>
+            </div>
+
+            {/* Lado derecho: Vista previa */}
+            <div className="p-8 bg-gray-50">
+              <h4 className="preview-title mb-5 text-xl font-bold text-gray-800">Vista Previa</h4>
+              <Card className="preview-card-custom shadow-xl border-0 overflow-hidden h-full">
+                {image ? (
+                  <div className="preview-image-container">
+                    <Image
+                      src={URL.createObjectURL(image)}
+                      alt="Vista previa"
+                      className="preview-image"
+                    />
+                  </div>
+                ) : (
+                  <div className="preview-placeholder bg-gray-200 border-2 border-dashed rounded-t-xl w-full h-48 flex items-center justify-center text-gray-400 text-lg">
+                    Sin imagen
+                  </div>
+                )}
+                <Card.Body className="p-6">
+                  <Card.Title className="preview-post-title text-xl">
+                    {title || "Título de la publicación"}
+                  </Card.Title>
+                  <p className="preview-post-content text-gray-600">
+                    {content || "Aquí aparecerá el contenido de tu publicación..."}
+                  </p>
+                </Card.Body>
+              </Card>
+            </div>
           </div>
-        </div>
-      </Modal.Body>
-      <Modal.Footer
-        style={{
-          backgroundColor: "#fff", // Ensure white background
-          borderTop: "1px solid #e0e0e0",
-          padding: "15px 20px",
-          borderRadius: "0 0 8px 8px", // Rounded bottom corners
-          boxShadow: "0 -2px 8px rgba(0, 0, 0, 0.1)", // Subtle shadow for depth
-        }}
-      >
-        <Button
-          variant="secondary"
-          onClick={closeEditModal}
-          style={{
-            borderRadius: "8px",
-            padding: "8px 20px",
-            fontSize: "14px",
-            backgroundColor: "#6c757d", // Consistent secondary color
-            border: "none",
-            marginRight: "10px",
-            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)", // Button shadow
-          }}
-        >
-          Cancelar
-        </Button>
-        <Button
-          variant="primary"
-          onClick={selectedBlogId ? updateBlogPost : createBlogPost}
-          style={{
-            borderRadius: "8px",
-            padding: "8px 20px",
-            fontSize: "14px",
-            backgroundColor: "#007bff", // Consistent primary color
-            border: "none",
-            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)", // Button shadow
-          }}
-        >
-          {selectedBlogId ? "Actualizar" : "Crear"}
-        </Button>
-      </Modal.Footer>
+        </Modal.Body>
+
+        <Modal.Footer className="modal-footer-custom border-0 px-6 py-4 bg-white justify-end gap-4">
+          <Button
+            variant="light"
+            onClick={closeEditModal}
+            className="btn-cancel-custom text-gray-700"
+          >
+            Cancelar
+          </Button>
+          <Button
+            onClick={selectedBlogId ? updateBlogPost : createBlogPost}
+            className="btn-submit-custom"
+          >
+            {selectedBlogId ? "Actualizar" : "Publicar"}
+          </Button>
+        </Modal.Footer>
+      </div>
     </Modal>
   );
 };

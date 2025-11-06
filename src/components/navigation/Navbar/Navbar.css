@@ -1,146 +1,124 @@
-/* Variables CSS para temas - Basadas en logo: azul #0A2463, rojo #D90404 */
-/* Modo claro: Rojo pastel suave para bg, azul para texto */
+/* Variables CSS – Alineadas con J SPORT (azul #0A2463, rojo #D90404, púrpura #663399) */
 :root {
-  --bg-primary: #FFF5F5; /* Rojo pastel suave principal */
-  --bg-secondary: #FFE6E6; /* Rojo pastel más claro */
-  --text-primary: #0A2463; /* Azul del logo */
-  --text-secondary: #4B5EAA; /* Azul secundario */
-  --accent-primary: #D90404; /* Rojo del logo */
-  --accent-hover: linear-gradient(135deg, #D90404, #0A2463);
+  --bg-primary: #FFF5F5; /* Rojo pastel light */
+  --bg-secondary: #E6F3FF; /* Azul claro light */
+  --text-primary: #0A2463; /* Azul marino oscuro para texto en light (mejor contraste) */
+  --text-secondary: #4B5EAA;
+  --accent-primary: #D90404; /* Rojo active/hover */
+  --accent-secondary: #663399; /* Púrpura acento */
+  --accent-hover: linear-gradient(135deg, #D90404, #663399); /* Sublimación gradiente */
   --border-primary: #0A2463;
-  --shadow-light: 0 2px 4px rgba(10, 36, 99, 0.1); /* Sombra azul sutil */
-  --glow-neon: 0 0 10px rgba(217, 4, 4, 0.3); /* Glow rojo */
+  --glow-neon: 0 0 12px rgba(217, 4, 4, 0.4);
+  --shadow-light: 0 2px 8px rgba(10, 36, 99, 0.15);
 }
 
-/* Modo oscuro: Azul oscuro */
 .dark {
-  --bg-primary: #0A1230; /* Azul profundo futurista */
+  --bg-primary: #0A1230; /* Azul dark */
   --bg-secondary: #1A2A4A;
-  --text-primary: #FFFFFF;
+  --text-primary: #FFFFFF; /* Blanco texto dark */
   --text-secondary: #A8B2D1;
-  --accent-primary: #FF4D4D; /* Rojo neón para dark */
-  --accent-hover: linear-gradient(135deg, #FF4D4D, #0A2463);
+  --accent-primary: #FF4D4D; /* Rojo neón dark */
+  --accent-secondary: #A855F7;
+  --accent-hover: linear-gradient(135deg, #FF4D4D, #A855F7);
   --border-primary: #FFFFFF;
-  --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.3);
-  --glow-neon: 0 0 15px rgba(255, 77, 77, 0.5);
+  --glow-neon: 0 0 18px rgba(255, 77, 77, 0.6);
+  --shadow-light: 0 2px 12px rgba(0, 0, 0, 0.5);
 }
 
-/* Transiciones globales para innovación */
-* {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Easing futurista suave */
-}
-
-/* Navbar container - Futurista: sticky con blur */
+/* Navbar: Más pequeño, sticky con glass futurista */
 .navbar {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 50;
-  background: var(--bg-primary);
-  backdrop-filter: blur(10px); /* Blur glassmorphism */
+  z-index: 10000; /* Alto para no overlaps */
+  background: rgba(var(--bg-primary-rgb, 255,245,245), 0.95); /* Semi-transparente */
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-primary);
-  color: var(--text-primary); /* Texto consistente */
+  color: white!important ;
+  height: 60px; /* Smaller */
 }
 
 .navbar-scrolled {
   box-shadow: var(--shadow-light), var(--glow-neon);
+  height: 55px; /* Aún más small on scroll */
 }
 
 .navbar-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 0 1rem;
-  height: 80px;
+  height: 100%;
 }
 
-/* Logo - Responsivo y vibrante */
-.logo-container {
-  flex-shrink: 0;
-  margin-top: 40px;
-}
+/* Logo: Smaller, con parallax hover */
+.logo-container { flex-shrink: 0; }
 
 .logo-link {
   display: flex;
   align-items: center;
-  flex-direction: column;
   text-decoration: none;
 }
 
 .logo-image {
-  height: 60px;
+  margin-top: 30px;
+  height: 35px; /* Smaller */
   width: auto;
-  filter: drop-shadow(0 2px 4px rgba(10, 36, 99, 0.3)); /* Sombra azul sutil */
+  filter: drop-shadow(0 1px 3px rgba(10,36,99,0.2));
 }
 
 .logo-text {
   color: var(--text-primary);
-  font-size: 0.875rem;
-  font-weight: 600;
-  text-shadow: 1px 1px 1px rgba(217, 4, 4, 0.1); /* Toque rojo */
-  margin-top: 0.25rem;
+  font-size: 0.75rem; /* Smaller font */
+  font-weight: 700;
+  margin-left: 0.5rem; /* Horizontal para pro */
 }
 
-/* Desktop Menu - Innovador: Flex con gap dinámico */
+/* Desktop Menu: Gap ajustado, active con glow */
 .desktop-menu {
   display: none;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem; /* Smaller gap */
 }
 
-@media (min-width: 1024px) {
-  .desktop-menu {
-    display: flex;
-  }
-}
+@media (min-width: 1024px) { .desktop-menu { display: flex; } }
 
 .desktop-menu-item {
   color: var(--text-primary);
-  font-size: 1rem;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  border-bottom: 2px solid transparent;
+  font-size: 0.95rem; /* Smaller */
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.25rem;
   position: relative;
-  overflow: hidden;
-}
-
-.desktop-menu-item::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: -100%;
-  width: 100%;
-  height: 2px;
-  background: var(--accent-hover);
-  transition: left 0.3s ease;
-}
-
-.desktop-menu-item:hover::before,
-.desktop-menu-item-active::before {
-  left: 0;
 }
 
 .desktop-menu-item:hover {
   color: var(--accent-primary);
-  transform: translateY(-1px); /* Lift sutil */
+  box-shadow: var(--glow-neon);
+  transform: scale(1.05);
 }
 
 .desktop-menu-item-active {
-  color: var(--accent-primary);
-  font-weight: 600;
+  color: #fc0000 !important;
+  background: rgba(217,4,4,0.1);
+  box-shadow: var(--glow-neon);
+  font-weight: 700;
 }
 
 .desktop-menu-login {
   background: var(--accent-hover);
   color: #FFFFFF;
-  border: 2px solid var(--border-primary);
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-  position: relative;
-  overflow: hidden;
+  padding: 0.4rem 0.8rem; /* Smaller */
+  border-radius: 0.25rem;
+  font-size: 0.95rem;
+}
+
+.desktop-menu-login:hover {
+  box-shadow: var(--glow-neon);
+  transform: scale(1.05);
 }
 
 .desktop-menu-login::before {
@@ -163,306 +141,161 @@
   border-color: var(--accent-primary);
   box-shadow: var(--glow-neon);
 }
-
-/* Theme Toggle - Futurista: Switch con animación rotatoria */
-/* 👈 Fix: Cambié .dark-mode a .dark para consistencia */
+/* Theme Toggle: Smaller, rotate-glow */
 .theme-toggle {
   background: var(--bg-secondary);
-  border: 1px solid var(--border-primary);
-  border-radius: 50px;
-  padding: 0.5rem;
-  cursor: pointer;
+  border-radius: 9999px;
+  width: 2rem; /* Smaller */
+  height: 1rem;
   position: relative;
-  min-width: 2.5rem;
-  height: 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.25rem;
+  cursor: pointer;
 }
 
 .theme-toggle-inner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1rem;
-  height: 1rem;
+  position: absolute;
+  top: 0.1rem;
+  left: 0.1rem;
+  width: 0.8rem;
+  height: 0.8rem;
   border-radius: 50%;
-  background: var(--text-primary);
-  transition: all 0.3s ease;
-  transform-origin: center;
-}
-
-.dark .theme-toggle-inner {  /* 👈 Fix: .dark en lugar de .dark-mode */
   background: var(--accent-primary);
-  animation: rotateGlow 0.6s ease-in-out;
+  transition: transform 0.3s ease;
 }
 
-@keyframes rotateGlow {
-  0% { transform: rotate(0deg) scale(1); }
-  50% { transform: rotate(180deg) scale(1.1); box-shadow: var(--glow-neon); }
-  100% { transform: rotate(360deg) scale(1); }
-}
+.dark .theme-toggle-inner { transform: translateX(1rem); }
 
 .theme-icon {
-  width: 1rem;
-  height: 1rem;
-  color: var(--bg-primary);  /* Icono contrasta con bg del toggle */
-  transition: opacity 0.3s ease;
+  width: 0.8rem;
+  height: 0.8rem;
+  color: var(--text-primary);
 }
 
-.theme-toggle:hover .theme-icon {
-  opacity: 0.7;
-}
+/* Mobile Toggle: Glow hover */
+.mobile-toggle-container { display: flex; }
 
-/* Mobile Menu Toggle - Responsivo */
-.mobile-toggle-container {
-  display: flex;
-  align-items: center;
-}
-
-@media (min-width: 1024px) {
-  .mobile-toggle-container {
-    display: none;
-  }
-}
+@media (min-width: 1024px) { .mobile-toggle-container { display: none; } }
 
 .mobile-toggle-button {
-  padding: 0.5rem;
-  color: var(--text-primary);
   background: none;
   border: none;
-  border-radius: 0.25rem;
+  padding: 0.3rem;
+  color: var(--text-primary);
 }
 
-.mobile-toggle-button:hover {
-  background: var(--bg-secondary);
-  box-shadow: var(--glow-neon);
-}
+.mobile-toggle-button:hover { box-shadow: var(--glow-neon); }
 
-.mobile-toggle-icon {
-  width: 1.5rem;
-  height: 1.5rem;
-}
+.mobile-toggle-icon { width: 1.2rem; height: 1.2rem; } /* Smaller */
 
-/* Mobile Menu - Sidebar futurista con overlay */
+/* Mobile Menu: Full-width, scrollable, high z-index */
 .mobile-menu {
   position: fixed;
-  top: 80px;
+  top: 60px; /* Bajo navbar */
   left: 0;
-  bottom: 0;
-  width: 250px;
-  background: linear-gradient(180deg, var(--bg-primary), var(--bg-secondary)); /* Gradiente innovador */
-  box-shadow: 2px 0 20px rgba(10, 36, 99, 0.2), var(--glow-neon);
-  z-index: 40;
-  overflow-y: auto;
+  width: 100vw; /* Full-width */
+  height: calc(100vh - 60px); /* Height fija para visibilidad completa */
+  background: #FFFFFF; /* Opaco en light para contraste (sobrescribe var) */
+  box-shadow: 0 4px 30px rgba(10,36,99,0.4); /* Sombra más fuerte */
+  z-index: 10001; /* Más alto que navbar */
+  overflow-y: auto; /* Scrollable */
+  opacity: 1 !important; /* Forzar visibilidad */
+}
+
+.dark .mobile-menu {
+  background: var(--bg-primary); /* Mantener dark */
+}
+
+.mobile-menu-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.5); /* Semi-transparente */
+  z-index: 10000; /* Debajo del menú */
+  opacity: 1 !important;
 }
 
 .mobile-menu-content {
-  padding: 1.5rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .mobile-menu-item {
-  display: block;
-  padding: 0.75rem 1rem;
+  padding: 0.6rem 1rem;
   color: var(--text-primary);
-  border-radius: 0.375rem;
-  position: relative;
-  border-left: 3px solid transparent;
+  border-radius: 0.25rem;
 }
 
 .mobile-menu-item:hover {
-  background: var(--accent-primary);
-  color: #FFFFFF;
-  border-left-color: var(--border-primary);
-  transform: translateX(5px); /* Slide in */
+  background: rgba(217,4,4,0.1);
+  transform: translateX(3px);
 }
 
-.mobile-menu-item-title {
-  font-size: 1rem;
-  font-weight: 500;
+.mobile-menu-item-active {
+  color: #000000; /* Negro en light */
+  background: rgba(217,4,4,0.2);
+  box-shadow: var(--glow-neon);
 }
 
-.mobile-menu-item-description {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
+.dark .mobile-menu-item-active {
+  color: var(--accent-primary);
 }
+
+.mobile-menu-item-title { font-size: 0.95rem; font-weight: 600; }
+
+.mobile-menu-item-description { font-size: 0.7rem; color: var(--text-secondary); }
 
 .mobile-menu-user {
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
   border-top: 1px solid var(--border-primary);
-  padding-top: 1rem;
 }
 
 .mobile-menu-button {
-  display: flex;
-  align-items: center;
-  padding: 0.75rem 1rem;
+  padding: 0.6rem 1rem;
   color: var(--text-primary);
-  background: var(--bg-primary);
-  border: 1px solid var(--border-primary);
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.mobile-menu-button:hover {
-  background: var(--accent-primary);
-  color: #FFFFFF;
-  border-color: var(--accent-primary);
-  box-shadow: var(--glow-neon);
-}
-
-.mobile-menu-login {
-  background: var(--accent-hover);
-  color: #FFFFFF;
-  border: 1px solid var(--border-primary);
-}
-
-.mobile-menu-login:hover {
-  background: var(--border-primary);
-  border-color: var(--accent-primary);
-}
-
-.mobile-menu-icon {
-  width: 1.25rem;
-  height: 1.25rem;
-  margin-right: 0.5rem;
-}
-
-.mobile-menu-logout {
-  color: var(--accent-primary);
-  border-color: var(--accent-primary);
-}
-
-.mobile-menu-logout:hover {
-  background: var(--accent-primary);
-  color: #FFFFFF;
-}
-
-/* User Menu - Popover con glass effect */
-.user-menu {
-  position: relative;
-}
-
-.user-menu-button {
-  display: flex;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  color: var(--text-primary);
-  font-size: 1rem;
-  font-weight: 500;
-  border: 2px solid transparent;
   background: var(--bg-secondary);
   border-radius: 0.25rem;
-}
-
-.user-menu-button:hover {
-  color: var(--accent-primary);
-  border-bottom-color: var(--accent-primary);
-  box-shadow: var(--glow-neon);
-}
-
-.user-menu-button-active {
-  color: var(--accent-primary);
-  border-bottom-color: var(--accent-primary);
-}
-
-.user-menu-icon {
-  width: 0.75rem;
-  height: 0.75rem;
-  margin-left: 0.25rem;
-}
-
-.user-menu-panel {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background: var(--bg-primary);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--border-primary);
-  border-radius: 0.375rem;
-  box-shadow: var(--shadow-light), var(--glow-neon);
-  min-width: 150px;
-}
-
-.user-menu-content {
-  display: flex;
-  flex-direction: column;
-  padding: 0.5rem;
-}
-
-.user-menu-item {
   display: flex;
   align-items: center;
-  padding: 0.5rem 1rem;
-  color: var(--text-primary);
-  font-size: 0.875rem;
+}
+
+.mobile-menu-button:hover { background: var(--accent-hover); color: #FFFFFF; }
+
+.mobile-menu-icon { width: 1rem; height: 1rem; margin-right: 0.5rem; }
+
+.mobile-menu-logout { color: var(--accent-primary); }
+
+/* User Menu: Glass popover smaller */
+.user-menu-panel {
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background: rgba(var(--bg-primary-rgb), 0.95);
+  backdrop-filter: blur(10px);
   border-radius: 0.25rem;
+  box-shadow: var(--shadow-light);
+  min-width: 140px; /* Smaller */
 }
 
-.user-menu-item:hover {
-  background: var(--accent-primary);
-  color: #FFFFFF;
-}
+.user-menu-item { padding: 0.5rem 0.8rem; font-size: 0.85rem; }
 
-.user-menu-item-icon {
-  width: 1.25rem;
-  height: 1.25rem;
-  margin-right: 0.5rem;
-}
+.user-menu-item:hover { background: var(--accent-hover); color: #FFFFFF; }
 
-.user-menu-logout {
-  color: var(--accent-primary);
-}
+.user-menu-item-icon { width: 1rem; height: 1rem; }
 
-.user-menu-logout:hover {
-  background: var(--accent-primary);
-  color: #FFFFFF;
-}
-
-/* Responsive - Mejoras para tablet y mobile */
-@media (max-width: 1023px) and (min-width: 641px) { /* Tablet */
-  .desktop-menu {
-    gap: 1rem; /* Gap más chico */
-  }
-  
-  .navbar-container {
-    padding: 0 0.75rem;
-  }
-  
-  .logo-image {
-    height: 50px;
-  }
+/* Responsive: Ajustes para tablet/mobile */
+@media (max-width: 1023px) and (min-width: 641px) {
+  .navbar { height: 55px; }
+  .mobile-menu { top: 55px; height: calc(100vh - 55px); }
 }
 
 @media (max-width: 640px) {
-  .navbar-container {
-    height: 60px;
-  }
-
-  .logo-container {
-    margin-top: 20px;
-  }
-  
-  .logo-image {
-    height: 40px;
-  }
-
-  .mobile-menu {
-    top: 60px;
-    width: 80%; /* Full-width en mobile chico */
-    max-width: 300px;
-  }
-  
-  .theme-toggle { /* Ocultar en mobile si es muy chico, o hazlo más pequeño */
-    min-width: 2rem;
-    height: 1.25rem;
-  }
+  .navbar { height: 50px; }
+  .navbar-container { padding: 0 0.75rem; }
+  .logo-image { height: 35px; }
+  .mobile-menu { top: 50px; height: calc(100vh - 50px); width: 80vw; } /* Sidebar feel */
+  .mobile-menu-content { padding: 0.75rem; gap: 0.5rem; }
 }
+

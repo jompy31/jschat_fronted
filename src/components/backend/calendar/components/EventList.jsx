@@ -35,7 +35,7 @@ const EventList = ({
     setShowAddModal(true);
     setIsEditMode(true);
     setNewEvent({
-      id: event.id, // Añadir el id
+      id: event.id,
       title: event.title,
       memo: event.memo,
       created: moment(event.created).toDate(),
@@ -50,66 +50,71 @@ const EventList = ({
   };
 
   return (
-    <div className="w-full md:w-1/2 p-4">
-      <h1 className="text-2xl font-bold text-gray-800 mb-4">Eventos</h1>
+    <div>
+      <h1>Eventos</h1>
       {isLoggedIn ? (
         <>
-          {currentUser && currentUser.staff_status === 'administrator' && (
-            <Button
-              variant="primary"
-              onClick={handleAddEvent}
-              className="mb-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300"
-            >
+          {currentUser && currentUser.staff_status && (
+            <button onClick={handleAddEvent} className="btn btn-primary mb-4">
               Agregar Evento
-            </Button>
+            </button>
           )}
-          {eventos.map((evento, index) => {
-            const isCompleted = moment(evento.created).isBefore(moment());
-            return (
-              <div
-                key={evento.id}
-                className={`bg-white rounded-lg shadow-md p-4 mb-4 transition-transform duration-300 ${
-                  hoveredEvent === index ? 'transform scale-105' : ''
-                }`}
-                onMouseOver={() => setHoveredEvent(index)}
-                onMouseOut={() => setHoveredEvent(null)}
-              >
-                <div className="flex justify-between items-center">
-                  <div onClick={() => handleEditEvent(evento)} className="cursor-pointer flex-1">
-                    <h2 className="text-lg font-semibold text-blue-600">{evento.title}</h2>
-                    <p className="text-gray-600">{evento.memo}</p>
-                    <p className="text-sm text-gray-500">
-                      Creado: {moment(evento.created).format('YYYY-MM-DD HH:mm')}
-                    </p>
-                    <p className="text-sm text-gray-500">Completado: {isCompleted ? 'Sí' : 'No'}</p>
-                  </div>
-                  <div className="flex space-x-2">
-                    <Button
-                      variant="primary"
-                      onClick={() => downloadEvent(evento)}
-                      className="bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded"
-                    >
-                      Descargar
-                    </Button>
-                    {currentUser && currentUser.staff_status === 'administrator' && (
-                      <Button
-                        variant="danger"
-                        onClick={() => handleDeleteEvent(evento.id)}
-                        className="bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
+          {eventos.length === 0 ? (
+            <p className="text-muted">No hay eventos programados.</p>
+          ) : (
+            eventos.map((evento, index) => {
+              const isCompleted = moment(evento.created).isBefore(moment());
+              return (
+                <div
+                  key={evento.id}
+                  className={`event-card ${hoveredEvent === index ? 'scale-105' : ''}`}
+                  onMouseEnter={() => setHoveredEvent(index)}
+                  onMouseLeave={() => setHoveredEvent(null)}
+                  onClick={() => handleEditEvent(evento)}
+                >
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <h2>{evento.title}</h2>
+                      <p>{evento.memo}</p>
+                      <p className="date">
+                        Creado: {moment(evento.created).format('YYYY-MM-DD HH:mm')}
+                      </p>
+                      <p className="date">
+                        Completado: {isCompleted ? 'Sí' : 'No'}
+                      </p>
+                    </div>
+                    <div className="flex gap-2 mt-2">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          downloadEvent(evento);
+                        }}
+                        className="btn btn-outline"
                       >
-                        Eliminar
-                      </Button>
-                    )}
+                        Descargar
+                      </button>
+                      {currentUser && currentUser.staff_status === 'administrator' && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteEvent(evento.id);
+                          }}
+                          className="btn btn-danger"
+                        >
+                          Eliminar
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          )}
         </>
       ) : (
-        <Alert variant="warning" className="rounded-lg">
+        <Alert variant="warning" className="alert-warning">
           No has iniciado sesión. Por favor{' '}
-          <Link to={'/login'} className="text-blue-600 hover:underline">
+          <Link to="/login" className="underline">
             inicia sesión
           </Link>{' '}
           para ver nuestro calendario de seminarios web.

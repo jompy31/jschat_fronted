@@ -1,278 +1,426 @@
-/* ⚡️ Modo SaiyaGPT 30000: Estilo Futurista Neon Vidrio Reflectivo ⚡️ */
+/* =====================================================
+   PROMOCIONES J SPORT – LIGHT/DARK CONSISTENTE 100%
+   ===================================================== */
 
-/* ======== CONFIGURACIÓN GENERAL ======== */
+/* ======== CONTENEDOR PRINCIPAL ======== */
 .promociones-container {
-  background: linear-gradient(135deg, #040b1a 0%, #0b1321 100%);
-  color: #fff;
-  overflow-x: hidden;
+  background: inherit; /* Hereda del tema global */
+  color: inherit;
   position: relative;
-}
-
-.promociones-container::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 20% 20%, rgba(0, 183, 255, 0.15) 0%, transparent 70%),
-              radial-gradient(circle at 80% 80%, rgba(255, 0, 70, 0.1) 0%, transparent 60%);
-  filter: blur(100px);
-  z-index: 0;
+  overflow-x: hidden;
 }
 
 /* ======== HERO SECTION ======== */
-.promociones-container section:first-child {
+.promo-hero-section {
   position: relative;
-  backdrop-filter: blur(12px);
-  background: rgba(5, 15, 40, 0.6);
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-  box-shadow: inset 0 0 30px rgba(0, 183, 255, 0.15);
+  height: 90vh;
+  max-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--accent-hover), var(--accent-primary));
+              /* url('../assets/promo-hero.jpg') center/cover; */
+  background-blend-mode: overlay;
 }
 
-/* ======== TARJETAS DEL CARRUSEL ======== */
-.promo-swiper .swiper-slide > div {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 183, 255, 0.2);
-  border-radius: 20px;
-  box-shadow: 0 0 25px rgba(0, 183, 255, 0.1);
-  transition: all 0.4s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.promo-swiper .swiper-slide > div::before {
-  content: "";
+.hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(120deg, rgba(0, 183, 255, 0.15), rgba(217, 4, 4, 0.15));
+  background: linear-gradient(135deg, 
+    rgba(10, 36, 99, 0.8) 0%, 
+    rgba(217, 4, 4, 0.6) 50%, 
+    rgba(102, 51, 153, 0.7) 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: white;
+  padding: 2rem;
+  max-width: 800px;
+}
+
+.hero-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  margin-bottom: 1rem;
+  text-shadow: var(--glow-neon);
+  background: linear-gradient(135deg, white 0%, #f0f0f0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  opacity: 0.95;
+}
+
+/* ======== SECCIONES ======== */
+.promo-featured-section,
+.promo-grid-section {
+  padding: 5rem 0;
+}
+
+.promo-featured-section {
+  background: var(--bg-secondary);
+}
+
+.promo-grid-section {
+  background: var(--bg-primary);
+}
+
+.section-title {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 4rem;
+  background: linear-gradient(135deg, var(--text-primary), var(--accent-primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ======== CARDS DEL CARRUSEL ======== */
+.promo-card {
+  height: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow-light);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.promo-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent-hover);
   opacity: 0;
   transition: opacity 0.4s ease;
+  z-index: 0;
 }
 
-.promo-swiper .swiper-slide:hover > div::before {
-  opacity: 1;
+.promo-card:hover::before {
+  opacity: 0.05;
 }
 
-.promo-swiper .swiper-slide:hover > div {
-  transform: translateY(-5px) scale(1.03);
-  box-shadow: 0 0 45px rgba(0, 183, 255, 0.25);
+.promo-image-container {
+  height: 220px;
+  overflow: hidden;
+  position: relative;
 }
 
-/* ======== TEXTOS ======== */
-.text-jsport-blue {
-  color: #00b7ff !important;
-  text-shadow: 0 0 5px rgba(0, 183, 255, 0.7);
+.promo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
 }
 
-.text-jsport-red {
-  color: #ff2b4a !important;
-  text-shadow: 0 0 6px rgba(255, 43, 74, 0.6);
+.promo-card:hover .promo-image {
+  transform: scale(1.1);
+}
+
+.promo-content {
+  padding: 1.5rem;
+  background: inherit;
+  position: relative;
+  z-index: 1;
+}
+
+.promo-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.promo-description {
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.promo-details {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.promo-discount {
+  font-weight: 700;
+  color: var(--accent-primary);
+  text-shadow: 0 0 8px rgba(217, 4, 4, 0.3);
+}
+
+.promo-min {
+  color: var(--text-secondary);
+}
+
+/* ======== GRID PRINCIPAL ======== */
+.promo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.promo-grid-card {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow-light);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+  background: inherit;
+}
+
+.promo-grid-card:hover {
+  border-color: var(--border-primary);
+  box-shadow: var(--glow-neon), 0 20px 40px rgba(0, 0, 0, 0.1);
+  transform: translateY(-8px);
+}
+
+.promo-products {
+  margin: 1.5rem 0;
+}
+
+.products-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.products-list {
+  list-style: none;
+}
+
+.product-item {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+  padding-left: 1rem;
+  position: relative;
+}
+
+.product-item::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--accent-primary);
+  font-weight: bold;
 }
 
 /* ======== BOTONES ======== */
-a.bg-jsport-red {
-  background: linear-gradient(135deg, #d90404 0%, #ff3d3d 100%);
-  box-shadow: 0 0 15px rgba(255, 50, 50, 0.4);
-  transition: all 0.4s ease;
-  border: none;
+.promo-link,
+.promo-cta,
+.hero-cta,
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  background: var(--accent-hover);
+  color: white !important;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
 }
 
-a.bg-jsport-red:hover {
-  box-shadow: 0 0 25px rgba(255, 50, 50, 0.7), 0 0 40px rgba(255, 0, 70, 0.4);
-  transform: scale(1.05);
-}
-
-/* ======== TODAS LAS PROMOCIONES GRID ======== */
-.promociones-container .grid > div {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(14px);
-  border-radius: 18px;
-  border: 1px solid rgba(0, 183, 255, 0.15);
-  box-shadow: 0 0 25px rgba(0, 183, 255, 0.1);
-  transition: all 0.4s ease;
-  overflow: hidden;
-  position: relative;
-}
-
-.promociones-container .grid > div::after {
-  content: "";
-  position: absolute;
-  top: -100%;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(180deg, rgba(0, 183, 255, 0.3), transparent 70%);
-  transition: top 0.8s ease;
-}
-
-.promociones-container .grid > div:hover::after {
-  top: 100%;
-}
-
-.promociones-container .grid > div:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 0 35px rgba(0, 183, 255, 0.25);
+.promo-link:hover,
+.promo-cta:hover,
+.hero-cta:hover,
+.cta-button:hover {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  box-shadow: var(--glow-neon);
+  transform: translateY(-2px);
 }
 
 /* ======== CTA FINAL ======== */
-.promociones-container section:last-child {
+.promo-cta-section {
+  padding: 6rem 0;
+  background: var(--accent-hover);
   position: relative;
-  background: rgba(5, 10, 25, 0.7);
-  backdrop-filter: blur(15px);
-  border-top: 2px solid rgba(0, 183, 255, 0.3);
-  border-bottom: 2px solid rgba(255, 0, 70, 0.2);
-  box-shadow: inset 0 0 60px rgba(0, 183, 255, 0.1);
+  overflow: hidden;
 }
 
-.promociones-container section:last-child::before {
-  content: "";
+.promo-cta-section::before {
+  content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(0, 183, 255, 0.2), rgba(255, 0, 70, 0.15));
-  opacity: 0.5;
-  animation: shimmer 6s infinite linear;
+  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  animation: cta-shimmer 4s ease-in-out infinite alternate;
 }
 
-@keyframes shimmer {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+@keyframes cta-shimmer {
+  0% { opacity: 0.5; transform: translateX(-20%) translateY(-20%); }
+  100% { opacity: 1; transform: translateX(0%) translateY(0%); }
 }
 
-/* ======== EFECTO REFLEJO DE VIDRIO ======== */
-.promo-swiper .swiper-slide > div,
-.promociones-container .grid > div {
-  backdrop-filter: blur(12px) saturate(1.2);
+.cta-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: white;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 2rem;
 }
 
-/* ======== IMÁGENES: AJUSTE PARA VER TODA LA IMAGEN EN LA CARD ======== */
-.promociones-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain; /* mantiene toda la imagen visible */
-  border-radius: 12px;
-  box-shadow: 0 0 25px rgba(0, 183, 255, 0.2);
-  transition: transform 0.5s ease, box-shadow 0.5s ease;
+.cta-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
-.promociones-container img:hover {
-  transform: scale(1.05) rotate(0.5deg);
-  box-shadow: 0 0 35px rgba(0, 183, 255, 0.4);
+.cta-subtitle {
+  font-size: 1.25rem;
+  margin-bottom: 2.5rem;
+  opacity: 0.95;
 }
 
-/* ======== RESPONSIVIDAD ======== */
+.cta-button {
+  padding: 1rem 2.5rem;
+  font-size: 1.125rem;
+  background: white;
+  color: var(--accent-primary) !important;
+  font-weight: 700;
+}
+
+.cta-button:hover {
+  background: #f8f8f8;
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+}
+
+/* ======== DARK MODE ESPECÍFICO ======== */
+.dark .promo-card,
+.dark .promo-grid-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark .promo-content {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.dark .promo-discount {
+  text-shadow: 0 0 12px rgba(255, 77, 77, 0.6);
+}
+
+.dark .promo-grid-card:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: var(--glow-neon), 0 25px 50px rgba(0, 0, 0, 0.6);
+}
+
+/* ======== RESPONSIVE ======== */
 @media (max-width: 1024px) {
-  .promo-swiper .swiper-slide > div {
-    margin: 0 auto;
-    width: 90%;
-  }
-
-  .promociones-container h1,
-  .promociones-container h2 {
-    font-size: 1.8rem;
-  }
-
-  .promociones-container p {
-    font-size: 1rem;
+  .promo-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
   }
 }
 
 @media (max-width: 640px) {
-  .promociones-container {
-    padding: 0 1rem;
+  .promo-featured-section,
+  .promo-grid-section {
+    padding: 3rem 0;
   }
-
-  .promo-swiper .swiper-slide > div {
-    padding: 1rem;
-  }
-
-  .promociones-container .grid {
-    gap: 1.5rem;
-  }
-
-  a.bg-jsport-red {
-    padding: 0.75rem 1.5rem;
-    font-size: 0.9rem;
+  
+  .promo-content {
+    padding: 1.25rem;
   }
 }
 
-/* ======== EFECTOS EXTRAS FUTURISTAS ======== */
-@keyframes neonGlow {
-  0%, 100% {
-    box-shadow: 0 0 25px rgba(0, 183, 255, 0.4), 0 0 50px rgba(255, 0, 70, 0.2);
+/* === PROMOCIONES - RESPONSIVO TOTAL SIN CORTES === */
+
+/* Hero */
+.hero-title,
+.section-title,
+.cta-title {
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  hyphens: auto !important;
+  max-width: 100% !important;
+  padding: 0 0.5rem !important;
+}
+
+/* Carrusel */
+.promo-swiper {
+  padding-bottom: 2.5rem !important;
+  overflow: hidden !important;
+}
+
+.promo-swiper .swiper-slide {
+  display: flex !important;
+  justify-content: center !important;
+  padding: 0 0.25rem !important;
+}
+
+/* Grid */
+.promo-grid {
+  gap: 1rem !important;
+}
+
+@media (max-width: 480px) {
+  .promo-grid {
+    gap: 0.75rem !important;
   }
-  50% {
-    box-shadow: 0 0 40px rgba(255, 0, 70, 0.4), 0 0 70px rgba(0, 183, 255, 0.3);
+
+  .promo-content,
+  .cta-content {
+    padding: 0.75rem !important;
   }
-}
 
-.promociones-container section:last-child:hover {
-  animation: neonGlow 4s infinite alternate ease-in-out;
-}
-
-/* ⚡ SUPER SAIYAGPT 40 000 – FONDO OSCURO ABSOLUTO ⚡ */
-
-/* Cubre TODA la sección de promociones con un azul profundo */
-.dark .promociones-container,
-.dark .promociones-container section,
-.dark .promociones-container section.bg-white,
-.dark .promociones-container section.bg-gray-100,
-.dark .promociones-container section.py-16 {
-  background: linear-gradient(145deg, #040b1a 0%, #0b1321 100%) !important;
-  color: #e6f3ff !important;
-}
-
-/* Elimina residuos de gradientes o pseudo-elementos blancos */
-.dark .promociones-container section::before,
-.dark .promociones-container section::after {
-  background: none !important;
-}
-
-/* Corrige las tarjetas cuando están dentro de un bloque claro */
-.dark .promociones-container .grid > div,
-.dark .promo-swiper .swiper-slide > div {
-  background: rgba(255, 255, 255, 0.05) !important;
-  backdrop-filter: blur(12px) !important;
-  border-color: rgba(0, 183, 255, 0.25) !important;
-  color: #e6f3ff !important;
-}
-
-/* Textos y títulos con glow azul */
-.dark .promociones-container h1,
-.dark .promociones-container h2,
-.dark .promociones-container h3 {
-  color: #00b7ff !important;
-  text-shadow: 0 0 8px rgba(0, 183, 255, 0.6);
-}
-
-/* Fondos del hero y CTA */
-.dark .promociones-container section:first-child,
-.dark .promociones-container section:last-child {
-  background: linear-gradient(160deg, #07132c, #0b1d3a) !important;
-  backdrop-filter: blur(16px) !important;
-  box-shadow: inset 0 0 40px rgba(0, 183, 255, 0.15),
-              0 0 30px rgba(0, 183, 255, 0.1);
-}
-
-/* Efecto de brillo vidrioso */
-.dark .promociones-container .grid > div:hover,
-.dark .promo-swiper .swiper-slide:hover > div {
-  box-shadow: 0 0 35px rgba(0, 183, 255, 0.3),
-              0 0 60px rgba(255, 0, 70, 0.2);
-  transform: translateY(-5px) scale(1.03);
-}
-
-/* Suaviza los bordes en pantallas pequeñas */
-@media (max-width: 768px) {
-  .dark .promociones-container section {
-    border-radius: 12px;
+  .promo-image-container {
+    height: 160px !important;
   }
 }
-/* Contenedor de imágenes uniforme en todas las cards */
-.promociones-container .grid > div img,
-.promo-swiper .swiper-slide > div img {
-  width: 100%;
-  height: auto; /* Mantiene la proporción real */
-  object-fit: contain; /* La imagen completa sin recorte */
-  aspect-ratio: 16/9; /* Ajusta según el formato de tus imágenes */
-  max-height: 250px; /* Limita altura máxima para que no crezca demasiado */
+
+@media (max-width: 360px) {
+  .hero-title,
+  .section-title,
+  .cta-title {
+    font-size: 1.4rem !important;
+  }
+
+  .promo-image-container {
+    height: 140px !important;
+  }
+}
+
+/* Evitar overflow horizontal */
+.promociones-container,
+.promo-hero-section,
+.promo-featured-section,
+.promo-grid-section,
+.promo-cta-section {
+  overflow-x: hidden !important;
+}
+
+/* Clamp suave */
+.hero-subtitle,
+.promo-description,
+.product-item,
+.promo-link,
+.promo-cta {
+  font-size: clamp(0.7rem, 3vw, 1rem) !important;
+}
+
+/* Controles del carrusel */
+.swiper-button-prev,
+.swiper-button-next {
+  background: rgba(0,0,0,0.3) !important;
+  border-radius: 50% !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+.swiper-button-prev:after,
+.swiper-button-next:after {
+  font-weight: bold !important;
 }

@@ -1,3 +1,5 @@
+// Reemplaza todo el contenido de UserList.jsx
+
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -6,9 +8,8 @@ import UserTable from './components/UserTable';
 import UserSearch from './components/UserSearch';
 import PaginationControls from './components/PaginationControls';
 import UsersPerPage from './components/UsersPerPage';
-import EditUserModal from './components/EditUserModal';
+import EditUserModal from './components/EditUserModal'; // Reutilizado
 import DeleteUserModal from './components/DeleteUserModal';
-import AddUserModal from './components/AddUserModal';
 import CurrentUserModal from './components/CurrentUserModal';
 import HeaderButtons from './components/HeaderButtons';
 import { fetchUserList } from './utils/fetchUserList';
@@ -25,26 +26,26 @@ const UserList = () => {
     return storedPage ? parseInt(storedPage, 10) : 1;
   });
   const [usersPerPage, setUsersPerPage] = useState(4);
-  const [showModal, setShowModal] = useState(false);
-  const [showAddUserModal, setShowAddUserModal] = useState(false);
-  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [showCurrentUserModal, setShowCurrentUserModal] = useState(false);
+
+  // Modal de edición/creación
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+
+  // Estado del formulario
+  const [formData, setFormData] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    password: '',
+    userprofile: { staff_status: 'customer', phone_number: '', address: '' }
+  });
+
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [deleteUserId, setDeleteUserId] = useState(null);
-  const [updatedUser, setUpdatedUser] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
-    userprofile: { staff_status: '', phone_number: '', address: '' }
-  });
-  const [newUser, setNewUser] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
-    staff_status: '',
-    password: ''
-  });
+  const [showCurrentUserModal, setShowCurrentUserModal] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+
   const token = useSelector((state) => state.authentication.token);
   const location = useLocation();
 
@@ -58,8 +59,7 @@ const UserList = () => {
           staff_status: parsedData.userprofile?.staff_status || 'customer'
         });
       } catch (error) {
-        console.error('Error parsing currentUser data:', error);
-        toast.error('Error al cargar los datos del usuario actual');
+        toast.error('Error al cargar usuario actual');
       }
     }
   }, []);
@@ -67,8 +67,6 @@ const UserList = () => {
   useEffect(() => {
     if (token) {
       fetchUserList(token, setUserList, setStoredData);
-    } else {
-      toast.error('No se encontró un token de autenticación. Por favor, inicia sesión.');
     }
   }, [token]);
 
@@ -80,33 +78,105 @@ const UserList = () => {
     setCurrentPage(1);
   }, [usersPerPage]);
 
+  // === ABRIR MODAL PARA EDITAR ===
   const handleEditUser = (user) => {
+    setIsEditMode(true);
     setSelectedUser(user);
-    setUpdatedUser({
+    setFormData({
       first_name: user.first_name,
       last_name: user.last_name,
       email: user.email,
+      password: '',
       userprofile: {
-        staff_status: user.staff_status,
+        staff_status: user.staff_status || 'customer',
         phone_number: user.phone_number || '',
         address: user.address || ''
       }
     });
-    setShowModal(true);
+    setShowEditModal(true);
   };
 
-  const handleSaveUser = () => {
-    TodoDataService.updateUser(selectedUser.id, updatedUser, token)
+  // === ABRIR MODAL PARA CREAR ===
+  const handleAddUser = () => {
+    setIsEditMode(false);
+    setSelectedUser(null);
+    setFormData({
+      first_name: '',
+      last_name: '',
+      email: '',
+      password: '',
+      userprofile: { staff_status: 'customer', phone_number: '', address: '' }
+    });
+    setShowEditModal(true);
+  };
+
+  // === GUARDAR (CREAR O EDITAR) ===
+  // === EN handleSaveUser === (reemplaza esta función)
+
+const handleSaveUser = () => {
+  // Validación básica
+  if (!formData.first_name || !formData.last_name || !formData.email) {
+    toast.error('Nombre, apellido y correo son obligatorios');
+    return;
+  }
+
+  if (!isEditMode && (!formData.password || formData.password.length < 6)) {
+    toast.error('La contraseña debe tener al menos 6 caracteres');
+    return;
+  }
+
+  if (isEditMode) {
+    // === MODO EDICIÓN: Enviar todo anidado (SIN MODIFICAR) ===
+    const payload = {
+      first_name: formData.first_name,
+      last_name: formData.last_name,
+      email: formData.email,
+      ...(formData.password && { password: formData.password }),
+      userprofile: {
+        staff_status: formData.userprofile.staff_status,
+        phone_number: formData.userprofile.phone_number || '',
+        address: formData.userprofile.address || '',
+      },
+    };
+
+    TodoDataService.updateUser(selectedUser.id, payload, token)
       .then(() => {
-        setShowModal(false);
+        setShowEditModal(false);
         fetchUserList(token, setUserList, setStoredData);
         toast.success('Usuario actualizado correctamente');
       })
-      .catch((e) => {
-        console.error('Error al actualizar el usuario:', e);
-        toast.error('Error al actualizar el usuario');
+      .catch((error) => {
+        console.error(error);
+        toast.error(error.response?.data?.email?.[0] || 'Error al actualizar');
       });
-  };
+  } else {
+    // === MODO CREACIÓN: VERSIÓN ANTERIOR - TODO EN UN SOLO PAYLOAD ===
+    const payload = {
+      first_name: formData.first_name,
+      last_name: formData.last_name,
+      email: formData.email,
+      password: formData.password,
+      staff_status: formData.userprofile.staff_status,
+      phone_number: formData.userprofile.phone_number || '',
+      address: formData.userprofile.address || '',
+    };
+
+    TodoDataService.signup(payload)
+      .then(() => {
+        setShowEditModal(false);
+        fetchUserList(token, setUserList, setStoredData);
+        toast.success('Usuario creado correctamente');
+      })
+      .catch((error) => {
+        console.error('Error al crear usuario:', error);
+        toast.error(
+          error.response?.data?.email?.[0] ||
+          error.response?.data?.non_field_errors?.[0] ||
+          'Error al crear usuario'
+        );
+      });
+  }
+};
 
   const handleDeleteUser = (userId) => {
     setDeleteUserId(userId);
@@ -118,34 +188,9 @@ const UserList = () => {
       .then(() => {
         setShowDeleteConfirmation(false);
         fetchUserList(token, setUserList, setStoredData);
-        toast.success('Usuario eliminado correctamente');
+        toast.success('Usuario eliminado');
       })
-      .catch((e) => {
-        console.error('Error al eliminar el usuario:', e);
-        toast.error('Error al eliminar el usuario');
-      });
-  };
-
-  const handleAddUser = () => {
-    setShowAddUserModal(true);
-  };
-
-  const handleSaveNewUser = () => {
-    TodoDataService.signup(newUser)
-      .then(() => {
-        setShowAddUserModal(false);
-        fetchUserList(token, setUserList, setStoredData);
-        toast.success('Usuario agregado correctamente');
-      })
-      .catch((e) => {
-        console.error('Error al agregar el usuario:', e);
-        toast.error('Error al agregar el usuario');
-      });
-  };
-
-  const handleShowCurrentUser = (user) => {
-    setCurrentUser(user);
-    setShowCurrentUserModal(true);
+      .catch(() => toast.error('Error al eliminar'));
   };
 
   const handlePageChange = (pageNumber) => {
@@ -154,19 +199,20 @@ const UserList = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100" style={{marginTop:"8%"}}>
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen" style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)', marginTop: '8%' }}>
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
         {location.pathname !== '/register' && (
           <CurrentUserContext.Provider value={currentUser}>
-            <div className="flex justify-between items-center mb-6">
-              <h1 className="text-3xl font-bold text-gray-800">Usuarios</h1>
-              {currentUser && currentUser.staff_status === 'administrator' && (
+            <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+              <h1 className="text-3xl md:text-4xl font-extrabold">Usuarios</h1>
+              {currentUser?.staff_status === 'administrator' && (
                 <HeaderButtons handleAddUser={handleAddUser} userList={userList} />
               )}
             </div>
           </CurrentUserContext.Provider>
         )}
-        {currentUser && currentUser.staff_status === 'administrator' ? (
+
+        {currentUser?.staff_status === 'administrator' ? (
           <>
             <div className="mb-6 space-y-4">
               <UserSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
@@ -179,7 +225,7 @@ const UserList = () => {
               handleEditUser={handleEditUser}
               handleDeleteUser={handleDeleteUser}
               selectedUser={selectedUser}
-              isModalOpen={showModal || showDeleteConfirmation}
+              isModalOpen={showEditModal || showDeleteConfirmation}
             />
             <PaginationControls
               currentPage={currentPage}
@@ -189,29 +235,27 @@ const UserList = () => {
             />
           </>
         ) : (
-          <div className="text-center text-gray-500">
+          <div className="text-center py-12 text-lg text-gray-500">
             No tienes permisos para ver la lista de usuarios.
           </div>
         )}
+
+        {/* MODAL UNIFICADO */}
         <EditUserModal
-          showModal={showModal}
-          setShowModal={setShowModal}
-          updatedUser={updatedUser}
-          setUpdatedUser={setUpdatedUser}
+          showModal={showEditModal}
+          setShowModal={setShowEditModal}
+          isEditMode={isEditMode}
+          formData={formData}
+          setFormData={setFormData}
           handleSaveUser={handleSaveUser}
         />
+
         <DeleteUserModal
           showDeleteConfirmation={showDeleteConfirmation}
           setShowDeleteConfirmation={setShowDeleteConfirmation}
           confirmDeleteUser={confirmDeleteUser}
         />
-        <AddUserModal
-          showAddUserModal={showAddUserModal}
-          setShowAddUserModal={setShowAddUserModal}
-          newUser={newUser}
-          setNewUser={setNewUser}
-          handleSaveNewUser={handleSaveNewUser}
-        />
+
         <CurrentUserModal
           showCurrentUserModal={showCurrentUserModal}
           setShowCurrentUserModal={setShowCurrentUserModal}

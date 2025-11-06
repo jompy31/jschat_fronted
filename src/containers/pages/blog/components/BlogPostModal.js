@@ -1,15 +1,14 @@
-import React, { useState, useRef } from "react";
-import { Modal, Image, Button, OverlayTrigger, Form, Tooltip, FormControl } from "react-bootstrap";
+import React, { useState } from "react";
+import { Modal, Form, Button, Image, OverlayTrigger } from "react-bootstrap";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { BsFillChatFill } from "react-icons/bs";
+import { BsFillChatFill, BsShareFill, BsTrash } from "react-icons/bs";
+import { ToastContainer, toast } from "react-toastify";
 import { useMediaQuery } from "react-responsive";
 
 const BlogPostModal = ({
   isImageModalOpen,
   closeImageModal,
   selectedImage,
-  isFullScreen,
-  toggleFullScreen,
   user,
   likedPosts,
   showComments,
@@ -18,89 +17,85 @@ const BlogPostModal = ({
   handleCommentChange,
   createComment,
   renderLikesTooltip,
+  handleDeleteComment,
 }) => {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-  const [commentText, setCommentText] = useState("");
-  const [zoomLevel, setZoomLevel] = useState(1);
-  const [panPosition, setPanPosition] = useState({ x: 0, y: 0 });
-  const imageRef = useRef(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [zoomStyle, setZoomStyle] = useState({ display: "none" });
 
-  if (!selectedImage) return null;
-
-  const defaultRenderLikesTooltip = (likes) => (
-    <Tooltip id={`likes-tooltip-${selectedImage.id}`}>
-      {likes && likes.length > 0 ? (
-        likes.map((like, index) => (
-          <div key={index}>{like.author || like.user || "Usuario"}</div>
-        ))
-      ) : (
-        <div>Sin me gusta</div>
-      )}
-    </Tooltip>
-  );
-
-  const effectiveRenderLikesTooltip = renderLikesTooltip || defaultRenderLikesTooltip;
-
-  const renderCommentsTooltip = (comments) => (
-    <Tooltip id={`comments-tooltip-${selectedImage.id}`}>
-      {comments && comments.length > 0 ? (
-        comments.map((comment, index) => (
-          <div key={index}>{comment.author || comment.user || "Usuario"}</div>
-        ))
-      ) : (
-        <div>Sin comentarios</div>
-      )}
-    </Tooltip>
-  );
-
-  const isLiked = likedPosts.some((post) => post.id === selectedImage.id);
-
-  const handleCommentInputChange = (event) => {
-    const newComment = event.target.value;
-    setCommentText(newComment);
-    handleCommentChange(event, selectedImage.id);
+  const handleShare = () => {
+    if (!selectedImage) return;
+    const postUrl = `${window.location.origin}/blog?postId=${selectedImage.id}`;
+    navigator.clipboard.writeText(postUrl).then(() => {
+      toast.success("Link copiado al portapapeles", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }).catch((err) => {
+      console.error("Error al copiar el enlace: ", err);
+      toast.error("Error al copiar el enlace", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    });
   };
 
-  const handleCommentSubmit = () => {
-    if (commentText.trim() === "") {
-      alert("No puedes crear un comentario en blanco");
+  const isLiked = selectedImage && likedPosts.some((post) => post.id === selectedImage.id);
+
+  const getImageSrc = () => {
+    if (!selectedImage?.image) {
+      return "https://via.placeholder.com/400x300?text=Imagen+no+disponible";
+    }
+    if (selectedImage.image instanceof File) {
+      return URL.createObjectURL(selectedImage.image);
+    }
+    return selectedImage.image;
+  };
+
+  const handleMouseMove = (e) => {
+    const img = e.currentTarget.querySelector("img");
+    if (!img || !selectedImage?.image) {
+      setZoomStyle({ display: "none" });
       return;
     }
-    createComment(selectedImage.id, commentText);
-    setCommentText("");
+
+    const { left, top, width, height } = img.getBoundingClientRect();
+    const x = e.clientX - left;
+    const y = e.clientY - top;
+
+    const zoomFactor = isMobile ? 3 : 2;
+    const zoomWidth = width * zoomFactor;
+    const zoomHeight = height * zoomFactor;
+
+    setZoomStyle({
+      backgroundImage: `url(${getImageSrc()})`,
+      backgroundSize: `${zoomWidth}px ${zoomHeight}px`,
+      backgroundPosition: `${-x * zoomFactor}px ${-y * zoomFactor}px`,
+      backgroundRepeat: "no-repeat",
+      display: isMobile ? "none" : "block", // Ocultar en móvil
+      position: "absolute",
+      width: isMobile ? "200px" : "300px",
+      height: isMobile ? "200px" : "300px",
+      border: "2px solid #ef4444",
+      borderRadius: "8px",
+      zIndex: 50,
+      pointerEvents: "none",
+      right: isMobile ? "10px" : "-320px",
+      top: "10px",
+    });
   };
 
-  const handleZoomChange = (event) => {
-    const newZoom = parseFloat(event.target.value);
-    setZoomLevel(newZoom);
-    setPanPosition({ x: 0, y: 0 });
-  };
-
-  const handleMouseDown = (event) => {
-    if (zoomLevel > 1) {
-      setIsDragging(true);
-      setDragStart({ x: event.clientX - panPosition.x, y: event.clientY - panPosition.y });
+  const handleMouseEnter = () => {
+    if (!isMobile && selectedImage?.image) {
+      setZoomStyle((prev) => ({ ...prev, display: "block" }));
     }
   };
 
-  const handleMouseMove = (event) => {
-    if (isDragging && zoomLevel > 1) {
-      const newX = event.clientX - dragStart.x;
-      const newY = event.clientY - dragStart.y;
-      setPanPosition({ x: newX, y: newY });
-    }
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  const handleBackdropClick = (event) => {
-    if (event.target === event.currentTarget) {
-      closeImageModal();
-    }
+  const handleMouseLeave = () => {
+    setZoomStyle({ display: "none" });
   };
 
   return (
@@ -108,219 +103,240 @@ const BlogPostModal = ({
       show={isImageModalOpen}
       onHide={closeImageModal}
       centered
-      dialogClassName={isMobile ? "modal-90w" : "modal-80w"}
+      dialogClassName="modal-80w"
       backdrop="static"
-      style={{ zIndex: 1200, marginTop:"8%" }}
       animation
-      onClick={handleBackdropClick}
+      className="blog-post-modal bg-white dark:bg-gray-800 rounded-2xl shadow-2xl animate-fadeInScale border border-gray-200 dark:border-gray-700"
+      style={{ zIndex: 2000 }}
     >
-      <Modal.Body
-        style={{
-          maxHeight: isFullScreen ? "100vh" : "80vh",
-          overflowY: "auto",
-          backgroundColor: "#fff",
-          borderRadius: "12px",
-          padding: isMobile ? "15px" : "20px",
-          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <div style={{ position: "relative", flex: "0 0 auto" }}>
-          <Button
-            variant="link"
-            onClick={closeImageModal}
-            style={{
-              position: "absolute",
-              top: "10px",
-              right: "10px",
-              color: "#606770",
-              fontSize: "24px",
-              zIndex: 1210,
-              textDecoration: "none",
-            }}
-          >
-            ✕
-          </Button>
-          <Button
-            variant="link"
-            onClick={toggleFullScreen}
-            style={{
-              position: "absolute",
-              top: "10px",
-              left: "10px",
-              color: "#606770",
-              fontSize: "24px",
-              zIndex: 1210,
-              textDecoration: "none",
-            }}
-          >
-            {isFullScreen ? "↙" : "↗"}
-          </Button>
-          <div
-            style={{
-              overflow: "hidden",
-              width: "100%",
-              height: isFullScreen ? "100vh" : isMobile ? "300px" : "500px",
-              position: "relative",
-              borderRadius: "8px",
-              marginBottom: isFullScreen ? "0" : "15px",
-            }}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
-          >
-            <Image
-              ref={imageRef}
-              src={selectedImage.image}
-              alt="Blog Post Image"
-              fluid
-              style={{
-                width: `${100 * zoomLevel}%`,
-                height: `${100 * zoomLevel}%`,
-                objectFit: "cover",
-                transform: `translate(${panPosition.x}px, ${panPosition.y}px)`,
-                cursor: zoomLevel > 1 ? "move" : "pointer",
-                transition: isDragging ? "none" : "transform 0.2s",
-              }}
-              onClick={toggleFullScreen}
-            />
-          </div>
-          <Form.Group style={{ marginBottom: "15px" }}>
-            <Form.Label>Zoom: {Math.round(zoomLevel * 100)}%</Form.Label>
-            <FormControl
-              type="range"
-              min="1"
-              max="3"
-              step="0.1"
-              value={zoomLevel}
-              onChange={handleZoomChange}
-              style={{ width: "100%" }}
-            />
-          </Form.Group>
+      <style>
+        {`
+          .blog-post-modal .modal-content {
+            border: none;
+            border-radius: 16px;
+            overflow-y: auto;
+            max-height: 90vh;
+            background: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+          }
+          .blog-post-modal .modal-header {
+            border-bottom: none;
+            padding: 1rem;
+            background: white;
+            justify-content: flex-end;
+            position: sticky;
+            top: 0;
+            zIndex: 10;
+          }
+          .blog-post-modal .modal-title {
+            color: #333;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.25rem, 4vw, 2.25rem);
+            font-weight: 700;
+            text-align: center;
+            margin: 0 auto;
+          }
+          .blog-post-modal .close-button {
+            color: #FFD700;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease, color 0.3s ease;
+          }
+          .blog-post-modal .close-button:hover {
+            color: #333;
+            transform: rotate(90deg);
+            filter: drop-shadow(0 0 8px #FFD700);
+          }
+          .blog-post-modal .modal-body {
+            padding: 1.5rem;
+            background: transparent;
+          }
+          .blog-post-modal .post-image-container {
+            overflow: hidden;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            max-width: 100%;
+            position: relative;
+          }
+          .blog-post-modal .post-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+          }
+          .blog-post-modal .modal-footer {
+            border-top: none;
+            padding: 1rem 1.5rem;
+            background: white;
+            position: sticky;
+            bottom: 0;
+            zIndex: 10;
+          }
+          .blog-post-modal .action-button {
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+          }
+          .blog-post-modal .action-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+          }
+          @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+          }
+          @media (max-width: 768px) {
+            .blog-post-modal .modal-body {
+              padding: 1rem;
+            }
+            .blog-post-modal .post-image {
+              max-height: 300px;
+            }
+            .blog-post-modal .modal-title {
+              font-size: clamp(1rem, 3.5vw, 1.75rem);
+            }
+          }
+        `}
+      </style>
+      <Modal.Header className="flex justify-end items-center p-2">
+        <span
+          className="close-button cursor-pointer"
+          onClick={closeImageModal}
+          aria-label="Cerrar modal"
+        >
+          ×
+        </span>
+      </Modal.Header>
+      <Modal.Body className="flex flex-col gap-4">
+        <div
+          className="post-image-container w-full flex justify-center"
+          onMouseMove={handleMouseMove}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          <Image
+            src={getImageSrc()}
+            alt={`${selectedImage?.title || "Publicación"} Image`}
+            className="post-image"
+          />
+          <div style={zoomStyle}></div>
         </div>
-        {!isFullScreen && (
-          <div style={{ flex: "1 0 auto", padding: "15px" }}>
-            <h3
-              style={{
-                fontWeight: "600",
-                color: "#1c2526",
-                fontSize: "1.8rem",
-                marginBottom: "10px",
-              }}
-            >
-              {selectedImage.title}
-            </h3>
-            <pre
-              style={{
-                whiteSpace: "pre-wrap",
-                color: "#1c2526",
-                fontSize: "15px",
-                marginBottom: "15px",
-                fontFamily: "'Arial', sans-serif",
-              }}
-            >
-              {selectedImage.content}
-            </pre>
-            <p style={{ color: "#606770", fontSize: "14px", marginBottom: "15px" }}>
-              Autor: {selectedImage.author}
-            </p>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
-              <OverlayTrigger placement="top" overlay={effectiveRenderLikesTooltip(selectedImage.likes)}>
-                <span style={{ fontSize: "14px", color: "#606770", cursor: "pointer" }}>
-                  <AiFillHeart size={16} style={{ marginRight: "5px", color: "#4267B2" }} />
-                  {selectedImage.likes?.length || 0} Me gusta
-                </span>
-              </OverlayTrigger>
-              <OverlayTrigger placement="top" overlay={renderCommentsTooltip(selectedImage.comments)}>
-                <span
-                  style={{ fontSize: "14px", color: "#606770", cursor: "pointer" }}
-                  onClick={() => toggleComments(selectedImage.id)}
-                >
-                  {selectedImage.comments?.length || 0} Comentarios
-                </span>
-              </OverlayTrigger>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", paddingTop: "10px", borderTop: "1px solid #e0e0e0" }}>
-              <Button
-                variant="link"
-                onClick={() => toggleLike(selectedImage.id)}
-                style={{
-                  color: isLiked ? "#4267B2" : "#606770",
-                  fontWeight: "500",
-                  display: "flex",
-                  alignItems: "center",
-                  textDecoration: "none",
-                  fontSize: "14px",
-                }}
-              >
-                {isLiked ? (
-                  <AiFillHeart size={20} style={{ marginRight: "5px", color: "#4267B2" }} />
-                ) : (
-                  <AiOutlineHeart size={20} style={{ marginRight: "5px" }} />
-                )}
-                Me gusta
-              </Button>
-              <Button
-                variant="link"
-                onClick={() => toggleComments(selectedImage.id)}
-                style={{
-                  color: "#606770",
-                  fontWeight: "500",
-                  display: "flex",
-                  alignItems: "center",
-                  textDecoration: "none",
-                  fontSize: "14px",
-                }}
-              >
-                <BsFillChatFill size={18} style={{ marginRight: "5px" }} />
-                Comentar
-              </Button>
-            </div>
-            {showComments[selectedImage.id] && (
-              <div style={{ marginTop: "15px", paddingTop: "10px", borderTop: "1px solid #e0e0e0" }}>
-                {selectedImage.comments && selectedImage.comments.length > 0 && (
-                  <div style={{ marginBottom: "15px" }}>
-                    {selectedImage.comments.map((comment, index) => (
-                      <div key={index} style={{ fontSize: "14px", marginBottom: "8px", display: "flex" }}>
-                        <div style={{ fontWeight: "600", marginRight: "5px" }}>
-                          {comment.author || comment.user || "Usuario"}:
-                        </div>
-                        <div>{comment.content || comment.text || "Comentario no disponible"}</div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <Form.Control
-                    as="textarea"
-                    value={commentText}
-                    onChange={handleCommentInputChange}
-                    style={{
-                      width: "100%",
-                      marginRight: "10px",
-                      fontSize: "14px",
-                      borderRadius: "20px",
-                      padding: "8px 12px",
-                      border: "1px solid #ced0d4",
-                    }}
-                    placeholder="Escribe un comentario..."
-                    rows={2}
-                  />
-                  <Button
-                    variant="primary"
-                    onClick={handleCommentSubmit}
-                    style={{ borderRadius: "20px", padding: "8px 15px", fontSize: "14px" }}
+        <h2 className="modal-title">
+          {selectedImage?.title || "Publicación"}
+        </h2>
+        <div className="font-['Open_Sans'] text-base text-[#333] whitespace-pre-wrap leading-relaxed">
+          {selectedImage?.content || "Contenido no disponible"}
+        </div>
+        <div className="font-['Open_Sans'] text-sm font-medium text-gray-600">
+          Autor: {selectedImage?.author || "Usuario"}
+        </div>
+        <div className="flex justify-between items-center mt-4">
+          <OverlayTrigger placement="top" overlay={renderLikesTooltip(selectedImage?.likes || [])}>
+            <span className="font-['Open_Sans'] text-sm cursor-pointer text-gray-600 flex items-center">
+              <AiFillHeart
+                size={16}
+                className={isLiked ? "text-[#FFD700]" : "text-[#036]"}
+                style={{ marginRight: "5px" }}
+              />
+              {selectedImage?.likes?.length || 0} Me gusta
+            </span>
+          </OverlayTrigger>
+          <span
+            className="font-['Open_Sans'] text-sm cursor-pointer text-gray-600"
+            onClick={() => toggleComments(selectedImage?.id)}
+          >
+            {selectedImage?.comments?.length || 0} Comentarios
+          </span>
+        </div>
+        <div className="flex justify-between pt-3 border-t border-gray-200">
+          <Button
+            variant="link"
+            onClick={() => toggleLike(selectedImage?.id)}
+            className={`action-button ${isLiked ? "liked" : ""} font-['Open_Sans'] font-medium text-sm flex items-center text-decoration-none text-[#036]`}
+          >
+            {isLiked ? (
+              <AiFillHeart size={20} className="mr-2 text-[#FFD700]" />
+            ) : (
+              <AiOutlineHeart size={20} className="mr-2" />
+            )}
+            Me gusta
+          </Button>
+          <Button
+            variant="link"
+            onClick={() => toggleComments(selectedImage?.id)}
+            className="action-button font-['Open_Sans'] font-medium text-sm flex items-center text-decoration-none text-[#036]"
+          >
+            <BsFillChatFill size={18} className="mr-2" />
+            Comentar
+          </Button>
+          <Button
+            variant="link"
+            onClick={handleShare}
+            className="action-button font-['Open_Sans'] font-medium text-sm flex items-center text-decoration-none text-[#036]"
+          >
+            <BsShareFill size={18} className="mr-2" />
+            Compartir
+          </Button>
+        </div>
+        {showComments[selectedImage?.id] && (
+          <div className="mt-4 pt-3 border-t border-gray-200">
+            {selectedImage?.comments && selectedImage.comments.length > 0 && (
+              <div className="mb-4">
+                {selectedImage.comments.map((comment, index) => (
+                  <div
+                    key={index}
+                    className="font-['Open_Sans'] text-sm mb-2 flex justify-between items-center text-gray-700"
                   >
-                    Enviar
-                  </Button>
-                </div>
+                    <div className="flex">
+                      <div className="font-semibold mr-2">
+                        {comment.author || comment.user || "Usuario"}:
+                      </div>
+                      <div>{comment.content || comment.text || "Comentario no disponible"}</div>
+                    </div>
+                    {user !== null && (
+                      <Button
+                        variant="link"
+                        onClick={() => handleDeleteComment(selectedImage.id, comment.id)}
+                        className="p-0 ml-2 text-[#FFD700] hover:text-[#036]"
+                      >
+                        <BsTrash size={16} />
+                      </Button>
+                    )}
+                  </div>
+                ))}
               </div>
             )}
+            <div className="flex items-center">
+              <Form.Control
+                as="textarea"
+                value={selectedImage?.comment || ""}
+                onChange={(event) => handleCommentChange(event, selectedImage.id)}
+                className="w-full mr-3 font-['Open_Sans'] text-sm rounded-full p-2 border-gray-300 bg-white text-gray-700 focus:border-[#036] focus:ring-2 focus:ring-[#036]"
+                placeholder="Escribe un comentario..."
+                rows={2}
+              />
+              <Button
+                variant="primary"
+                onClick={() => createComment(selectedImage.id, selectedImage.comment)}
+                className="rounded-full px-4 py-2 font-['Open_Sans'] text-sm bg-[#036] text-white hover:bg-[#048] hover:shadow-[0_0_12px_rgba(0,51,102,0.5)] transition-all duration-200"
+              >
+                Enviar
+              </Button>
+            </div>
           </div>
         )}
       </Modal.Body>
+      <Modal.Footer className="flex justify-end gap-2 bg-transparent border-t-0">
+        <Button
+          variant="primary"
+          onClick={closeImageModal}
+          className="rounded-lg px-4 py-2 font-['Open_Sans'] text-sm bg-gradient-to-r from-[#036] to-[#048] text-white shadow-md hover:scale-105 hover:shadow-[0_0_12px_rgba(0,51,102,0.5)] transition-all duration-200"
+        >
+          Cerrar
+        </Button>
+      </Modal.Footer>
+      <ToastContainer />
     </Modal>
   );
 };

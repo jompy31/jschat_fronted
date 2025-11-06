@@ -22,10 +22,12 @@ const Profile = () => {
     if (storedUser) {
       const user = JSON.parse(storedUser);
       setCurrentUser(user);
+      // console.log(user)
       setEditedUser({
         first_name: user.first_name,
         last_name: user.last_name,
         email: user.email,
+        password: '',
         userprofile: {
           staff_status: user.userprofile?.staff_status || "customer",
           phone_number: user.userprofile?.phone_number || "",
@@ -58,22 +60,50 @@ const Profile = () => {
   };
 
   const handleEditUserChange = (e) => {
-    const { name, value } = e.target;
-    if (name.startsWith("userprofile.")) {
-      const field = name.split(".")[1];
-      setEditedUser({
-        ...editedUser,
-        userprofile: { ...editedUser.userprofile, [field]: value },
-      });
-    } else {
-      setEditedUser({ ...editedUser, [name]: value });
-    }
+  const { name, value } = e.target;
+
+  if (name === 'password') {
+    setEditedUser({ ...editedUser, password: value });
+  } else if (name.startsWith("userprofile.")) {
+    const field = name.split(".")[1];
+    setEditedUser({
+      ...editedUser,
+      userprofile: { ...editedUser.userprofile, [field]: value },
+    });
+  } else {
+    setEditedUser({ ...editedUser, [name]: value });
+  }
+};
+  const handleEditUser = (formData, profile_picture) => {
+  setIsLoading(true);
+
+  const payload = {
+    first_name: formData.first_name,
+    last_name: formData.last_name,
+    email: formData.email,
+    ...(formData.password && { password: formData.password }),
+    userprofile: {
+      staff_status: formData.userprofile.staff_status,
+      phone_number: formData.userprofile.phone_number || '',
+      address: formData.userprofile.address || '',
+    },
   };
 
-  const handleEditUser = (formData, profile_picture) => {
-    setIsLoading(true);
-    const formattedData = formatUserData(formData, profile_picture);
-    updateUser(currentUser.id, formattedData, token)
+  // Si hay foto, usar FormData
+  if (profile_picture) {
+    const formDataObj = new FormData();
+    Object.keys(payload).forEach(key => {
+      if (key === 'userprofile') {
+        Object.keys(payload.userprofile).forEach(subKey => {
+          formDataObj.append(`userprofile.${subKey}`, payload.userprofile[subKey]);
+        });
+      } else {
+        formDataObj.append(key, payload[key]);
+      }
+    });
+    formDataObj.append('userprofile.profile_picture', profile_picture);
+
+    updateUser(currentUser.id, formDataObj, token, true) // ← true = FormData
       .then(() => {
         handleFetchUser(currentUser.id);
         setIsModalOpen(false);
@@ -82,14 +112,24 @@ const Profile = () => {
         alert("Perfil actualizado correctamente.");
       })
       .catch((error) => {
-        console.error("Error updating user:", error);
-        const errorMessage = error?.email
-          ? "El correo electrónico ya está registrado."
-          : error?.detail || "Error al actualizar el perfil. Verifica los datos e intenta de nuevo.";
-        alert(errorMessage);
+        console.error(error);
+        alert(error?.email?.[0] || "Error al actualizar perfil");
       })
       .finally(() => setIsLoading(false));
-  };
+  } else {
+    updateUser(currentUser.id, payload, token)
+      .then(() => {
+        handleFetchUser(currentUser.id);
+        setIsModalOpen(false);
+        alert("Perfil actualizado correctamente.");
+      })
+      .catch((error) => {
+        console.error(error);
+        alert(error?.email?.[0] || "Error al actualizar perfil");
+      })
+      .finally(() => setIsLoading(false));
+  }
+};
 
   return (
     <div className="profile-page">

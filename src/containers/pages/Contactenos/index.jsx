@@ -19,8 +19,7 @@ function Contact() {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let newCaptcha = '';
     for (let i = 0; i < 6; i++) {
-      const randomIndex = Math.floor(Math.random() * characters.length);
-      newCaptcha += characters.charAt(randomIndex);
+      newCaptcha += characters.charAt(Math.floor(Math.random() * characters.length));
     }
     setCaptcha(newCaptcha);
     setValidCaptcha(false);
@@ -31,8 +30,7 @@ function Contact() {
   }, [generateCaptcha]);
 
   const handleCaptchaChange = (e) => {
-    const inputCaptcha = e.target.value;
-    setValidCaptcha(inputCaptcha === captcha);
+    setValidCaptcha(e.target.value === captcha);
   };
 
   const handleFileChange = (e) => {
@@ -41,238 +39,224 @@ function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (!validCaptcha) {
-      alert('Por favor, ingrese el captcha correcto.');
-      return;
-    }
+    if (!validCaptcha) return alert('Captcha incorrecto.');
 
     const data = {
-      subject: `Consulta de J SPORT - ${subject}`,
-      message: `Nombre: ${name}\nEmail: ${email}\nTeléfono: ${phone}\nEmpresa: ${company}\n\nMensaje:\n${message}`,
+      subject: `Consulta J SPORT - ${subject}`,
+      message: `Nombre: ${name}\nEmail: ${email}\nTeléfono: ${phone}\nEmpresa: ${company}\n\n${message}`,
       from_email: 'contacto@jsport.com',
       recipient_list: 'contacto@jsport.com',
+    };
+
+    const send = (payload, isFormData = false) => {
+      axios.post(
+        'https://jsport-backend.com/send-email/',
+        isFormData ? payload : JSON.stringify(data),
+        { headers: { 'Content-Type': isFormData ? 'multipart/form-data' : 'application/json' } }
+      )
+      .then(() => {
+        alert('¡Mensaje enviado!');
+        setName(''); setEmail(''); setPhone(''); setCompany(''); setSubject(''); setMessage(''); setAttachment(null);
+        generateCaptcha();
+      })
+      .catch(() => alert('Error al enviar.'));
     };
 
     if (attachment) {
       const formData = new FormData();
       formData.append('data', JSON.stringify(data));
       formData.append('attachments', attachment);
-      sendEmail(formData, true);
+      send(formData, true);
     } else {
-      sendEmail(data);
+      send(data);
     }
-  };
-
-  const sendEmail = (data, isFormData = false) => {
-    const config = {
-      headers: {
-        'Content-Type': isFormData ? 'multipart/form-data' : 'application/json',
-      },
-    };
-
-    axios
-      .post('https://jsport-backend.com/send-email/', isFormData ? data : JSON.stringify(data), config)
-      .then((response) => {
-        alert('Correo enviado correctamente.');
-        setName('');
-        setEmail('');
-        setPhone('');
-        setCompany('');
-        setSubject('');
-        setMessage('');
-        setAttachment(null);
-        generateCaptcha();
-      })
-      .catch((error) => {
-        console.error(error);
-        alert('Hubo un error al enviar el correo.');
-      });
   };
 
   const sectionVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
   };
 
   return (
     <div className="contact-container">
+      {/* === HERO - RESPONSIVO === */}
       <motion.section
         initial="hidden"
         animate="visible"
         variants={sectionVariants}
-        className="pt-28 pb-16 bg-gray-100"
+        className="hero-section"
       >
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-jsport-blue mb-4">Contáctanos</h1>
-          <p className="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto mb-8">
-            En J SPORT, estamos comprometidos en brindarte una experiencia única en personalización de productos deportivos y empresariales. ¡Envíanos tu consulta!
-          </p>
-        </div>
-
-        <div className="container mx-auto px-4">
-          <motion.form
-            id="contact-form"
-            ref={contactFormRef}
-            onSubmit={handleSubmit}
-            className="bg-white shadow-lg rounded-lg p-8 max-w-4xl mx-auto"
-            initial="hidden"
-            whileInView="visible"
-            variants={sectionVariants}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-2xl font-bold text-jsport-blue mb-6 text-center">Formulario de Contacto</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nombre</label>
-                <input
-                  type="text"
-                  name="name"
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm py-2 px-3 focus:outline-none focus:ring-jsport-red focus:border-jsport-red"
-                  placeholder="Escribe tu nombre"
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">Correo Electrónico</label>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm py-2 px-3 focus:outline-none focus:ring-jsport-red focus:border-jsport-red"
-                  placeholder="tucorreo@ejemplo.com"
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Número de Teléfono</label>
-                <input
-                  type="text"
-                  name="phone"
-                  id="phone"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm py-2 px-3 focus:outline-none focus:ring-jsport-red focus:border-jsport-red"
-                  placeholder="123-456-7890"
-                />
-              </div>
-              <div>
-                <label htmlFor="company" className="block text-sm font-medium text-gray-700">Empresa</label>
-                <input
-                  type="text"
-                  name="company"
-                  id="company"
-                  value={company}
-                  onChange={(e) => setCompany(e.target.value)}
-                  className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm py-2 px-3 focus:outline-none focus:ring-jsport-red focus:border-jsport-red"
-                  placeholder="Nombre de la empresa"
-                />
-              </div>
-              <div className="col-span-1 sm:col-span-2">
-                <label htmlFor="subject" className="block text-sm font-medium text-gray-700">Asunto</label>
-                <input
-                  type="text"
-                  name="subject"
-                  id="subject"
-                  value={subject}
-                  onChange={(e) => setSubject(e.target.value)}
-                  className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm py-2 px-3 focus:outline-none focus:ring-jsport-red focus:border-jsport-red"
-                  placeholder="Motivo de tu mensaje"
-                  required
-                />
-              </div>
-              <div className="col-span-1 sm:col-span-2">
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700">Mensaje</label>
-                <textarea
-                  name="message"
-                  id="message"
-                  rows={4}
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm py-2 px-3 focus:outline-none focus:ring-jsport-red focus:border-jsport-red"
-                  placeholder="Escribe tu mensaje aquí"
-                  required
-                ></textarea>
-              </div>
-              <div className="col-span-1 sm:col-span-2">
-                <label htmlFor="attachment" className="block text-sm font-medium text-gray-700">Archivos Adjuntos</label>
-                <input
-                  type="file"
-                  name="attachment"
-                  id="attachment"
-                  onChange={handleFileChange}
-                  className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm py-2 px-3 focus:outline-none focus:ring-jsport-red focus:border-jsport-red"
-                />
-              </div>
-              <div className="col-span-1 sm:col-span-2">
-                <div className="flex items-center mb-2">
-                  <img
-                    src={`https://dummyimage.com/100x40/000000/ffffff&text=${captcha}`}
-                    alt="Captcha"
-                    className="mr-4 rounded-lg border border-gray-300"
-                  />
-                  <button
-                    type="button"
-                    onClick={generateCaptcha}
-                    className="bg-jsport-red text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-jsport-red"
-                  >
-                    Actualizar Captcha
-                  </button>
-                </div>
-                <input
-                  type="text"
-                  onChange={handleCaptchaChange}
-                  className="block w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-jsport-red focus:border-jsport-red"
-                  placeholder="Ingresa el captcha"
-                  required
-                />
-                {!validCaptcha && <p className="text-jsport-red mt-2">Por favor ingresa el captcha correcto.</p>}
-              </div>
-              <div className="col-span-1 sm:col-span-2 text-center">
-                <button
-                  type="submit"
-                  disabled={!validCaptcha}
-                  className="inline-flex justify-center py-3 px-8 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-jsport-red hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-jsport-red disabled:opacity-50"
-                >
-                  Enviar Correo
-                </button>
-              </div>
-            </div>
-          </motion.form>
-        </div>
-
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          variants={sectionVariants}
-          viewport={{ once: true }}
-          className="container mx-auto px-4 mt-8"
-        >
-          <h2 className="text-2xl font-bold text-jsport-blue mb-4 text-center">Encuéntranos</h2>
-          <iframe
-            title="Ubicación de J SPORT"
-            src="https://www.google.com/maps/embed?pb=!1m17!1m8!1m3!1d3929.824640014565!2d-84.1081463!3d9.948544!3m2!1i1024!2i768!4f13.1!4m6!3e6!4m0!4m3!3m2!1d9.948533399999999!2d-84.10564649999999!5e0!3m2!1ses-419!2scr!4v1707616204816!5m2!1ses-419!2scr"
-            width="100%"
-            height="400"
-            frameBorder="0"
+        <div className="hero-overlay"></div>
+        <div className="hero-content">
+          <motion.h1 
+            className="hero-title"
             style={{
-              border: '2px solid #D90404',
-              borderRadius: '10px',
-              boxShadow: '0px 0px 10px rgba(217, 4, 4, 0.5)',
+              fontSize: 'clamp(2.2rem, 7vw, 5rem)',
+              lineHeight: '1.1',
+              wordBreak: 'break-word',
+              overflowWrap: 'break-word',
+              hyphens: 'auto'
             }}
-            allowFullScreen=""
-            aria-hidden="false"
-            tabIndex="0"
-          ></iframe>
-        </motion.div>
+          >
+            Contáctanos
+          </motion.h1>
+          <motion.p 
+            className="hero-subtitle"
+            style={{
+              fontSize: 'clamp(0.9rem, 3.5vw, 1.3rem)',
+              lineHeight: '1.7'
+            }}
+          >
+            En J SPORT, estamos comprometidos en brindarte una experiencia única en personalización de productos deportivos y empresariales. ¡Envíanos tu consulta!
+          </motion.p>
+        </div>
+      </motion.section>
+
+      {/* === FORMULARIO - 100% CONTENIDO === */}
+<motion.section
+  initial="hidden"
+  whileInView="visible"
+  viewport={{ once: true }}
+  variants={sectionVariants}
+  className="form-section"
+>
+  <div className="container mx-auto px-3 xs:px-4 sm:px-6 lg:px-8">
+    <motion.form
+      ref={contactFormRef}
+      onSubmit={handleSubmit}
+      className="contact-form mx-auto"
+      style={{ maxWidth: '100%' }}
+    >
+      {/* TÍTULO RESPONSIVO */}
+      <h2 
+        className="form-title"
+        style={{
+          fontSize: 'clamp(1.6rem, 5.5vw, 2.2rem)',
+          lineHeight: '1.2',
+          wordBreak: 'break-word',
+          overflowWrap: 'break-word',
+          hyphens: 'auto',
+          padding: '0 0.5rem',
+          maxWidth: '100%',
+          margin: '0 auto 1.5rem'
+        }}
+      >
+        Formulario de Contacto
+      </h2>
+
+      <div className="form-grid">
+        <Input label="Nombre" id="name" value={name} setValue={setName} required />
+        <Input label="Correo Electrónico" id="email" type="email" value={email} setValue={setEmail} required />
+        <Input label="Número de Teléfono" id="phone" value={phone} setValue={setPhone} />
+        <Input label="Empresa" id="company" value={company} setValue={setCompany} />
+        <Input label="Asunto" id="subject" value={subject} setValue={setSubject} required span={2} />
+        <Textarea label="Mensaje" id="message" value={message} setValue={setMessage} required span={2} />
+        <FileInput label="Archivos Adjuntos" id="attachment" onChange={handleFileChange} span={2} />
+        
+        {/* CAPTCHA */}
+        <div className="captcha-container" style={{ gridColumn: '1 / -1' }}>
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 mb-2">
+            <img
+              src={`https://dummyimage.com/120x50/001a4d/ffffff&text=${captcha}`}
+              alt="Captcha"
+              className="captcha-image w-full max-w-[120px] h-auto"
+            />
+            <button type="button" onClick={generateCaptcha} className="captcha-refresh w-full sm:w-auto text-xs sm:text-sm">
+              Actualizar
+            </button>
+          </div>
+          <input
+            type="text"
+            onChange={handleCaptchaChange}
+            placeholder="Ingresa el captcha"
+            className="captcha-input text-xs sm:text-sm"
+            required
+          />
+          {!validCaptcha && <p className="captcha-error text-xs">Captcha incorrecto</p>}
+        </div>
+
+        {/* ENVIAR */}
+        <div className="submit-container" style={{ gridColumn: '1 / -1' }}>
+          <button type="submit" disabled={!validCaptcha} className="submit-btn w-full sm:w-auto">
+            Enviar Mensaje
+          </button>
+        </div>
+      </div>
+    </motion.form>
+  </div>
+</motion.section>
+
+      {/* === MAPA - RESPONSIVO === */}
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={sectionVariants}
+        className="map-section"
+      >
+        <div className="container mx-auto px-3 xs:px-4 sm:px-6 md:px-8">
+          <h2 
+            className="section-title"
+            style={{
+              fontSize: 'clamp(1.8rem, 5.5vw, 3rem)',
+              wordBreak: 'break-word'
+            }}
+          >
+            Encuéntranos
+          </h2>
+          <div className="map-container">
+            <iframe
+              title="Ubicación J SPORT"
+              src="https://www.google.com/maps/embed?pb=!1m17!1m8!1m3!1d3929.824640014565!2d-84.1081463!3d9.948544!3m2!1i1024!2i768!4f13.1!4m6!3e6!4m0!4m3!3m2!1d9.948533399999999!2d-84.10564649999999!5e0!3m2!1ses-419!2scr!4v1707616204816!5m2!1ses-419!2scr"
+              width="100%"
+              height="450"
+              allowFullScreen=""
+              loading="lazy"
+              className="map-iframe"
+            ></iframe>
+          </div>
+        </div>
       </motion.section>
     </div>
   );
 }
+
+// Componentes reutilizables
+const Input = ({ label, id, type = "text", value, setValue, required, span = 1 }) => (
+  <div style={{ gridColumn: span === 2 ? '1 / -1' : 'auto' }}>
+    <label htmlFor={id} className="input-label text-sm xs:text-base">{label}</label>
+    <input
+      type={type}
+      id={id}
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      className="form-input text-sm xs:text-base"
+      placeholder={label}
+      required={required}
+    />
+  </div>
+);
+
+const Textarea = ({ label, id, value, setValue, required, span = 1 }) => (
+  <div style={{ gridColumn: span === 2 ? '1 / -1' : 'auto' }}>
+    <label htmlFor={id} className="input-label text-sm xs:text-base">{label}</label>
+    <textarea
+      id={id}
+      rows={4}
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      className="form-input text-sm xs:text-base"
+      placeholder={label}
+      required={required}
+    />
+  </div>
+);
+
+const FileInput = ({ label, id, onChange, span = 1 }) => (
+  <div style={{ gridColumn: span === 2 ? '1 / -1' : 'auto' }}>
+    <label htmlFor={id} className="input-label text-sm xs:text-base">{label}</label>
+    <input type="file" id={id} onChange={onChange} className="form-file text-xs xs:text-sm" />
+  </div>
+);
 
 export default Contact;

@@ -44,14 +44,13 @@ const CustomerDetail = lazy(() => import("../components/backend/customers/detail
 const Orders = lazy(() => import("../components/backend/orders"));
 const OrderDetail = lazy(() => import("../components/backend/orders/detail"));
 const OrderCreate = lazy(() => import("../components/backend/orders/create"));
-const OrderAddEvent = lazy(() => import("../components/backend/orders/add_event"));
+// const OrderAddEvent = lazy(() => import("../components/backend/orders/add_event"));
 const Products = lazy(() => import("../components/backend/products"));
 const ProductDetail = lazy(() => import("../components/backend/products/detail"));
 const Promotions = lazy(() => import("../components/backend/promotions"));
 const PromotionDetail = lazy(() => import("../components/backend/promotions/detail"));
 const CustomerPoints = lazy(() => import("../components/backend/customer_points"));
 const ProductionQueues = lazy(() => import("../components/backend/production_queues"));
-const Settings = lazy(() => import("../components/backend/settings"));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -194,18 +193,23 @@ function App() {
 
   return (
     <Provider store={store}>
-      <AuthProvider value={{ token, login, logout }}>
-        {/* 👈 Removido <Router> aquí – ya está en index.js */}
-        <ScrollToTop />
-        <Sidebar isSidebar={isSidebar} />
-        <Navbar 
-          user={user} 
-          token={token} 
-          logout={logout} 
-          setIsSidebar={setIsSidebar}
-          isDark={isDark} 
-          setIsDark={setIsDark} // 👈 Pasa props del tema a Navbar
-        />
+    <AuthProvider value={{ token, login, logout }}>
+      <ScrollToTop />
+      <Sidebar 
+        isSidebar={isSidebar} 
+        onClose={() => setIsSidebar(false)}
+      />
+      <Navbar 
+        user={user} 
+        token={token} 
+        logout={logout} 
+        setIsSidebar={setIsSidebar}
+        isDark={isDark} 
+        setIsDark={setIsDark}
+      />
+      
+      {/* Contenido principal con margen dinámico */}
+      <div className="main-content">
         <Suspense fallback={<div>Loading...</div>}>
           <Routes> {/* 👈 Routes sin Router wrapper */}
             {/* Public Routes */}
@@ -244,7 +248,7 @@ function App() {
               <Route path="/orders" element={<Orders />}>
                 <Route path="new" element={<OrderCreate />} />
                 <Route path=":id" element={<OrderDetail />} />
-                <Route path=":id/add_event" element={<OrderAddEvent />} />
+                {/* <Route path=":id/add_event" element={<OrderAddEvent />} /> */}
               </Route>
               <Route path="/customer-points" element={<CustomerPoints />} />
             </Route>
@@ -260,11 +264,11 @@ function App() {
                 <Route path=":id" element={<PromotionDetail />} />
               </Route>
               <Route path="/production-queues" element={<ProductionQueues />} />
-              <Route path="/settings" element={<Settings />} />
             </Route>
           </Routes>
         </Suspense>
         <Footer />
+        </div>
       </AuthProvider>
     </Provider>
   );

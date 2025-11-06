@@ -1,10 +1,11 @@
-// frontend\src\components\backend\orders\detail\index.js
+// frontend_github/jschat_frontend/src/components/backend/orders/detail/index.js
 import React, { useState, useEffect } from 'react';
 import { FaTimes, FaSave, FaPlus, FaTrash, FaChevronDown, FaChevronUp, FaCalendarAlt, FaFileAlt, FaEdit } from 'react-icons/fa';
 import ApiService from '../../../../services/products';
-import AddEvent from '../add_event';
+import EventPaymentModal from '../event_payment';
+import './detail.css';
 
-const OrderDetailModal = ({ order, onClose, onUpdate }) => {
+const OrderDetailModal = ({ order, onClose, onUpdate, onEditEvent, onEditPayment, onDeleteEvent, onDeletePayment }) => {
   const [formData, setFormData] = useState({
     customer_id: order.customer?.id || '',
     order_type: order.order_type || 'normal',
@@ -52,23 +53,38 @@ const OrderDetailModal = ({ order, onClose, onUpdate }) => {
         variaciones: player.variaciones || '',
       })) || [{ first_name: '', last_name: '', number: '', size: '', gender: '', observaciones: '', variaciones: '' }],
     } : null,
+    payments: order.payments?.map(payment => ({
+      id: payment.id,
+      amount: parseFloat(payment.amount) || 0,
+      payment_date: payment.payment_date || '',
+      payment_type: payment.payment_type || 'partial',
+      reference_document: payment.reference_document || null,
+      previewUrl: payment.reference_document || null,
+    })) || [],
   });
+  const [events, setEvents] = useState(order.events || []); // New state for events
   const [customers, setCustomers] = useState([]);
   const [products, setProducts] = useState([]);
   const [productTypes, setProductTypes] = useState([]);
   const [error, setError] = useState(null);
   const [showUniformDetails, setShowUniformDetails] = useState(!!order.uniform_detail);
   const [showEvents, setShowEvents] = useState(true);
+  const [showPayments, setShowPayments] = useState(true);
+  const [showProductionQueue, setShowProductionQueue] = useState(true);
+  const [showEventPaymentModal, setShowEventPaymentModal] = useState(false);
+  const [editingEvent, setEditingEvent] = useState(null);
+  const [editingPayment, setEditingPayment] = useState(null);
   const token = localStorage.getItem('token');
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const userRole = currentUser?.userprofile?.staff_status || null;
-  const [showAddEvent, setShowAddEvent] = useState(false);
-  const [editingEvent, setEditingEvent] = useState(null);
 
   useEffect(() => {
     console.log('Order data received:', order);
     console.log('Initial formData.items:', formData.items);
     console.log('Datos de uniforme:', formData.uniform_detail);
+    console.log('Datos de pagos:', formData.payments);
+    console.log('Datos de eventos:', events);
+    console.log('Datos de cola de producción:', order.production_queue);
     const fetchData = async () => {
       try {
         const [customersRes, productsRes, productTypesRes] = await Promise.all([
@@ -118,6 +134,7 @@ const OrderDetailModal = ({ order, onClose, onUpdate }) => {
     fetchData();
     return () => {
       formData.items.forEach(item => item.previewUrl && URL.revokeObjectURL(item.previewUrl));
+      formData.payments.forEach(payment => payment.previewUrl && URL.revokeObjectURL(payment.previewUrl));
       if (formData.uniform_detail) {
         ['player_uniform_preview', 'goalkeeper_uniform_preview', 'neck_preview', 'pants_preview'].forEach(field => {
           if (formData.uniform_detail[field] && formData.uniform_detail[field].startsWith('blob:')) {
@@ -126,7 +143,7 @@ const OrderDetailModal = ({ order, onClose, onUpdate }) => {
         });
       }
     };
-  }, [token]);
+  }, [token, order]);
 
   useEffect(() => {
     if (formData.uniform_detail) {
@@ -179,8 +196,13 @@ const OrderDetailModal = ({ order, onClose, onUpdate }) => {
       newItems[index][field] = value;
       if (field === 'product' && value) {
         const product = products.find(p => p.id === parseInt(value));
-        newItems[index].product_type = '';
-        newItems[index].unit_price = product ? parseFloat((product.product_type.base_price + product.additional_price).toFixed(2)) : 0.01;
+        if (product) {
+          newItems[index].product_type = String(product.product_type.id);
+          newItems[index].unit_price = parseFloat((product.product_type.base_price + product.additional_price).toFixed(2));
+        } else {
+          newItems[index].product_type = '';
+          newItems[index].unit_price = 0.01;
+        }
         newItems[index].design_file = null;
         newItems[index].previewUrl && URL.revokeObjectURL(newItems[index].previewUrl);
         newItems[index].previewUrl = null;
@@ -304,10 +326,6 @@ const OrderDetailModal = ({ order, onClose, onUpdate }) => {
         setError(`El ítem ${i + 1} debe especificar un producto o tipo de producto.`);
         return false;
       }
-      if (item.product && item.product_type) {
-        setError(`El ítem ${i + 1} no puede especificar tanto un producto como un tipo de producto.`);
-        return false;
-      }
       if (item.product_type && !item.design_file && !item.previewUrl) {
         setError(`El ítem ${i + 1} requiere un archivo de diseño para productos personalizados.`);
         return false;
@@ -345,90 +363,73 @@ const OrderDetailModal = ({ order, onClose, onUpdate }) => {
     try {
       const formDataToSend = new FormData();
 
-      // Append top-level fields
       formDataToSend.append('customer_id', formData.customer_id);
       formDataToSend.append('order_type', formData.order_type);
       formDataToSend.append('status', formData.status);
-      formDataToSend.append('order_date', formData.order_date || '');
-      formDataToSend.append('payment_50_date', formData.payment_50_date || '');
-      formDataToSend.append('design_confirmation_date', formData.design_confirmation_date || '');
-      if (formData.delivery_date) {
-        formDataToSend.append('delivery_date', formData.delivery_date);
-      }
+      if (formData.order_date) formDataToSend.append('order_date', formData.order_date);
+      if (formData.payment_50_date) formDataToSend.append('payment_50_date', formData.payment_50_date);
+      if (formData.design_confirmation_date) formDataToSend.append('design_confirmation_date', formData.design_confirmation_date);
+      if (formData.delivery_date) formDataToSend.append('delivery_date', formData.delivery_date);
       formDataToSend.append('use_points', formData.use_points);
 
-      // Append items with dot notation
       formData.items.forEach((item, index) => {
         if (item.id) formDataToSend.append(`items.${index}.id`, item.id);
         if (item.product) formDataToSend.append(`items.${index}.product`, item.product);
         if (item.product_type) formDataToSend.append(`items.${index}.product_type`, item.product_type);
-        formDataToSend.append(`items.${index}.quantity`, item.quantity || 1);
-        formDataToSend.append(`items.${index}.unit_price`, item.unit_price || 0.01);
+        formDataToSend.append(`items.${index}.quantity`, item.quantity);
+        formDataToSend.append(`items.${index}.unit_price`, item.unit_price);
         if (item.design_file instanceof File) {
           formDataToSend.append(`items.${index}.design_file`, item.design_file);
         }
       });
 
-      // Append uniform_detail with dot notation if present
       if (showUniformDetails && formData.uniform_detail) {
-        const uniformDetail = {
-          shirt_quantity: parseInt(formData.uniform_detail.shirt_quantity) || 0,
-          shirt_fabric: formData.uniform_detail.shirt_fabric || '',
-          pants_quantity: parseInt(formData.uniform_detail.pants_quantity) || 0,
-          pants_fabric: formData.uniform_detail.pants_fabric || '',
-          polo_quantity: parseInt(formData.uniform_detail.polo_quantity) || 0,
-          polo_fabric: formData.uniform_detail.polo_fabric || '',
-          bag_quantity: parseInt(formData.uniform_detail.bag_quantity) || 0,
-          bag_fabric: formData.uniform_detail.bag_fabric || '',
-          sponsorships: formData.uniform_detail.sponsorships || '',
-          players: formData.uniform_detail.players.map(player => ({
-            id: player.id || null,
-            first_name: player.first_name || '',
-            last_name: player.last_name || '',
-            number: parseInt(player.number) || 0,
-            size: player.size || '',
-            gender: player.gender || '',
-            observaciones: player.observaciones || '',
-            variaciones: player.variaciones || '',
-          })),
-        };
-        Object.keys(uniformDetail).forEach(key => {
-          if (key !== 'players') {
-            formDataToSend.append(`uniform_detail.${key}`, uniformDetail[key]);
-          }
-        });
-        uniformDetail.players.forEach((player, pindex) => {
-          if (player.id !== null) formDataToSend.append(`uniform_detail.players.${pindex}.id`, player.id);
-          formDataToSend.append(`uniform_detail.players.${pindex}.first_name`, player.first_name);
-          formDataToSend.append(`uniform_detail.players.${pindex}.last_name`, player.last_name);
-          formDataToSend.append(`uniform_detail.players.${pindex}.number`, player.number);
-          formDataToSend.append(`uniform_detail.players.${pindex}.size`, player.size);
-          formDataToSend.append(`uniform_detail.players.${pindex}.gender`, player.gender);
-          formDataToSend.append(`uniform_detail.players.${pindex}.observaciones`, player.observaciones);
-          formDataToSend.append(`uniform_detail.players.${pindex}.variaciones`, player.variaciones);
-        });
-        ['player_uniform_photo', 'goalkeeper_uniform_photo', 'neck_photo', 'pants_photo'].forEach(field => {
-          if (formData.uniform_detail[field] instanceof File) {
-            formDataToSend.append(`uniform_detail.${field}`, formData.uniform_detail[field]);
-          }
-          // If you want to remove an image, you could append an empty string, but here we assume no removal.
+        const ud = formData.uniform_detail;
+        formDataToSend.append('uniform_detail.shirt_quantity', ud.shirt_quantity || 0);
+        formDataToSend.append('uniform_detail.shirt_fabric', ud.shirt_fabric || '');
+        formDataToSend.append('uniform_detail.pants_quantity', ud.pants_quantity || 0);
+        formDataToSend.append('uniform_detail.pants_fabric', ud.pants_fabric || '');
+        formDataToSend.append('uniform_detail.polo_quantity', ud.polo_quantity || 0);
+        formDataToSend.append('uniform_detail.polo_fabric', ud.polo_fabric || '');
+        formDataToSend.append('uniform_detail.bag_quantity', ud.bag_quantity || 0);
+        formDataToSend.append('uniform_detail.bag_fabric', ud.bag_fabric || '');
+        formDataToSend.append('uniform_detail.sponsorships', ud.sponsorships || '');
+        if (ud.player_uniform_photo instanceof File) {
+          formDataToSend.append('uniform_detail.player_uniform_photo', ud.player_uniform_photo);
+        }
+        if (ud.goalkeeper_uniform_photo instanceof File) {
+          formDataToSend.append('uniform_detail.goalkeeper_uniform_photo', ud.goalkeeper_uniform_photo);
+        }
+        if (ud.neck_photo instanceof File) {
+          formDataToSend.append('uniform_detail.neck_photo', ud.neck_photo);
+        }
+        if (ud.pants_photo instanceof File) {
+          formDataToSend.append('uniform_detail.pants_photo', ud.pants_photo);
+        }
+        ud.players.forEach((player, index) => {
+          if (player.id) formDataToSend.append(`uniform_detail.players.${index}.id`, player.id);
+          formDataToSend.append(`uniform_detail.players.${index}.first_name`, player.first_name || '');
+          formDataToSend.append(`uniform_detail.players.${index}.last_name`, player.last_name || '');
+          formDataToSend.append(`uniform_detail.players.${index}.number`, player.number || '');
+          formDataToSend.append(`uniform_detail.players.${index}.size`, player.size || '');
+          formDataToSend.append(`uniform_detail.players.${index}.gender`, player.gender || '');
+          formDataToSend.append(`uniform_detail.players.${index}.observaciones`, player.observaciones || '');
+          formDataToSend.append(`uniform_detail.players.${index}.variaciones`, player.variaciones || '');
         });
       }
 
-      console.log('Datos enviados al backend (FormData keys):', Array.from(formDataToSend.keys()));
-      for (let [key, value] of formDataToSend.entries()) {
-        console.log(`FormData entry: ${key} = ${value instanceof File ? value.name : value}`);
+      formDataToSend.append('replace_items', true);
+      formDataToSend.append('replace_players', true);
+
+      await ApiService.updateOrder(order.id, formDataToSend, token);
+      if (typeof onUpdate === 'function') {
+        onUpdate();
+      } else {
+        console.warn('onUpdate is not a function. Parent component must provide a valid onUpdate callback.');
       }
-
-      const response = await ApiService.updateOrder(order.id, formDataToSend, token);
-      console.log('Respuesta del servidor:', response.data);
-
-      onUpdate();
       onClose();
     } catch (error) {
-      console.error('Error updating order:', error);
-      const errorDetail = error.response?.data?.detail || JSON.stringify(error.response?.data) || 'Error al actualizar el pedido.';
-      setError(errorDetail);
+      setError(error.response?.data?.detail || 'Error al actualizar.');
     }
   };
 
@@ -444,7 +445,11 @@ const OrderDetailModal = ({ order, onClose, onUpdate }) => {
           return;
         }
         await ApiService.deleteOrder(order.id, token);
-        onUpdate();
+        if (typeof onUpdate === 'function') {
+          onUpdate();
+        } else {
+          console.warn('onUpdate is not a function. Parent component must provide a valid onUpdate callback.');
+        }
         onClose();
       } catch (error) {
         console.error('Error deleting order:', error);
@@ -454,60 +459,148 @@ const OrderDetailModal = ({ order, onClose, onUpdate }) => {
     }
   };
 
-  const handleEditEvent = (event) => {
+  const handleEditEvent = (event, e) => {
+    if (e) e.stopPropagation();
     setEditingEvent(event);
-    setShowAddEvent(true);
+    setEditingPayment(null);
+    setShowEventPaymentModal(true);
+    if (typeof onEditEvent === 'function') {
+      onEditEvent(event);
+    }
+  };
+
+  const handleEditPayment = (payment, e) => {
+    if (e) e.stopPropagation();
+    setEditingPayment(payment);
+    setEditingEvent(null);
+    setShowEventPaymentModal(true);
+    if (typeof onEditPayment === 'function') {
+      onEditPayment(payment);
+    }
   };
 
   const handleDeleteEvent = async (eventId) => {
-    if (window.confirm('¿Estás seguro de eliminar este evento?')) {
-      try {
-        if (['administrator', 'sales', 'design'].includes(userRole)) {
-          await ApiService.deleteOrderEvent(order.id, eventId, token);
-          const updatedOrder = await ApiService.getOrderById(order.id, token);
-          onUpdate();
-          setFormData(prev => ({
-            ...prev,
-            status: updatedOrder.data.status || prev.status,
-            payment_50_date: updatedOrder.data.payment_50_date || prev.payment_50_date,
-            design_confirmation_date: updatedOrder.data.design_confirmation_date || prev.design_confirmation_date,
-            delivery_date: updatedOrder.data.delivery_date || prev.delivery_date,
-          }));
-          setError(null);
-        } else {
-          setError('No tienes permisos para eliminar eventos.');
-        }
-      } catch (error) {
-        console.error('Error deleting event:', error);
-        const errorDetail = error.response?.data?.detail || 'Error al eliminar el evento.';
-        setError(errorDetail);
+    try {
+      if (typeof onDeleteEvent === 'function') {
+        await onDeleteEvent(eventId);
       }
+      const updatedOrder = await ApiService.getOrderById(order.id, token);
+      setFormData(prev => ({
+        ...prev,
+        status: updatedOrder.data.status || prev.status,
+        payment_50_date: updatedOrder.data.payment_50_date || prev.payment_50_date,
+        design_confirmation_date: updatedOrder.data.design_confirmation_date || prev.design_confirmation_date,
+        delivery_date: updatedOrder.data.delivery_date || prev.delivery_date,
+        payments: updatedOrder.data.payments?.map(payment => ({
+          id: payment.id,
+          amount: parseFloat(payment.amount) || 0,
+          payment_date: payment.payment_date || '',
+          payment_type: payment.payment_type || 'partial',
+          reference_document: payment.reference_document || null,
+          previewUrl: payment.reference_document || null,
+        })) || [],
+      }));
+      setEvents(updatedOrder.data.events || []);
+      if (typeof onUpdate === 'function') {
+        onUpdate();
+      } else {
+        console.warn('onUpdate is not a function. Parent component must provide a valid onUpdate callback.');
+      }
+      setError(null);
+    } catch (error) {
+      console.error('Error deleting event:', error);
+      const errorDetail = error.response?.data?.detail || 'Error al eliminar el evento.';
+      setError(errorDetail);
+    }
+  };
+
+  const handleDeletePayment = async (paymentId) => {
+    try {
+      if (typeof onDeletePayment === 'function') {
+        await onDeletePayment(paymentId);
+      }
+      const updatedOrder = await ApiService.getOrderById(order.id, token);
+      setFormData(prev => ({
+        ...prev,
+        status: updatedOrder.data.status || prev.status,
+        payment_50_date: updatedOrder.data.payment_50_date || prev.payment_50_date,
+        design_confirmation_date: updatedOrder.data.design_confirmation_date || prev.design_confirmation_date,
+        delivery_date: updatedOrder.data.delivery_date || prev.delivery_date,
+        payments: updatedOrder.data.payments?.map(payment => ({
+          id: payment.id,
+          amount: parseFloat(payment.amount) || 0,
+          payment_date: payment.payment_date || '',
+          payment_type: payment.payment_type || 'partial',
+          reference_document: payment.reference_document || null,
+          previewUrl: payment.reference_document || null,
+        })) || [],
+      }));
+      setEvents(updatedOrder.data.events || []);
+      if (typeof onUpdate === 'function') {
+        onUpdate();
+      } else {
+        console.warn('onUpdate is not a function. Parent component must provide a valid onUpdate callback.');
+      }
+      setError(null);
+    } catch (error) {
+      console.error('Error deleting payment:', error);
+      const errorDetail = error.response?.data?.detail || 'Error al eliminar el pago.';
+      setError(errorDetail);
+    }
+  };
+
+  const handleEventPaymentUpdate = async () => {
+    try {
+      const updatedOrder = await ApiService.getOrderById(order.id, token);
+      setFormData(prev => ({
+        ...prev,
+        status: updatedOrder.data.status || prev.status,
+        payment_50_date: updatedOrder.data.payment_50_date || prev.payment_50_date,
+        design_confirmation_date: updatedOrder.data.design_confirmation_date || prev.design_confirmation_date,
+        delivery_date: updatedOrder.data.delivery_date || prev.delivery_date,
+        payments: updatedOrder.data.payments?.map(payment => ({
+          id: payment.id,
+          amount: parseFloat(payment.amount) || 0,
+          payment_date: payment.payment_date || '',
+          payment_type: payment.payment_type || 'partial',
+          reference_document: payment.reference_document || null,
+          previewUrl: payment.reference_document || null,
+        })) || [],
+      }));
+      setEvents(updatedOrder.data.events || []);
+      if (typeof onUpdate === 'function') {
+        onUpdate();
+      } else {
+        console.warn('onUpdate is not a function. Parent component must provide a valid onUpdate callback.');
+      }
+      setError(null);
+    } catch (error) {
+      console.error('Error refreshing order after payment/event update:', error);
+      setError(error.response?.data?.detail || 'Error al actualizar los datos del pedido.');
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
-      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl p-8 w-full max-w-4xl max-h-[85vh] overflow-y-auto shadow-2xl border border-blue-500/50 neon-glow">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-bold text-blue-400 animate-pulse">Editar Pedido {order.order_number}</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
+    <div className="order-detail-overlay">
+      <div className="order-detail-modal">
+        <div className="order-detail-header">
+          <h2 className="order-detail-title">Editar Pedido {order.order_number}</h2>
+          <button onClick={onClose} className="order-detail-close">
             <FaTimes size={24} />
           </button>
         </div>
-        {error && (
-          <div className="bg-red-600 text-white p-4 rounded-lg mb-6 animate-shake">
-            {error}
-          </div>
-        )}
-        <form onSubmit={handleSubmit} className="space-y-6">
+
+        {error && <div className="error-message">{error}</div>}
+
+        <form onSubmit={handleSubmit} className="form-section">
           {(userRole === 'administrator' || userRole === 'sales') && (
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Cliente <span className="text-red-400">*</span></label>
+              <label className="input-label">Cliente <span className="input-required">*</span></label>
               <select
                 name="customer_id"
                 value={formData.customer_id}
                 onChange={handleInputChange}
-                className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
+                className="select-field"
                 required
               >
                 <option value="">Seleccione un cliente</option>
@@ -519,27 +612,30 @@ const OrderDetailModal = ({ order, onClose, onUpdate }) => {
               </select>
             </div>
           )}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <div className="form-grid">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Tipo de Pedido</label>
+              <label className="input-label">Tipo de Pedido</label>
               <select
                 name="order_type"
                 value={formData.order_type}
                 onChange={handleInputChange}
-                className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
+                className="select-field"
                 disabled={userRole !== 'administrator' && userRole !== 'sales'}
               >
                 <option value="normal">Normal</option>
                 <option value="urgent">Urgente</option>
+                <option value="express">Express</option>
+                <option value="personalizado">Personalizado</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Estado</label>
+              <label className="input-label">Estado</label>
               <select
                 name="status"
                 value={formData.status}
                 onChange={handleInputChange}
-                className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
+                className="select-field"
                 disabled={userRole !== 'administrator' && userRole !== 'sales'}
               >
                 <option value="pending">Pendiente</option>
@@ -550,71 +646,67 @@ const OrderDetailModal = ({ order, onClose, onUpdate }) => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Fecha de Pedido</label>
-              <input
-                type="date"
-                name="order_date"
-                value={formData.order_date}
-                onChange={handleInputChange}
-                className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-              />
+              <label className="input-label">Fecha de Pedido</label>
+              <input type="date" name="order_date" value={formData.order_date} onChange={handleInputChange} className="input-field" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Fecha de Pago 50%</label>
+              <label className="input-label">Fecha de Pago 50%</label>
               <input
                 type="date"
                 name="payment_50_date"
                 value={formData.payment_50_date}
                 onChange={handleInputChange}
-                className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
+                className="input-field"
                 disabled={formData.status !== 'in_progress'}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Fecha de Confirmación de Diseño</label>
+              <label className="input-label">Fecha de Confirmación de Diseño</label>
               <input
                 type="date"
                 name="design_confirmation_date"
                 value={formData.design_confirmation_date}
                 onChange={handleInputChange}
-                className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                disabled={formData.status !== 'in_progress'}
+                className="input-field"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Fecha de Entrega</label>
+              <label className="input-label">Fecha de Entrega</label>
               <input
                 type="date"
                 name="delivery_date"
                 value={formData.delivery_date}
                 onChange={handleInputChange}
-                className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
+                className="input-field"
                 disabled={userRole !== 'administrator'}
                 required={userRole === 'administrator'}
               />
             </div>
-            <div className="flex items-center">
+            <div className="checkbox-wrapper">
               <input
                 type="checkbox"
                 name="use_points"
                 checked={formData.use_points}
                 onChange={(e) => setFormData({ ...formData, use_points: e.target.checked })}
-                className="mr-2 h-5 w-5 text-blue-500 rounded border-gray-600 focus:ring-blue-500"
+                className="checkbox-input"
               />
-              <label className="text-sm font-medium text-gray-300">Usar puntos del cliente</label>
+              <label className="input-label">Usar puntos del cliente</label>
             </div>
           </div>
 
-          <h3 className="text-xl font-semibold text-blue-400 mt-6">Ítems del Pedido</h3>
+          <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#60a5fa', margin: '1.5rem 0 1rem' }}>
+            Ítems del Pedido
+          </h3>
+
           {formData.items.map((item, index) => (
-            <div key={index} className="bg-gray-800 p-6 rounded-lg mb-4 shadow-md hover:shadow-lg transition-shadow">
-              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <div key={index} className="item-card">
+              <div className="item-grid">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Producto</label>
+                  <label className="input-label">Producto</label>
                   <select
                     value={item.product}
                     onChange={(e) => handleItemChange(index, 'product', e.target.value)}
-                    className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
+                    className="select-field"
                   >
                     <option value="">Seleccione un producto</option>
                     {products.map((product) => (
@@ -627,17 +719,17 @@ const OrderDetailModal = ({ order, onClose, onUpdate }) => {
                     <img
                       src={products.find(p => p.id === parseInt(item.product))?.design_file}
                       alt="Vista previa del producto"
-                      className="mt-2 h-24 w-24 object-cover rounded-lg shadow"
+                      className="item-preview"
                     />
                   )}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Tipo de Producto</label>
+                  <label className="input-label">Tipo de Producto</label>
                   <select
                     value={item.product_type}
                     onChange={(e) => handleItemChange(index, 'product_type', e.target.value)}
-                    className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                    disabled={item.product}
+                    className="select-field"
+                    disabled={!!item.product}
                   >
                     <option value="">Seleccione un tipo</option>
                     {productTypes.map((type) => (
@@ -648,92 +740,78 @@ const OrderDetailModal = ({ order, onClose, onUpdate }) => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Cantidad <span className="text-red-400">*</span></label>
+                  <label className="input-label">Cantidad <span className="input-required">*</span></label>
                   <input
                     type="number"
                     value={item.quantity || 1}
                     onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
-                    className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
+                    className="input-field"
                     min="1"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Precio Unitario <span className="text-red-400">*</span></label>
+                  <label className="input-label">Precio Unitario <span className="input-required">*</span></label>
                   <input
                     type="number"
                     value={item.unit_price || '0.01'}
                     onChange={(e) => handleItemChange(index, 'unit_price', e.target.value)}
-                    className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
+                    className="input-field"
                     min="0.01"
                     step="0.01"
                     required
-                    readOnly={item.product || item.product_type}
+                    readOnly={!!item.product || !!item.product_type}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Subtotal</label>
+                  <label className="input-label">Subtotal</label>
                   <input
                     type="text"
                     value={`₡${calculateSubtotal(item).toFixed(2)}`}
-                    className="w-full p-3 bg-gray-700 text-white rounded-lg border border-gray-600"
+                    className="input-field"
+                    style={{ backgroundColor: '#374151' }}
                     readOnly
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Archivo de Diseño {item.product_type && <span className="text-red-400">*</span>}</label>
+                  <label className="input-label">
+                    Archivo de Diseño {item.product_type && <span className="input-required">*</span>}
+                  </label>
                   <input
                     type="file"
                     onChange={(e) => handleItemChange(index, 'design_file', e.target.files[0])}
-                    className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600"
+                    className="file-input"
                     accept="image/jpeg,image/png,application/pdf"
                     required={item.product_type && !item.previewUrl}
                   />
                   {item.previewUrl && (
-                    <div className="mt-2">
+                    <div style={{ marginTop: '0.5rem' }}>
                       {item.previewUrl.endsWith('.pdf') ? (
-                        <a
-                          href={item.previewUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center text-blue-400 hover:text-blue-300"
-                        >
-                          <FaFileAlt className="mr-2" /> Ver Diseño PDF
+                        <a href={item.previewUrl} target="_blank" rel="noopener noreferrer" className="file-link">
+                          <FaFileAlt /> Ver Diseño PDF
                         </a>
                       ) : (
-                        <img
-                          src={item.previewUrl}
-                          alt="Vista previa del diseño"
-                          className="h-24 w-24 object-cover rounded-lg shadow"
-                        />
+                        <img src={item.previewUrl} alt="Vista previa del diseño" className="item-preview" />
                       )}
                     </div>
                   )}
                 </div>
               </div>
               {formData.items.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() => removeItem(index)}
-                  className="mt-2 text-red-400 hover:text-red-300 transition-colors"
-                >
+                <button type="button" onClick={() => removeItem(index)} className="btn btn-red" style={{ marginTop: '0.5rem' }}>
                   <FaTrash />
                 </button>
               )}
             </div>
           ))}
-          <button
-            type="button"
-            onClick={addItem}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-all flex items-center"
-          >
-            <FaPlus className="mr-2" /> Agregar Ítem
-          </button>
-          <div className="mt-4 text-right">
-            <span className="text-xl font-bold text-green-400">Total: ₡{calculateTotal()}</span>
-          </div>
 
-          <div className="mt-6">
+          <button type="button" onClick={addItem} className="btn btn-neon">
+            <FaPlus /> Agregar Ítem
+          </button>
+
+          <div className="total-display">Total: ₡{calculateTotal()}</div>
+
+          <div style={{ marginTop: '1.5rem' }}>
             <button
               type="button"
               onClick={() => {
@@ -764,14 +842,15 @@ const OrderDetailModal = ({ order, onClose, onUpdate }) => {
                 }
                 setShowUniformDetails(!showUniformDetails);
               }}
-              className="flex items-center px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-all"
+              className="uniform-toggle"
             >
-              {showUniformDetails ? <FaChevronUp className="mr-2" /> : <FaChevronDown className="mr-2" />}
+              {showUniformDetails ? <FaChevronUp /> : <FaChevronDown />}
               Detalles de Uniformes
             </button>
+
             {showUniformDetails && formData.uniform_detail && (
-              <div className="bg-gray-800 p-6 rounded-lg mt-4 shadow-md">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="uniform-section">
+                <div className="form-grid">
                   {[
                     { label: 'Cantidad de Camisetas', name: 'shirt_quantity', type: 'number' },
                     { label: 'Tela de Camisetas', name: 'shirt_fabric', type: 'text' },
@@ -784,12 +863,12 @@ const OrderDetailModal = ({ order, onClose, onUpdate }) => {
                     { label: 'Patrocinios', name: 'sponsorships', type: 'text' },
                   ].map(({ label, name, type }) => (
                     <div key={name}>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">{label}</label>
+                      <label className="input-label">{label}</label>
                       <input
                         type={type}
                         value={formData.uniform_detail[name] || ''}
                         onChange={(e) => handleUniformDetailChange(name, e.target.value)}
-                        className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
+                        className="input-field"
                         min={type === 'number' ? 0 : undefined}
                       />
                     </div>
@@ -801,19 +880,19 @@ const OrderDetailModal = ({ order, onClose, onUpdate }) => {
                     { label: 'Foto de Pantalones', name: 'pants_photo', preview: 'pants_preview' },
                   ].map(({ label, name, preview }) => (
                     <div key={name}>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">{label}</label>
+                      <label className="input-label">{label}</label>
                       <input
                         type="file"
                         onChange={(e) => handleUniformImageChange(name, e.target.files[0])}
-                        className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600"
+                        className="file-input"
                         accept="image/jpeg,image/png"
                       />
                       {formData.uniform_detail[preview] && (
-                        <div className="mt-2">
+                        <div style={{ marginTop: '0.5rem' }}>
                           <img
                             src={formData.uniform_detail[preview]}
                             alt={`Vista previa de ${label}`}
-                            className="h-32 w-32 object-cover rounded-lg shadow"
+                            style={{ height: '8rem', width: '8rem', objectFit: 'cover', borderRadius: '0.5rem', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}
                             onError={(e) => {
                               console.error(`Error loading image for ${label}:`, formData.uniform_detail[preview]);
                               e.target.style.display = 'none';
@@ -824,48 +903,28 @@ const OrderDetailModal = ({ order, onClose, onUpdate }) => {
                     </div>
                   ))}
                 </div>
-                <h4 className="text-lg font-semibold mt-6 text-blue-400">Jugadores</h4>
+
+                <h4 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#60a5fa', margin: '1.5rem 0 1rem' }}>
+                  Jugadores
+                </h4>
+
                 {formData.uniform_detail.players.map((player, index) => (
-                  <div key={index} className="bg-gray-700 p-4 rounded-lg mt-4 grid grid-cols-1 md:grid-cols-5 gap-4">
+                  <div key={index} className="player-card">
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Nombre <span className="text-red-400">*</span></label>
-                      <input
-                        type="text"
-                        value={player.first_name || ''}
-                        onChange={(e) => handlePlayerChange(index, 'first_name', e.target.value)}
-                        className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                        required
-                      />
+                      <label className="input-label">Nombre <span className="input-required">*</span></label>
+                      <input type="text" value={player.first_name || ''} onChange={(e) => handlePlayerChange(index, 'first_name', e.target.value)} className="input-field" required />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Apellido <span className="text-red-400">*</span></label>
-                      <input
-                        type="text"
-                        value={player.last_name || ''}
-                        onChange={(e) => handlePlayerChange(index, 'last_name', e.target.value)}
-                        className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                        required
-                      />
+                      <label className="input-label">Apellido <span className="input-required">*</span></label>
+                      <input type="text" value={player.last_name || ''} onChange={(e) => handlePlayerChange(index, 'last_name', e.target.value)} className="input-field" required />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Número <span className="text-red-400">*</span></label>
-                      <input
-                        type="number"
-                        value={player.number || ''}
-                        onChange={(e) => handlePlayerChange(index, 'number', e.target.value)}
-                        className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                        min="0"
-                        required
-                      />
+                      <label className="input-label">Número <span className="input-required">*</span></label>
+                      <input type="number" value={player.number || ''} onChange={(e) => handlePlayerChange(index, 'number', e.target.value)} className="input-field" min="0" required />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Talla <span className="text-red-400">*</span></label>
-                      <select
-                        value={player.size || ''}
-                        onChange={(e) => handlePlayerChange(index, 'size', e.target.value)}
-                        className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                        required
-                      >
+                      <label className="input-label">Talla <span className="input-required">*</span></label>
+                      <select value={player.size || ''} onChange={(e) => handlePlayerChange(index, 'size', e.target.value)} className="select-field" required>
                         <option value="">Seleccione</option>
                         <option value="S">S</option>
                         <option value="M">M</option>
@@ -874,111 +933,81 @@ const OrderDetailModal = ({ order, onClose, onUpdate }) => {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Género <span className="text-red-400">*</span></label>
-                      <select
-                        value={player.gender || ''}
-                        onChange={(e) => handlePlayerChange(index, 'gender', e.target.value)}
-                        className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                        required
-                      >
+                      <label className="input-label">Género <span className="input-required">*</span></label>
+                      <select value={player.gender || ''} onChange={(e) => handlePlayerChange(index, 'gender', e.target.value)} className="select-field" required>
                         <option value="">Seleccione</option>
                         <option value="H">Hombre</option>
                         <option value="M">Mujer</option>
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Observaciones</label>
-                      <input
-                        type="text"
-                        value={player.observaciones || ''}
-                        onChange={(e) => handlePlayerChange(index, 'observaciones', e.target.value)}
-                        className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                      />
+                      <label className="input-label">Observaciones</label>
+                      <input type="text" value={player.observaciones || ''} onChange={(e) => handlePlayerChange(index, 'observaciones', e.target.value)} className="input-field" />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Variaciones</label>
-                      <input
-                        type="text"
-                        value={player.variaciones || ''}
-                        onChange={(e) => handlePlayerChange(index, 'variaciones', e.target.value)}
-                        className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                      />
+                      <label className="input-label">Variaciones</label>
+                      <input type="text" value={player.variaciones || ''} onChange={(e) => handlePlayerChange(index, 'variaciones', e.target.value)} className="input-field" />
                     </div>
                     {formData.uniform_detail.players.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => removePlayer(index)}
-                        className="text-red-400 hover:text-red-300 transition-colors self-center"
-                      >
+                      <button type="button" onClick={() => removePlayer(index)} className="btn btn-red" style={{ alignSelf: 'center' }}>
                         <FaTrash />
                       </button>
                     )}
                   </div>
                 ))}
-                <button
-                  type="button"
-                  onClick={addPlayer}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg mt-4 flex items-center"
-                >
-                  <FaPlus className="mr-2" /> Agregar Jugador
+
+                <button type="button" onClick={addPlayer} className="btn btn-neon" style={{ marginTop: '1rem' }}>
+                  <FaPlus /> Agregar Jugador
                 </button>
               </div>
             )}
           </div>
 
-          <div className="mt-6">
-            <button
-              type="button"
-              onClick={() => setShowEvents(!showEvents)}
-              className="flex items-center px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-all"
-            >
-              {showEvents ? <FaChevronUp className="mr-2" /> : <FaChevronDown className="mr-2" />}
+          <div style={{ marginTop: '1.5rem' }}>
+            <button type="button" onClick={() => setShowEvents(!showEvents)} className="events-toggle">
+              {showEvents ? <FaChevronUp /> : <FaChevronDown />}
               Eventos del Pedido
             </button>
-            {showEvents && order.events && order.events.length > 0 ? (
-              <div className="bg-gray-800 p-6 rounded-lg mt-4 shadow-md">
-                {order.events.map((event, index) => (
-                  <div key={event.id} className="mb-4 border-b border-gray-700 pb-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center">
-                        <FaCalendarAlt className="mr-2 text-blue-400" />
-                        <p className="font-semibold text-white">{new Date(event.timestamp).toLocaleString()}</p>
+
+            {showEvents && events && events.length > 0 ? (
+              <div className="events-section">
+                {events.map((event) => (
+                  <div key={event.id} className="event-item">
+                    <div className="event-header">
+                      <div className="event-date">
+                        <FaCalendarAlt /> {new Date(event.timestamp).toLocaleString()}
                       </div>
                       {['administrator', 'sales', 'design'].includes(userRole) && (
-                        <div className="flex space-x-2">
+                        <div className="event-actions">
                           <button
-                            onClick={() => handleEditEvent(event)}
-                            className="text-yellow-400 hover:text-yellow-300 transition-colors"
+                            type="button"
+                            onClick={(e) => handleEditEvent(event, e)}
+                            className="event-edit"
                           >
                             <FaEdit />
                           </button>
                           <button
+                            type="button"
                             onClick={() => handleDeleteEvent(event.id)}
-                            className="text-red-400 hover:text-red-300 transition-colors"
+                            className="event-delete"
                           >
                             <FaTrash />
                           </button>
                         </div>
                       )}
                     </div>
-                    <p className="text-gray-300">{event.event_type.replace('_', ' ').toUpperCase()}</p>
+                    <p className="event-type">{event.event_type.replace('_', ' ').toUpperCase()}</p>
+                    {event.amount && (
+                      <p className="event-amount">Monto: ₡{parseFloat(event.amount).toFixed(2)}</p>
+                    )}
                     {event.document && (
-                      <div className="mt-2">
+                      <div style={{ marginTop: '0.5rem' }}>
                         {event.document.endsWith('.pdf') ? (
-                          <a
-                            href={event.document}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center text-blue-400 hover:text-blue-300"
-                          >
-                            <FaFileAlt className="mr-2" /> Ver Documento PDF
+                          <a href={event.document} target="_blank" rel="noopener noreferrer" className="file-link">
+                            <FaFileAlt /> Ver Documento PDF
                           </a>
                         ) : (
-                          <img
-                            src={event.document}
-                            alt="Documento adjunto"
-                            className="h-24 w-24 object-cover rounded-lg shadow"
-                          />
+                          <img src={event.document} alt="Documento adjunto" className="item-preview" />
                         )}
                       </div>
                     )}
@@ -986,26 +1015,117 @@ const OrderDetailModal = ({ order, onClose, onUpdate }) => {
                 ))}
               </div>
             ) : showEvents && (
-              <p className="text-gray-400 mt-4">No hay eventos registrados para este pedido.</p>
+              <p style={{ color: '#9ca3af', marginTop: '1rem' }}>No hay eventos registrados para este pedido.</p>
             )}
           </div>
 
-          <div className="flex justify-end space-x-4 mt-6">
+          <div style={{ marginTop: '1.5rem' }}>
+            <button type="button" onClick={() => setShowPayments(!showPayments)} className="payments-toggle">
+              {showPayments ? <FaChevronUp /> : <FaChevronDown />}
+              Pagos del Pedido
+            </button>
+
+            {showPayments && formData.payments && formData.payments.length > 0 ? (
+              <div className="payments-section">
+                {formData.payments.map((payment) => (
+                  <div key={payment.id} className="payment-item">
+                    <div className="payment-header">
+                      <div className="payment-date">
+                        <FaCalendarAlt /> {new Date(payment.payment_date).toLocaleString()}
+                      </div>
+                      {['administrator', 'sales', 'design'].includes(userRole) && (
+                        <div className="payment-actions">
+                          <button
+                            type="button"
+                            onClick={(e) => handleEditPayment(payment, e)}
+                            className="payment-edit"
+                          >
+                            <FaEdit />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDeletePayment(payment.id)}
+                            className="payment-delete"
+                          >
+                            <FaTrash />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                    <p className="payment-type">{payment.payment_type.replace('_', ' ').toUpperCase()}</p>
+                    <p className="payment-amount">Monto: ₡{parseFloat(payment.amount).toFixed(2)}</p>
+                    {payment.previewUrl && (
+                      <div style={{ marginTop: '0.5rem' }}>
+                        {payment.previewUrl.endsWith('.pdf') ? (
+                          <a href={payment.previewUrl} target="_blank" rel="noopener noreferrer" className="file-link">
+                            <FaFileAlt /> Ver Documento PDF
+                          </a>
+                        ) : (
+                          <img src={payment.previewUrl} alt="Documento de pago" className="item-preview" />
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : showPayments && (
+              <p style={{ color: '#9ca3af', marginTop: '1rem' }}>No hay pagos registrados para este pedido.</p>
+            )}
+          </div>
+
+          <div style={{ marginTop: '1.5rem' }}>
+            <button type="button" onClick={() => setShowProductionQueue(!showProductionQueue)} className="production-queue-toggle">
+              {showProductionQueue ? <FaChevronUp /> : <FaChevronDown />}
+              Cola de Producción
+            </button>
+
+            {showProductionQueue && order.production_queue ? (
+              <div className="production-queue-section">
+                <div className="production-queue-item">
+                  <div className="production-queue-header">
+                    <div className="production-queue-date">
+                      <FaCalendarAlt /> Creado: {new Date(order.production_queue.created_at).toLocaleString()}
+                    </div>
+                  </div>
+                  <p className="production-queue-type">Tipo de Cola: {order.production_queue.queue_type.replace('_', ' ').toUpperCase()}</p>
+                  <p className="production-queue-status">Estado: {order.production_queue.status.replace('_', ' ').toUpperCase()}</p>
+                  <p className="production-queue-customer">Cliente: {order.production_queue.customer_name}</p>
+                  <p className="production-queue-delivery">
+                    <FaCalendarAlt /> Fecha de Entrega: {new Date(order.production_queue.delivery_date).toLocaleDateString()}
+                  </p>
+                  <h4 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#60a5fa', margin: '1rem 0 0.5rem' }}>
+                    Ítems en Cola
+                  </h4>
+                  {order.production_queue.items && order.production_queue.items.length > 0 ? (
+                    <div className="production-queue-items">
+                      {order.production_queue.items.map((item, index) => (
+                        <div key={index} className="production-queue-item-detail">
+                          <p><strong>Producto:</strong> {item.product_name}</p>
+                          <p><strong>Cantidad:</strong> {item.quantity}</p>
+                          <p><strong>Precio Unitario:</strong> ₡{parseFloat(item.unit_price).toFixed(2)}</p>
+                          <p><strong>Subtotal:</strong> ₡{(parseFloat(item.unit_price) * item.quantity).toFixed(2)}</p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p style={{ color: '#9ca3af', marginTop: '0.5rem' }}>No hay ítems en la cola de producción.</p>
+                  )}
+                </div>
+              </div>
+            ) : showProductionQueue && (
+              <p style={{ color: '#9ca3af', marginTop: '1rem' }}>No hay información de cola de producción para este pedido.</p>
+            )}
+          </div>
+
+          <div className="form-actions">
             {(userRole === 'administrator' || (userRole === 'sales' && formData.customer_id === order.customer?.id)) && (
-              <button
-                type="submit"
-                className="flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-all duration-300 transform hover:scale-105 neon-button"
-              >
-                <FaSave className="mr-2" /> Guardar
+              <button type="submit" className="btn btn-neon">
+                <FaSave /> Guardar
               </button>
             )}
             {(userRole === 'administrator' || (userRole === 'design' && ['design_pending', 'design_confirmed'].includes(formData.status)) || (userRole === 'customer' && formData.customer_id === currentUser?.id)) && (
-              <button
-                type="button"
-                onClick={handleDelete}
-                className="flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition-all duration-300 transform hover:scale-105 neon-button-red"
-              >
-                <FaTrash className="mr-2" /> Eliminar
+              <button type="button" onClick={handleDelete} className="btn btn-red">
+                <FaTrash /> Eliminar
               </button>
             )}
             {(userRole === 'administrator' || userRole === 'sales' || userRole === 'design') && (
@@ -1013,24 +1133,32 @@ const OrderDetailModal = ({ order, onClose, onUpdate }) => {
                 type="button"
                 onClick={() => {
                   setEditingEvent(null);
-                  setShowAddEvent(true);
+                  setEditingPayment(null);
+                  setShowEventPaymentModal(true);
                 }}
-                className="flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg transition-all duration-300 transform hover:scale-105 neon-button-green"
+                className="btn btn-green"
               >
-                <FaPlus className="mr-2" /> Agregar Evento
+                <FaPlus /> Agregar Evento o Pago
               </button>
             )}
+            <button type="button" onClick={onClose} className="btn btn-gray">
+              Cancelar
+            </button>
           </div>
         </form>
-        {showAddEvent && (
-          <AddEvent
+
+        {showEventPaymentModal && (
+          <EventPaymentModal
             orderId={order.id}
             event={editingEvent}
+            payment={editingPayment}
             onClose={() => {
-              setShowAddEvent(false);
+              setShowEventPaymentModal(false);
               setEditingEvent(null);
+              setEditingPayment(null);
             }}
-            onEventAdded={onUpdate}
+            onEventAdded={handleEventPaymentUpdate}
+            onPaymentAdded={handleEventPaymentUpdate}
           />
         )}
       </div>

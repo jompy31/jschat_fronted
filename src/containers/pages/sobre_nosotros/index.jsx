@@ -7,7 +7,7 @@ import './SobreNosotros.css';
 const SobreNosotros = () => {
   const sectionVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
   };
 
   const cardVariants = {
@@ -15,178 +15,249 @@ const SobreNosotros = () => {
     visible: (i) => ({
       opacity: 1,
       scale: 1,
-      transition: { duration: 0.5, delay: i * 0.2 },
+      transition: { duration: 0.5, delay: i * 0.15, ease: "easeOut" },
     }),
   };
 
+  const values = [
+    { title: 'Calidad', description: 'Nos comprometemos a entregar productos de la más alta calidad en cada proyecto.' },
+    { title: 'Innovación', description: 'Utilizamos tecnologías de vanguardia para ofrecer soluciones creativas y únicas.' },
+    { title: 'Pasión', description: 'Trabajamos con entusiasmo, reflejando el espíritu de nuestros clientes en cada producto.' },
+  ];
+
+  const services = [
+    { title: 'Sublimación', description: 'Impresión de alta calidad para diseños vibrantes y duraderos en uniformes y productos.' },
+    { title: 'Impresión Láser', description: 'Acabados precisos y profesionales para detalles complejos en cualquier material.' },
+    { title: 'Personalización', description: 'Personaliza tus productos con nombres, números y logotipos únicos.' },
+  ];
+
+  const testimonials = [
+    { quote: 'J SPORT superó nuestras expectativas con uniformes de alta calidad para nuestro equipo.', author: 'Juan Pérez, Entrenador Deportivo' },
+    { quote: 'Los regalos personalizados para nuestro evento corporativo fueron un éxito gracias a J SPORT.', author: 'Ana Gómez, Organizadora de Eventos' },
+    { quote: 'La sublimación en nuestros productos promocionales fue impecable y entregada a tiempo.', author: 'Carlos López, Director de Marketing' },
+  ];
+
   return (
     <div className="sobre-nosotros-container">
-      {/* Hero Section */}
+      {/* === HERO - RESPONSIVO === */}
       <motion.section
         initial="hidden"
         animate="visible"
         variants={sectionVariants}
-        className="relative bg-cover bg-center h-96 flex items-center justify-center text-white"
-        style={{ backgroundImage: 'url(/assets/sobre-nosotros-hero.jpg)' }}
+        className="hero-section"
       >
-        <div className="absolute inset-0 bg-jsport-blue opacity-60"></div>
-        <div className="relative z-10 text-center px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Conoce a J SPORT</h1>
-          <p className="text-lg md:text-xl mb-6">Tu aliado en personalización de productos deportivos y empresariales</p>
-          <Link
-            to="/contacto"
-            className="btn-futurista bg-jsport-red hover:bg-red-600 text-white font-bold py-3 px-6 rounded-lg inline-flex items-center"
+        <div className="hero-overlay"></div>
+        <div className="hero-content">
+          <motion.h1 
+            className="hero-title"
+            style={{
+              fontSize: 'clamp(2rem, 7vw, 4.5rem)',
+              lineHeight: '1.1',
+              wordBreak: 'break-word',
+              overflowWrap: 'break-word',
+              hyphens: 'auto'
+            }}
           >
-            Contáctanos <ChevronRight className="ml-2 h-5 w-5" />
-          </Link>
+            Conoce a J SPORT
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="hero-subtitle"
+            style={{
+              fontSize: 'clamp(0.9rem, 3.5vw, 1.3rem)',
+              lineHeight: '1.6'
+            }}
+          >
+            Tu aliado en personalización de productos deportivos y empresariales
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.5 }}
+            whileHover={{ scale: 1.05 }}
+          >
+            <Link to="/contacto" className="hero-cta">
+              Contáctanos <ChevronRight className="ml-2 h-5 w-5" />
+            </Link>
+          </motion.div>
         </div>
       </motion.section>
 
-      {/* Nuestra Historia */}
+      {/* === HISTORIA === */}
       <motion.section
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
         variants={sectionVariants}
-        className="py-16"
+        className="section historia-section"
       >
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-jsport-blue text-center mb-8">Nuestra Historia</h2>
-          <p className="text-lg text-gray-300 max-w-3xl mx-auto text-center motion-visible">
+        <div className="container mx-auto px-3 xs:px-4 sm:px-6 md:px-8">
+          <h2 
+            className="section-title"
+            style={{
+              fontSize: 'clamp(1.8rem, 5.5vw, 3.5rem)',
+              wordBreak: 'break-word'
+            }}
+          >
+            Nuestra Historia
+          </h2>
+          <p className="section-text max-w-3xl mx-auto text-center text-sm xs:text-base sm:text-lg leading-relaxed">
             Fundada en 2010, J SPORT nació con la pasión de transformar ideas en productos únicos. Desde nuestros inicios en Costa Rica, hemos crecido hasta convertirnos en líderes en sublimación, impresión láser y personalización, trabajando con equipos deportivos y empresas para dar vida a sus visiones.
           </p>
         </div>
       </motion.section>
 
-      {/* Misión y Visión */}
+      {/* === MISIÓN Y VISIÓN === */}
       <motion.section
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
         variants={sectionVariants}
-        className="py-16"
+        className="section mission-vision-section"
       >
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-jsport-blue text-center mb-12">Misión y Visión</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <motion.div
-              variants={cardVariants}
-              custom={0}
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="card-futurista p-6 text-center motion-visible"
-            >
-              <h3 className="text-2xl font-semibold text-jsport-red mb-4">Misión</h3>
-              <p className="text-lg text-gray-200">
-                Ofrecer productos personalizados de alta calidad utilizando tecnologías avanzadas de sublimación e impresión láser, satisfaciendo las necesidades de nuestros clientes en los ámbitos deportivo y empresarial.
-              </p>
-            </motion.div>
-            <motion.div
-              variants={cardVariants}
-              custom={1}
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="card-futurista p-6 text-center motion-visible"
-            >
-              <h3 className="text-2xl font-semibold text-jsport-red mb-4">Visión</h3>
-              <p className="text-lg text-gray-200">
-                Ser el referente en personalización de productos en Costa Rica, reconocidos por nuestra innovación, calidad y compromiso con la satisfacción del cliente.
-              </p>
-            </motion.div>
+        <div className="container mx-auto px-3 xs:px-4 sm:px-6 md:px-8">
+          <h2 
+            className="section-title"
+            style={{
+              fontSize: 'clamp(1.8rem, 5.5vw, 3.5rem)'
+            }}
+          >
+            Misión y Visión
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+            {[
+              { title: 'Misión', text: 'Ofrecer productos personalizados de alta calidad utilizando tecnologías avanzadas de sublimación e impresión láser, satisfaciendo las necesidades de nuestros clientes en los ámbitos deportivo y empresarial.' },
+              { title: 'Visión', text: 'Ser el referente en personalización de productos en Costa Rica, reconocidos por nuestra innovación, calidad y compromiso con la satisfacción del cliente.' }
+            ].map((item, i) => (
+              <motion.div
+                key={item.title}
+                custom={i}
+                variants={cardVariants}
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="value-card p-4 xs:p-5 sm:p-6"
+              >
+                <h3 className="value-title text-lg xs:text-xl sm:text-2xl">{item.title}</h3>
+                <p className="value-text text-xs xs:text-sm sm:text-base leading-relaxed">
+                  {item.text}
+                </p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </motion.section>
 
-      {/* Nuestros Valores */}
+      {/* === VALORES === */}
       <motion.section
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
         variants={sectionVariants}
-        className="py-16"
+        className="section values-section"
       >
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-jsport-blue text-center mb-12">Nuestros Valores</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              { title: 'Calidad', description: 'Nos comprometemos a entregar productos de la más alta calidad en cada proyecto.' },
-              { title: 'Innovación', description: 'Utilizamos tecnologías de vanguardia para ofrecer soluciones creativas y únicas.' },
-              { title: 'Pasión', description: 'Trabajamos con entusiasmo, reflejando el espíritu de nuestros clientes en cada producto.' },
-            ].map((value, index) => (
+        <div className="container mx-auto px-3 xs:px-4 sm:px-6 md:px-8">
+          <h2 
+            className="section-title"
+            style={{
+              fontSize: 'clamp(1.8rem, 5.5vw, 3.5rem)'
+            }}
+          >
+            Nuestros Valores
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {values.map((value, index) => (
               <motion.div
                 key={value.title}
                 custom={index}
                 variants={cardVariants}
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="card-futurista p-6 text-center motion-visible"
+                className="value-card p-4 xs:p-5 sm:p-6"
               >
-                <h3 className="text-xl font-semibold text-jsport-red mb-2">{value.title}</h3>
-                <p className="text-gray-200">{value.description}</p>
+                <h3 className="value-title text-lg xs:text-xl sm:text-2xl">{value.title}</h3>
+                <p className="value-text text-xs xs:text-sm sm:text-base leading-relaxed">
+                  {value.description}
+                </p>
               </motion.div>
             ))}
           </div>
         </div>
       </motion.section>
 
-      {/* Qué Hacemos */}
+      {/* === QUÉ HACEMOS === */}
       <motion.section
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
         variants={sectionVariants}
-        className="py-16"
+        className="section services-section"
       >
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-jsport-blue text-center mb-12">Qué Hacemos</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              { title: 'Sublimación', description: 'Impresión de alta calidad para diseños vibrantes y duraderos en uniformes y productos.' },
-              { title: 'Impresión Láser', description: 'Acabados precisos y profesionales para detalles complejos en cualquier material.' },
-              { title: 'Personalización', description: 'Personaliza tus productos con nombres, números y logotipos únicos.' },
-            ].map((service, index) => (
+        <div className="container mx-auto px-3 xs:px-4 sm:px-6 md:px-8">
+          <h2 
+            className="section-title"
+            style={{
+              fontSize: 'clamp(1.8rem, 5.5vw, 3.5rem)'
+            }}
+          >
+            Qué Hacemos
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {services.map((service, index) => (
               <motion.div
                 key={service.title}
                 custom={index}
                 variants={cardVariants}
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="card-futurista p-6 text-center motion-visible"
+                className="value-card p-4 xs:p-5 sm:p-6"
               >
-                <h3 className="text-xl font-semibold text-jsport-red mb-4">{service.title}</h3>
-                <p className="text-gray-200">{service.description}</p>
+                <h3 className="value-title text-lg xs:text-xl sm:text-2xl break-words">
+                  {service.title}
+                </h3>
+                <p className="value-text text-xs xs:text-sm sm:text-base leading-relaxed">
+                  {service.description}
+                </p>
               </motion.div>
             ))}
           </div>
         </div>
       </motion.section>
 
-      {/* Testimonios */}
+      {/* === TESTIMONIOS === */}
       <motion.section
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
         variants={sectionVariants}
-        className="py-16"
+        className="section testimonials-section"
       >
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-jsport-blue text-center mb-12">Lo Que Dicen Nuestros Clientes</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              { quote: 'J SPORT superó nuestras expectativas con uniformes de alta calidad para nuestro equipo.', author: 'Juan Pérez, Entrenador Deportivo' },
-              { quote: 'Los regalos personalizados para nuestro evento corporativo fueron un éxito gracias a J SPORT.', author: 'Ana Gómez, Organizadora de Eventos' },
-              { quote: 'La sublimación en nuestros productos promocionales fue impecable y entregada a tiempo.', author: 'Carlos López, Director de Marketing' },
-            ].map((testimonial, index) => (
+        <div className="container mx-auto px-3 xs:px-4 sm:px-6 md:px-8">
+          <h2 
+            className="section-title"
+            style={{
+              fontSize: 'clamp(1.8rem, 5.5vw, 3.5rem)'
+            }}
+          >
+            Lo Que Dicen Nuestros Clientes
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {testimonials.map((testimonial, index) => (
               <motion.div
                 key={testimonial.author}
                 custom={index}
                 variants={cardVariants}
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="card-futurista p-6 text-center motion-visible"
+                className="testimonial-card p-4 xs:p-5 sm:p-6"
               >
-                <p className="text-gray-200 italic mb-4">"{testimonial.quote}"</p>
-                <p className="font-bold text-jsport-blue">{testimonial.author}</p>
+                <p className="testimonial-quote italic text-xs xs:text-sm sm:text-base leading-relaxed">
+                  "{testimonial.quote}"
+                </p>
+                <p className="testimonial-author font-semibold text-xs xs:text-sm sm:text-base mt-3">
+                  {testimonial.author}
+                </p>
               </motion.div>
             ))}
           </div>

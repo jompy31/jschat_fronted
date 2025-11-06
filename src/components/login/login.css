@@ -1,77 +1,32 @@
-/* 🌌 FONDO PRINCIPAL */
+
+/* === CONTENEDOR PRINCIPAL === */
 .login-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at 50% 20%, #0a0f24 0%, #01030d 100%);
-  position: relative;
-  overflow: hidden;
-  color: #fff;
+  background: var(--bg-primary);
   padding: 2rem;
+  font-family: 'Open Sans', sans-serif;
 }
 
-/* Neblina y partículas energéticas */
-.login-container::before,
-.login-container::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 30% 20%, rgba(0, 255, 255, 0.08) 0%, transparent 60%),
-              radial-gradient(circle at 70% 80%, rgba(0, 100, 255, 0.1) 0%, transparent 70%);
-  animation: nebulaMove 12s ease-in-out infinite alternate;
-  z-index: 0;
-}
-
-@keyframes nebulaMove {
-  0% { transform: scale(1) translateY(0); }
-  100% { transform: scale(1.2) translateY(-10px); }
-}
-
-/* 🌐 TARJETA CENTRAL */
+/* === TARJETA CENTRAL === */
 .auth-card {
-  position: relative;
-  z-index: 2;
   width: 100%;
   max-width: 850px;
-  background: rgba(10, 20, 40, 0.6);
-  backdrop-filter: blur(20px);
+  background: var(--bg-card);
   border-radius: 20px;
-  border: 2px solid rgba(0, 255, 255, 0.3);
-  box-shadow: 0 0 40px rgba(0, 255, 255, 0.2);
-  padding: 3rem 3.5rem;
-  overflow: hidden;
-  transition: transform 0.5s ease, box-shadow 0.5s ease;
+  border: 1px solid var(--border-primary);
+  box-shadow: var(--shadow-light);
+  transition: all 0.4s ease;
 }
 
 .auth-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 0 60px rgba(0, 255, 255, 0.4);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-light), var(--glow-neon);
 }
 
-/* Efecto energético animado en los bordes */
-.auth-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 20px;
-  padding: 2px;
-  background: linear-gradient(135deg, #00eaff, #007bff, #00ffff, #00aaff);
-  background-size: 400% 400%;
-  animation: glowShift 8s linear infinite;
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-@keyframes glowShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* ✴️ LOGO Y TÍTULOS */
+/* === LOGO === */
 .logo-container {
   text-align: center;
   margin-bottom: 1.5rem;
@@ -79,208 +34,217 @@
 
 .logo {
   width: 180px;
-  filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.5));
-  transition: transform 0.4s ease, filter 0.4s ease;
+  max-width: 100%;
+  height: auto;
+  transition: transform 0.3s ease;
 }
 
 .logo:hover {
-  transform: scale(1.05);
-  filter: drop-shadow(0 0 30px rgba(0, 255, 255, 0.8));
+  transform: scale(1.03);
 }
 
+/* === TÍTULOS === */
 .card-title {
   text-align: center;
   font-size: 2rem;
   font-weight: 700;
-  color: #00eaff;
-  text-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  font-family: 'Playfair Display', serif;
 }
 
 .card-subtitle {
   text-align: center;
-  color: #b4c6ff;
+  color: var(--text-secondary);
   margin-bottom: 2rem;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
-/* 🧠 INPUTS */
-.input-field-container {
-  margin-bottom: 1.5rem;
-}
-
+/* === INPUTS === */
 .input-label {
   font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
   font-size: 0.95rem;
-  color: #9beeff;
-  display: block;
-  margin-bottom: 0.3rem;
 }
 
 .form-control-modern {
-  width: 100%;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1.5px solid rgba(0, 255, 255, 0.3);
-  border-radius: 10px;
-  padding: 12px 15px;
-  color: #fff;
+  background: white;
+  border: 2px solid var(--border-primary);
+  border-radius: 14px;
+  padding: 0.9rem 1.2rem;
+  color: var(--text-primary);
   font-size: 1rem;
   transition: all 0.3s ease;
 }
 
-.form-control-modern:focus {
-  border-color: #00eaff;
-  box-shadow: 0 0 15px rgba(0, 255, 255, 0.7);
-  background: rgba(255, 255, 255, 0.1);
-  outline: none;
+.form-control-modern::placeholder {
+  color: #9ca3af;
 }
 
-/* 🧿 BOTÓN PRINCIPAL */
-.login-button {
-  width: 100%;
-  background: linear-gradient(90deg, #0066ff, #00eaff);
+.form-control-modern:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 4px rgba(217, 4, 4, 0.12);
+  transform: translateY(-1px);
+}
+
+.password-input-wrapper {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
   border: none;
-  border-radius: 12px;
-  padding: 12px;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #fff;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
+  color: var(--text-secondary);
   cursor: pointer;
-  transition: all 0.4s ease;
+  padding: 0;
+  transition: color 0.3s ease;
+}
+
+.password-toggle:hover {
+  color: var(--accent-primary);
+}
+
+/* === BOTÓN PRINCIPAL === */
+.login-button {
+  background: var(--accent-primary);
+  color: white;
+  font-weight: 600;
+  padding: 1rem;
+  border-radius: 14px;
+  font-size: 1.1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(217, 4, 4, 0.25);
   position: relative;
   overflow: hidden;
 }
 
-.login-button::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -75%;
-  width: 50%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.2);
-  transform: skewX(-25deg);
-  transition: left 0.5s ease;
+.login-button:hover:not(:disabled) {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(217, 4, 4, 0.35);
 }
 
-.login-button:hover::after {
-  left: 130%;
+.login-button:active {
+  transform: translateY(0);
 }
 
-.login-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 35px rgba(0, 255, 255, 0.7);
+.login-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
-/* 🔗 LINKS */
+/* === ENLACES === */
 .links-container {
   text-align: center;
   margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .auth-link {
-  color: #00eaff;
-  font-weight: 600;
-  transition: color 0.3s ease, text-shadow 0.3s ease;
-  display: block;
-  margin: 6px 0;
+  color: white;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
 }
 
 .auth-link:hover {
-  color: #00ffff;
-  text-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
+  color: white;
+  text-decoration: underline;
 }
 
-/* ⚠️ ERRORES */
+.signup-link {
+  color: white;
+}
+
+.signup-link:hover {
+  color: white;
+}
+
+/* === MENSAJE DE ERROR === */
 .error-message {
-  color: #ff7070;
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--accent-primary);
+  padding: 0.85rem;
+  border-radius: 12px;
+  text-align: center;
+  margin: 1rem 0;
   font-size: 0.9rem;
-  margin-top: 0.4rem;
-  text-shadow: 0 0 6px rgba(255, 0, 0, 0.4);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  font-weight: 500;
 }
 
-/* 📱 RESPONSIVIDAD */
+/* === DARK MODE ESPECÍFICO === */
+[data-theme="dark"] .form-control-modern {
+  background: #334155;
+  color: #f1f5f9;
+  border-color: #475569;
+}
+
+[data-theme="dark"] .form-control-modern::placeholder {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .form-control-modern:focus {
+  background: #475569;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.25);
+}
+
+[data-theme="dark"] .auth-card {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+[data-theme="dark"] .input-label,
+[data-theme="dark"] .card-subtitle {
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .password-toggle {
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .password-toggle:hover {
+  color: var(--accent-primary);
+}
+
+[data-theme="dark"] .error-message {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+/* === RESPONSIVE === */
 @media (max-width: 768px) {
   .auth-card {
     padding: 2rem 1.5rem;
   }
   .card-title {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
+  }
+  .login-button {
+    font-size: 1rem;
   }
 }
 
 @media (max-width: 480px) {
   .auth-card {
-    border-width: 1px;
+    padding: 1.5rem 1rem;
+    border-radius: 16px;
   }
-  .login-container {
-    padding: 1rem;
+  .logo {
+    width: 150px;
   }
-  .login-button {
-    font-size: 0.95rem;
-  }
-}
-/* ======== MEJORA VISUAL DE INPUTS EN MODO CLARO Y OSCURO ======== */
-.form-container input,
-.form-container select,
-.form-container textarea {
-  border: 2px solid transparent;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  color: #fff;
-  padding: 12px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
-}
-
-.form-container input::placeholder {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-/* Efecto hover y focus futurista */
-.form-container input:hover,
-.form-container select:hover,
-.form-container textarea:hover {
-  border: 2px solid #00ffff;
-  box-shadow: 0 0 12px #00ffff, 0 0 25px #00ffff44;
-}
-
-.form-container input:focus,
-.form-container select:focus,
-.form-container textarea:focus {
-  outline: none;
-  border: 2px solid #00ffff;
-  background: rgba(0, 0, 0, 0.3);
-  box-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff66;
-}
-
-/* ======== MODO CLARO ======== */
-[data-theme='light'] .form-container input,
-[data-theme='light'] .form-container select,
-[data-theme='light'] .form-container textarea {
-  background: rgba(255, 255, 255, 0.9);
-  color: #000;
-  border: 2px solid #00bcd4;
-  box-shadow: 0 0 6px rgba(0, 188, 212, 0.5);
-}
-
-[data-theme='light'] .form-container input::placeholder {
-  color: rgba(0, 0, 0, 0.6);
-}
-
-[data-theme='light'] .form-container input:hover,
-[data-theme='light'] .form-container select:hover,
-[data-theme='light'] .form-container textarea:hover {
-  border-color: #00bcd4;
-  box-shadow: 0 0 12px #00bcd4, 0 0 25px #00bcd455;
-}
-
-[data-theme='light'] .form-container input:focus,
-[data-theme='light'] .form-container select:focus,
-[data-theme='light'] .form-container textarea:focus {
-  border-color: #0097a7;
-  box-shadow: 0 0 20px #00bcd4, 0 0 40px #00bcd477;
 }

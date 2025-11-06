@@ -17,7 +17,6 @@ const Files = () => {
   const [fileName, setFileName] = useState('');
   const [selectedFileName, setSelectedFileName] = useState('');
   const [selectedFiles, setSelectedFiles] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
   const [previewFileUrls, setPreviewFileUrls] = useState({});
   const [searchTerm, setSearchTerm] = useState('');
   const [filesPerPage, setFilesPerPage] = useState(3);
@@ -73,7 +72,6 @@ const Files = () => {
     setDesignError(null);
     FileDataService.getAllDesigns(token, page, designsPerPage)
       .then(response => {
-        console.log('Designs API Response:', response.data); // Log the response
         const { results, count, next, previous } = response.data;
         setDesigns(results || []);
         setDesignMeta({ count: count || 0, next, previous });
@@ -84,7 +82,7 @@ const Files = () => {
         setPreviewDesignUrls(urls);
       })
       .catch(error => {
-        console.error('Error fetching designs:', error.response || error); // Log detailed error
+        console.error('Error fetching designs:', error.response || error);
         setDesignError('No se pudieron cargar los diseños. Verifique la conexión con el servidor.');
       })
       .finally(() => {
@@ -99,16 +97,15 @@ const Files = () => {
   }, [currentPage, filesPerPage, currentDesignsPage, designsPerPage]);
 
   return (
-    <>
-      <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-      <Container className="py-8 px-4 sm:px-6 lg:px-8" style={{ marginTop: "5%" }}>
+    <div className="files-container">
+      <Container fluid>
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="mb-8"
         >
-          <h1 className="text-3xl font-bold text-gray-800">Archivos de ABCupon</h1>
+          <h1>Archivos de JSport</h1>
         </motion.div>
 
         {currentUser && currentUser.staff_status === 'administrator' && (
@@ -116,7 +113,7 @@ const Files = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.5 }}
-            className="bg-white shadow-lg rounded-lg p-6 mb-8"
+            className="file-card"
           >
             <FileUpload
               selectedFile={selectedFile}
@@ -136,7 +133,7 @@ const Files = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.5 }}
-          className="bg-white shadow-lg rounded-lg p-6 mb-8"
+          className="file-card"
         >
           <SearchBar
             searchTerm={searchTerm}
@@ -147,8 +144,8 @@ const Files = () => {
             setEndDate={setEndDate}
             filesPerPage={filesPerPage}
             setFilesPerPage={setFilesPerPage}
-            selectAll={selectAll}
-            setSelectAll={setSelectAll}
+            selectAll={selectedFiles.length === files.length}
+            setSelectAll={(checked) => setSelectedFiles(checked ? files.map(f => f.id) : [])}
             setCurrentPage={setCurrentPage}
             setCurrentDesignsPage={setCurrentDesignsPage}
           />
@@ -158,7 +155,7 @@ const Files = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.5 }}
-          className="bg-white shadow-lg rounded-lg p-6 mb-8"
+          className="file-card"
         >
           <FileTable
             files={files}
@@ -186,13 +183,13 @@ const Files = () => {
               transition={{ delay: 0.5, duration: 0.5 }}
               className="mb-8"
             >
-              <h2 className="text-2xl font-bold text-gray-800">Archivos de Diseño</h2>
+              <h2>Archivos de Diseño</h2>
             </motion.div>
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.5 }}
-              className="bg-white shadow-lg rounded-lg p-6 mb-8"
+              className="file-card"
             >
               <DesignUpload
                 selectedDesignFile={selectedDesignFile}
@@ -215,7 +212,7 @@ const Files = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.7, duration: 0.5 }}
-              className="bg-white shadow-lg rounded-lg p-6 mb-8"
+              className="file-card"
             >
               <SearchBar
                 searchTerm={designNameSearch}
@@ -241,12 +238,12 @@ const Files = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8, duration: 0.5 }}
-              className="bg-white shadow-lg rounded-lg p-6"
+              className="file-card"
             >
               {isLoadingDesigns ? (
-                <p className="text-gray-600">Cargando diseños...</p>
+                <p className="text-center py-4">Cargando diseños...</p>
               ) : designError ? (
-                <p className="text-red-600">{designError}</p>
+                <p className="text-center text-red-600 py-4">{designError}</p>
               ) : (
                 <DesignTable
                   designs={designs}
@@ -274,7 +271,7 @@ const Files = () => {
           </>
         )}
       </Container>
-    </>
+    </div>
   );
 };
 

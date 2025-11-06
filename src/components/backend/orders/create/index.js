@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaTimes, FaSave, FaPlus, FaTrash, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import ApiService from '../../../../services/products';
+import "./create.css"
 
 const CreateOrder = ({ onClose, onCreate }) => {
   const [customers, setCustomers] = useState([]);
@@ -163,17 +164,23 @@ const CreateOrder = ({ onClose, onCreate }) => {
     } else {
       newItems[index][field] = value;
       if (field === 'product' && value) {
-        const product = products.find(p => p.id === parseInt(value));
-        newItems[index].product_type = '';
-        newItems[index].unit_price = product ? parseFloat((product.product_type.base_price + product.additional_price).toFixed(2)) : 0.01;
-        newItems[index].design_file = null;
-        newItems[index].previewUrl && URL.revokeObjectURL(newItems[index].previewUrl);
-        newItems[index].previewUrl = null;
-      } else if (field === 'product_type' && value) {
-        const productType = productTypes.find(pt => pt.id === parseInt(value));
-        newItems[index].product = '';
-        newItems[index].unit_price = productType ? parseFloat(productType.base_price.toFixed(2)) : 0.01;
-      }
+  const product = products.find(p => p.id === parseInt(value));
+  if (product) {
+    // Asignar automáticamente el product_type del producto
+    newItems[index].product_type = String(product.product_type.id);
+    newItems[index].unit_price = parseFloat((product.product_type.base_price + product.additional_price).toFixed(2));
+  } else {
+    newItems[index].product_type = '';
+    newItems[index].unit_price = 0.01;
+  }
+  newItems[index].design_file = null;
+  newItems[index].previewUrl && URL.revokeObjectURL(newItems[index].previewUrl);
+  newItems[index].previewUrl = null;
+} else if (field === 'product_type' && value) {
+  const productType = productTypes.find(pt => pt.id === parseInt(value));
+  newItems[index].product = '';
+  newItems[index].unit_price = productType ? parseFloat(productType.base_price.toFixed(2)) : 0.01;
+}
     }
     setFormData({ ...formData, items: newItems });
   };
@@ -295,10 +302,6 @@ const CreateOrder = ({ onClose, onCreate }) => {
         setError(`El ítem ${i + 1} debe especificar un producto o tipo de producto.`);
         return false;
       }
-      if (item.product && item.product_type) {
-        setError(`El ítem ${i + 1} no puede especificar tanto un producto como un tipo de producto.`);
-        return false;
-      }
       if (item.product_type && !item.design_file) {
         setError(`El ítem ${i + 1} requiere un archivo de diseño para productos personalizados.`);
         return false;
@@ -363,592 +366,544 @@ const CreateOrder = ({ onClose, onCreate }) => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(null);
+  e.preventDefault();
+  setError(null);
 
-    if (!validateForm()) return;
+  if (!validateForm()) return;
 
-    try {
-      const formDataToSend = new FormData();
-      
-      // Append top-level fields
-      formDataToSend.append('customer_id', formData.customer_id);
-      formDataToSend.append('order_type', formData.order_type);
-      formDataToSend.append('status', formData.status);
-      formDataToSend.append('order_date', formData.order_date || '');
-      formDataToSend.append('payment_50_date', formData.payment_50_date || '');
-      formDataToSend.append('design_confirmation_date', formData.design_confirmation_date || '');
-      if (formData.delivery_date) {
-        formDataToSend.append('delivery_date', formData.delivery_date);
-      }
-      formDataToSend.append('use_points', formData.use_points);
+  try {
+    const formDataToSend = new FormData();
 
-      // Append items as a JSON string
-      const items = formData.items.map((item, index) => {
-        const itemData = {
-          product: item.product ? parseInt(item.product) : null,
-          product_type: item.product_type ? parseInt(item.product_type) : null,
-          quantity: parseInt(item.quantity, 10) || 1,
-          unit_price: parseFloat(item.unit_price) || 0.01,
-        };
-        if (item.design_file) {
-          formDataToSend.append(`items[${index}].design_file`, item.design_file);
-        }
-        return itemData;
-      });
-      formDataToSend.append('items', JSON.stringify(items));
-
-      // Append uniform_detail if present
-      if (showUniformDetails) {
-        const uniformDetail = {
-          shirt_quantity: parseInt(formData.uniform_detail.shirt_quantity) || 0,
-          shirt_fabric: formData.uniform_detail.shirt_fabric,
-          pants_quantity: parseInt(formData.uniform_detail.pants_quantity) || 0,
-          pants_fabric: formData.uniform_detail.pants_fabric,
-          polo_quantity: parseInt(formData.uniform_detail.polo_quantity) || 0,
-          polo_fabric: formData.uniform_detail.polo_fabric,
-          bag_quantity: parseInt(formData.uniform_detail.bag_quantity) || 0,
-          bag_fabric: formData.uniform_detail.bag_fabric,
-          sponsorships: formData.uniform_detail.sponsorships,
-          players: formData.uniform_detail.players.map(player => ({
-            ...player,
-            number: parseInt(player.number) || 0,
-          })),
-        };
-        ['player_uniform_photo', 'goalkeeper_uniform_photo', 'neck_photo', 'pants_photo'].forEach(field => {
-          if (formData.uniform_detail[field]) {
-            formDataToSend.append(`uniform_detail.${field}`, formData.uniform_detail[field]);
-          }
-        });
-        formDataToSend.append('uniform_detail', JSON.stringify(uniformDetail));
-      }
-
-      console.log('Datos enviados al backend (FormData keys):', Array.from(formDataToSend.keys()));
-      for (let [key, value] of formDataToSend.entries()) {
-        console.log(`FormData entry: ${key} = ${value instanceof File ? value.name : value}`);
-      }
-
-      const response = await ApiService.createOrder(formDataToSend, token);
-      console.log('Respuesta del servidor:', response.data);
-
-      onCreate();
-      onClose();
-    } catch (error) {
-      console.error('Error creating order:', error);
-      const errorDetail = error.response?.data?.details || error.response?.data || 'Error al crear el pedido. Por favor, verifica los datos e intenta de nuevo.';
-      setError(JSON.stringify(errorDetail));
+    // === CAMPOS PRINCIPALES (solo una vez, como string) ===
+    if (!formData.customer_id) {
+      setError('Debe seleccionar un cliente.');
+      return;
     }
-  };
+    formDataToSend.append('customer_id', formData.customer_id); // ← STRING
+    formDataToSend.append('order_type', formData.order_type);
+    formDataToSend.append('status', formData.status);
+    if (formData.order_date) formDataToSend.append('order_date', formData.order_date);
+    if (formData.payment_50_date) formDataToSend.append('payment_50_date', formData.payment_50_date);
+    if (formData.design_confirmation_date) formDataToSend.append('design_confirmation_date', formData.design_confirmation_date);
+    if (formData.delivery_date) formDataToSend.append('delivery_date', formData.delivery_date);
+    formDataToSend.append('use_points', formData.use_points ? 'true' : 'false');
+
+    // === ITEMS: Usar sintaxis Django (items[0].quantity) ===
+    formData.items.forEach((item, index) => {
+      const prefix = `items[${index}]`;
+
+      // Campos básicos
+      if (item.product) {
+        formDataToSend.append(`${prefix}.product`, item.product);
+      } else if (item.product_type) {
+        formDataToSend.append(`${prefix}.product_type`, item.product_type);
+      }
+
+      formDataToSend.append(`${prefix}.quantity`, item.quantity);
+      // formDataToSend.append(`${prefix}.unit_price`, item.unit_price);
+
+      // Archivo de diseño
+      if (item.design_file instanceof File) {
+        formDataToSend.append(`${prefix}.design_file`, item.design_file);
+      }
+    });
+
+    // === UNIFORM DETAIL (solo si está activo) ===
+    if (showUniformDetails && formData.uniform_detail) {
+      const ud = formData.uniform_detail;
+      const udPrefix = 'uniform_detail';
+
+      formDataToSend.append(`${udPrefix}.shirt_quantity`, ud.shirt_quantity || '0');
+      formDataToSend.append(`${udPrefix}.shirt_fabric`, ud.shirt_fabric || '');
+      formDataToSend.append(`${udPrefix}.pants_quantity`, ud.pants_quantity || '0');
+      formDataToSend.append(`${udPrefix}.pants_fabric`, ud.pants_fabric || '');
+      formDataToSend.append(`${udPrefix}.polo_quantity`, ud.polo_quantity || '0');
+      formDataToSend.append(`${udPrefix}.polo_fabric`, ud.polo_fabric || '');
+      formDataToSend.append(`${udPrefix}.bag_quantity`, ud.bag_quantity || '0');
+      formDataToSend.append(`${udPrefix}.bag_fabric`, ud.bag_fabric || '');
+      formDataToSend.append(`${udPrefix}.sponsorships`, ud.sponsorships || '');
+
+      // Fotos
+      ['player_uniform_photo', 'goalkeeper_uniform_photo', 'neck_photo', 'pants_photo'].forEach(field => {
+        if (ud[field] instanceof File) {
+          formDataToSend.append(`${udPrefix}.${field}`, ud[field]);
+        }
+      });
+
+      // Jugadores
+      ud.players.forEach((player, i) => {
+        const pPrefix = `${udPrefix}.players[${i}]`;
+        formDataToSend.append(`${pPrefix}.first_name`, player.first_name || '');
+        formDataToSend.append(`${pPrefix}.last_name`, player.last_name || '');
+        formDataToSend.append(`${pPrefix}.number`, player.number || '');
+        formDataToSend.append(`${pPrefix}.size`, player.size || '');
+        formDataToSend.append(`${pPrefix}.gender`, player.gender || '');
+        formDataToSend.append(`${pPrefix}.observaciones`, player.observaciones || '');
+        formDataToSend.append(`${pPrefix}.variaciones`, player.variaciones || '');
+      });
+    }
+
+    // === DEBUG: Ver exactamente qué se envía ===
+    console.log('ENVIANDO FormData:');
+    for (let [key, value] of formDataToSend.entries()) {
+      if (value instanceof File) {
+        console.log(`${key}: <File: ${value.name}, ${value.size} bytes>`);
+      } else {
+        console.log(`${key}: ${value}`);
+      }
+    }
+
+    const response = await ApiService.createOrder(formDataToSend, token);
+    console.log('Pedido creado:', response.data);
+    onCreate();
+    onClose();
+  } catch (error) {
+    console.error('Error al crear pedido:', error);
+    const errMsg = error.response?.data;
+    let msg = 'Error al crear el pedido.';
+
+    if (errMsg) {
+      if (typeof errMsg === 'string') msg = errMsg;
+      else if (errMsg.customer_id) msg = `Cliente: ${errMsg.customer_id.join(', ')}`;
+      else if (errMsg.items) msg = `Ítems: ${JSON.stringify(errMsg.items)}`;
+      else if (errMsg.non_field_errors) msg = errMsg.non_field_errors.join(', ');
+    }
+
+    setError(msg);
+  }
+};
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
-      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl p-8 w-full max-w-4xl max-h-[85vh] overflow-y-auto shadow-2xl border border-blue-500/50 neon-glow">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-bold text-blue-400 animate-pulse">
-            {showCustomerForm ? 'Crear Nuevo Cliente' : 'Crear Nuevo Pedido'}
-          </h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
-            <FaTimes size={24} />
-          </button>
-        </div>
-        {error && (
-          <div className="bg-red-600 text-white p-4 rounded-lg mb-6 animate-shake">
-            {error}
-          </div>
-        )}
-        {showCustomerForm ? (
-          <form onSubmit={handleCreateCustomer} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {[
-                { label: 'Nombre', name: 'name', type: 'text', required: true },
-                { label: 'Tipo de Identificación', name: 'id_type', type: 'text' },
-                { label: 'Número de Identificación', name: 'id_number', type: 'text', required: true },
-                { label: 'Correo Electrónico', name: 'email', type: 'email' },
-                { label: 'Teléfono', name: 'phone_number', type: 'text' },
-                { label: 'Dirección', name: 'address', type: 'text' },
-                { label: 'Compañía', name: 'company', type: 'text' },
-                {
-                  label: 'Tipo de Contacto',
-                  name: 'tipo_contacto',
-                  type: 'select',
-                  options: [
-                    { value: 'Cliente', label: 'Cliente' },
-                    { value: 'Proveedor', label: 'Proveedor' },
-                  ],
-                },
-              ].map(({ label, name, type, required, options }) => (
-                <div key={name}>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    {label} {required && <span className="text-red-400">*</span>}
-                  </label>
-                  {type === 'select' ? (
-                    <select
-                      name={name}
-                      value={formData.new_customer[name]}
-                      onChange={handleCustomerChange}
-                      className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                      required={required}
-                    >
-                      <option value="">Seleccione</option>
-                      {options.map(opt => (
-                        <option key={opt.value} value={opt.value}>
-                          {opt.label}
-                        </option>
-                      ))}
-                    </select>
-                  ) : (
-                    <input
-                      type={type}
-                      name={name}
-                      value={formData.new_customer[name]}
-                      onChange={handleCustomerChange}
-                      className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                      required={required}
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-            <div className="flex justify-end space-x-4 mt-6">
-              <button
-                type="button"
-                onClick={() => setShowCustomerForm(false)}
-                className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-all duration-300 transform hover:scale-105"
-              >
-                Cancelar
-              </button>
-              <button
-                type="submit"
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-300 transform hover:scale-105 flex items-center neon-button"
-              >
-                <FaSave className="mr-2" /> Crear Cliente
-              </button>
-            </div>
-          </form>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {(userRole === 'administrator' || userRole === 'sales') && (
-              <div className="space-y-4">
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    checked={isNewCustomer}
-                    onChange={(e) => {
-                      setIsNewCustomer(e.target.checked);
-                      if (e.target.checked) setFormData({ ...formData, customer_id: '' });
-                    }}
-                    className="mr-2 h-5 w-5 text-blue-500 rounded border-gray-600 focus:ring-blue-500"
-                  />
-                  <label className="text-sm font-medium text-gray-300">Crear nuevo cliente</label>
-                </div>
-                <div className="relative">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Cliente <span className="text-red-400">*</span></label>
-                  <div className="flex items-center space-x-2">
-                    <select
-                      name="customer_id"
-                      value={formData.customer_id}
-                      onChange={handleInputChange}
-                      className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                      required
-                      disabled={isNewCustomer}
-                    >
-                      <option value="">Seleccione un cliente</option>
-                      {customers.map((customer) => (
-                        <option key={customer.id} value={customer.id}>
-                          {customer.name || 'N/A'} ({customer.id_number})
-                        </option>
-                      ))}
-                    </select>
-                    <button
-                      type="button"
-                      onClick={() => setShowCustomerForm(true)}
-                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all flex items-center whitespace-nowrap duration-300 transform hover:scale-105 neon-button"
-                    >
-                      <FaPlus className="mr-2" /> Nuevo Cliente
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Tipo de Pedido</label>
-                <select
-                  name="order_type"
-                  value={formData.order_type}
-                  onChange={handleInputChange}
-                  className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                >
-                  <option value="normal">Normal</option>
-                  <option value="urgent">Urgente</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Estado</label>
-                <select
-                  name="status"
-                  value={formData.status}
-                  onChange={handleInputChange}
-                  className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                >
-                  <option value="pending">Pendiente</option>
-                  <option value="in_progress">En Progreso</option>
-                  <option value="design_pending">Diseño Pendiente</option>
-                  <option value="design_confirmed">Diseño Confirmado</option>
-                  <option value="completed">Completado</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Fecha de Pedido</label>
-                <input
-                  type="date"
-                  name="order_date"
-                  value={formData.order_date}
-                  onChange={handleInputChange}
-                  className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Fecha de Pago 50%</label>
-                <input
-                  type="date"
-                  name="payment_50_date"
-                  value={formData.payment_50_date}
-                  onChange={handleInputChange}
-                  className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Fecha de Confirmación de Diseño</label>
-                <input
-                  type="date"
-                  name="design_confirmation_date"
-                  value={formData.design_confirmation_date}
-                  onChange={handleInputChange}
-                  className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Fecha de Entrega</label>
-                <input
-                  type="date"
-                  name="delivery_date"
-                  value={formData.delivery_date}
-                  onChange={handleInputChange}
-                  className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                  disabled={userRole !== 'administrator'}
-                />
-                <p className="text-sm text-gray-400 mt-1">
-                  {formData.delivery_date ? 'La fecha de entrega será validada por el sistema.' : 'Dejar en blanco para que el sistema asigne automáticamente.'}
-                </p>
-              </div>
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  name="use_points"
-                  checked={formData.use_points}
-                  onChange={(e) => setFormData({ ...formData, use_points: e.target.checked })}
-                  className="mr-2 h-5 w-5 text-blue-500 rounded border-gray-600 focus:ring-blue-500"
-                />
-                <label className="text-sm font-medium text-gray-300">Usar puntos del cliente</label>
-              </div>
-            </div>
+  <div className="create-order-overlay">
+    <div className="create-order-modal">
+      <div className="create-order-header">
+        <h2 className="create-order-title">
+          {showCustomerForm ? 'Crear Nuevo Cliente' : 'Crear Nuevo Pedido'}
+        </h2>
+        <button onClick={onClose} className="create-order-close">
+          <FaTimes size={24} />
+        </button>
+      </div>
 
-            <h3 className="text-xl font-semibold text-blue-400">Ítems del Pedido</h3>
-            {formData.items.map((item, index) => (
-              <div key={index} className="bg-gray-800 p-6 rounded-lg mb-4 shadow-md hover:shadow-lg transition-shadow">
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Producto</label>
-                    <select
-                      value={item.product}
-                      onChange={(e) => handleItemChange(index, 'product', e.target.value)}
-                      className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                    >
-                      <option value="">Seleccione un producto</option>
-                      {products.map((product) => (
-                        <option key={product.id} value={product.id}>
-                          {product.name || 'N/A'} (₡{(product.product_type.base_price + product.additional_price).toFixed(2)})
-                        </option>
-                      ))}
-                    </select>
-                    {item.product && products.find(p => p.id === parseInt(item.product))?.design_file && (
-                      <img
-                        src={products.find(p => p.id === parseInt(item.product))?.design_file}
-                        alt="Vista previa del producto"
-                        className="mt-2 h-24 w-24 object-cover rounded-lg shadow"
-                      />
-                    )}
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Tipo de Producto</label>
-                    <select
-                      value={item.product_type}
-                      onChange={(e) => handleItemChange(index, 'product_type', e.target.value)}
-                      className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                      disabled={item.product}
-                    >
-                      <option value="">Seleccione un tipo</option>
-                      {productTypes.map((type) => (
-                        <option key={type.id} value={type.id}>
-                          {type.name || 'N/A'} (₡{type.base_price.toFixed(2)})
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Cantidad <span className="text-red-400">*</span></label>
-                    <input
-                      type="number"
-                      value={item.quantity || 1}
-                      onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
-                      className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                      min="1"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Precio Unitario <span className="text-red-400">*</span></label>
-                    <input
-                      type="number"
-                      value={item.unit_price || '0.01'}
-                      onChange={(e) => handleItemChange(index, 'unit_price', e.target.value)}
-                      className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                      min="0.01"
-                      step="0.01"
-                      required
-                      readOnly={item.product || item.product_type}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Subtotal</label>
-                    <input
-                      type="text"
-                      value={`₡${calculateSubtotal(item).toFixed(2)}`}
-                      className="w-full p-3 bg-gray-700 text-white rounded-lg border border-gray-600"
-                      readOnly
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Archivo de Diseño {item.product_type && <span className="text-red-400">*</span>}</label>
-                    <input
-                      type="file"
-                      onChange={(e) => handleItemChange(index, 'design_file', e.target.files[0])}
-                      className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600"
-                      accept="image/jpeg,image/png,application/pdf"
-                      required={item.product_type}
-                    />
-                    {item.previewUrl && (
-                      <img
-                        src={item.previewUrl}
-                        alt="Vista previa del diseño"
-                        className="mt-2 h-24 w-24 object-cover rounded-lg shadow"
-                      />
-                    )}
-                  </div>
-                </div>
-                {formData.items.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeItem(index)}
-                    className="mt-2 text-red-400 hover:text-red-300 transition-colors"
+      {error && (
+        <div className="error-message">
+          {error}
+        </div>
+      )}
+
+      {showCustomerForm ? (
+        <form onSubmit={handleCreateCustomer} className="form-section">
+          <div className="form-grid">
+            {[
+              { label: 'Nombre', name: 'name', type: 'text', required: true },
+              { label: 'Tipo de Identificación', name: 'id_type', type: 'text' },
+              { label: 'Número de Identificación', name: 'id_number', type: 'text', required: true },
+              { label: 'Correo Electrónico', name: 'email', type: 'email' },
+              { label: 'Teléfono', name: 'phone_number', type: 'text' },
+              { label: 'Dirección', name: 'address', type: 'text' },
+              { label: 'Compañía', name: 'company', type: 'text' },
+              {
+                label: 'Tipo de Contacto',
+                name: 'tipo_contacto',
+                type: 'select',
+                options: [
+                  { value: 'Cliente', label: 'Cliente' },
+                  { value: 'Proveedor', label: 'Proveedor' },
+                ],
+              },
+            ].map(({ label, name, type, required, options }) => (
+              <div key={name}>
+                <label className="input-label">
+                  {label} {required && <span className="input-required">*</span>}
+                </label>
+                {type === 'select' ? (
+                  <select
+                    name={name}
+                    value={formData.new_customer[name]}
+                    onChange={handleCustomerChange}
+                    className="select-field"
+                    required={required}
                   >
-                    <FaTrash />
-                  </button>
+                    <option value="">Seleccione</option>
+                    {options.map(opt => (
+                      <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <input
+                    type={type}
+                    name={name}
+                    value={formData.new_customer[name]}
+                    onChange={handleCustomerChange}
+                    className="input-field"
+                    required={required}
+                  />
                 )}
               </div>
             ))}
+          </div>
+
+          <div className="form-actions">
             <button
               type="button"
-              onClick={addItem}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-all flex items-center duration-300 transform hover:scale-105 neon-button"
+              onClick={() => setShowCustomerForm(false)}
+              className="btn btn-cancel"
             >
-              <FaPlus className="mr-2" /> Agregar Ítem
+              Cancelar
             </button>
-            <div className="mt-4 text-right">
-              <span className="text-xl font-bold text-green-400">Total: ₡{calculateTotal()}</span>
-            </div>
+            <button type="submit" className="btn btn-neon">
+              <FaSave /> Crear Cliente
+            </button>
+          </div>
+        </form>
+      ) : (
+        <form onSubmit={handleSubmit} className="form-section">
+          {(userRole === 'administrator' || userRole === 'sales') && (
+            <div className="form-section">
+              <div className="checkbox-wrapper">
+                <input
+                  type="checkbox"
+                  checked={isNewCustomer}
+                  onChange={(e) => {
+                    setIsNewCustomer(e.target.checked);
+                    if (e.target.checked) setFormData({ ...formData, customer_id: '' });
+                  }}
+                  className="checkbox-input"
+                />
+                <label className="input-label">Crear nuevo cliente</label>
+              </div>
 
-            <div className="mt-6">
-              <button
-                type="button"
-                onClick={() => setShowUniformDetails(!showUniformDetails)}
-                className="flex items-center px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-all duration-300 transform hover:scale-105"
-              >
-                {showUniformDetails ? <FaChevronUp className="mr-2" /> : <FaChevronDown className="mr-2" />}
-                Detalles de Uniformes
-              </button>
-              {showUniformDetails && (
-                <div className="bg-gray-800 p-6 rounded-lg mt-4 shadow-md">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {[
-                      { label: 'Cantidad de Camisetas', name: 'shirt_quantity', type: 'number' },
-                      { label: 'Tela de Camisetas', name: 'shirt_fabric', type: 'text' },
-                      { label: 'Cantidad de Pantalones', name: 'pants_quantity', type: 'number' },
-                      { label: 'Tela de Pantalones', name: 'pants_fabric', type: 'text' },
-                      { label: 'Cantidad de Polos', name: 'polo_quantity', type: 'number' },
-                      { label: 'Tela de Polos', name: 'polo_fabric', type: 'text' },
-                      { label: 'Cantidad de Bolsos', name: 'bag_quantity', type: 'number' },
-                      { label: 'Tela de Bolsos', name: 'bag_fabric', type: 'text' },
-                      { label: 'Patrocinios', name: 'sponsorships', type: 'text' },
-                    ].map(({ label, name, type }) => (
-                      <div key={name}>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">{label}</label>
-                        <input
-                          type={type}
-                          value={formData.uniform_detail[name]}
-                          onChange={(e) => handleUniformDetailChange(name, e.target.value)}
-                          className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                          min={type === 'number' ? 0 : undefined}
-                        />
-                      </div>
+              <div>
+                <label className="input-label">Cliente <span className="input-required">*</span></label>
+                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <select
+                    name="customer_id"
+                    value={formData.customer_id}
+                    onChange={handleInputChange}
+                    className="select-field"
+                    required
+                    disabled={isNewCustomer}
+                  >
+                    <option value="">Seleccione un cliente</option>
+                    {customers.map((customer) => (
+                      <option key={customer.id} value={customer.id}>
+                        {customer.name || 'N/A'} ({customer.id_number})
+                      </option>
                     ))}
-                    {[
-                      { label: 'Foto de Uniforme de Jugador', name: 'player_uniform_photo' },
-                      { label: 'Foto de Uniforme de Portero', name: 'goalkeeper_uniform_photo' },
-                      { label: 'Foto de Cuello', name: 'neck_photo' },
-                      { label: 'Foto de Pantalones', name: 'pants_photo' },
-                    ].map(({ label, name }) => (
-                      <div key={name}>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">{label}</label>
-                        <input
-                          type="file"
-                          onChange={(e) => handleUniformImageChange(name, e.target.files[0])}
-                          className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600"
-                          accept="image/jpeg,image/png"
-                        />
-                        {formData.uniform_detail[`${name}_preview`] && (
-                          <img
-                            src={formData.uniform_detail[`${name}_preview`]}
-                            alt={`Vista previa de ${label}`}
-                            className="mt-2 h-32 w-32 object-cover rounded-lg shadow"
-                          />
-                        )}
-                      </div>
+                  </select>
+                  <button
+                    type="button"
+                    onClick={() => setShowCustomerForm(true)}
+                    className="btn btn-neon"
+                  >
+                    <FaPlus /> Nuevo Cliente
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="form-grid">
+            <div>
+              <label className="input-label">Tipo de Pedido</label>
+              <select name="order_type" value={formData.order_type} onChange={handleInputChange} className="select-field">
+                <option value="normal">Normal</option>
+                <option value="urgent">Urgente</option>
+              </select>
+            </div>
+            <div>
+              <label className="input-label">Estado</label>
+              <select name="status" value={formData.status} onChange={handleInputChange} className="select-field">
+                <option value="pending">Pendiente</option>
+                <option value="in_progress">En Progreso</option>
+                <option value="design_pending">Diseño Pendiente</option>
+                <option value="design_confirmed">Diseño Confirmado</option>
+                <option value="completed">Completado</option>
+              </select>
+            </div>
+            <div>
+              <label className="input-label">Fecha de Pedido</label>
+              <input type="date" name="order_date" value={formData.order_date} onChange={handleInputChange} className="input-field" />
+            </div>
+            <div>
+              <label className="input-label">Fecha de Pago 50%</label>
+              <input type="date" name="payment_50_date" value={formData.payment_50_date} onChange={handleInputChange} className="input-field" />
+            </div>
+            <div>
+              <label className="input-label">Fecha de Confirmación de Diseño</label>
+              <input type="date" name="design_confirmation_date" value={formData.design_confirmation_date} onChange={handleInputChange} className="input-field" />
+            </div>
+            <div>
+              <label className="input-label">Fecha de Entrega</label>
+              <input
+                type="date"
+                name="delivery_date"
+                value={formData.delivery_date}
+                onChange={handleInputChange}
+                className="input-field"
+                disabled={userRole !== 'administrator'}
+              />
+              <p style={{ fontSize: '0.875rem', color: '#9ca3af', marginTop: '0.25rem' }}>
+                {formData.delivery_date ? 'La fecha de entrega será validada por el sistema.' : 'Dejar en blanco para que el sistema asigne automáticamente.'}
+              </p>
+            </div>
+            {/* <div className="checkbox-wrapper">
+              <input
+                type="checkbox"
+                name="use_points"
+                checked={formData.use_points}
+                onChange={(e) => setFormData({ ...formData, use_points: e.target.checked })}
+                className="checkbox-input"
+              />
+              <label className="input-label">Usar puntos del cliente</label>
+            </div> */}
+          </div>
+
+          <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#60a5fa', margin: '1.5rem 0 1rem' }}>
+            Ítems del Pedido
+          </h3>
+
+          {formData.items.map((item, index) => (
+            <div key={index} className="item-card">
+              <div className="item-grid">
+                <div>
+                  <label className="input-label">Producto</label>
+                  <select
+                    value={item.product}
+                    onChange={(e) => handleItemChange(index, 'product', e.target.value)}
+                    className="select-field"
+                  >
+                    <option value="">Seleccione un producto</option>
+                    {products.map((product) => (
+                      <option key={product.id} value={product.id}>
+                        {product.name || 'N/A'} (₡{(product.product_type.base_price + product.additional_price).toFixed(2)})
+                      </option>
                     ))}
-                  </div>
-                  <h4 className="text-lg font-semibold mt-6 text-blue-400">Jugadores</h4>
-                  {formData.uniform_detail.players.map((player, index) => (
-                    <div key={index} className="bg-gray-700 p-4 rounded-lg mt-4 grid grid-cols-1 md:grid-cols-5 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Nombre <span className="text-red-400">*</span></label>
-                        <input
-                          type="text"
-                          value={player.first_name}
-                          onChange={(e) => handlePlayerChange(index, 'first_name', e.target.value)}
-                          className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                          required
+                  </select>
+                  {item.product && products.find(p => p.id === parseInt(item.product))?.design_file && (
+                    <img
+                      src={products.find(p => p.id === parseInt(item.product))?.design_file}
+                      alt="Vista previa del producto"
+                      className="item-preview"
+                    />
+                  )}
+                </div>
+                <div>
+                  <label className="input-label">Tipo de Producto</label>
+                  <select
+                    value={item.product_type}
+                    onChange={(e) => handleItemChange(index, 'product_type', e.target.value)}
+                    className="select-field"
+                    disabled={!!item.product}
+                  >
+                    <option value="">Seleccione un tipo</option>
+                    {productTypes.map((type) => (
+                      <option key={type.id} value={type.id}>
+                        {type.name || 'N/A'} (₡{type.base_price.toFixed(2)})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="input-label">Cantidad <span className="input-required">*</span></label>
+                  <input
+                    type="number"
+                    value={item.quantity || 1}
+                    onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
+                    className="input-field"
+                    min="1"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="input-label">Precio Unitario <span className="input-required">*</span></label>
+                  <input
+                    type="number"
+                    value={item.unit_price || '0.01'}
+                    onChange={(e) => handleItemChange(index, 'unit_price', e.target.value)}
+                    className="input-field"
+                    min="0.01"
+                    step="0.01"
+                    required
+                    readOnly={!!item.product || !!item.product_type}
+                  />
+                </div>
+                <div>
+                  <label className="input-label">Subtotal</label>
+                  <input
+                    type="text"
+                    value={`₡${calculateSubtotal(item).toFixed(2)}`}
+                    className="input-field"
+                    style={{ backgroundColor: '#374151' }}
+                    readOnly
+                  />
+                </div>
+                <div>
+                  <label className="input-label">
+                    Archivo de Diseño {item.product_type && <span className="input-required">*</span>}
+                  </label>
+                  <input
+                    type="file"
+                    onChange={(e) => handleItemChange(index, 'design_file', e.target.files[0])}
+                    className="file-input"
+                    accept="image/jpeg,image/png,application/pdf"
+                    required={!!item.product_type}
+                  />
+                  {item.previewUrl && (
+                    <img src={item.previewUrl} alt="Vista previa del diseño" className="item-preview" />
+                  )}
+                </div>
+              </div>
+              {formData.items.length > 1 && (
+                <button type="button" onClick={() => removeItem(index)} className="btn-remove" style={{ marginTop: '0.5rem' }}>
+                  <FaTrash />
+                </button>
+              )}
+            </div>
+          ))}
+
+          <button type="button" onClick={addItem} className="btn btn-neon">
+            <FaPlus /> Agregar Ítem
+          </button>
+
+          <div className="total-display">
+            Total: ₡{calculateTotal()}
+          </div>
+
+          <div style={{ marginTop: '1.5rem' }}>
+            <button
+              type="button"
+              onClick={() => setShowUniformDetails(!showUniformDetails)}
+              className="uniform-toggle"
+            >
+              {showUniformDetails ? <FaChevronUp /> : <FaChevronDown />}
+              Detalles de Uniformes
+            </button>
+
+            {showUniformDetails && (
+              <div className="uniform-section">
+                <div className="form-grid">
+                  {[
+                    { label: 'Cantidad de Camisetas', name: 'shirt_quantity', type: 'number' },
+                    { label: 'Tela de Camisetas', name: 'shirt_fabric', type: 'text' },
+                    { label: 'Cantidad de Pantalones', name: 'pants_quantity', type: 'number' },
+                    { label: 'Tela de Pantalones', name: 'pants_fabric', type: 'text' },
+                    { label: 'Cantidad de Polos', name: 'polo_quantity', type: 'number' },
+                    { label: 'Tela de Polos', name: 'polo_fabric', type: 'text' },
+                    { label: 'Cantidad de Bolsos', name: 'bag_quantity', type: 'number' },
+                    { label: 'Tela de Bolsos', name: 'bag_fabric', type: 'text' },
+                    { label: 'Patrocinios', name: 'sponsorships', type: 'text' },
+                  ].map(({ label, name, type }) => (
+                    <div key={name}>
+                      <label className="input-label">{label}</label>
+                      <input
+                        type={type}
+                        value={formData.uniform_detail[name]}
+                        onChange={(e) => handleUniformDetailChange(name, e.target.value)}
+                        className="input-field"
+                        min={type === 'number' ? 0 : undefined}
+                      />
+                    </div>
+                  ))}
+                  {[
+                    { label: 'Foto de Uniforme de Jugador', name: 'player_uniform_photo' },
+                    { label: 'Foto de Uniforme de Portero', name: 'goalkeeper_uniform_photo' },
+                    { label: 'Foto de Cuello', name: 'neck_photo' },
+                    { label: 'Foto de Pantalones', name: 'pants_photo' },
+                  ].map(({ label, name }) => (
+                    <div key={name}>
+                      <label className="input-label">{label}</label>
+                      <input
+                        type="file"
+                        onChange={(e) => handleUniformImageChange(name, e.target.files[0])}
+                        className="file-input"
+                        accept="image/jpeg,image/png"
+                      />
+                      {formData.uniform_detail[`${name}_preview`] && (
+                        <img
+                          src={formData.uniform_detail[`${name}_preview`]}
+                          alt={`Vista previa de ${label}`}
+                          style={{ marginTop: '0.5rem', height: '8rem', width: '8rem', objectFit: 'cover', borderRadius: '0.5rem', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}
                         />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Apellido <span className="text-red-400">*</span></label>
-                        <input
-                          type="text"
-                          value={player.last_name}
-                          onChange={(e) => handlePlayerChange(index, 'last_name', e.target.value)}
-                          className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Número <span className="text-red-400">*</span></label>
-                        <input
-                          type="number"
-                          value={player.number}
-                          onChange={(e) => handlePlayerChange(index, 'number', e.target.value)}
-                          className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                          min="0"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Talla <span className="text-red-400">*</span></label>
-                        <select
-                          value={player.size}
-                          onChange={(e) => handlePlayerChange(index, 'size', e.target.value)}
-                          className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                          required
-                        >
-                          <option value="">Seleccione</option>
-                          <option value="S">S</option>
-                          <option value="M">M</option>
-                          <option value="L">L</option>
-                          <option value="XL">XL</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Género <span className="text-red-400">*</span></label>
-                        <select
-                          value={player.gender}
-                          onChange={(e) => handlePlayerChange(index, 'gender', e.target.value)}
-                          className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                          required
-                        >
-                          <option value="">Seleccione</option>
-                          <option value="H">Hombre</option>
-                          <option value="M">Mujer</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Observaciones</label>
-                        <input
-                          type="text"
-                          value={player.observaciones}
-                          onChange={(e) => handlePlayerChange(index, 'observaciones', e.target.value)}
-                          className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Variaciones</label>
-                        <input
-                          type="text"
-                          value={player.variaciones}
-                          onChange={(e) => handlePlayerChange(index, 'variaciones', e.target.value)}
-                          className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 transition-all"
-                        />
-                      </div>
-                      {formData.uniform_detail.players.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => removePlayer(index)}
-                          className="text-red-400 hover:text-red-300 transition-colors self-center"
-                        >
-                          <FaTrash />
-                        </button>
                       )}
                     </div>
                   ))}
-                  <button
-                    type="button"
-                    onClick={addPlayer}
-                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg mt-4 flex items-center duration-300 transform hover:scale-105 neon-button"
-                  >
-                    <FaPlus className="mr-2" /> Agregar Jugador
-                  </button>
                 </div>
-              )}
-            </div>
 
-            <div className="flex justify-end space-x-4 mt-6">
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-all duration-300 transform hover:scale-105"
-              >
-                Cancelar
-              </button>
-              <button
-                type="submit"
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-300 transform hover:scale-105 flex items-center neon-button"
-              >
-                <FaSave className="mr-2" /> Crear Pedido
-              </button>
-            </div>
-          </form>
-        )}
-      </div>
+                <h4 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#60a5fa', margin: '1.5rem 0 1rem' }}>
+                  Jugadores
+                </h4>
+
+                {formData.uniform_detail.players.map((player, index) => (
+                  <div key={index} className="player-card">
+                    <div>
+                      <label className="input-label">Nombre <span className="input-required">*</span></label>
+                      <input type="text" value={player.first_name} onChange={(e) => handlePlayerChange(index, 'first_name', e.target.value)} className="input-field" required />
+                    </div>
+                    <div>
+                      <label className="input-label">Apellido <span className="input-required">*</span></label>
+                      <input type="text" value={player.last_name} onChange={(e) => handlePlayerChange(index, 'last_name', e.target.value)} className="input-field" required />
+                    </div>
+                    <div>
+                      <label className="input-label">Número <span className="input-required">*</span></label>
+                      <input type="number" value={player.number} onChange={(e) => handlePlayerChange(index, 'number', e.target.value)} className="input-field" min="0" required />
+                    </div>
+                    <div>
+                      <label className="input-label">Talla <span className="input-required">*</span></label>
+                      <select value={player.size} onChange={(e) => handlePlayerChange(index, 'size', e.target.value)} className="select-field" required>
+                        <option value="">Seleccione</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="input-label">Género <span className="input-required">*</span></label>
+                      <select value={player.gender} onChange={(e) => handlePlayerChange(index, 'gender', e.target.value)} className="select-field" required>
+                        <option value="">Seleccione</option>
+                        <option value="H">Hombre</option>
+                        <option value="M">Mujer</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="input-label">Observaciones</label>
+                      <input type="text" value={player.observaciones} onChange={(e) => handlePlayerChange(index, 'observaciones', e.target.value)} className="input-field" />
+                    </div>
+                    <div>
+                      <label className="input-label">Variaciones</label>
+                      <input type="text" value={player.variaciones} onChange={(e) => handlePlayerChange(index, 'variaciones', e.target.value)} className="input-field" />
+                    </div>
+                    {formData.uniform_detail.players.length > 1 && (
+                      <button type="button" onClick={() => removePlayer(index)} className="btn-remove" style={{ alignSelf: 'center' }}>
+                        <FaTrash />
+                      </button>
+                    )}
+                  </div>
+                ))}
+
+                <button type="button" onClick={addPlayer} className="btn btn-neon" style={{ marginTop: '1rem' }}>
+                  <FaPlus /> Agregar Jugador
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div className="form-actions">
+            <button type="button" onClick={onClose} className="btn btn-cancel">
+              Cancelar
+            </button>
+            <button type="submit" className="btn btn-neon">
+              <FaSave /> Crear Pedido
+            </button>
+          </div>
+        </form>
+      )}
     </div>
-  );
+  </div>
+);
 };
 
 export default CreateOrder;

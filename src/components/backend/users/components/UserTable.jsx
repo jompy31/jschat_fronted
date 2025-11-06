@@ -1,8 +1,9 @@
+// frontend_github\jschat_fronted\src\components\backend\users\components\UserTable.jsx
 import React, { useState } from 'react';
 import { FaSort, FaEdit, FaTrash } from 'react-icons/fa';
 import moment from 'moment';
 import { sortData } from '../utils/sortData';
-import styles from '../../users/components/usertable.module.css';
+import styles from './usertable.module.css';
 
 const UserTable = ({
   storedData,
@@ -30,23 +31,19 @@ const UserTable = ({
   );
 
   return (
-    <div className={`${styles.tableWrapper} ${isModalOpen ? styles.modalOpen : ''}`}>
+    <div className={`${styles.tableWrapper} ${isModalOpen ? 'opacity-50' : ''}`}>
       <table className={styles.table}>
         <thead className={styles.tableHeader}>
           <tr>
             {['first_name', 'last_name', 'email', 'staff_status', 'created_at'].map((key) => (
-              <th
-                key={key}
-                onClick={() => handleSort(key)}
-                className={styles.tableHeadCell}
-              >
+              <th key={key} onClick={() => handleSort(key)} className={styles.tableHeadCell}>
                 <div className={styles.sortContainer}>
                   <span>
                     {key === 'first_name' && 'Nombre'}
                     {key === 'last_name' && 'Apellido'}
-                    {key === 'email' && 'Correo electrónico'}
-                    {key === 'staff_status' && 'Rol de página'}
-                    {key === 'created_at' && 'Creado por'}
+                    {key === 'email' && 'Correo'}
+                    {key === 'staff_status' && 'Rol'}
+                    {key === 'created_at' && 'Creado'}
                   </span>
                   <FaSort className={styles.sortIcon} />
                 </div>
@@ -78,18 +75,10 @@ const UserTable = ({
                   {moment(user.created_at).format('YYYY-MM-DD')}
                 </td>
                 <td className={styles.tableCell}>
-                  <button
-                    onClick={() => handleEditUser(user)}
-                    className={`${styles.actionButton} ${styles.edit}`}
-                    title="Editar usuario"
-                  >
+                  <button onClick={() => handleEditUser(user)} className={`${styles.actionButton} ${styles.edit}`} title="Editar">
                     <FaEdit />
                   </button>
-                  <button
-                    onClick={() => handleDeleteUser(user.id)}
-                    className={`${styles.actionButton} ${styles.delete}`}
-                    title="Eliminar usuario"
-                  >
+                  <button onClick={() => handleDeleteUser(user.id)} className={`${styles.actionButton} ${styles.delete}`} title="Eliminar">
                     <FaTrash />
                   </button>
                 </td>

@@ -1,11 +1,5 @@
 import React, { useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
-// import Contraportada from '../../../assets/catalogo/requisitos_propiedades.pdf';
-// import Valeautos from '../../../assets/catalogo/requisitos_valeautos.pdf';
-// import Sucesorios from '../../../assets/catalogo/requisitos_sucesorios.pdf';
-// import Contraportadaimg from '../../../assets/catalogo/requisitos_propiedades.jpg';
-// import Valeautosimg from '../../../assets/catalogo/requisitos_valeautos.jpg';
-// import Sucesoriosimg from '../../../assets/catalogo/requisitos_sucesorios.jpg';
 import { useMediaQuery } from 'react-responsive';
 
 const Catalogo = () => {
@@ -13,14 +7,10 @@ const Catalogo = () => {
   const [fullScreen, setFullScreen] = useState(null);
   const [currentPdfIndex, setCurrentPdfIndex] = useState(0);
   const [zoomLevel, setZoomLevel] = useState(1);
+
+  // Detectar dispositivos
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
   const isMini = useMediaQuery({ query: '(max-width: 340px)' });
-
-  const pdfs = [
-    // // { src: Contraportada, img: Contraportadaimg, alt: 'Contraportada' },
-    // { src: Valeautos, img: Valeautosimg, alt: 'Valeautos' },
-    // { src: Sucesorios, img: Sucesoriosimg, alt: 'Sucesorios' },
-  ];
 
   const scrollToCatalogo = () => {
     if (catalogoRef.current) {
@@ -28,292 +18,112 @@ const Catalogo = () => {
     }
   };
 
-  const handleImageClick = (index) => {
-    console.log('Índice seleccionado:', index, 'Imagen:', pdfs[index].img);
-    if (isMobile) {
-      setFullScreen(pdfs[index].img);
-    } else {
-      setFullScreen(pdfs[index].src);
-    }
-    setCurrentPdfIndex(index);
-    setZoomLevel(1);
-  };
-
-  const handleCloseFullScreen = () => {
-    setFullScreen(null);
-    setZoomLevel(1);
-  };
-
-  const handleNextPdf = () => {
-    const nextIndex = (currentPdfIndex + 1) % pdfs.length;
-    console.log('Siguiente elemento, índice:', nextIndex);
-    setCurrentPdfIndex(nextIndex);
-    setFullScreen(isMobile ? pdfs[nextIndex].img : pdfs[nextIndex].src);
-    setZoomLevel(1);
-  };
-
-  const handlePrevPdf = () => {
-    const prevIndex = (currentPdfIndex - 1 + pdfs.length) % pdfs.length;
-    console.log('Elemento anterior, índice:', prevIndex);
-    setCurrentPdfIndex(prevIndex);
-    setFullScreen(isMobile ? pdfs[prevIndex].img : pdfs[prevIndex].src);
-    setZoomLevel(1);
-  };
-
-  const handleZoomIn = () => {
-    setZoomLevel((prev) => Math.min(prev + 0.2, 3));
-  };
-
-  const handleZoomOut = () => {
-    setZoomLevel((prev) => Math.max(prev - 0.2, 0.5));
-  };
-
   return (
-    <div>
-      {/* Meta tags con Helmet */}
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Meta tags */}
       <Helmet>
-        <title>Catálogo de Servicios de ABCupon</title>
+        <title>Catálogo de Servicios de JSport</title>
         <meta
           name="description"
-          content="Explora el catálogo de servicios de ABCupon, que incluye requisitos para propiedades, valeautos y sucesorios, diseñado para ofrecerte soluciones integrales."
+          content="Explora el catálogo de servicios de JSport, diseñado para ofrecerte soluciones integrales."
         />
-        <meta name="keywords" content="ABCupon, catálogo de servicios, propiedades, valeautos, sucesorios" />
+        <meta name="keywords" content="JSport, catálogo de servicios, propiedades, valeautos, sucesorios" />
         <meta name="robots" content="index, follow" />
       </Helmet>
 
-      {/* Sección de Imágenes */}
-      <div
+      {/* === SECCIÓN CATÁLOGO - RESPONSIVO === */}
+      <section
+        ref={catalogoRef}
+        className={`
+          ${isMobile ? 'pt-13 sm:pt-32' : 'pt-8 md:pt-12'} 
+          px-3 xs:px-4 sm:px-6 md:px-8 
+          max-w-7xl mx-auto
+        `}
         style={{
-          width: '100vw',
-          height: isMini ? '50vh' : isMobile ? '30vh' : '80vh',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginTop: isMobile ? '20%' : '6%',
-          gap: '20px',
+          marginTop: isMobile ? '120px' : '0',
+          transition: 'margin-top 0.3s ease'
         }}
       >
-        {pdfs.map((pdf, index) => (
-          <div
-            key={index}
-            style={{
-              width: '30%',
-              height: '100%',
-              cursor: 'pointer',
-              position: 'relative',
-              overflow: 'hidden',
-              border: '1px solid lightgray',
-              aspectRatio: '8.5 / 11',
-            }}
-            onClick={() => handleImageClick(index)}
-          >
-            <img
-              src={pdf.img}
-              alt={pdf.alt}
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'contain',
-                transition: 'transform 0.3s ease',
-              }}
-              onMouseOver={(e) => {
-                if (!isMobile) {
-                  e.target.style.transform = 'scale(1.05)';
-                }
-              }}
-              onMouseOut={(e) => {
-                if (!isMobile) {
-                  e.target.style.transform = 'scale(1)';
-                }
-              }}
-            />
-          </div>
-        ))}
-      </div>
-
-      {/* Botón "Ver más productos" */}
-      <div style={{ textAlign: 'center', margin: '10px 0' }}>
-        <button
-          onClick={scrollToCatalogo}
+        {/* TÍTULO RESPONSIVO */}
+        <h1
+          className={`
+            text-3xl xs:text-4xl sm:text-5xl md:text-6xl 
+            font-bold text-center mb-6 sm:mb-8 
+            text-gray-900 dark:text-white 
+            leading-tight tracking-tight
+            ${isMini ? 'text-2xl' : ''}
+          `}
           style={{
-            padding: '15px 30px',
-            fontSize: '18px',
-            backgroundColor: '#008000',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-            transition: '0.3s ease',
-          }}
-          onMouseOver={(e) => {
-            e.target.style.backgroundColor = '#000000';
-          }}
-          onMouseOut={(e) => {
-            e.target.style.backgroundColor = '#008000';
+            fontSize: 'clamp(1.8rem, 6vw, 4rem)',
+            lineHeight: '1.2'
           }}
         >
-          Ver Catálogo
-        </button>
-      </div>
+          Catálogo JSport
+        </h1>
 
-      {/* Sección del catálogo */}
-      <div ref={catalogoRef} style={{ marginTop: '6%' }}>
-        <h1>Catálogo ABCupon</h1>
-        <iframe
-          allowFullScreen
-          scrolling="no"
-          className="fp-iframe"
-          src="https://heyzine.com/flip-book/0214ae368e.html"
-          style={{ border: '1px solid lightgray', width: '100%', height: '90vh' }}
-          title="Catálogo"
-        ></iframe>
-      </div>
-
-      {/* Modal de pantalla completa */}
-      {fullScreen && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '100vh',
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex: 1000,
-          }}
-          onClick={handleCloseFullScreen}
-        >
-          <div
+        {/* IFRAME RESPONSIVO */}
+        <div className="relative w-full overflow-hidden rounded-xl shadow-2xl bg-white dark:bg-gray-800">
+          <iframe
+            allowFullScreen
+            scrolling="no"
+            className="fp-iframe w-full"
+            src="https://heyzine.com/flip-book/819865ba38.html"
+            title="Catálogo JSport"
             style={{
-              position: 'relative',
-              width: '90vw',
-              height: '90vh',
-              overflow: 'auto',
+              border: '1px solid #e5e7eb',
+              height: isMobile 
+                ? (isMini ? '60vh' : '70vh') 
+                : '80vh',
+              minHeight: '500px',
+              borderRadius: '0.75rem',
+              boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
             }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {isMobile ? (
-              <img
-                src={fullScreen}
-                alt={pdfs[currentPdfIndex].alt}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'contain',
-                  transform: `scale(${zoomLevel})`,
-                  transformOrigin: 'top left',
-                  transition: 'transform 0.3s ease',
-                }}
-              />
-            ) : (
-              <iframe
-                src={fullScreen}
-                title={pdfs[currentPdfIndex].alt}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  border: 'none',
-                  transform: `scale(${zoomLevel})`,
-                  transformOrigin: 'top left',
-                  transition: 'transform 0.3s ease',
-                }}
-              />
-            )}
-            <button
-              onClick={handlePrevPdf}
-              style={{
-                position: 'absolute',
-                left: '10px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                padding: '10px',
-                fontSize: '24px',
-                backgroundColor: 'black',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer',
-              }}
-            >
-              &lt;
-            </button>
-            <button
-              onClick={handleNextPdf}
-              style={{
-                position: 'absolute',
-                right: '10px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                padding: '10px',
-                fontSize: '24px',
-                backgroundColor: 'black',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer',
-              }}
-            >
-              &gt;
-            </button>
-            <button
-              onClick={handleZoomIn}
-              style={{
-                position: 'absolute',
-                bottom: '10px',
-                left: '50%',
-                transform: 'translateX(-60px)',
-                padding: '10px',
-                fontSize: '18px',
-                backgroundColor: 'blue',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer',
-              }}
-            >
-              +
-            </button>
-            <button
-              onClick={handleZoomOut}
-              style={{
-                position: 'absolute',
-                bottom: '10px',
-                left: '50%',
-                transform: 'translateX(10px)',
-                padding: '10px',
-                fontSize: '18px',
-                backgroundColor: 'red',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer',
-              }}
-            >
-              -
-            </button>
-            <button
-              onClick={handleCloseFullScreen}
-              style={{
-                position: 'absolute',
-                top: '10px',
-                right: '10px',
-                padding: '10px',
-                fontSize: '18px',
-                backgroundColor: '#ff0000',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer',
-              }}
-            >
-              X
-            </button>
+            loading="lazy"
+          ></iframe>
+
+          {/* Overlay de carga (opcional) */}
+          <div className="absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center opacity-0 pointer-events-none">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--accent-primary)]"></div>
           </div>
         </div>
-      )}
+      </section>
+
+      {/* === CSS INLINED (para evitar import extra) === */}
+      <style jsx>{`
+        @media (max-width: 768px) {
+          section {
+            margin-top: 120px !important;
+          }
+        }
+
+        @media (min-width: 769px) {
+          section {
+            margin-top: 0 !important;
+          }
+        }
+
+        .fp-iframe {
+          transition: all 0.3s ease;
+        }
+
+        /* Evitar scroll horizontal */
+        body, html {
+          overflow-x: hidden;
+        }
+
+        /* Mejorar renderizado en móviles */
+        @media (max-width: 480px) {
+          .fp-iframe {
+            height: 65vh !important;
+          }
+        }
+
+        @media (max-width: 340px) {
+          .fp-iframe {
+            height: 58vh !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

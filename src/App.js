@@ -7,7 +7,6 @@ import "../src/styles/form.css"
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 function App() {
   const preference = window.matchMedia("(prefers-color-scheme: dark)").matches;
   const [isDark, setIsDark] = useLocalStorage("isDark", preference);
@@ -50,22 +49,22 @@ function App() {
   }, [setIsDark]);
 
   return (
-    <div className={`App ${isDark ? "dark" : "light"}`} style={{ lineHeight: "1.5" }}>
-     <Navbar isDark={isDark} setIsDark={setIsDark} />
-<AppRoutes />
+    <div className={`App ${isDark ? "dark" : "light"}`}>
+      <Navbar isDark={isDark} setIsDark={setIsDark} />
+      <AppRoutes />
 
-{/* 🔥 Aquí va el contenedor global de Toastify */}
-<ToastContainer
-  position="top-right"
-  autoClose={4000}
-  hideProgressBar={false}
-  newestOnTop
-  closeOnClick
-  pauseOnFocusLoss
-  draggable
-  pauseOnHover
-  theme={isDark ? "dark" : "light"}
-/>
+      {/* 🔥 Aquí va el contenedor global de Toastify */}
+      <ToastContainer
+        position="top-right"
+        autoClose={4000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme={isDark ? "dark" : "light"}
+      />
     </div>
   );
 }

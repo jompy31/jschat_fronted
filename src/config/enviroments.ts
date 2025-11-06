@@ -5,7 +5,7 @@ const environments = {
     API_URL: "http://localhost:8000/api",
   },
   production: {
-    API_URL: "https://abcupon.com/api",
+    API_URL: "https://dirlux.com/programas/backendjschat",
   },
 };
 

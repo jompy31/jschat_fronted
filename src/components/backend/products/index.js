@@ -6,8 +6,24 @@ import CreateProductTypeForm from './components/CreateProductTypeForm';
 import CreateProductForm from './components/CreateProductForm';
 import CreateCharacteristicForm from './components/CreateCharacteristicForm';
 import { fetchProductTypes, fetchProducts, fetchCharacteristics } from './utils/api';
+import "./components/products.css";
+
+// Íconos simples con SVG
+const TabIcon = ({ type }) => {
+  switch (type) {
+    case 'types':
+      return <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>;
+    case 'products':
+      return <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>;
+    case 'characteristics':
+      return <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+    default:
+      return null;
+  }
+};
 
 const Products = () => {
+  const [activeTab, setActiveTab] = useState('types');
   const [productTypes, setProductTypes] = useState([]);
   const [products, setProducts] = useState([]);
   const [characteristics, setCharacteristics] = useState([]);
@@ -22,11 +38,9 @@ const Products = () => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
 
-  // Check if user is authorized based on staff_status
   const isAuthorized = user?.userprofile?.staff_status && ['administrator', 'sales', 'design'].includes(user.userprofile.staff_status);
 
   useEffect(() => {
-    // Retrieve user and token from localStorage
     const storedUser = localStorage.getItem('currentUser');
     const storedToken = localStorage.getItem('token');
     if (storedUser && storedToken) {
@@ -34,10 +48,10 @@ const Products = () => {
         setUser(JSON.parse(storedUser));
         setToken(storedToken);
       } catch (err) {
-        setError('Error al cargar datos del usuario desde localStorage');
+        setError('Error al cargar datos del usuario');
       }
     } else {
-      setError('No se encontró usuario autenticado. Por favor, inicia sesión.');
+      setError('No se encontró usuario autenticado. Inicia sesión.');
     }
   }, []);
 
@@ -62,128 +76,153 @@ const Products = () => {
 
   const handleSelectProduct = (product) => setSelectedProduct(product);
   const handleCloseModal = () => setSelectedProduct(null);
+
   const handleOpenProductTypeForm = (type = null) => {
-    if (!isAuthorized) return alert('No tienes permiso para realizar esta acción.');
+    if (!isAuthorized) return alert('No tienes permiso.');
     setEditingProductType(type);
     setShowProductTypeForm(true);
   };
+
   const handleOpenProductForm = (product = null) => {
-    if (!isAuthorized) return alert('No tienes permiso para realizar esta acción.');
+    if (!isAuthorized) return alert('No tienes permiso.');
     setEditingProduct(product);
     setShowProductForm(true);
   };
+
   const handleOpenCharacteristicForm = (char = null) => {
-    if (!isAuthorized) return alert('No tienes permiso para realizar esta acción.');
+    if (!isAuthorized) return alert('No tienes permiso.');
     setEditingCharacteristic(char);
     setShowCharacteristicForm(true);
   };
 
+  const tabs = [
+    { id: 'types', label: 'Tipos de Producto', icon: 'types' },
+    { id: 'products', label: 'Productos', icon: 'products' },
+    { id: 'characteristics', label: 'Características', icon: 'characteristics' },
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-black text-white p-6">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
-          Gestión de Productos
-        </h1>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-        
-        {/* Product Types Table */}
-        <div className="mb-12">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-semibold">Tipos de Productos</h2>
-            {isAuthorized && (
-              <button
-                onClick={() => handleOpenProductTypeForm()}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105"
-              >
-                Crear Tipo de Producto
-              </button>
-            )}
-          </div>
-          <ProductTypeTable
-            productTypes={productTypes}
-            setProductTypes={setProductTypes}
-            token={token}
-            isAuthorized={isAuthorized}
-            onEdit={handleOpenProductTypeForm}
-          />
+    <div className="products-container">
+      <div className="products-content">
+        <h1 className="products-title">Gestión de Productos</h1>
+        {error && <p className="text-red-500 text-center mb-6 font-medium">{error}</p>}
+
+        {/* Tabs */}
+        <div className="tabs-container mb-8">
+          {tabs.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`tab-button ${activeTab === tab.id ? 'tab-active' : ''}`}
+            >
+              <TabIcon type={tab.icon} />
+              <span>{tab.label}</span>
+            </button>
+          ))}
         </div>
 
-        {/* Products Table */}
-        <div className="mb-12">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-semibold">Productos</h2>
-            {isAuthorized && (
-              <div className="space-x-4">
-                <button
-                  onClick={() => handleOpenProductForm()}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105"
-                >
-                  Crear Producto
-                </button>
-                <button
-                  onClick={() => handleOpenCharacteristicForm()}
-                  className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105"
-                >
-                  Crear Característica
-                </button>
+        {/* Contenido de pestañas */}
+        <div className="tab-content">
+          {/* Pestaña: Tipos de Producto */}
+          {activeTab === 'types' && (
+            <div className="animate-fade-in">
+              <div className="flex justify-between items-center mb-5">
+                <h2 className="section-title">Tipos de Productos</h2>
+                {isAuthorized && (
+                  <button onClick={() => handleOpenProductTypeForm()} className="btn btn-primary">
+                    + Crear Tipo
+                  </button>
+                )}
               </div>
-            )}
-          </div>
-          <ProductTable
-            products={products}
-            setProducts={setProducts}
-            token={token}
-            isAuthorized={isAuthorized}
-            onSelect={handleSelectProduct}
-            onEdit={handleOpenProductForm}
-          />
+              <div className="card">
+                <ProductTypeTable
+                  productTypes={productTypes}
+                  setProductTypes={setProductTypes}
+                  token={token}
+                  isAuthorized={isAuthorized}
+                  onEdit={handleOpenProductTypeForm}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Pestaña: Productos */}
+          {activeTab === 'products' && (
+            <div className="animate-fade-in">
+              <div className="flex justify-between items-center mb-5">
+                <h2 className="section-title">Productos</h2>
+                {isAuthorized && (
+                  <div className="flex gap-3">
+                    <button onClick={() => handleOpenProductForm()} className="btn btn-primary">
+                      + Crear Producto
+                    </button>
+                    <button onClick={() => handleOpenCharacteristicForm()} className="btn btn-secondary">
+                      + Característica
+                    </button>
+                  </div>
+                )}
+              </div>
+              <div className="card">
+                <ProductTable
+                  products={products}
+                  setProducts={setProducts}
+                  token={token}
+                  isAuthorized={isAuthorized}
+                  onSelect={handleSelectProduct}
+                  onEdit={handleOpenProductForm}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Pestaña: Características */}
+          {activeTab === 'characteristics' && (
+            <div className="animate-fade-in">
+              <div className="flex justify-between items-center mb-5">
+                <h2 className="section-title">Características</h2>
+                {isAuthorized && (
+                  <button onClick={() => handleOpenCharacteristicForm()} className="btn btn-primary">
+                    + Crear Característica
+                  </button>
+                )}
+              </div>
+              <div className="card">
+                {!Array.isArray(characteristics) || characteristics.length === 0 ? (
+                  <p className="text-center py-8 text-gray-500">No hay características disponibles.</p>
+                ) : (
+                  <div className="table-container">
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <th>Nombre</th>
+                          <th>Descripción</th>
+                          {isAuthorized && <th>Acciones</th>}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {characteristics.map(char => (
+                          <tr key={char.id}>
+                            <td>{char.name}</td>
+                            <td>{char.description || 'N/A'}</td>
+                            {isAuthorized && (
+                              <td>
+                                <button onClick={() => handleOpenCharacteristicForm(char)} className="btn btn-warning text-sm">
+                                  Editar
+                                </button>
+                              </td>
+                            )}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Characteristics Table */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">Características</h2>
-          <div className="bg-gray-800 bg-opacity-80 backdrop-blur-md rounded-lg shadow-lg p-6">
-            {!Array.isArray(characteristics) || characteristics.length === 0 ? (
-              <p className="text-white text-center">No hay características disponibles.</p>
-            ) : (
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-                    <th className="p-3">Nombre</th>
-                    <th className="p-3">Descripción</th>
-                    {isAuthorized && <th className="p-3">Acciones</th>}
-                  </tr>
-                </thead>
-                <tbody>
-                  {characteristics.map(char => (
-                    <tr key={char.id} className="border-b border-gray-700 hover:bg-gray-700 transition-all">
-                      <td className="p-3">{char.name}</td>
-                      <td className="p-3">{char.description || 'N/A'}</td>
-                      {isAuthorized && (
-                        <td className="p-3">
-                          <button
-                            onClick={() => handleOpenCharacteristicForm(char)}
-                            className="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded mr-2"
-                          >
-                            Editar
-                          </button>
-                          <button
-                            onClick={() => handleOpenCharacteristicForm(char)}
-                            className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded"
-                          >
-                            Eliminar
-                          </button>
-                        </td>
-                      )}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-          </div>
-        </div>
-
-        {/* Modals */}
+        {/* Modales */}
         {selectedProduct && (
           <ProductModal
             product={selectedProduct}

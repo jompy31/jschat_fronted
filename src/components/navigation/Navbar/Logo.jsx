@@ -22,13 +22,13 @@ function Logo() {
           variants={vibration}
           animate="vibrate"
         />
-        <motion.p
+        {/* <motion.p
           className="logo-text"
           variants={vibration}
           animate="vibrate"
         >
           J SPORT
-        </motion.p>
+        </motion.p> */}
       </Link>
     </div>
   );

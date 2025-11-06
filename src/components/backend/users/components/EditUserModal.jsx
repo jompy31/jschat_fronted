@@ -1,12 +1,15 @@
+// frontend_github\jschat_fronted\src\components\backend\users\components\EditUserModal.jsx
+
 import React from 'react';
-import { FaUserEdit } from 'react-icons/fa';
-import styles from '../../users/components/usertable.module.css';
+import { FaUserEdit, FaUserPlus } from 'react-icons/fa';
+import styles from './usertable.module.css';
 
 const EditUserModal = ({
   showModal,
   setShowModal,
-  updatedUser,
-  setUpdatedUser,
+  isEditMode,
+  formData,
+  setFormData,
   handleSaveUser,
 }) => {
   if (!showModal) return null;
@@ -15,8 +18,12 @@ const EditUserModal = ({
     <div className={styles.modalBackdrop}>
       <div className={styles.modalPanel}>
         <div className={styles.modalHeader}>
-          <FaUserEdit className={styles.iconBlue} />
-          <h2>Editar Usuario</h2>
+          {isEditMode ? (
+            <FaUserEdit className={styles.iconBlue} />
+          ) : (
+            <FaUserPlus className={styles.iconGreen} />
+          )}
+          <h2>{isEditMode ? 'Editar Usuario' : 'Crear Usuario'}</h2>
         </div>
 
         <div className={styles.modalBody}>
@@ -25,28 +32,55 @@ const EditUserModal = ({
             { label: 'Apellido', name: 'last_name', type: 'text' },
             { label: 'Correo', name: 'email', type: 'email' },
           ].map((field) => (
-            <div key={field.name}>
-              <label>{field.label}</label>
+            <div key={field.name} className="mb-3">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                {field.label}
+              </label>
               <input
                 type={field.type}
-                value={updatedUser[field.name]}
+                value={formData[field.name]}
                 onChange={(e) =>
-                  setUpdatedUser({ ...updatedUser, [field.name]: e.target.value })
+                  setFormData({ ...formData, [field.name]: e.target.value })
                 }
                 className={styles.modalInput}
+                required
               />
             </div>
           ))}
 
-          <div>
-            <label>Rol</label>
-            <select
-              value={updatedUser.userprofile.staff_status}
+          {/* CONTRASEÑA: Obligatoria al crear, opcional al editar */}
+          <div className="mb-3">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Contraseña {isEditMode ? '(opcional)' : ''}
+            </label>
+            <input
+              type="password"
+              value={formData.password || ''}
               onChange={(e) =>
-                setUpdatedUser({
-                  ...updatedUser,
+                setFormData({ ...formData, password: e.target.value })
+              }
+              placeholder={isEditMode ? 'Dejar vacío para no cambiar' : 'Requerida'}
+              className={styles.modalInput}
+              {...(!isEditMode && { required: true })}
+            />
+            {isEditMode && (
+              <p className="text-xs text-gray-500 mt-1">
+                Deja vacío si no deseas cambiar la contraseña
+              </p>
+            )}
+          </div>
+
+          <div className="mb-3">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Rol
+            </label>
+            <select
+              value={formData.userprofile.staff_status}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
                   userprofile: {
-                    ...updatedUser.userprofile,
+                    ...formData.userprofile,
                     staff_status: e.target.value,
                   },
                 })
@@ -60,16 +94,18 @@ const EditUserModal = ({
             </select>
           </div>
 
-          <div>
-            <label>Teléfono</label>
+          <div className="mb-3">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Teléfono
+            </label>
             <input
               type="text"
-              value={updatedUser.userprofile.phone_number}
+              value={formData.userprofile.phone_number}
               onChange={(e) =>
-                setUpdatedUser({
-                  ...updatedUser,
+                setFormData({
+                  ...formData,
                   userprofile: {
-                    ...updatedUser.userprofile,
+                    ...formData.userprofile,
                     phone_number: e.target.value,
                   },
                 })
@@ -78,16 +114,18 @@ const EditUserModal = ({
             />
           </div>
 
-          <div>
-            <label>Dirección</label>
+          <div className="mb-3">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Dirección
+            </label>
             <input
               type="text"
-              value={updatedUser.userprofile.address}
+              value={formData.userprofile.address}
               onChange={(e) =>
-                setUpdatedUser({
-                  ...updatedUser,
+                setFormData({
+                  ...formData,
                   userprofile: {
-                    ...updatedUser.userprofile,
+                    ...formData.userprofile,
                     address: e.target.value,
                   },
                 })
@@ -102,7 +140,7 @@ const EditUserModal = ({
             Cancelar
           </button>
           <button className={styles.btnConfirm} onClick={handleSaveUser}>
-            Guardar
+            {isEditMode ? 'Guardar Cambios' : 'Crear Usuario'}
           </button>
         </div>
       </div>
