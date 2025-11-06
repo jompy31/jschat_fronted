@@ -21,7 +21,7 @@ const Promociones = lazy(() => import("../containers/pages/Promociones"));
 const Sobre_nosotros = lazy(() => import("../containers/pages/sobre_nosotros"));
 const Catalogo = lazy(() => import("../containers/pages/Catalogo"));
 const Cotizador = lazy(() => import("../containers/pages/cotizador/Cotizador.jsx"));
-const Blog = lazy(() => import("../containers/pages/blog/manage_blog.js"));
+// const Blog = lazy(() => import("../containers/pages/blog/manage_blog.js"));
 const Contactenos = lazy(() => import("../containers/pages/Contactenos"));
 const Login = lazy(() => import("../components/login/login"));
 const Signup = lazy(() => import("../components/login/signup"));
@@ -231,7 +231,7 @@ function App() {
             <Route path="/promociones" element={<Promociones />} />
             <Route path="/sobre_nosotros" element={<Sobre_nosotros />} />
             <Route path="/cotizador" element={<Cotizador />} />
-            <Route path="/blog" element={<Blog />} />
+            {/* <Route path="/blog" element={<Blog />} /> */}
             <Route path="/contacto" element={<Contactenos />} />
             <Route path="/login" element={<Login login={login} />} />
             <Route path="/signup" element={<Signup signup={signup} />} />

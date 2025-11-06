@@ -15,7 +15,7 @@ const navItems = [
   { name: "Catálogo", description: "Explora nuestra colección de productos deportivos", href: "/catalogo", icon: "Package" },
   { name: "Promociones", description: "Descubre nuestras ofertas exclusivas", href: "/promociones", icon: "Star" },
   { name: "Sobre Nosotros", description: "Conoce más sobre J SPORT", href: "/sobre_nosotros", icon: "Info" },
-  { name: "Blog", description: "Accede a nuestro blog", href: "/blog", icon: "ShoppingCart" },
+  // { name: "Blog", description: "Accede a nuestro blog", href: "/blog", icon: "ShoppingCart" },
   { name: "Contacto", description: "Ponte en contacto con nosotros", href: "/contacto", icon: "Mail" },
 ];
 
