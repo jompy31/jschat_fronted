@@ -5,7 +5,7 @@ const environments = {
     API_URL: "http://localhost:8000/api",
   },
   production: {
-    API_URL: "https://dirlux.com/programas/backendjsapp",
+    API_URL: "https://dirlux.com/programas/backendjsapp/api",
   },
 };
 
