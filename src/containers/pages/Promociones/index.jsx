@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
-import { ChevronRight } from 'lucide-react';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import './Promociones.css';
+import { motion, AnimatePresence } from 'framer-motion';
 import ProductDataService from '../../../services/products';
+import "./Promociones.css";
+
+const ITEMS_PER_PAGE = 8;
 
 const Promociones = () => {
   const [promotions, setPromotions] = useState([]);
@@ -16,341 +12,317 @@ const Promociones = () => {
   const [minDiscount, setMinDiscount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedPromotion, setSelectedPromotion] = useState(null);
 
-  // Token opcional
   const token = localStorage.getItem('token');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Obtener promociones
-        const promoResponse = await ProductDataService.getAllPromotions(token);
-        setPromotions(promoResponse.data.results || promoResponse.data);
+        const [promoRes, typesRes] = await Promise.all([
+          ProductDataService.getAllPromotions(token),
+          ProductDataService.getAllProductTypes(token)
+        ]);
 
-        // Obtener tipos de productos para filtro
-        const typesResponse = await ProductDataService.getAllProductTypes(token);
-        setProductTypes(typesResponse.data.results || typesResponse.data);
-
+        setPromotions(promoRes.data.results || promoRes.data);
+        setProductTypes(typesRes.data.results || typesRes.data);
         setLoading(false);
       } catch (err) {
-        setError('Error al cargar las promociones o tipos de productos.');
+        setError('Error al cargar las promociones.');
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [token]);
+  }, []);
 
   // Filtrar promociones
   const filteredPromotions = promotions.filter(promo => {
-    const typeMatch = !selectedType || promo.products.some(product => 
-      product.product_type && product.product_type.id === parseInt(selectedType)
+    const typeMatch = !selectedType || promo.products.some(p => 
+      p.product_type && p.product_type.id === parseInt(selectedType)
     );
     const discountMatch = promo.discount >= minDiscount;
     return typeMatch && discountMatch;
   });
 
-  const heroVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 1 } },
+  // Paginación
+  const totalPages = Math.ceil(filteredPromotions.length / ITEMS_PER_PAGE);
+  const paginatedPromotions = filteredPromotions.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const cardVariants = {
-    hidden: { opacity: 0, scale: 0.95 },
-    visible: (i) => ({
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 0.5, delay: i * 0.2 },
-    }),
+  // Modal
+  const openModal = (promo) => {
+    setSelectedPromotion(promo);
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeModal = () => {
+    setSelectedPromotion(null);
+    document.body.style.overflow = 'unset';
+  };
+
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === 'Escape') closeModal();
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, []);
+
+  const handleTypeChange = (e) => {
+    setSelectedType(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleMinDiscountChange = (e) => {
+    setMinDiscount(parseInt(e.target.value) || 0);
+    setCurrentPage(1);
   };
 
   if (loading) {
-    return <div>Cargando promociones...</div>;
+    return (
+      <motion.div className="loading-screen" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <div className="pulse-loader">
+          <div></div><div></div><div></div><div></div>
+        </div>
+        <p>CARGANDO PROMOCIONES...</p>
+      </motion.div>
+    );
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <div className="error-screen">{error}</div>;
   }
 
   return (
-    <div className="promociones-container">
-      {/* === HERO SECTION - RESPONSIVO === */}
-      <motion.section
-        initial="hidden"
-        animate="visible"
-        variants={heroVariants}
-        className="promo-hero-section"
-      >
-        <div className="hero-overlay"></div>
-        <div className="hero-content">
-          <motion.h1 
-            className="hero-title"
-            style={{
-              fontSize: 'clamp(2rem, 7vw, 4.5rem)',
-              lineHeight: '1.1',
-              wordBreak: 'break-word',
-              overflowWrap: 'break-word',
-              hyphens: 'auto'
-            }}
-          >
-            Promociones Exclusivas
+    <>
+      <motion.div className="promociones-page-container" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        {/* Título */}
+        <header className="promociones-page-header">
+          <motion.h1 initial={{ y: -50 }} animate={{ y: 0 }} transition={{ duration: 0.5 }}>
+            <span className="glitch" data-text="PROMOCIONES">PROMOCIONES</span> EXCLUSIVAS
           </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="hero-subtitle"
-            style={{
-              fontSize: 'clamp(0.9rem, 3.5vw, 1.3rem)',
-              lineHeight: '1.5'
-            }}
-          >
-            Descubre nuestras ofertas en productos deportivos y empresariales personalizados
-          </motion.p>
-          <motion.a
-            href="/contacto"
-            className="hero-cta"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.5 }}
-            whileHover={{ scale: 1.05 }}
-          >
-            Contáctanos <ChevronRight className="ml-2 h-5 w-5" />
-          </motion.a>
-        </div>
-      </motion.section>
+        </header>
 
-      {/* === FILTROS === */}
-      <section className="promo-filters-section">
-        <div className="container mx-auto px-3 xs:px-4 sm:px-6 md:px-8">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="section-title"
-            style={{
-              fontSize: 'clamp(1.8rem, 5.5vw, 3.2rem)'
-            }}
-          >
-            Filtrar Promociones
-          </motion.h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-2">Por Tipo de Producto</label>
-              <select 
-                className="form-select w-full"
-                value={selectedType} 
-                onChange={(e) => setSelectedType(e.target.value)}
-              >
-                <option value="">Todos los tipos</option>
-                {productTypes.map(type => (
-                  <option key={type.id} value={type.id}>
-                    {type.name}
-                  </option>
-                ))}
-              </select>
+        <div className="promociones-layout">
+          {/* Sidebar de filtros */}
+          <aside className="filters-sidebar">
+            <motion.div initial={{ x: -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.2 }}>
+              <div className="filter-group">
+                <h5>Filtrar por Tipo de Producto</h5>
+                <select className="form-select" value={selectedType} onChange={handleTypeChange}>
+                  <option value="">Todos los tipos</option>
+                  {productTypes.map(type => (
+                    <option key={type.id} value={type.id}>{type.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="filter-group">
+                <h5>Descuento Mínimo (%)</h5>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={minDiscount}
+                  onChange={handleMinDiscountChange}
+                  className="discount-slider"
+                />
+                <div className="discount-value">{minDiscount}%</div>
+              </div>
+            </motion.div>
+          </aside>
+
+          {/* Productos */}
+          <main className="promotions-main">
+            <div className="results-count">
+              Mostrando {paginatedPromotions.length} de {filteredPromotions.length} promociones
             </div>
-            <div>
-              <label className="block text-sm font-medium mb-2">Descuento Mínimo (%)</label>
-              <input 
-                type="number" 
-                className="form-control w-full"
-                min="0" 
-                max="100" 
-                value={minDiscount} 
-                onChange={(e) => setMinDiscount(parseInt(e.target.value) || 0)} 
-              />
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* === CARRUSEL - RESPONSIVO === */}
-      <section className="promo-featured-section">
-        <div className="container mx-auto px-3 xs:px-4 sm:px-6 md:px-8">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="section-title"
-            style={{
-              fontSize: 'clamp(1.8rem, 5.5vw, 3.2rem)'
-            }}
-          >
-            Ofertas Destacadas
-          </motion.h2>
-          <Swiper
-            modules={[Navigation, Pagination, Autoplay]}
-            spaceBetween={16}
-            slidesPerView={1}
-            centeredSlides={true}
-            loop={true}
-            navigation={{
-              prevEl: '.swiper-button-prev',
-              nextEl: '.swiper-button-next',
-            }}
-            pagination={{ 
-              clickable: true,
-              dynamicBullets: true,
-              dynamicMainBullets: 3
-            }}
-            autoplay={{ delay: 4000, disableOnInteraction: false }}
-            breakpoints={{
-              320: { slidesPerView: 1, spaceBetween: 12 },
-              480: { slidesPerView: 1.1, spaceBetween: 14 },
-              640: { slidesPerView: 1.3, spaceBetween: 16 },
-              768: { slidesPerView: 2, spaceBetween: 20 },
-              1024: { slidesPerView: 3, spaceBetween: 24 },
-            }}
-            className="promo-swiper pb-10"
-          >
-            {filteredPromotions.map((promo) => (
-              <SwiperSlide key={promo.id}>
-                <motion.div
-                  className="promo-card"
-                  whileHover={{ y: -8, scale: 1.02 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  <div className="promo-image-container">
-                    <img
-                      src={promo.products[0]?.design_file || '/assets/placeholder.jpg'}
-                      alt={promo.name}
-                      className="promo-image"
-                      loading="lazy"
-                    />
-                  </div>
-                  <div className="promo-content">
-                    <h3 className="promo-title text-sm xs:text-base sm:text-lg md:text-xl">
-                      {promo.name}
-                    </h3>
-                    <p className="promo-description text-xs xs:text-sm sm:text-base opacity-85">
-                      {promo.description}
-                    </p>
-                    <div className="promo-details text-xs xs:text-sm">
-                      <span className="promo-discount">{promo.discount}% OFF</span>
-                      <span className="promo-min">Mín: ${promo.min_amount}</span>
-                    </div>
-                    <a href="/login" className="promo-link text-xs xs:text-sm">
-                      Ver Oferta <ChevronRight className="ml-1 h-3 w-3 xs:h-4 xs:w-4" />
-                    </a>
-                  </div>
-                </motion.div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-
-          {/* Controles */}
-          <div className="swiper-button-prev !text-white !w-8 !h-8 xs:!w-9 xs:!h-9 sm:!w-10 sm:!h-10 after:!text-xs xs:after:!text-sm !left-1 xs:!left-2" />
-          <div className="swiper-button-next !text-white !w-8 !h-8 xs:!w-9 xs:!h-9 sm:!w-10 sm:!h-10 after:!text-xs xs:after:!text-sm !right-1 xs:!right-2" />
-        </div>
-      </section>
-
-      {/* === GRID - RESPONSIVO === */}
-      <section className="promo-grid-section">
-        <div className="container mx-auto px-3 xs:px-4 sm:px-6 md:px-8">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="section-title"
-            style={{
-              fontSize: 'clamp(1.8rem, 5.5vw, 3.2rem)'
-            }}
-          >
-            Todas las Promociones
-          </motion.h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {filteredPromotions.map((promo, index) => (
+            <AnimatePresence mode="wait">
               <motion.div
-                key={promo.id}
-                custom={index}
-                initial="hidden"
-                whileInView="visible"
-                variants={cardVariants}
-                viewport={{ once: true }}
-                whileHover={{ y: -6, scale: 1.01 }}
-                className="promo-grid-card"
+                key={currentPage}
+                className="promotions-grid"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
               >
-                <div className="promo-image-container">
-                  <img
-                    src={promo.products[0]?.design_file || '/assets/placeholder.jpg'}
-                    alt={promo.name}
-                    className="promo-image"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="promo-content p-3 xs:p-4 sm:p-5">
-                  <h3 className="promo-title text-sm xs:text-base sm:text-lg md:text-xl">
-                    {promo.name}
-                  </h3>
-                  <p className="promo-description text-xs xs:text-sm sm:text-base opacity-85">
-                    {promo.description}
-                  </p>
-                  <div className="promo-details text-xs xs:text-sm">
-                    <span className="promo-discount">{promo.discount}% OFF</span>
-                    <span className="promo-min">Mín: ${promo.min_amount}</span>
+                {paginatedPromotions.length > 0 ? (
+                  paginatedPromotions.map((promo, i) => (
+                    <motion.div
+                      key={promo.id}
+                      className="promotion-card glass"
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: i * 0.05 }}
+                      onClick={() => openModal(promo)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <div className="promotion-image-container">
+                        {promo.products[0]?.design_file ? (
+                          <img src={promo.products[0].design_file} alt={promo.name} className="promotion-image" />
+                        ) : (
+                          <div className="image-placeholder">Sin imagen</div>
+                        )}
+                        <div className="discount-badge">-{promo.discount}%</div>
+                      </div>
+                      <div className="promotion-body">
+                        <h5 className="promotion-title">{promo.name}</h5>
+                        <p className="promotion-description">{promo.description}</p>
+                        <p className="promotion-min">Mínimo de compra: {promo.min_amount}</p>
+                        <div className="included-products">
+                          <strong>Productos:</strong>
+                          <ul>
+                            {promo.products.map(p => (
+                              <li key={p.id}>{p.name}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                      <div className="glow-effect"></div>
+                    </motion.div>
+                  ))
+                ) : (
+                  <div className="no-results">
+                    <p>No se encontraron promociones con los filtros seleccionados.</p>
                   </div>
-                  <div className="promo-products mt-3">
-                    <h4 className="products-title text-xs xs:text-sm font-semibold">
-                      Productos Incluidos:
-                    </h4>
-                    <ul className="products-list text-xs xs:text-sm">
-                      {promo.products.map((product) => (
-                        <li key={product.id} className="product-item">
-                          {product.name} - ${product.price}
+                )}
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Paginación */}
+            {totalPages > 1 && (
+              <div className="pagination-container">
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="pagination-btn"
+                >
+                  Anterior
+                </button>
+                <div className="pagination-numbers">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                    <button
+                      key={page}
+                      onClick={() => handlePageChange(page)}
+                      className={`pagination-number ${currentPage === page ? 'active' : ''}`}
+                    >
+                      {page}
+                    </button>
+                  ))}
+                </div>
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="pagination-btn"
+                >
+                  Siguiente
+                </button>
+              </div>
+            )}
+          </main>
+        </div>
+      </motion.div>
+
+      {/* MODAL DE PROMOCIÓN */}
+      <AnimatePresence>
+        {selectedPromotion && (
+          <motion.div
+            className="promotion-modal-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={closeModal}
+          >
+            <motion.div
+              className="promotion-modal-content"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button className="modal-close-btn" onClick={closeModal}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+              </button>
+
+              <div className="modal-promo-grid">
+                <div className="modal-image-container">
+                  {selectedPromotion.products[0]?.design_file ? (
+                    <img src={selectedPromotion.products[0].design_file} alt={selectedPromotion.name} className="modal-promo-image" />
+                  ) : (
+                    <div className="modal-image-placeholder">Sin imagen</div>
+                  )}
+                </div>
+
+                <div className="modal-promo-details">
+                  <h2 className="modal-promo-title">{selectedPromotion.name}</h2>
+                  <div className="modal-discount-badge">-{selectedPromotion.discount}% DESCUENTO</div>
+                  <p className="modal-promo-description">{selectedPromotion.description}</p>
+
+                  <div className="modal-section">
+                    <h4>Mínimo de compra</h4>
+                    <p className="modal-min-amount">{selectedPromotion.min_amount}</p>
+                  </div>
+
+                  <div className="modal-section">
+                    <h4>Productos Incluidos</h4>
+                    <ul className="modal-products-list">
+                      {selectedPromotion.products.map(p => (
+                        <li key={p.id}>
+                          <strong>{p.name}</strong> - ₡{p.price}
                         </li>
                       ))}
                     </ul>
                   </div>
-                  <a href="/login" className="promo-cta text-xs xs:text-sm mt-3">
-                    Aprovechar Oferta <ChevronRight className="ml-1 h-3 w-3 xs:h-4 xs:w-4" />
-                  </a>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* === CTA FINAL - RESPONSIVO === */}
-      <section className="promo-cta-section">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          className="cta-content px-3 xs:px-4 sm:px-6"
-        >
-          <motion.h2 
-            className="cta-title"
-            style={{
-              fontSize: 'clamp(1.8rem, 6vw, 3.5rem)'
-            }}
-          >
-            ¡No Pierdas Estas Ofertas!
-          </motion.h2>
-          <motion.p 
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="cta-subtitle"
-            style={{
-              fontSize: 'clamp(0.9rem, 3.5vw, 1.2rem)'
-            }}
-          >
-            Inicia sesión o contáctanos para personalizar tus productos con descuentos exclusivos.
-          </motion.p>
-          <motion.a
-            href="/contacto"
-            className="cta-button"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            Contáctanos Ahora <ChevronRight className="ml-2 h-5 w-5" />
-          </motion.a>
-        </motion.div>
-      </section>
-    </div>
+                  <div className="modal-actions">
+  <button 
+    className="btn-contact"
+    onClick={() => {
+      const promo = selectedPromotion;
+      const productsList = promo.products
+        .map(p => `• ${p.name} - $${p.price}`)
+        .join('%0A');
+      
+      const message = encodeURIComponent(
+`¡Hola! Me interesa la promoción:
+
+*${promo.name}*
+Descuento: *${promo.discount}% OFF*
+Monto mínimo: *₡${promo.min_amount}*
+
+*Productos incluidos:*
+${productsList}
+
+¡Quiero aprovechar esta oferta!`
+      );
+
+      const whatsappUrl = `https://wa.me/50683856602?text=${message}`;
+      window.open(whatsappUrl, '_blank');
+    }}
+  >
+    Contáctanos por WhatsApp
+  </button>
+</div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
