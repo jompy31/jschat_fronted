@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -11,8 +12,31 @@ import Foto1 from "../../../assets/img/empresas-subli.jpg";
 import Foto2 from "../../../assets/img/sublimacion.jpg";
 import Foto3 from "../../../assets/img/impresion-laser.jpg";
 import Foto4 from "../../../assets/img/uniformes-deportivo.jpg";
+import ProductDataService from '../../../services/products';
 
 const Home = () => {
+  const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const token = localStorage.getItem('token');
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await ProductDataService.getAllProducts(token);
+        const data = response.data.results || response.data;
+        // Mostrar solo 6 productos destacados
+        setProducts(data.slice(0, 6));
+        setLoading(false);
+      } catch (err) {
+        setError('Error al cargar productos destacados.');
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [token]);
   const heroVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.4, 0, 0.2, 1] } },
@@ -285,111 +309,132 @@ const Home = () => {
 </motion.section>
 
   {/* Portfolio Section - 100% RESPONSIVO SIN CORTES */}
-<section className="section-spacing" aria-labelledby="portfolio-title">
-  <div className="container mx-auto px-3 xs:px-4 sm:px-6 md:px-8 max-w-7xl">
-    {/* TÍTULO RESPONSIVO CON CLAMP */}
-    <motion.h2
-      id="portfolio-title"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, margin: "-100px" }}
-      className="section-title text-center font-extrabold mb-6 sm:mb-8 px-2
-                 text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl
-                 leading-tight"
-      style={{
-        fontSize: 'clamp(1.8rem, 6vw, 4.5rem)',
-        lineHeight: '1.2'
-      }}
-    >
-      Nuestro Portafolio
-    </motion.h2>
+<section className="section-spacing" aria-labelledby="products-title">
+        <div className="container mx-auto px-3 xs:px-4 sm:px-6 md:px-8 max-w-7xl">
+          {/* TÍTULO RESPONSIVO */}
+          <motion.h2
+            id="products-title"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            className="section-title text-center font-extrabold mb-6 sm:mb-8 px-2
+                       text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl
+                       leading-tight"
+            style={{
+              fontSize: 'clamp(1.8rem, 6vw, 4.5rem)',
+              lineHeight: '1.2'
+            }}
+          >
+            Productos Destacados
+          </motion.h2>
 
-    {/* CARRUSEL RESPONSIVO */}
-    <motion.div
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.7 }}
-      className="portfolio-swiper"
-    >
-      <Swiper
-        modules={[Navigation, Pagination, Autoplay]}
-        spaceBetween={16}
-        slidesPerView={1}
-        centeredSlides={true}
-        loop={true}
-        navigation={{
-          prevEl: '.swiper-button-prev',
-          nextEl: '.swiper-button-next',
-        }}
-        pagination={{ 
-          clickable: true,
-          dynamicBullets: true,
-          dynamicMainBullets: 3
-        }}
-        autoplay={{ 
-          delay: 3500, 
-          disableOnInteraction: false,
-          pauseOnMouseEnter: true
-        }}
-        breakpoints={{
-          320: { slidesPerView: 1, spaceBetween: 12 },
-          480: { slidesPerView: 1.1, spaceBetween: 14 },
-          640: { slidesPerView: 1.3, spaceBetween: 16 },
-          768: { slidesPerView: 2, spaceBetween: 20 },
-          1024: { slidesPerView: 3, spaceBetween: 24 },
-          1280: { slidesPerView: 3, spaceBetween: 28 },
-        }}
-        className="pb-10 sm:pb-12"
-      >
-        {portfolioItems.map((item, index) => (
-          <SwiperSlide key={index} className="flex flex-col items-center">
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              whileInView={{ scale: 1, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group cursor-pointer w-full"
+          {/* CARRUSEL - DE DERECHA A IZQUIERDA */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.7 }}
+            className="products-swiper"
+          >
+            <Swiper
+              modules={[Navigation, Pagination, Autoplay]}
+              spaceBetween={16}
+              slidesPerView={1}
+              centeredSlides={true}
+              loop={true}
+              reverseDirection={true} // ← MUEVE DE DERECHA A IZQUIERDA
+              autoplay={{ 
+                delay: 3000, 
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+                reverseDirection: true
+              }}
+              navigation={{
+                prevEl: '.swiper-button-prev',
+                nextEl: '.swiper-button-next',
+              }}
+              pagination={{ 
+                clickable: true,
+                dynamicBullets: true,
+                dynamicMainBullets: 3
+              }}
+              breakpoints={{
+                320: { slidesPerView: 1, spaceBetween: 12 },
+                480: { slidesPerView: 1.1, spaceBetween: 14 },
+                640: { slidesPerView: 1.3, spaceBetween: 16 },
+                768: { slidesPerView: 2, spaceBetween: 20 },
+                1024: { slidesPerView: 3, spaceBetween: 24 },
+                1280: { slidesPerView: 3, spaceBetween: 28 },
+              }}
+              className="pb-10 sm:pb-12"
             >
-              <div className="relative overflow-hidden rounded-xl bg-white dark:bg-gray-800/50 shadow-md hover:shadow-xl transition-all duration-400">
-                <img
-                  src={item.src}
-                  alt={`Ejemplo de ${item.name}`}
-                  className="w-full h-48 xs:h-52 sm:h-56 md:h-64 lg:h-72 object-cover 
-                             group-hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
-                />
-                {/* Overlay sutil */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
-              </div>
-              
-              <motion.p
-                className="text-center mt-3 text-xs xs:text-sm sm:text-base md:text-lg 
-                           font-medium text-gray-700 dark:text-gray-200 px-2"
-                initial={{ opacity: 0, y: 8 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                style={{
-                  fontSize: 'clamp(0.75rem, 3vw, 1.1rem)'
-                }}
-              >
-                {item.name}
-              </motion.p>
-            </motion.div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+              {products.map((product, index) => (
+                <SwiperSlide key={product.id} className="flex flex-col items-center">
+                  <motion.div
+                    custom={index}
+                    initial={{ scale: 0.95, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className="group cursor-pointer w-full"
+                    onClick={() => navigate('/catalogo')}
+                  >
+                    <div className="relative overflow-hidden rounded-xl bg-white dark:bg-gray-800/50 shadow-md hover:shadow-xl transition-all duration-400 glass-neon">
+                      {product.design_file ? (
+                        <img
+                          src={product.design_file}
+                          alt={product.name}
+                          className="w-full h-48 xs:h-52 sm:h-56 md:h-64 lg:h-72 object-cover 
+                                     group-hover:scale-105 transition-transform duration-500"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="w-full h-48 xs:h-52 sm:h-56 md:h-64 lg:h-72 bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500">
+                          Sin imagen
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
+                    </div>
+                    
+                    <motion.p
+                      className="text-center mt-3 text-xs xs:text-sm sm:text-base md:text-lg 
+                                 font-medium text-gray-700 dark:text-gray-200 px-2"
+                      initial={{ opacity: 0, y: 8 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      style={{
+                        fontSize: 'clamp(0.75rem, 3vw, 1.1rem)'
+                      }}
+                    >
+                      {product.name}
+                    </motion.p>
+                  </motion.div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
 
-      {/* Controles personalizados */}
-      <div className="swiper-button-prev !text-[var(--accent-primary)] !w-8 !h-8 xs:!w-9 xs:!h-9 sm:!w-10 sm:!h-10 
-                      after:!text-xs xs:after:!text-sm after:font-bold 
-                      !left-2 xs:!left-3 sm:!left-4" />
-      <div className="swiper-button-next !text-[var(--accent-primary)] !w-8 !h-8 xs:!w-9 xs:!h-9 sm:!w-10 sm:!h-10 
-                      after:!text-xs xs:after:!text-sm after:font-bold 
-                      !right-2 xs:!right-3 sm:!right-4" />
-    </motion.div>
-  </div>
-</section>
+            {/* Controles personalizados */}
+            <div className="swiper-button-prev !text-[var(--accent-primary)] !w-8 !h-8 xs:!w-9 xs:!h-9 sm:!w-10 sm:!h-10 
+                            after:!text-xs xs:after:!text-sm after:font-bold 
+                            !left-2 xs:!left-3 sm:!left-4" />
+            <div className="swiper-button-next !text-[var(--accent-primary)] !w-8 !h-8 xs:!w-9 xs:!h-9 sm:!w-10 sm:!h-10 
+                            after:!text-xs xs:after:!text-sm after:font-bold 
+                            !right-2 xs:!right-3 sm:!right-4" />
+          </motion.div>
+
+          {/* Botón Ver Todo */}
+          <div className="text-center mt-8">
+            <motion.a
+              href="/catalogo"
+              className="inline-flex items-center bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] text-white font-semibold py-3 px-8 rounded-full text-base md:text-lg transition-all duration-300"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              Ver Todo el Catálogo <ChevronRight className="ml-2 h-5 w-5" />
+            </motion.a>
+          </div>
+        </div>
+      </section>
 
      {/* Testimonials Section - 100% RESPONSIVO SIN DESBORDE */}
 <motion.section
