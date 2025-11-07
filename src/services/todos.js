@@ -148,6 +148,13 @@ class TodoDataService {
     this.setAuthHeader(token);
     return axios.post(`${config.API_URL}/blog/posts/${blogPostId}/likes/`, data);
   }
+  getUserDetails(id, token) {
+  this.setAuthHeader(token);
+  const url = id === 'me' 
+    ? `${config.API_URL}/users/me/` 
+    : `${config.API_URL}/users/${id}/`;
+  return axios.get(url);
+}
 }
 
 const todoDataService = new TodoDataService();

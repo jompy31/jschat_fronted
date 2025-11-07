@@ -1,138 +1,121 @@
-import React, { useState, useEffect, useRef } from 'react';
+// src/components/login/CurrentUser.js
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux'; // ← AÑADIDO
 import TodoDataService from '../../services/todos';
 
-const UserList1 = () => {
-  const [userList, setUserList] = useState([]);
+const CurrentUser = () => {
   const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
-  const maxAttempts = 3;
-  const attemptDelay = 1000;
   const navigate = useNavigate();
-  const retryCount = useRef(0);
 
-  // ← OBTENER token y user desde Redux
-  const { token, user: loggedUsername } = useSelector((state) => state.authentication);
+  const token = localStorage.getItem('token');
 
-  const fetchUserListWithRetry = async () => {
+  useEffect(() => {
     if (!token) {
-      setErrorMessage('No estás autenticado. Redirigiendo...');
-      setTimeout(() => navigate('/login'), 2000);
+      setErrorMessage('No hay sesión. Redirigiendo...');
+      setTimeout(() => navigate('/login'), 3000);
       return;
     }
 
-    setErrorMessage('');
-    let attempts = 0;
-
-    while (attempts < maxAttempts) {
-      console.log('Intentando obtener lista de usuarios. Intento:', attempts + 1);
+    const fetchCurrentUser = async () => {
       try {
-        const response = await TodoDataService.getUserList(token);
-        const users = response.data.results || response.data;
+        setLoading(true);
+        setErrorMessage('');
 
-        if (Array.isArray(users)) {
-          setUserList(users);
-          return;
+        // AHORA SÍ: Usa /me/ → siempre el usuario correcto
+        const response = await TodoDataService.getUserDetails('me', token);
+        const userData = response.data;
+
+        setCurrentUser(userData);
+        localStorage.setItem('currentUser', JSON.stringify(userData));
+
+        console.log('CurrentUser desde /me/:', userData);
+        console.log('Rol:', userData.userprofile?.staff_status);
+        console.log('Foto:', userData.userprofile?.profile_picture);
+        console.log('Teléfono:', userData.userprofile?.phone_number);
+
+      } catch (error) {
+        console.error('Error en /me/:', error);
+        const msg = error.response?.data?.detail || 'No se pudo cargar el perfil';
+        setErrorMessage(msg);
+
+        if (error.response?.status === 401) {
+          localStorage.clear();
+          setTimeout(() => navigate('/login'), 3000);
         }
-      } catch (e) {
-        console.error('Error:', e.response?.data || e.message);
-        setErrorMessage('Error al cargar datos. Reintentando...');
+      } finally {
+        setLoading(false);
       }
-      attempts++;
-      if (attempts < maxAttempts) await new Promise(r => setTimeout(r, attemptDelay));
-    }
+    };
 
-    setErrorMessage('No se pudo cargar la información. Volviendo al login...');
-    setTimeout(() => {
-      localStorage.clear();
-      navigate('/login');
-    }, 3000);
-  };
-
-  useEffect(() => {
-    if (token && loggedUsername) {
-      fetchUserListWithRetry();
-    } else {
-      console.log('Token o usuario no disponibles. Redirigiendo...');
-      setErrorMessage('Sesión no válida. Redirigiendo al login...');
-      setTimeout(() => navigate('/login'), 2000);
-    }
-  }, [token, loggedUsername]);
-
-  useEffect(() => {
-    if (userList.length > 0 && loggedUsername) {
-      const foundUser = userList.find(u => u.username === loggedUsername);
-      if (foundUser) {
-        setCurrentUser(foundUser);
-        localStorage.setItem('currentUser', JSON.stringify(foundUser));
-      } else {
-        setErrorMessage('Usuario no encontrado en la lista.');
-      }
-    }
-  }, [userList, loggedUsername]);
+    fetchCurrentUser();
+  }, [token, navigate]);
 
   useEffect(() => {
     if (currentUser) {
-      setTimeout(() => navigate('/'), 1500);
+      setTimeout(() => {
+        navigate('/', { replace: true });
+      }, 2800);
     }
-  }, [currentUser]);
+  }, [currentUser, navigate]);
 
-  // Estilos igual que antes...
-  const modalOverlayStyle = { /* ... mismo que tenías ... */ };
-  const containerStyle = { /* ... */ };
-  // ... (mantén todos tus estilos)
+  // === ESTILOS (mismo que antes, solo copiar) ===
+  const styles = {
+    overlay: { position: 'fixed', inset: 0, background: 'linear-gradient(135deg, #3b82f6, #10b981)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 9999, backdropFilter: 'blur(12px)' },
+    card: { background: 'white', borderRadius: '24px', padding: '45px 35px', width: 'min(95%, 540px)', boxShadow: '0 30px 70px rgba(0,0,0,0.4)', textAlign: 'center', animation: 'floatIn 0.9s ease-out' },
+    logo: { height: '85px', marginBottom: '25px', filter: 'drop-shadow(0 5px 15px rgba(0,0,0,0.25))' },
+    title: { fontSize: '2.3rem', fontWeight: '800', color: '#1e40af', margin: '15px 0 8px', fontFamily: "'Montserrat', sans-serif" },
+    subtitle: { color: '#4b5563', fontSize: '1.15rem', marginBottom: '25px' },
+    avatar: { width: '160px', height: '160px', borderRadius: '50%', objectFit: 'cover', border: '9px solid #3b82f6', boxShadow: '0 15px 40px rgba(59,130,246,0.5)', margin: '30px auto' },
+    avatarPlaceholder: { width: '160px', height: '160px', borderRadius: '50%', background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '4.5rem', fontWeight: 'bold', margin: '30px auto', border: '9px solid #3b82f6', boxShadow: '0 15px 40px rgba(59,130,246,0.5)' },
+    infoRow: { display: 'flex', justifyContent: 'space-between', padding: '16px 0', borderBottom: '1px solid #f3f4f6', fontSize: '17px' },
+    label: { fontWeight: '700', color: '#1d4ed8', minWidth: '130px' },
+    value: { color: '#1f2937', textAlign: 'right', flex: 1, marginLeft: '20px', fontWeight: '500' },
+    loading: { color: '#1d4ed8', fontSize: '1.4rem', fontWeight: '600' },
+    error: { color: '#dc2626', background: '#fee2e2', padding: '18px', borderRadius: '14px', margin: '25px 0', border: '2px solid #fca5a5', fontWeight: '600' },
+    redirectText: { marginTop: '35px', color: '#374151', fontSize: '15.5px', fontStyle: 'italic' },
+  };
 
   return (
-    <div style={modalOverlayStyle}>
-      <style>{`@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } } ...`}</style>
-      <div style={containerStyle}>
-        <div className="loading-logo" style={{ marginBottom: '20px' }}>
-          <img src={require('../../assets/LOGO_rectangular.png')} height="60" alt="Logo" />
-        </div>
-        <h1 style={{ fontSize: '28px', fontWeight: '700', color: '#1a1a1a' }}>
-          Bienvenido a JSport.com
-        </h1>
+    <div style={styles.overlay}>
+      <style>{`@keyframes floatIn { from { opacity: 0; transform: translateY(70px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }`}</style>
 
-        {currentUser ? (
+      <div style={styles.card}>
+        <img src={require('../../assets/LOGO_rectangular.png')} alt="JSport" style={styles.logo} />
+        <h1 style={styles.title}>¡Bienvenido!</h1>
+        <p style={styles.subtitle}>Sesión verificada correctamente</p>
+
+        {loading && <p style={styles.loading}>Cargando perfil...</p>}
+        {errorMessage && <div style={styles.error}>{errorMessage}</div>}
+
+        {currentUser && (
           <>
-            {currentUser.userprofile?.profile_picture && (
-              <img src={currentUser.userprofile.profile_picture} alt="Perfil" style={{
-                width: '150px', height: '150px', borderRadius: '50%', border: '4px solid #007bff',
-                boxShadow: '0 4px 15px rgba(0, 123, 255, 0.3)', marginBottom: '25px'
-              }} />
+            {currentUser.userprofile?.profile_picture ? (
+              <img src={currentUser.userprofile.profile_picture} alt="Perfil" style={styles.avatar} />
+            ) : (
+              <div style={styles.avatarPlaceholder}>
+                {(currentUser.first_name?.[0] || '') + (currentUser.last_name?.[0] || 'U')}
+              </div>
             )}
-            <div style={{ width: '100%', maxWidth: '400px', fontFamily: "'Roboto', sans-serif" }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #eee' }}>
-                <span style={{ fontWeight: '600', color: '#007bff' }}>Nombre:</span>
-                <span>{currentUser.first_name || 'N/A'}</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #eee' }}>
-                <span style={{ fontWeight: '600', color: '#007bff' }}>Apellidos:</span>
-                <span>{currentUser.last_name || 'N/A'}</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #eee' }}>
-                <span style={{ fontWeight: '600', color: '#007bff' }}>Correo:</span>
-                <span>{currentUser.email || 'N/A'}</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #eee' }}>
-                <span style={{ fontWeight: '600', color: '#007bff' }}>Rol:</span>
-                <span>{currentUser.userprofile?.staff_status || 'N/A'}</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #eee' }}>
-                <span style={{ fontWeight: '600', color: '#007bff' }}>Teléfono:</span>
-                <span>{currentUser.userprofile?.phone_number || 'N/A'}</span>
-              </div>
+
+            <div style={{ marginTop: '35px', width: '100%' }}>
+              <div style={styles.infoRow}><span style={styles.label}>Nombre:</span><span style={styles.value}>{currentUser.first_name} {currentUser.last_name}</span></div>
+              <div style={styles.infoRow}><span style={styles.label}>Correo:</span><span style={styles.value}>{currentUser.email}</span></div>
+              <div style={styles.infoRow}><span style={styles.label}>Rol:</span><span style={styles.value}>
+                {currentUser.userprofile?.staff_status === 'administrator' ? 'Administrador' :
+                 currentUser.userprofile?.staff_status === 'sales' ? 'Ventas' :
+                 currentUser.userprofile?.staff_status === 'design' ? 'Diseño' : 'Cliente'}
+              </span></div>
+              <div style={styles.infoRow}><span style={styles.label}>Teléfono:</span><span style={styles.value}>{currentUser.userprofile?.phone_number || '—'}</span></div>
             </div>
+
+            <p style={styles.redirectText}>Redirigiendo en <strong>2.8s</strong>...</p>
           </>
-        ) : (
-          <p style={{ color: '#333', fontSize: '18px' }}>
-            {errorMessage || 'Cargando tus datos...'}
-          </p>
         )}
       </div>
     </div>
   );
 };
 
-export default UserList1;
+export default CurrentUser;

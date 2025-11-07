@@ -27,11 +27,28 @@ function Login() {
     TodoDataService.login({ username, password })
       .then((response) => {
         const token = response.data.token;
+
+        // Guardamos en localStorage
         localStorage.setItem('token', token);
         localStorage.setItem('user', username);
-        setUsername(''); setPassword(''); setError('');
+
+        // Limpiamos campos y errores
+        setUsername('');
+        setPassword('');
+        setError('');
+
+        // Dispatch a Redux
         dispatch(setAuthentication(token, username));
-        navigate('/current_user');
+
+        // ---- NUEVO: Mostrar token y username en consola ----
+        console.log('Login exitoso!');
+        console.log('Username:', username);
+        console.log('Token:', token);
+
+        // ---- Esperamos 4 segundos antes de redirigir ----
+        setTimeout(() => {
+          navigate('/current_user');
+        }, 4000);
       })
       .catch((error) => {
         setError(error.response?.data?.error || 'Error al iniciar sesión.');
