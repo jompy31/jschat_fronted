@@ -1,18 +1,55 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { ChevronRight } from 'lucide-react';
-import promotionsData from './promotions.json';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import './Promociones.css';
-import Foto1 from "../../../../src/assets/img/Des-verano.jpg";
-import Foto2 from "../../../../src/assets/img/equipo-completo.jpg";
-import Foto3 from "../../../../src/assets/img/oferta-empre.jpg";
+import ProductDataService from '../../../services/products';
 
 const Promociones = () => {
+  const [promotions, setPromotions] = useState([]);
+  const [productTypes, setProductTypes] = useState([]);
+  const [selectedType, setSelectedType] = useState('');
+  const [minDiscount, setMinDiscount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Token opcional
+  const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Obtener promociones
+        const promoResponse = await ProductDataService.getAllPromotions(token);
+        setPromotions(promoResponse.data.results || promoResponse.data);
+
+        // Obtener tipos de productos para filtro
+        const typesResponse = await ProductDataService.getAllProductTypes(token);
+        setProductTypes(typesResponse.data.results || typesResponse.data);
+
+        setLoading(false);
+      } catch (err) {
+        setError('Error al cargar las promociones o tipos de productos.');
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [token]);
+
+  // Filtrar promociones
+  const filteredPromotions = promotions.filter(promo => {
+    const typeMatch = !selectedType || promo.products.some(product => 
+      product.product_type && product.product_type.id === parseInt(selectedType)
+    );
+    const discountMatch = promo.discount >= minDiscount;
+    return typeMatch && discountMatch;
+  });
+
   const heroVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 1 } },
@@ -27,12 +64,13 @@ const Promociones = () => {
     }),
   };
 
-  const getPromoImage = (promoId) => {
-    if (promoId === 1) return Foto1;
-    if (promoId === 2) return Foto2;
-    if (promoId === 3) return Foto3;
-    return '/assets/placeholder.jpg';
-  };
+  if (loading) {
+    return <div>Cargando promociones...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div className="promociones-container">
@@ -82,6 +120,51 @@ const Promociones = () => {
         </div>
       </motion.section>
 
+      {/* === FILTROS === */}
+      <section className="promo-filters-section">
+        <div className="container mx-auto px-3 xs:px-4 sm:px-6 md:px-8">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="section-title"
+            style={{
+              fontSize: 'clamp(1.8rem, 5.5vw, 3.2rem)'
+            }}
+          >
+            Filtrar Promociones
+          </motion.h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">Por Tipo de Producto</label>
+              <select 
+                className="form-select w-full"
+                value={selectedType} 
+                onChange={(e) => setSelectedType(e.target.value)}
+              >
+                <option value="">Todos los tipos</option>
+                {productTypes.map(type => (
+                  <option key={type.id} value={type.id}>
+                    {type.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">Descuento Mínimo (%)</label>
+              <input 
+                type="number" 
+                className="form-control w-full"
+                min="0" 
+                max="100" 
+                value={minDiscount} 
+                onChange={(e) => setMinDiscount(parseInt(e.target.value) || 0)} 
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* === CARRUSEL - RESPONSIVO === */}
       <section className="promo-featured-section">
         <div className="container mx-auto px-3 xs:px-4 sm:px-6 md:px-8">
@@ -121,7 +204,7 @@ const Promociones = () => {
             }}
             className="promo-swiper pb-10"
           >
-            {promotionsData.map((promo) => (
+            {filteredPromotions.map((promo) => (
               <SwiperSlide key={promo.id}>
                 <motion.div
                   className="promo-card"
@@ -130,7 +213,7 @@ const Promociones = () => {
                 >
                   <div className="promo-image-container">
                     <img
-                      src={getPromoImage(promo.id)}
+                      src={promo.products[0]?.design_file || '/assets/placeholder.jpg'}
                       alt={promo.name}
                       className="promo-image"
                       loading="lazy"
@@ -177,7 +260,7 @@ const Promociones = () => {
             Todas las Promociones
           </motion.h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {promotionsData.map((promo, index) => (
+            {filteredPromotions.map((promo, index) => (
               <motion.div
                 key={promo.id}
                 custom={index}
@@ -190,7 +273,7 @@ const Promociones = () => {
               >
                 <div className="promo-image-container">
                   <img
-                    src={getPromoImage(promo.id)}
+                    src={promo.products[0]?.design_file || '/assets/placeholder.jpg'}
                     alt={promo.name}
                     className="promo-image"
                     loading="lazy"

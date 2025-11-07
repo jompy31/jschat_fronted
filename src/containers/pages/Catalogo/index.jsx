@@ -1,130 +1,177 @@
-import React, { useRef, useState } from 'react';
-import { Helmet } from 'react-helmet';
-import { useMediaQuery } from 'react-responsive';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion'; // Added for animations, similar to previous component
+import ProductDataService from '../../../services/products';
+import "./catalogo.css"
 
 const Catalogo = () => {
-  const catalogoRef = useRef(null);
-  const [fullScreen, setFullScreen] = useState(null);
-  const [currentPdfIndex, setCurrentPdfIndex] = useState(0);
-  const [zoomLevel, setZoomLevel] = useState(1);
+  const [products, setProducts] = useState([]);
+  const [productTypes, setProductTypes] = useState([]);
+  const [characteristics, setCharacteristics] = useState([]);
+  const [selectedType, setSelectedType] = useState('');
+  const [selectedCharacteristics, setSelectedCharacteristics] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Detectar dispositivos
-  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
-  const isMini = useMediaQuery({ query: '(max-width: 340px)' });
+  // Obtener token si existe, pero no lo requerimos obligatoriamente
+  const token = localStorage.getItem('token');
 
-  const scrollToCatalogo = () => {
-    if (catalogoRef.current) {
-      catalogoRef.current.scrollIntoView({ behavior: 'smooth' });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Obtener todos los productos (sin requerir token obligatoriamente)
+        const productsResponse = await ProductDataService.getAllProducts(token);
+        setProducts(productsResponse.data.results || productsResponse.data); // Manejar paginación si aplica
+
+        // Obtener todos los tipos de productos
+        const typesResponse = await ProductDataService.getAllProductTypes(token);
+        setProductTypes(typesResponse.data.results || typesResponse.data);
+
+        // Obtener todas las características
+        const charsResponse = await ProductDataService.getAllCharacteristics(token);
+        setCharacteristics(charsResponse.data.results || charsResponse.data);
+
+        setLoading(false);
+      } catch (err) {
+        setError('Error al cargar los datos. Por favor, intenta de nuevo.');
+        setLoading(false);
+      }
+    };
+
+    // Siempre intentamos cargar, incluso sin token (el backend lo permite ahora)
+    fetchData();
+  }, []);  // Eliminamos [token] como dependencia, para que cargue siempre
+
+  // Manejar selección de tipo de producto
+  const handleTypeChange = (e) => {
+    setSelectedType(e.target.value);
+  };
+
+  // Manejar selección de características (multi-select con checkboxes)
+  const handleCharacteristicChange = (e) => {
+    const value = parseInt(e.target.value);
+    if (e.target.checked) {
+      setSelectedCharacteristics([...selectedCharacteristics, value]);
+    } else {
+      setSelectedCharacteristics(selectedCharacteristics.filter(id => id !== value));
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Meta tags */}
-      <Helmet>
-        <title>Catálogo de Servicios de JSport</title>
-        <meta
-          name="description"
-          content="Explora el catálogo de servicios de JSport, diseñado para ofrecerte soluciones integrales."
-        />
-        <meta name="keywords" content="JSport, catálogo de servicios, propiedades, valeautos, sucesorios" />
-        <meta name="robots" content="index, follow" />
-      </Helmet>
+  // Filtrar productos basados en selecciones
+  const filteredProducts = products.filter(product => {
+    const typeMatch = !selectedType || product.product_type.id === parseInt(selectedType);
+    const charsMatch = selectedCharacteristics.every(selectedId =>
+      product.characteristics.some(char => char.id === selectedId)
+    );
+    return typeMatch && charsMatch;
+  });
 
-      {/* === SECCIÓN CATÁLOGO - RESPONSIVO === */}
-      <section
-        ref={catalogoRef}
-        className={`
-          ${isMobile ? 'pt-13 sm:pt-32' : 'pt-8 md:pt-12'} 
-          px-3 xs:px-4 sm:px-6 md:px-8 
-          max-w-7xl mx-auto
-        `}
-        style={{
-          marginTop: isMobile ? '120px' : '0',
-          transition: 'margin-top 0.3s ease'
-        }}
-      >
-        {/* TÍTULO RESPONSIVO */}
-        <h1
-          className={`
-            text-3xl xs:text-4xl sm:text-5xl md:text-6xl 
-            font-bold text-center mb-6 sm:mb-8 
-            text-gray-900 dark:text-white 
-            leading-tight tracking-tight
-            ${isMini ? 'text-2xl' : ''}
-          `}
-          style={{
-            fontSize: 'clamp(1.8rem, 6vw, 4rem)',
-            lineHeight: '1.2'
-          }}
-        >
-          Catálogo JSport
-        </h1>
-
-        {/* IFRAME RESPONSIVO */}
-        <div className="relative w-full overflow-hidden rounded-xl shadow-2xl bg-white dark:bg-gray-800">
-          <iframe
-            allowFullScreen
-            scrolling="no"
-            className="fp-iframe w-full"
-            src="https://heyzine.com/flip-book/819865ba38.html"
-            title="Catálogo JSport"
-            style={{
-              border: '1px solid #e5e7eb',
-              height: isMobile 
-                ? (isMini ? '60vh' : '70vh') 
-                : '80vh',
-              minHeight: '500px',
-              borderRadius: '0.75rem',
-              boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
-            }}
-            loading="lazy"
-          ></iframe>
-
-          {/* Overlay de carga (opcional) */}
-          <div className="absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center opacity-0 pointer-events-none">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--accent-primary)]"></div>
-          </div>
+  if (loading) {
+    return (
+      <motion.div className="loading-screen" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <div className="pulse-loader">
+          <div></div><div></div><div></div><div></div>
         </div>
-      </section>
+        <p>CARGANDO CATÁLOGO...</p>
+      </motion.div>
+    );
+  }
 
-      {/* === CSS INLINED (para evitar import extra) === */}
-      <style jsx>{`
-        @media (max-width: 768px) {
-          section {
-            margin-top: 120px !important;
-          }
-        }
+  if (error) {
+    return <div className="error-screen">{error}</div>;
+  }
 
-        @media (min-width: 769px) {
-          section {
-            margin-top: 0 !important;
-          }
-        }
+  return (
+    <motion.div className="catalogo-container" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <header className="catalogo-header">
+        <motion.h1 initial={{ y: -50 }} animate={{ y: 0 }}>
+          <span className="glitch" data-text="CATÁLOGO">CATÁLOGO</span> DE PRODUCTOS
+        </motion.h1>
+      </header>
 
-        .fp-iframe {
-          transition: all 0.3s ease;
-        }
+      {/* Sección de filtros */}
+      <motion.div className="filters-bar" initial={{ y: 30 }} animate={{ y: 0 }}>
+        <div className="filter-section">
+          <h5>Filtrar por Tipo de Producto</h5>
+          <select 
+            className="form-select" 
+            value={selectedType} 
+            onChange={handleTypeChange}
+          >
+            <option value="">Todos los tipos</option>
+            {productTypes.map(type => (
+              <option key={type.id} value={type.id}>
+                {type.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="filter-section">
+          <h5>Filtrar por Características</h5>
+          {characteristics.map(char => (
+            <div key={char.id} className="form-check">
+              <input 
+                className="form-check-input" 
+                type="checkbox" 
+                value={char.id} 
+                id={`char-${char.id}`} 
+                onChange={handleCharacteristicChange}
+                checked={selectedCharacteristics.includes(char.id)}
+              />
+              <label className="form-check-label" htmlFor={`char-${char.id}`}>
+                {char.name}
+              </label>
+            </div>
+          ))}
+        </div>
+      </motion.div>
 
-        /* Evitar scroll horizontal */
-        body, html {
-          overflow-x: hidden;
-        }
-
-        /* Mejorar renderizado en móviles */
-        @media (max-width: 480px) {
-          .fp-iframe {
-            height: 65vh !important;
-          }
-        }
-
-        @media (max-width: 340px) {
-          .fp-iframe {
-            height: 58vh !important;
-          }
-        }
-      `}</style>
-    </div>
+      {/* Grid de cards de productos */}
+      <AnimatePresence>
+        <div className="products-grid">
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((product, i) => (
+              <motion.div
+                key={product.id}
+                className="product-card glass"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                exit={{ opacity: 0 }}
+              >
+                {product.design_file && (
+                  <img 
+                    src={product.design_file} 
+                    className="card-img-top" 
+                    alt={product.name} 
+                  />
+                )}
+                <div className="card-body">
+                  <h5 className="card-title">{product.name}</h5>
+                  <p className="card-text">{product.description}</p>
+                  <p className="card-text">
+                    <strong>Tipo:</strong> {product.product_type.name}<br />
+                    <strong>Precio Total:</strong> ${(parseFloat(product.product_type.base_price) + parseFloat(product.additional_price)).toFixed(2)}
+                  </p>
+                  <p className="card-text">
+                    <strong>Características:</strong>
+                    <ul>
+                      {product.characteristics.map(char => (
+                        <li key={char.id}>{char.name}</li>
+                      ))}
+                    </ul>
+                  </p>
+                </div>
+                <div className="glow-effect"></div>
+              </motion.div>
+            ))
+          ) : (
+            <motion.div className="no-results" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <p>No se encontraron productos con los filtros seleccionados.</p>
+            </motion.div>
+          )}
+        </div>
+      </AnimatePresence>
+    </motion.div>
   );
 };
 
