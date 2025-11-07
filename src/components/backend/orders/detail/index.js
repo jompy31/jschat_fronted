@@ -679,7 +679,6 @@ const OrderDetailModal = ({ order, onClose, onUpdate, onEditEvent, onEditPayment
                 onChange={handleInputChange}
                 className="input-field"
                 disabled={userRole !== 'administrator'}
-                required={userRole === 'administrator'}
               />
             </div>
             <div className="checkbox-wrapper">
