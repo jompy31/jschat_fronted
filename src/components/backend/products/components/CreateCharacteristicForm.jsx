@@ -1,6 +1,16 @@
 import React, { useState } from 'react';
 import { createCharacteristic, updateCharacteristic, deleteCharacteristic } from '../utils/api';
-import "../../../backend/products/components/products.css"
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  IconButton,
+  Divider,
+  Grid,
+} from "@mui/material";
+import { motion } from "framer-motion";
+import { Close } from "@mui/icons-material";
 
 const CreateCharacteristicForm = ({ onClose, token, setCharacteristics, editingCharacteristic }) => {
   const [formData, setFormData] = useState({
@@ -42,68 +52,179 @@ const CreateCharacteristicForm = ({ onClose, token, setCharacteristics, editingC
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
-      <div className="bg-gray-900 bg-opacity-90 backdrop-blur-md rounded-lg p-6 w-full max-w-lg">
-        <h2 className="text-2xl font-bold mb-4 text-blue-400">
-          {editingCharacteristic ? 'Editar Característica' : 'Crear Característica'}
-        </h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-white mb-1">Nombre</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-              className="w-full bg-gray-800 text-white rounded p-2"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-white mb-1">Descripción</label>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}
-              className="w-full bg-gray-800 text-white rounded p-2"
-            />
-          </div>
-          <div className="flex justify-between space-x-4">
-            {editingCharacteristic && (
-              <button
-                type="button"
-                onClick={handleDelete}
-                className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded"
-              >
-                Eliminar
-              </button>
-            )}
-            <div className="flex space-x-4">
-              <button
-                type="button"
-                onClick={onClose}
-                className="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded"
-              >
-                Cancelar
-              </button>
-              <button
-                type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-              >
-                Guardar
-              </button>
-            </div>
-          </div>
-        </form>
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 text-gray-400 hover:text-white"
+    <Box
+      sx={{
+        position: "fixed",
+        inset: 0,
+        bgcolor: "rgba(0, 0, 0, 0.7)",
+        backdropFilter: "blur(8px)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 50,
+      }}
+    >
+      <Box
+        sx={{
+          position: "relative",
+          width: { xs: "95%", sm: "90%", md: "500px" },
+          maxHeight: "90vh",
+          overflowY: "auto",
+          bgcolor: "var(--bg-primary)",
+          background: "linear-gradient(180deg, var(--bg-primary), var(--bg-secondary))",
+          border: "1px solid var(--border-primary)",
+          borderRadius: 4,
+          boxShadow: "var(--shadow-light), var(--glow-neon)",
+          p: { xs: 3, sm: 4 },
+        }}
+      >
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.9, y: 20 }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
+          style={{ width: "100%" }}
         >
-          ✕
-        </button>
-      </div>
-    </div>
+          {/* Header */}
+          <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+            <Typography variant="h5" fontWeight={700} sx={{ color: "var(--text-primary)" }}>
+              {editingCharacteristic ? "Editar Característica" : "Crear Característica"}
+            </Typography>
+            <IconButton
+              onClick={onClose}
+              sx={{
+                color: "var(--text-secondary)",
+                "&:hover": { background: "rgba(255, 255, 255, 0.1)" },
+              }}
+            >
+              <Close />
+            </IconButton>
+          </Box>
+
+          <Divider sx={{ borderColor: "var(--border-primary)", opacity: 0.3, mb: 3 }} />
+
+          {/* Formulario */}
+          <form onSubmit={handleSubmit}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  label="Nombre *"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  fullWidth
+                  required
+                  variant="outlined"
+                  InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+                  sx={textFieldStyle}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  label="Descripción"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  fullWidth
+                  multiline
+                  rows={3}
+                  variant="outlined"
+                  InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+                  sx={textFieldStyle}
+                />
+              </Grid>
+            </Grid>
+
+            <Divider sx={{ borderColor: "var(--border-primary)", opacity: 0.3, my: 3 }} />
+
+            {/* Botones */}
+            <Box display="flex" justifyContent="space-between" flexWrap="wrap" gap={2}>
+              <Box>
+                {editingCharacteristic && (
+                  <Button
+                    variant="outlined"
+                    onClick={handleDelete}
+                    size="large"
+                    sx={{
+                      minWidth: 120,
+                      color: "#ff4444",
+                      borderColor: "#ff4444",
+                      fontWeight: 600,
+                      "&:hover": {
+                        background: "#ff4444",
+                        color: "#FFFFFF",
+                        borderColor: "#ff4444",
+                        boxShadow: "0 0 20px rgba(255, 68, 68, 0.6)",
+                      },
+                    }}
+                  >
+                    Eliminar
+                  </Button>
+                )}
+              </Box>
+
+              <Box display="flex" gap={2} flexWrap="wrap">
+                <Button
+                  variant="outlined"
+                  onClick={onClose}
+                  size="large"
+                  sx={{
+                    minWidth: 120,
+                    color: "var(--text-secondary)",
+                    borderColor: "var(--border-primary)",
+                    fontWeight: 600,
+                    "&:hover": {
+                      background: "var(--accent-primary)",
+                      color: "#FFFFFF",
+                      borderColor: "var(--accent-primary)",
+                      boxShadow: "var(--glow-neon)",
+                    },
+                  }}
+                >
+                  Cancelar
+                </Button>
+
+                <Button
+                  variant="contained"
+                  type="submit"
+                  size="large"
+                  sx={{
+                    minWidth: 120,
+                    background: "var(--accent-hover)",
+                    color: "#FFFFFF",
+                    fontWeight: 600,
+                    "&:hover": {
+                      background: "var(--accent-primary)",
+                      boxShadow: "var(--glow-neon)",
+                    },
+                  }}
+                >
+                  Guardar
+                </Button>
+              </Box>
+            </Box>
+          </form>
+        </motion.div>
+      </Box>
+    </Box>
   );
+};
+
+// Estilos reutilizables (igual que en CustomerModal)
+const textFieldStyle = {
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": { borderColor: "var(--border-primary)" },
+    "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+    "&.Mui-focused fieldset": {
+      borderColor: "var(--accent-primary)",
+      boxShadow: "var(--glow-neon)",
+    },
+    bgcolor: "var(--bg-secondary)",
+    color: "var(--text-primary)",
+  },
+  "& .MuiInputLabel-root": { color: "var(--text-secondary)" },
+  "& .MuiInputLabel-root.Mui-focused": { color: "var(--accent-primary)" },
 };
 
 export default CreateCharacteristicForm;

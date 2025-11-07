@@ -41,14 +41,14 @@ function Login() {
         dispatch(setAuthentication(token, username));
 
         // ---- NUEVO: Mostrar token y username en consola ----
-        console.log('Login exitoso!');
-        console.log('Username:', username);
-        console.log('Token:', token);
+        // console.log('Login exitoso!');
+        // console.log('Username:', username);
+        // console.log('Token:', token);
 
         // ---- Esperamos 4 segundos antes de redirigir ----
         setTimeout(() => {
           navigate('/current_user');
-        }, 4000);
+        }, 1000);
       })
       .catch((error) => {
         setError(error.response?.data?.error || 'Error al iniciar sesión.');

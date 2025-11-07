@@ -134,46 +134,75 @@ const CreateProductForm = ({ onClose, token, setProducts, productTypes, characte
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50" 
-       
+    <div 
+      className="fixed inset-0 flex items-center justify-center z-50" 
+      style={{
+        backgroundColor: "rgba(0, 0, 0, 0.7)",
+        backdropFilter: "blur(8px)",
+      }}
     >
-      <div className="bg-gray-900 bg-opacity-90 backdrop-blur-md rounded-lg p-6 w-full max-w-lg" style={{
-        overflowY: "auto",   // ✅ permite scroll vertical
-        maxHeight: "100vh"   // ✅ evita que crezca más allá de la pantalla
-      }}>
-        <h2 className="text-2xl font-bold mb-4 text-blue-400 mt-[12%]">
+      <div 
+        className="rounded-lg p-6 w-full max-w-lg" 
+        style={{
+          overflowY: "auto",   // ✅ permite scroll vertical
+          maxHeight: "100vh",  // ✅ evita que crezca más allá de la pantalla
+          background: "linear-gradient(180deg, var(--bg-primary), var(--bg-secondary))",
+          border: "1px solid var(--border-primary)",
+          borderRadius: 4,
+          boxShadow: "var(--shadow-light), var(--glow-neon)",
+        }}
+      >
+        <h2 
+          className="text-2xl font-bold mb-4 mt-[12%]"
+          style={{ color: "var(--accent-primary)" }}
+        >
           {editingProduct ? 'Editar Producto' : 'Crear Producto'}
         </h2>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
+        {error && <p style={{ color: "#FF0000", marginBottom: "1rem" }}>{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-white mb-1">Nombre</label>
+            <label className="block mb-1" style={{ color: "var(--text-primary)" }}>Nombre</label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              className="w-full bg-gray-800 text-white rounded p-2"
+              className="w-full rounded p-2"
               required
+              style={{
+                backgroundColor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                border: "1px solid var(--border-primary)",
+              }}
             />
           </div>
           <div className="mb-4">
-            <label className="block text-white mb-1">Descripción</label>
+            <label className="block mb-1" style={{ color: "var(--text-primary)" }}>Descripción</label>
             <textarea
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              className="w-full bg-gray-800 text-white rounded p-2"
+              className="w-full rounded p-2"
+              style={{
+                backgroundColor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                border: "1px solid var(--border-primary)",
+              }}
             />
           </div>
           <div className="mb-4">
-            <label className="block text-white mb-1">Tipo de Producto</label>
+            <label className="block mb-1" style={{ color: "var(--text-primary)" }}>Tipo de Producto</label>
             <select
               name="product_type_id"
               value={formData.product_type_id}
               onChange={handleInputChange}
-              className="w-full bg-gray-800 text-white rounded p-2"
+              className="w-full rounded p-2"
               required
+              style={{
+                backgroundColor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                border: "1px solid var(--border-primary)",
+              }}
             >
               <option value="">Seleccionar tipo</option>
               {productTypes.map(type => (
@@ -182,48 +211,63 @@ const CreateProductForm = ({ onClose, token, setProducts, productTypes, characte
             </select>
           </div>
           <div className="mb-4">
-            <label className="block text-white mb-1">Precio Adicional</label>
+            <label className="block mb-1" style={{ color: "var(--text-primary)" }}>Precio Adicional</label>
             <input
               type="number"
               name="additional_price"
               value={formData.additional_price}
               onChange={handleInputChange}
-              className="w-full bg-gray-800 text-white rounded p-2"
+              className="w-full rounded p-2"
               step="0.01"
               min="0"
               required
+              style={{
+                backgroundColor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                border: "1px solid var(--border-primary)",
+              }}
             />
           </div>
           <div className="mb-4">
-            <label className="block text-white mb-1">Archivo de Diseño</label>
+            <label className="block mb-1" style={{ color: "var(--text-primary)" }}>Archivo de Diseño</label>
             <input
               type="file"
               name="design_file"
               onChange={handleFileChange}
-              className="w-full bg-gray-800 text-white rounded p-2"
+              className="w-full rounded p-2"
               accept="image/jpeg,image/png,application/pdf"
+              style={{
+                backgroundColor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                border: "1px solid var(--border-primary)",
+              }}
             />
             {editingProduct && editingProduct.design_file && !formData.design_file && (
-              <p className="text-gray-400 text-sm mt-1">
+              <p className="text-sm mt-1" style={{ color: "var(--text-secondary)" }}>
                 Archivo actual: {editingProduct.design_file.split('/').pop()}
                 {formData.design_file === null && ' (será reemplazado si no se selecciona un nuevo archivo)'}
               </p>
             )}
             {previewUrl && (
               <div className="mt-2">
-                <p className="text-gray-400 text-sm">Vista previa:</p>
+                <p className="text-sm" style={{ color: "var(--text-secondary)" }}>Vista previa:</p>
                 <img src={previewUrl} alt="Vista previa" className="max-w-full h-auto rounded" style={{ maxHeight: '200px' }} />
               </div>
             )}
           </div>
           <div className="mb-4">
-            <label className="block text-white mb-1">Características</label>
+            <label className="block mb-1" style={{ color: "var(--text-primary)" }}>Características</label>
             <select
               multiple
               name="characteristic_ids"
               value={formData.characteristic_ids}
               onChange={handleCharacteristicChange}
-              className="w-full bg-gray-800 text-white rounded p-2"
+              className="w-full rounded p-2"
+              style={{
+                backgroundColor: "var(--bg-secondary)",
+                color: "var(--text-primary)",
+                border: "1px solid var(--border-primary)",
+              }}
             >
               {characteristics.map(char => (
                 <option key={char.id} value={char.id.toString()}>{char.name}</option>
@@ -237,13 +281,22 @@ const CreateProductForm = ({ onClose, token, setProducts, productTypes, characte
                 if (previewUrl) URL.revokeObjectURL(previewUrl);
                 onClose();
               }}
-              className="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded"
+              className="py-2 px-4 rounded"
+              style={{
+                backgroundColor: "var(--bg-secondary)",
+                color: "var(--text-secondary)",
+                border: "1px solid var(--border-primary)",
+              }}
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+              className="py-2 px-4 rounded"
+              style={{
+                backgroundColor: "var(--accent-hover)",
+                color: "var(--text-secondary)",
+              }}
             >
               Guardar
             </button>
@@ -254,7 +307,8 @@ const CreateProductForm = ({ onClose, token, setProducts, productTypes, characte
             if (previewUrl) URL.revokeObjectURL(previewUrl);
             onClose();
           }}
-          className="absolute top-2 right-2 text-gray-400 hover:text-white"
+          className="absolute top-2 right-2"
+          style={{ color: "var(--text-secondary)" }}
         >
           ✕
         </button>

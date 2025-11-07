@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import { createProductType, updateProductType } from '../utils/api';
-import "../../../backend/products/components/products.css"
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  IconButton,
+  Divider,
+} from "@mui/material";
+import { motion } from "framer-motion";
+import { Close } from "@mui/icons-material";
 
 const CreateProductTypeForm = ({ onClose, token, setProductTypes, editingProductType }) => {
   const [formData, setFormData] = useState({
@@ -18,7 +27,7 @@ const CreateProductTypeForm = ({ onClose, token, setProductTypes, editingProduct
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = { ...formData, created_by_id: 1 }; // Adjust user ID as needed
+    const data = { ...formData, created_by_id: 1 };
     try {
       if (editingProductType) {
         const response = await updateProductType(editingProductType.id, data, token);
@@ -34,93 +43,200 @@ const CreateProductTypeForm = ({ onClose, token, setProductTypes, editingProduct
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
-      <div className="bg-gray-900 bg-opacity-90 backdrop-blur-md rounded-lg p-6 w-full max-w-lg">
-        <h2 className="text-2xl font-bold mb-4 text-blue-400">
-          {editingProductType ? 'Editar Tipo de Producto' : 'Crear Tipo de Producto'}
-        </h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-white mb-1">Nombre</label>
-            <input
-              type="text"
+    <Box
+      sx={{
+        position: "fixed",
+        inset: 0,
+        backgroundColor: "rgba(0, 0, 0, 0.7)",
+        backdropFilter: "blur(8px)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 50,
+      }}
+    >
+      <Box
+        sx={{
+          position: "relative",
+          width: { xs: "95%", sm: "90%", md: "600px" },
+          maxHeight: "90vh",
+          overflowY: "auto",
+          bgcolor: "var(--bg-primary)",
+          background: "linear-gradient(180deg, var(--bg-primary), var(--bg-secondary))",
+          border: "1px solid var(--border-primary)",
+          borderRadius: 4,
+          boxShadow: "var(--shadow-light), var(--glow-neon)",
+          p: { xs: 3, sm: 4 },
+          "&::-webkit-scrollbar": {
+            width: 8,
+          },
+          "&::-webkit-scrollbar-track": {
+            background: "var(--bg-secondary)",
+            borderRadius: 4,
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: "var(--accent-primary)",
+            borderRadius: 4,
+          },
+        }}
+      >
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.9, y: 20 }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
+          style={{ width: "100%" }}
+        >
+          {/* Header */}
+          <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+            <Typography variant="h5" fontWeight={700} sx={{ color: "var(--text-primary)" }}>
+              {editingProductType ? "Editar Tipo de Producto" : "Crear Tipo de Producto"}
+            </Typography>
+            <IconButton
+              onClick={onClose}
+              sx={{
+                color: "var(--text-secondary)",
+                "&:hover": { background: "rgba(255, 255, 255, 0.1)" },
+              }}
+            >
+              <Close />
+            </IconButton>
+          </Box>
+
+          <Divider sx={{ borderColor: "var(--border-primary)", opacity: 0.3, mb: 3 }} />
+
+          {/* Formulario */}
+          <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
+            <TextField
+              label="Nombre *"
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              className="w-full bg-gray-800 text-white rounded p-2"
+              fullWidth
               required
+              variant="outlined"
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={textFieldStyle}
             />
-          </div>
-          <div className="mb-4">
-            <label className="block text-white mb-1">Descripción</label>
-            <textarea
+
+            <TextField
+              label="Descripción"
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              className="w-full bg-gray-800 text-white rounded p-2"
+              fullWidth
+              multiline
+              rows={3}
+              variant="outlined"
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={textFieldStyle}
             />
-          </div>
-          <div className="mb-4">
-            <label className="block text-white mb-1">Precio Base</label>
-            <input
-              type="number"
+
+            <TextField
+              label="Precio Base *"
               name="base_price"
+              type="number"
               value={formData.base_price}
               onChange={handleInputChange}
-              className="w-full bg-gray-800 text-white rounded p-2"
-              step="0.01"
+              fullWidth
               required
+              InputProps={{ step: "0.01" }}
+              variant="outlined"
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={textFieldStyle}
             />
-          </div>
-          <div className="mb-4">
-            <label className="block text-white mb-1">Tiempo de Entrega (días)</label>
-            <input
-              type="number"
+
+            <TextField
+              label="Tiempo de Entrega (días) *"
               name="delivery_time_days"
+              type="number"
               value={formData.delivery_time_days}
               onChange={handleInputChange}
-              className="w-full bg-gray-800 text-white rounded p-2"
-              min="1"
+              fullWidth
               required
+              InputProps={{ inputProps: { min: 1 } }}
+              variant="outlined"
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={textFieldStyle}
             />
-          </div>
-          <div className="mb-4">
-            <label className="block text-white mb-1">Capacidad Diaria</label>
-            <input
-              type="number"
+
+            <TextField
+              label="Capacidad Diaria de Producción *"
               name="daily_production_capacity"
+              type="number"
               value={formData.daily_production_capacity}
               onChange={handleInputChange}
-              className="w-full bg-gray-800 text-white rounded p-2"
-              min="1"
+              fullWidth
               required
+              InputProps={{ inputProps: { min: 1 } }}
+              variant="outlined"
+              InputLabelProps={{ style: { color: "var(--text-secondary)" } }}
+              sx={textFieldStyle}
             />
-          </div>
-          <div className="flex justify-end space-x-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded"
-            >
-              Cancelar
-            </button>
-            <button
-              type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-            >
-              Guardar
-            </button>
-          </div>
-        </form>
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 text-gray-400 hover:text-white"
-        >
-          ✕
-        </button>
-      </div>
-    </div>
+
+            <Divider sx={{ borderColor: "var(--border-primary)", opacity: 0.3, my: 2 }} />
+
+            {/* Botones */}
+            <Box display="flex" justifyContent="center" gap={2} flexWrap="wrap">
+              <Button
+                variant="outlined"
+                onClick={onClose}
+                size="large"
+                sx={{
+                  minWidth: 140,
+                  color: "var(--text-secondary)",
+                  borderColor: "var(--border-primary)",
+                  fontWeight: 600,
+                  "&:hover": {
+                    background: "var(--accent-primary)",
+                    color: "#FFFFFF",
+                    borderColor: "var(--accent-primary)",
+                    boxShadow: "var(--glow-neon)",
+                  },
+                }}
+              >
+                Cancelar
+              </Button>
+
+              <Button
+                variant="contained"
+                type="submit"
+                size="large"
+                sx={{
+                  minWidth: 140,
+                  background: "var(--accent-hover)",
+                  color: "#FFFFFF",
+                  fontWeight: 600,
+                  "&:hover": {
+                    background: "var(--accent-primary)",
+                    boxShadow: "var(--glow-neon)",
+                  },
+                }}
+              >
+                {editingProductType ? "Guardar Cambios" : "Crear Tipo"}
+              </Button>
+            </Box>
+          </Box>
+        </motion.div>
+      </Box>
+    </Box>
   );
+};
+
+// Estilos reutilizables (igual que en CustomerModal)
+const textFieldStyle = {
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": { borderColor: "var(--border-primary)" },
+    "&:hover fieldset": { borderColor: "var(--accent-primary)" },
+    "&.Mui-focused fieldset": {
+      borderColor: "var(--accent-primary)",
+      boxShadow: "var(--glow-neon)",
+    },
+    bgcolor: "var(--bg-secondary)",
+    color: "var(--text-primary)",
+  },
+  "& .MuiInputLabel-root": { color: "var(--text-secondary)" },
+  "& .MuiInputLabel-root.Mui-focused": { color: "var(--accent-primary)" },
 };
 
 export default CreateProductTypeForm;
