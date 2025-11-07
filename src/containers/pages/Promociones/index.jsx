@@ -24,8 +24,8 @@ const Promociones = () => {
           ProductDataService.getAllPromotions(token),
           ProductDataService.getAllProductTypes(token)
         ]);
-
-        setPromotions(promoRes.data.results || promoRes.data);
+        console.log("promoRes.data.results ", promoRes.data.results )
+        setPromotions(promoRes.data.results || promoRes.data) ;
         setProductTypes(typesRes.data.results || typesRes.data);
         setLoading(false);
       } catch (err) {
@@ -281,7 +281,7 @@ const Promociones = () => {
                     <ul className="modal-products-list">
                       {selectedPromotion.products.map(p => (
                         <li key={p.id}>
-                          <strong>{p.name}</strong> - ₡{p.price}
+                          <strong>{p.name}</strong> - ₡{p.total_price}
                         </li>
                       ))}
                     </ul>
@@ -293,7 +293,7 @@ const Promociones = () => {
     onClick={() => {
       const promo = selectedPromotion;
       const productsList = promo.products
-        .map(p => `• ${p.name} - $${p.price}`)
+        .map(p => `• ${p.name} - ₡${p.total_price}`)
         .join('%0A');
       
       const message = encodeURIComponent(

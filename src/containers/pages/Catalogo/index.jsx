@@ -192,7 +192,7 @@ const Catalogo = () => {
                         <p className="card-text">{product.description}</p>
                         <p className="card-text">
                           <strong>Tipo:</strong> {product.product_type.name}<br />
-                          <strong>Precio Total:</strong> ${(parseFloat(product.product_type.base_price) + parseFloat(product.additional_price)).toFixed(2)}
+                          <strong>Precio Total:</strong> ₡{(parseFloat(product.product_type.base_price) + parseFloat(product.additional_price)).toFixed(2)}
                         </p>
                         <p className="card-text">
                           <strong>Características:</strong>
@@ -292,7 +292,7 @@ const Catalogo = () => {
                   <div className="modal-price">
                     <span className="price-label">Precio Total:</span>
                     <span className="price-value">
-                      ${(parseFloat(selectedProduct.product_type.base_price) + parseFloat(selectedProduct.additional_price)).toFixed(2)}
+                      ₡{(parseFloat(selectedProduct.product_type.base_price) + parseFloat(selectedProduct.additional_price)).toFixed(2)}
                     </span>
                   </div>
 
