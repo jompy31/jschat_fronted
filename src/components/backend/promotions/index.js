@@ -187,7 +187,7 @@ const PromocionesAdmin = () => {
           ) : (
             <div className="overflow-x-auto shadow-lg rounded-lg">
               <table className="w-full bg-white">
-                <thead className="bg-jsport-blue text-white">
+                <thead className="bg-jsport-blue text-black">
                   <tr>
                     <th className="px-6 py-4 text-left">Nombre</th>
                     <th className="px-6 py-4 text-center">Descuento</th>

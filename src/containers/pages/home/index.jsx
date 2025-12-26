@@ -120,7 +120,7 @@ const Home = () => {
             Su socio estratégico en personalización de uniformes deportivos y productos empresariales mediante sublimación innovadora.
           </motion.p>
           <motion.a
-            href="/catalogo"
+            href="/programas/jsportapp/catalogo"
             className="group relative inline-flex items-center bg-[var(--accent-primary)] hover:bg-[var(--border-primary)] text-white font-semibold py-3 px-7 md:py-4 md:px-9 rounded-full text-base md:text-lg overflow-hidden transition-all duration-300"
             initial={{ scale: 1 }}
             whileHover={{ scale: 1.03, boxShadow: 'var(--glow-neon)' }}
@@ -425,7 +425,7 @@ const Home = () => {
           {/* Botón Ver Todo */}
           <div className="text-center mt-8">
             <motion.a
-              href="/catalogo"
+              href="/programas/jsportapp/catalogo"
               className="inline-flex items-center bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] text-white font-semibold py-3 px-8 rounded-full text-base md:text-lg transition-all duration-300"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
@@ -579,7 +579,7 @@ const Home = () => {
 
     {/* BOTÓN RESPONSIVO */}
     <motion.a
-      href="/contacto"
+      href="/programas/jsportapp/contacto"
       className="group relative inline-flex items-center 
                  bg-white text-[var(--accent-primary)] 
                  hover:bg-transparent hover:text-white

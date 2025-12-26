@@ -5,7 +5,7 @@ import "../../components/navigation/Footer.css";
 
 const navigation = {
   support: [{ name: 'Contactenos', href: '/contacto' }],
-  solutions: [{ name: 'Preguntas frecuentes', href: '/faq' }],
+  // solutions: [{ name: 'Preguntas frecuentes', href: '/faq' }],
   company: [
     { name: "Catálogo", href: "/catalogo" },
     { name: "Promociones", href: "/promociones" },
@@ -47,14 +47,14 @@ function Footer() {
                 ))}
               </ul>
             </div>
-            <div className="nav-column">
+            {/* <div className="nav-column">
               <h3>Consultas</h3>
               <ul>
                 {navigation.solutions.map((item) => (
                   <li key={item.name}><Link to={item.href}>{item.name}</Link></li>
                 ))}
               </ul>
-            </div>
+            </div> */}
             <div className="nav-column">
               <h3>Empresa</h3>
               <ul>
