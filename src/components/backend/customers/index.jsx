@@ -1,6 +1,7 @@
 // frontend_github\jschat_fronted\src\components\backend\customers\index.jsx
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Box, Button, Typography, Modal, Card, CardContent, Tabs, Tab } from "@mui/material";
 import { Add, Download } from "@mui/icons-material";
 import { DragDropContext } from "react-beautiful-dnd";
@@ -12,6 +13,7 @@ import DeleteConfirmationToast from "./components/DeleteConfirmationToast";
 import ErrorToast from "./components/ErrorToast";
 import CustomerPipelineView from "./components/CustomerPipelineView";
 import { validateCustomer, initialCustomerState, convertToCSV } from "./utils/customerUtils";
+import ApiService from "../../../services/products"; 
 import { downloadPDF, downloadCustomerPDF } from "./utils/pdfUtils";
 import { loadCustomers, createCustomer, updateCustomer, deleteCustomer, loadCustomerOrders, loadCustomerInvoices } from "./utils/apiUtils";
 
@@ -35,6 +37,8 @@ const ContactsInfo = () => {
   const [customerOrders, setCustomerOrders] = useState([]);
   const [customerInvoices, setCustomerInvoices] = useState([]);
   const [viewMode, setViewMode] = useState("table");
+  const [allOrders, setAllOrders] = useState([]); // ← NUEVO: todos los pedidos (como en Orders)
+  const navigate = useNavigate();
   const token = useSelector((state) => state.authentication.token);
 
   useEffect(() => {
@@ -50,10 +54,28 @@ const ContactsInfo = () => {
 
   useEffect(() => {
     if (token) {
+      const fetchAllOrders = async () => {
+        try {
+          const response = await ApiService.getAllOrders(token);
+          const data = Array.isArray(response.data) ? response.data : response.data.results || [];
+          console.log("🔥 Todos los pedidos cargados (para clientes):", data);
+          setAllOrders(data);
+        } catch (error) {
+          console.error("Error cargando todos los pedidos:", error);
+        }
+      };
+      fetchAllOrders();
+    }
+  }, [token]);
+  
+
+  useEffect(() => {
+    if (token) {
       const fetchCustomers = async () => {
         try {
           const { customers, totalCount } = await loadCustomers(token, currentPage, searchTerm);
           const validCustomers = customers.filter(customer => customer && customer.id && customer.name);
+          console.log("👥 Clientes cargados:", validCustomers);
           setCustomers(validCustomers);
           setTotalCount(totalCount);
         } catch (error) {
@@ -67,13 +89,22 @@ const ContactsInfo = () => {
   const handleCustomerClick = async (customer) => {
     setModalCustomer(customer);
     setShowDetailsModal(true);
+
+    // Filtrar pedidos del cliente actual desde todos los pedidos
+    const ordersForThisCustomer = allOrders.filter(order => 
+      order.customer && order.customer.id === customer.id
+    );
+
+    console.log(`🛒 Pedidos del cliente ${customer.name} (ID: ${customer.id}):`, ordersForThisCustomer);
+
+    setCustomerOrders(ordersForThisCustomer);
+
+    // Opcional: cargar facturas si aún las necesitas (puedes mantener tu función)
     try {
-      const orders = await loadCustomerOrders(customer.id, token);
       const invoices = await loadCustomerInvoices(customer.id, token);
-      setCustomerOrders(orders);
       setCustomerInvoices(invoices);
     } catch (error) {
-      setErrorToast("Error al cargar datos del cliente");
+      console.error("Error cargando facturas:", error);
     }
   };
 
@@ -172,6 +203,13 @@ const ContactsInfo = () => {
     }
   };
 
+  const handleOrderClick = (orderId) => {
+    setShowDetailsModal(false);
+    navigate("/orders"); // va a la página de pedidos
+    // Opcional: podrías pasar state para destacar el pedido
+    // navigate("/backend/orders", { state: { highlightOrderId: orderId } });
+  };
+
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'var(--bg-primary)', color: 'var(--text-primary)', p: 4 }}>
       <ToastContainer />
@@ -265,7 +303,7 @@ const ContactsInfo = () => {
             }}
           >
             <Typography variant="h5" gutterBottom sx={{ color: 'var(--text-primary)', fontWeight: 700 }}>
-              Detalles del Cliente
+              Detalles de {modalCustomer.name}
             </Typography>
             <Tabs value={0} sx={{ mb: 2, borderBottom: `1px solid var(--border-primary)` }}>
               <Tab label="Información" sx={{ color: 'var(--text-primary)' }} />
@@ -292,61 +330,229 @@ const ContactsInfo = () => {
             {/* PEDIDOS */}
             <Typography variant="h6" sx={{ color: 'var(--text-primary)', mb: 2 }}>Pedidos</Typography>
             {customerOrders.length > 0 ? (
-              customerOrders.map((order) => (
-                <Card key={order.id} sx={{ bgcolor: 'var(--bg-secondary)', mb: 2, border: `1px solid var(--border-primary)` }}>
-                  <CardContent>
-                    {[
-                      { label: 'Número de Orden', value: order.order_number },
-                      { label: 'Número de Pedido', value: order.pedido_number },
-                      { label: 'Tipo', value: order.order_type },
-                      { label: 'Estado', value: order.status },
-                      { label: 'Fecha de Entrega', value: order.delivery_date },
-                    ].map((item) => (
-                      <Typography key={item.label} sx={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-                        <strong>{item.label}:</strong> {item.value || "No disponible"}
-                      </Typography>
-                    ))}
-                    <Typography sx={{ color: 'var(--text-secondary)', mt: 1 }}>
-                      <strong>Ítems:</strong>
-                      <ul className="pl-5">
-                        {order.order_items?.map((item) => (
-                          <li key={item.id}>
-                            {item.product?.name || item.product_type?.name || "Producto"} - Cant: {item.quantity} - Precio: {item.unit_price}
-                          </li>
-                        ))}
-                      </ul>
+  customerOrders.map((order) => (
+    <Card
+      key={order.id}
+      sx={{
+        bgcolor: 'var(--bg-secondary)',
+        mb: 3,
+        border: `1px solid var(--border-primary)`,
+        cursor: "pointer",
+        transition: "all 0.3s ease",
+        '&:hover': {
+          boxShadow: 'var(--glow-neon)',
+          transform: 'translateY(-4px)',
+          borderColor: 'var(--accent-blue)'
+        }
+      }}
+      onClick={() => handleOrderClick(order.id)}
+    >
+      <CardContent>
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+          <Typography variant="h6" sx={{ fontWeight: 700, color: 'var(--accent-blue)' }}>
+            {order.order_number} ({order.pedido_number})
+          </Typography>
+          <Box
+            sx={{
+              px: 2,
+              py: 1,
+              borderRadius: 2,
+              backgroundColor:
+                order.status === 'completed' ? '#4caf50' :
+                order.status === 'in_progress' ? '#2196f3' :
+                order.status.includes('design') ? '#ff9800' :
+                order.status === 'pending' ? '#ff5722' : '#9e9e9e',
+              color: 'white',
+              fontSize: '0.85rem',
+              fontWeight: 600
+            }}
+          >
+            {order.status.replace('_', ' ').toUpperCase()}
+          </Box>
+        </Box>
+
+        <Typography><strong>Tipo:</strong> {order.order_type}</Typography>
+        <Typography><strong>Fecha de entrega:</strong> {order.delivery_date || "No definida"}</Typography>
+
+        {/* ÍTEMS DEL PEDIDO */}
+        <Typography variant="subtitle1" sx={{ mt: 2, mb: 1, fontWeight: 600 }}>
+          Ítems ({order.items?.length || 0})
+        </Typography>
+
+        {order.items && order.items.length > 0 ? (
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            {order.items.map((item, index) => (
+              <Card
+                key={item.id}
+                sx={{
+                  bgcolor: 'var(--bg-primary)',
+                  border: '1px dashed var(--border-primary)',
+                  p: 2
+                }}
+              >
+                <Box display="flex" gap={3} alignItems="flex-start">
+                  {/* IMAGEN DEL DISEÑO */}
+                  {item.design_file ? (
+                    <Box
+                      component="img"
+                      src={item.design_file}
+                      alt={`Diseño del ítem ${index + 1}`}
+                      sx={{
+                        width: 100,
+                        height: 100,
+                        objectFit: 'contain',
+                        borderRadius: 2,
+                        border: '1px solid var(--border-primary)',
+                        bgcolor: 'white'
+                      }}
+                    />
+                  ) : (
+                    <Box
+                      sx={{
+                        width: 100,
+                        height: 100,
+                        bgcolor: '#333',
+                        borderRadius: 2,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'var(--text-muted)',
+                        fontSize: '0.8rem',
+                        textAlign: 'center',
+                        border: '1px dashed var(--border-primary)'
+                      }}
+                    >
+                      Sin imagen
+                    </Box>
+                  )}
+
+                  {/* DETALLES DEL ÍTEM */}
+                  <Box flex={1}>
+                    <Typography><strong>Cantidad:</strong> {item.quantity}</Typography>
+                    <Typography><strong>Precio unitario:</strong> ₡{parseFloat(item.unit_price).toLocaleString()}</Typography>
+                    <Typography><strong>Total ítem:</strong> ₡{(item.quantity * parseFloat(item.unit_price)).toLocaleString()}</Typography>
+                    <Typography color="text.secondary" fontSize="0.9rem">
+                      Producto ID: {item.product || 'N/A'} {item.product_type ? `(Tipo: ${item.product_type})` : ''}
                     </Typography>
-                  </CardContent>
-                </Card>
-              ))
-            ) : (
-              <Typography sx={{ color: 'var(--text-secondary)' }}>No hay pedidos disponibles.</Typography>
-            )}
+                  </Box>
+                </Box>
+              </Card>
+            ))}
+          </Box>
+        ) : (
+          <Typography color="text.secondary">No hay ítems registrados.</Typography>
+        )}
+      </CardContent>
+    </Card>
+  ))
+) : (
+  <Card sx={{ bgcolor: 'var(--bg-secondary)', p: 3, textAlign: 'center' }}>
+    <Typography sx={{ color: 'var(--text-secondary)', fontStyle: 'italic' }}>
+      Este cliente no tiene pedidos aún.
+    </Typography>
+  </Card>
+)}
+{/* PAGOS DEL CLIENTE (agrupados por pedido) */}
+<Typography variant="h6" sx={{ mb: 2, mt: 4, color: 'var(--text-primary)' }}>
+  Pagos Realizados
+</Typography>
 
-            {/* FACTURAS */}
-            <Typography variant="h6" sx={{ color: 'var(--text-primary)', mb: 2 }}>Facturas</Typography>
-            {customerInvoices.length > 0 ? (
-              customerInvoices.map((invoice) => (
-                <Card key={invoice.id} sx={{ bgcolor: 'var(--bg-secondary)', mb: 2, border: `1px solid var(--border-primary)` }}>
-                  <CardContent>
-                    {[
-                      { label: 'Número de Factura', value: invoice.invoice_number },
-                      { label: 'Monto Total', value: invoice.total_amount },
-                      { label: 'Impuestos', value: invoice.tax },
-                      { label: 'Fecha de Emisión', value: invoice.issued_date },
-                      { label: 'Urgente', value: invoice.is_urgent ? "Sí" : "No" },
-                    ].map((item) => (
-                      <Typography key={item.label} sx={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-                        <strong>{item.label}:</strong> {item.value || "No disponible"}
-                      </Typography>
-                    ))}
-                  </CardContent>
-                </Card>
-              ))
-            ) : (
-              <Typography sx={{ color: 'var(--text-secondary)' }}>No hay facturas disponibles.</Typography>
-            )}
+{customerOrders.some(order => order.payments && order.payments.length > 0) ? (
+  customerOrders.map((order) => (
+    order.payments && order.payments.length > 0 && (
+      <Card
+        key={`payments-${order.id}`}
+        sx={{
+          bgcolor: 'var(--bg-secondary)',
+          mb: 3,
+          border: `1px solid var(--border-primary)`,
+        }}
+      >
+        <CardContent>
+          <Typography variant="subtitle1" sx={{ fontWeight: 600, color: 'var(--accent-blue)', mb: 1 }}>
+            Pagos del pedido: {order.order_number}
+          </Typography>
 
+          {order.payments.map((payment) => (
+            <Card
+              key={payment.id}
+              sx={{
+                bgcolor: 'var(--bg-primary)',
+                mb: 2,
+                p: 2,
+                border: '1px dashed var(--border-primary)',
+              }}
+            >
+              <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+                <Typography><strong>Fecha:</strong> {new Date(payment.payment_date).toLocaleDateString()}</Typography>
+                <Box
+                  sx={{
+                    px: 2,
+                    py: 0.5,
+                    borderRadius: 2,
+                    backgroundColor: payment.payment_type === 'full' ? '#4caf50' : '#2196f3',
+                    color: 'white',
+                    fontSize: '0.8rem',
+                    fontWeight: 600
+                  }}
+                >
+                  {payment.payment_type.replace('_', ' ').toUpperCase()}
+                </Box>
+              </Box>
+
+              <Typography sx={{ fontSize: '1.1rem', fontWeight: 700, color: '#4ade80', mb: 1 }}>
+                Monto: ₡{parseFloat(payment.amount).toLocaleString('es-CR')}
+              </Typography>
+
+              {/* Documento adjunto (imagen o PDF) */}
+              {payment.reference_document && (
+                <Box mt={1}>
+                  {payment.reference_document.endsWith('.pdf') ? (
+                    <a
+                      href={payment.reference_document}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        color: 'var(--accent-blue)',
+                        textDecoration: 'none',
+                        fontWeight: 500
+                      }}
+                    >
+                      {/* <FaFileAlt size={20} /> */}
+                      Ver Comprobante PDF
+                    </a>
+                  ) : (
+                    <Box
+                      component="img"
+                      src={payment.reference_document}
+                      alt="Comprobante de pago"
+                      sx={{
+                        maxWidth: '100%',
+                        maxHeight: 300,
+                        borderRadius: 2,
+                        border: '1px solid var(--border-primary)',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+                      }}
+                    />
+                  )}
+                </Box>
+              )}
+            </Card>
+          ))}
+        </CardContent>
+      </Card>
+    )
+  ))
+) : (
+  <Card sx={{ bgcolor: 'var(--bg-secondary)', p: 3, textAlign: 'center' }}>
+    <Typography sx={{ color: 'var(--text-secondary)', fontStyle: 'italic' }}>
+      Este cliente aún no tiene pagos registrados.
+    </Typography>
+  </Card>
+)}
             <Box mt={3} display="flex" justifyContent="flex-end" gap={2}>
               <Button
                 variant="contained"
