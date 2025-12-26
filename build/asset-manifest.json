@@ -1,11 +1,11 @@
 {
   "files": {
     "main.css": "/static/css/main.5629e917.css",
-    "main.js": "/static/js/main.1b8a4b9b.js",
+    "main.js": "/static/js/main.1987b370.js",
     "static/css/478.c59221f7.chunk.css": "/static/css/478.c59221f7.chunk.css",
     "static/js/478.1174e4df.chunk.js": "/static/js/478.1174e4df.chunk.js",
     "static/css/247.07ba9dee.chunk.css": "/static/css/247.07ba9dee.chunk.css",
-    "static/js/247.d5569015.chunk.js": "/static/js/247.d5569015.chunk.js",
+    "static/js/247.a991915a.chunk.js": "/static/js/247.a991915a.chunk.js",
     "static/css/578.f5f6542a.chunk.css": "/static/css/578.f5f6542a.chunk.css",
     "static/js/578.4397ac1d.chunk.js": "/static/js/578.4397ac1d.chunk.js",
     "static/css/537.e925f2e9.chunk.css": "/static/css/537.e925f2e9.chunk.css",
@@ -80,11 +80,11 @@
     "static/media/impresion-laser.jpg": "/static/media/impresion-laser.f1e430b42aa214e78428.jpg",
     "index.html": "/index.html",
     "main.5629e917.css.map": "/static/css/main.5629e917.css.map",
-    "main.1b8a4b9b.js.map": "/static/js/main.1b8a4b9b.js.map",
+    "main.1987b370.js.map": "/static/js/main.1987b370.js.map",
     "478.c59221f7.chunk.css.map": "/static/css/478.c59221f7.chunk.css.map",
     "478.1174e4df.chunk.js.map": "/static/js/478.1174e4df.chunk.js.map",
     "247.07ba9dee.chunk.css.map": "/static/css/247.07ba9dee.chunk.css.map",
-    "247.d5569015.chunk.js.map": "/static/js/247.d5569015.chunk.js.map",
+    "247.a991915a.chunk.js.map": "/static/js/247.a991915a.chunk.js.map",
     "578.f5f6542a.chunk.css.map": "/static/css/578.f5f6542a.chunk.css.map",
     "578.4397ac1d.chunk.js.map": "/static/js/578.4397ac1d.chunk.js.map",
     "537.e925f2e9.chunk.css.map": "/static/css/537.e925f2e9.chunk.css.map",
@@ -153,6 +153,6 @@
   },
   "entrypoints": [
     "static/css/main.5629e917.css",
-    "static/js/main.1b8a4b9b.js"
+    "static/js/main.1987b370.js"
   ]
 }
