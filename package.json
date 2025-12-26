@@ -1,7 +1,7 @@
 {
   "name": "frontend_abcupon",
   "version": "0.1.0",
-  "homepage": "/programas/jsportapp",
+  "homepage": "/",
   "nombreEmpresa": "CopyRight Dirlux",
   "private": true,
   "dependencies": {
@@ -77,7 +77,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "cross-env PORT=3001 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -102,6 +102,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.21",
+    "cross-env": "^10.1.0",
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3"
