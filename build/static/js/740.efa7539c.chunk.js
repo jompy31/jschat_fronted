@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkfrontend_abcupon=self.webpackChunkfrontend_abcupon||[]).push([[740],{84740:(n,e,c)=>{c.r(e),c.d(e,{default:()=>s});c(65043);var d=c(70579);const s=()=>(0,d.jsx)("div",{children:"index"})}}]);
+//# sourceMappingURL=740.efa7539c.chunk.js.map
